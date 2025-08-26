@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>채용 관리(웍스파이)</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">👔 채용 관리</h1>
+    
+        <!-- 검색 폼 -->
+    <div class="search-section">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center;">
+            <!-- 왼쪽: 라디오 버튼 그룹 -->
+            <div style="display: flex; gap: 50px; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 16px; font-weight: bold; color: #374151;">작업상태</span>
+                    <div style="display: flex; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #374151;">
+                            <input type="radio" name="workStatus" value="all" checked style="width: 16px; height: 16px;">
+                            <span>전체</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #374151;">
+                            <input type="radio" name="workStatus" value="working" style="width: 16px; height: 16px;">
+                            <span>작업중</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #374151;">
+                            <input type="radio" name="workStatus" value="completed" style="width: 16px; height: 16px;">
+                            <span>작업종료</span>
+                        </label>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-size: 16px; font-weight: bold; color: #374151;">채용상태</span>
+                    <div style="display: flex; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #374151;">
+                            <input type="radio" name="recruitStatus" value="all" checked style="width: 16px; height: 16px;">
+                            <span>전체</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #374151;">
+                            <input type="radio" name="recruitStatus" value="recruiting" style="width: 16px; height: 16px;">
+                            <span>채용중</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #374151;">
+                            <input type="radio" name="recruitStatus" value="closed" style="width: 16px; height: 16px;">
+                            <span>채용종료</span>
+                        </label>
+                        <label style="display: flex; align-items: center; gap: 4px; cursor: pointer; font-size: 14px; color: #374151;">
+                            <input type="radio" name="recruitStatus" value="deadline" style="width: 16px; height: 16px;">
+                            <span>채용마감</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 오른쪽: 기존 검색 영역 -->
+            <div style="display: flex; align-items: center; gap: 15px;">
+                <label style="display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; color: #374151;">
+                    <input type="checkbox" id="importantOnly" style="width: 16px; height: 16px;">
+                    <span>중요 채용소식</span>
+                </label>
+                <select id="searchCategory" style="padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; min-width: 120px; background: white; color: #374151; outline: none; transition: border-color 0.2s;">
+                    <option value="all">전체</option>
+                    <option value="title">제목</option>
+                    <option value="service">서비스</option>
+                    <option value="project">프로젝트번호</option>
+                    </select>
+                <div style="position: relative;">
+                    <input type="text" id="searchInput" placeholder="검색어를 입력하세요" style="width: 280px; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; background: white; color: #374151; outline: none; transition: border-color 0.2s;">
+                </div>
+                <button id="searchBtn" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; gap: 6px;">
+                    🔍 검색
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 채용 목록 테이블 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>👔 총 13,234건</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="btn btn-primary btn-sm" onclick="addNewRecruitment()">➕ 등록</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 80px;">NO</th>
+                    <th style="width: 120px;">썸네일</th>
+                    <th>제목</th>
+                    <th style="width: 100px;">채용상태</th>
+                    <th style="width: 80px;">서비스</th>
+                    <th style="width: 80px;">조회수</th>
+                    <th style="width: 140px;">등록일</th>
+                    <th style="width: 140px;">모집마감일</th>
+                    <th style="width: 100px;">신청작업자</th>
+                    <th style="width: 100px;">작업상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>202507160057</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #3482F6;">TIMBEN</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        팀벨 글로벌씨지엠 직원 채용 공고
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>3056</td>
+                    <td>2025.07.16 15:11</td>
+                    <td>2025.08.30 00:00</td>
+                    <td>1 / 00</td>
+                    <td>작업중</td>
+                </tr>
+                <tr>
+                    <td>202507160055</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #109974;">DATA</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        데이터전문속기사 모집(출퇴근)
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #d97706; font-weight: 500;">채용마감</span></td>
+                    <td>팀벨</td>
+                    <td>3534</td>
+                    <td>2025.07.16 14:59</td>
+                    <td>2025.07.28 00:00</td>
+                    <td>9 / 00</td>
+                    <td>작업종료</td>
+                </tr>
+                <tr>
+                    <td>202507160053</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #DC4374;">MEDIA</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        팀벨 미디어자박씨지엠 직원 채용 공고
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>3254</td>
+                    <td>2025.07.16 13:10</td>
+                    <td>2025.08.29 00:00</td>
+                    <td>0 / 00</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>202507150001</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #0891A5;">DATA</div>
+                    </td>
+                    <td style="text-align: left;">팀벨 데이터파트팀 정규직 모집</td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>5161</td>
+                    <td>2025.07.15 09:31</td>
+                    <td>2025.07.31 00:00</td>
+                    <td>6 / 1</td>
+                    <td>작업중</td>
+                </tr>
+                <tr>
+                    <td>202507140048</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #7748F6;">SERVICE</div>
+                    </td>
+                    <td style="text-align: left;">팀벨 서비스 품질 점검 담당 모집</td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>3602</td>
+                    <td>2025.07.14 14:36</td>
+                    <td>2025.07.31 00:00</td>
+                    <td>11 / 1</td>
+                    <td>작업종료</td>
+                </tr>
+                <tr>
+                    <td>202507110021</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #FF8400;">TIMBEN</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        팀벨 회의록, 녹취록 직원 채용 공고
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>3948</td>
+                    <td>2025.07.11 10:54</td>
+                    <td>2025.08.31 00:00</td>
+                    <td>10 / 00</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>202507040048</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #904F17;">MEDICAL</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        충북 청주의료원 서면 속기사 모집
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>2043</td>
+                    <td>2025.07.04 14:17</td>
+                    <td>2025.08.15 00:00</td>
+                    <td>3 / 02</td>
+                    <td>작업중</td>
+                </tr>
+                <tr>
+                    <td>202507040047</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #DC2626;">COURT</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        제주 한라병원 서면 속기사 모집
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>3724</td>
+                    <td>2025.07.04 14:16</td>
+                    <td>2025.08.10 00:00</td>
+                    <td>7 / 05</td>
+                    <td>작업종료</td>
+                </tr>
+                <tr>
+                    <td>202507040046</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #F59E0B;">HOSPITAL</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        강진의료원 서면 속기사 모집
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>3577</td>
+                    <td>2025.07.04 14:15</td>
+                    <td>2025.08.05 00:00</td>
+                    <td>2 / 10</td>
+                    <td>작업중</td>
+                </tr>
+                <tr>
+                    <td>202507040045</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #374151;">MEDICAL</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        강진의료원 메인 속기사 모집
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>3497</td>
+                    <td>2025.07.04 14:14</td>
+                    <td>2025.08.01 00:00</td>
+                    <td>5 / 03</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>202507030041</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #06B6D4;">TECH</div>
+                    </td>
+                    <td style="text-align: left;">팀벨 기술개발팀 신입사원 모집</td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>2847</td>
+                    <td>2025.07.03 16:22</td>
+                    <td>2025.08.15 00:00</td>
+                    <td>8 / 02</td>
+                    <td>작업종료</td>
+                </tr>
+                <tr>
+                    <td>202507030039</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #8B5CF6;">DESIGN</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        팀벨 UI/UX 디자이너 모집
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>4162</td>
+                    <td>2025.07.03 14:18</td>
+                    <td>2025.08.03 00:00</td>
+                    <td>12 / 03</td>
+                    <td>작업중</td>
+                </tr>
+                <tr>
+                    <td>202507020035</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #EC4899;">MARKETING</div>
+                    </td>
+                    <td style="text-align: left;">팀벨 마케팅팀 경력직 모집</td>
+                    <td><span style="color: #d97706; font-weight: 500;">채용마감</span></td>
+                    <td>팀벨</td>
+                    <td>3892</td>
+                    <td>2025.07.02 10:45</td>
+                    <td>2025.07.25 00:00</td>
+                    <td>15 / 05</td>
+                    <td>작업종료</td>
+                </tr>
+                <tr>
+                    <td>202507010032</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #F97316;">SALES</div>
+                    </td>
+                    <td style="position: relative; text-align: left;">
+                        팀벨 영업팀 팀장 모집
+                        <span style="background: #ef4444; color: white; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-left: 8px;">중요</span>
+                    </td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>5234</td>
+                    <td>2025.07.01 09:15</td>
+                    <td>2025.08.20 00:00</td>
+                    <td>4 / 01</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>202506280028</td>
+                    <td>
+                        <div class="thumbnail-box" style="background: #22C55E;">FINANCE</div>
+                    </td>
+                    <td style="text-align: left;">팀벨 재무팀 회계담당자 모집</td>
+                    <td><span style="color: #059669; font-weight: 500;">채용중</span></td>
+                    <td>팀벨</td>
+                    <td>2156</td>
+                    <td>2025.06.28 14:33</td>
+                    <td>2025.07.30 00:00</td>
+                    <td>6 / 02</td>
+                    <td>작업중</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">24</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+            <div style="margin-left: 20px; display: flex; align-items: center; gap: 5px;">
+                <span style="font-size: 13px;">페이지당</span>
+                <select style="padding: 3px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+                    <option>15</option>
+                    <option>30</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <span style="font-size: 13px;">개씩 보기</span>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        /* 테이블 헤더 중앙정렬 */
+        table th {
+            text-align: center;
+        }
+        
+        /* 썸네일 박스 스타일 */
+        .thumbnail-box {
+            width: 60px;
+            height: 45px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+        }
+        
+        /* 테이블 행 높이 최적화 */
+        table tbody tr {
+            height: 50px;
+        }
+        
+        table tbody td {
+            padding: 8px 12px !important;
+            vertical-align: middle;
+            line-height: 1.2;
+        }
+        
+        /* 중앙정렬 컬럼들 (체크박스 제거로 컬럼 번호 재조정) */
+        table td:nth-child(1), /* NO */
+        table td:nth-child(4), /* 채용상태 */
+        table td:nth-child(5), /* 서비스 */
+        table th:nth-child(6), table td:nth-child(6), /* 조회수 */
+        table th:nth-child(7), table td:nth-child(7), /* 등록일 */
+        table th:nth-child(8), table td:nth-child(8), /* 모집마감일 */
+        table th:nth-child(9), table td:nth-child(9), /* 신청작업자 */
+        table th:nth-child(10), table td:nth-child(10) /* 작업상태 */ {
+            text-align: center;
+        }
+        
+        /* 썸네일 컬럼 정렬 */
+        table td:nth-child(2) {
+            text-align: center;
+            vertical-align: middle;
+        }
+        
+        table td:nth-child(2) .thumbnail-box {
+            margin: 0 auto;
+        }
+        
+        /* 숫자/날짜 컬럼 폭 조정 */
+        table th:nth-child(6), table td:nth-child(6), /* 조회수 */
+        table th:nth-child(7), table td:nth-child(7), /* 등록일 */
+        table th:nth-child(8), table td:nth-child(8), /* 모집마감일 */
+        table th:nth-child(9), table td:nth-child(9), /* 신청작업자 */
+        table th:nth-child(10), table td:nth-child(10) /* 작업상태 */ {
+            width: 120px;
+        }
+    </style>
+
+    <script src="../../scripts/common.js"></script>
+    <script>
+        // 검색 기능
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const category = document.getElementById('searchCategory').value;
+            const searchText = document.getElementById('searchInput').value.trim();
+            const importantOnly = document.getElementById('importantOnly').checked;
+            
+            if (searchText === '') {
+                alert('검색어를 입력해주세요.');
+                return;
+            }
+            
+            let searchMessage = '';
+            switch(category) {
+                case 'all':
+                    searchMessage = `전체 항목에서 "${searchText}" 검색`;
+                    break;
+                case 'title':
+                    searchMessage = `제목에서 "${searchText}" 검색`;
+                    break;
+                case 'service':
+                    searchMessage = `서비스에서 "${searchText}" 검색`;
+                    break;
+                case 'project':
+                    searchMessage = `프로젝트번호에서 "${searchText}" 검색`;
+                    break;
+            }
+            
+            if (importantOnly) {
+                searchMessage += ' (중요 채용소식만)';
+            }
+            
+            // 실제로는 서버 API 호출하여 검색
+            alert(searchMessage + ' 결과를 표시합니다.');
+        });
+
+        // 엔터키로 검색
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
+        // 중요 채용소식 체크박스 변경 시 자동 필터링
+        document.getElementById('importantOnly').addEventListener('change', function() {
+            if (this.checked) {
+                console.log('중요 채용소식만 표시');
+                // 실제로는 서버 API 호출하여 필터링
+            } else {
+                console.log('전체 채용소식 표시');
+            }
+        });
+
+        // 신규 채용공고 등록
+        function addNewRecruitment() {
+            // 실제로는 채용공고 등록 페이지로 이동하거나 팝업 표시
+            alert('채용공고 등록 페이지로 이동합니다.');
+        }
+
+        // 검색 입력창 포커스 효과
+        const searchInput = document.getElementById('searchInput');
+        const searchCategory = document.getElementById('searchCategory');
+        const searchBtn = document.getElementById('searchBtn');
+        
+        searchInput.addEventListener('focus', function() {
+            this.style.borderColor = '#3b82f6';
+            this.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+        });
+        
+        searchInput.addEventListener('blur', function() {
+            this.style.borderColor = '#e2e8f0';
+            this.style.boxShadow = 'none';
+        });
+        
+        searchCategory.addEventListener('focus', function() {
+            this.style.borderColor = '#3b82f6';
+            this.style.boxShadow = '0 0 0 3px rgba(59, 130, 246, 0.1)';
+        });
+        
+        searchCategory.addEventListener('blur', function() {
+            this.style.borderColor = '#e2e8f0';
+            this.style.boxShadow = 'none';
+        });
+        
+        // 검색 버튼 호버 효과
+        searchBtn.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = '#2563eb';
+            this.style.transform = 'translateY(-1px)';
+            this.style.boxShadow = '0 4px 12px rgba(59, 130, 246, 0.3)';
+        });
+        
+        searchBtn.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = '#3b82f6';
+            this.style.transform = 'translateY(0)';
+            this.style.boxShadow = 'none';
+        });
+
+        // 테이블 행 hover 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f9fafb';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

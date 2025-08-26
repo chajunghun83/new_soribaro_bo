@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엔터프라이즈 회의록 작업관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 통계 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+        
+        .search-grid-unified {
+            display: grid;
+            grid-template-columns: 1.2fr 1.2fr 0.8fr 1.4fr 0.9fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .date-range-group {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+        }
+        
+        .date-range-group .form-group {
+            flex: 1;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 13px;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .text-search-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .text-search-group select {
+            flex: 0 0 130px;
+        }
+        
+        .text-search-group input {
+            flex: 1;
+        }
+        
+        .search-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            align-items: end;
+        }
+        
+        .btn {
+            height: 35px;
+            padding: 0 14px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-sizing: border-box;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        /* 테이블 */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+        
+        .data-table thead {
+            background: #f8f9fa;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 16px 12px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            font-weight: 600;
+            color: #374151;
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .data-table td {
+            color: #4b5563;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-received {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-inprogress {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .status-draft {
+            background: #e0e7ff;
+            color: #5b21b6;
+        }
+        
+        .status-review {
+            background: #f3e8ff;
+            color: #7c2d12;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        /* 페이징 */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+        }
+        
+        .btn-outline:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .search-grid-unified {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .search-buttons {
+                justify-content: stretch;
+            }
+            
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">
+        <span>📊</span>
+        회의록 작업관리
+    </h1>
+    
+    <!-- 통계 영역 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>총 작업 건수</h3>
+            <div class="value">156</div>
+        </div>
+        <div class="stat-card">
+            <h3>접수</h3>
+            <div class="value">23</div>
+        </div>
+        <div class="stat-card">
+            <h3>작업중</h3>
+            <div class="value">45</div>
+        </div>
+        <div class="stat-card">
+            <h3>초안완성</h3>
+            <div class="value">32</div>
+        </div>
+        <div class="stat-card">
+            <h3>완료</h3>
+            <div class="value">56</div>
+        </div>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-grid-unified">
+            <div class="date-range-group">
+                <div class="form-group">
+                    <label for="start-date">시작일</label>
+                    <input type="date" id="start-date" value="2025-07-01">
+                </div>
+                <div class="form-group">
+                    <label for="end-date">종료일</label>
+                    <input type="date" id="end-date" value="2025-07-31">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="company-select">기업명칭</label>
+                <select id="company-select">
+                    <option value="">전체</option>
+                    <option value="seoul-city">서울특별시청</option>
+                    <option value="busan-city">부산광역시청</option>
+                    <option value="incheon-city">인천광역시청</option>
+                    <option value="ministry-health">보건복지부</option>
+                    <option value="ministry-education">교육부</option>
+                    <option value="ministry-environment">환경부</option>
+                    <option value="national-assembly">국회사무처</option>
+                    <option value="supreme-court">대법원</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status-select">진행상태</label>
+                <select id="status-select">
+                    <option value="">전체</option>
+                    <option value="received">접수</option>
+                    <option value="inprogress">작업중</option>
+                    <option value="draft">초안완성</option>
+                    <option value="review">검수완료</option>
+                    <option value="completed">작업완료</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>텍스트 검색</label>
+                <div class="text-search-group">
+                    <select id="search-type">
+                        <option value="order">주문번호</option>
+                        <option value="title">제목</option>
+                        <option value="client">의뢰자명</option>
+                        <option value="contact">연락처</option>
+                        <option value="worker">작업자</option>
+                    </select>
+                    <input type="text" id="search-text" placeholder="검색어를 입력하세요">
+                </div>
+            </div>
+            <div class="search-buttons">
+                <button class="btn btn-primary" onclick="searchMeetings()">
+                    <span>🔍</span>
+                    검색
+                </button>
+                <button class="btn btn-success" onclick="downloadExcel()">
+                    <span>📊</span>
+                    엑셀 다운로드
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 테이블 -->
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>주문번호</th>
+                        <th>제목</th>
+                        <th>의뢰자명</th>
+                        <th>연락처</th>
+                        <th>의뢰일</th>
+                        <th>총 작업시간</th>
+                        <th>작업자</th>
+                        <th>진행상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>10</td>
+                        <td>20250725033445</td>
+                        <td>2025년 제1차 정책위원회 회의록</td>
+                        <td>서울시교육지원청</td>
+                        <td>02-2100-1234</td>
+                        <td>2025-07-25 09:30</td>
+                        <td>02:45:30</td>
+                        <td>이수진</td>
+                        <td><span class="status-badge status-inprogress">작업중</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>9</td>
+                        <td>20250724012345</td>
+                        <td>교육과정 개발 협의회 회의록</td>
+                        <td>박민수</td>
+                        <td>02-2100-5678</td>
+                        <td>2025-07-24 14:00</td>
+                        <td>01:30:15</td>
+                        <td>김한결</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>8</td>
+                        <td>20250723098765</td>
+                        <td>환경보호 정책 심의회 회의록</td>
+                        <td>최영희</td>
+                        <td>02-2110-9876</td>
+                        <td>2025-07-23 10:15</td>
+                        <td>03:20:45</td>
+                        <td>정민호</td>
+                        <td><span class="status-badge status-draft">초안완성</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>7</td>
+                        <td>20250722054321</td>
+                        <td>시민참여예산 위원회 회의록</td>
+                        <td>이재원</td>
+                        <td>051-888-1234</td>
+                        <td>2025-07-22 16:30</td>
+                        <td>02:10:20</td>
+                        <td>황성민</td>
+                        <td><span class="status-badge status-review">검수완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>6</td>
+                        <td>20250721067890</td>
+                        <td>국정감사 준비위원회 회의록</td>
+                        <td>김미영</td>
+                        <td>02-788-5555</td>
+                        <td>2025-07-21 13:45</td>
+                        <td>04:15:30</td>
+                        <td>박철수</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>5</td>
+                        <td>20250720024680</td>
+                        <td>대법원 전원합의체 회의록</td>
+                        <td>임해영</td>
+                        <td>02-3480-1111</td>
+                        <td>2025-07-20 11:00</td>
+                        <td>05:30:15</td>
+                        <td>조민석</td>
+                        <td><span class="status-badge status-inprogress">작업중</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>4</td>
+                        <td>20250719013579</td>
+                        <td>보건복지부 정책자문위원회 회의록</td>
+                        <td>강수진</td>
+                        <td>044-202-2500</td>
+                        <td>2025-07-19 15:20</td>
+                        <td>01:45:40</td>
+                        <td>이수진</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>3</td>
+                        <td>20250718098321</td>
+                        <td>인천시 도시계획위원회 회의록</td>
+                        <td>윤정호</td>
+                        <td>032-440-2000</td>
+                        <td>2025-07-18 09:45</td>
+                        <td>02:55:25</td>
+                        <td>김한결</td>
+                        <td><span class="status-badge status-draft">초안완성</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>2</td>
+                        <td>20250717076543</td>
+                        <td>교육부 교육과정심의회 회의록</td>
+                        <td>송민아</td>
+                        <td>044-203-6000</td>
+                        <td>2025-07-17 14:30</td>
+                        <td>03:40:10</td>
+                        <td>정민호</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>1</td>
+                        <td>20250716034567</td>
+                        <td>서울시 시정협의회 정례회의 회의록</td>
+                        <td>홍길동</td>
+                        <td>02-120</td>
+                        <td>2025-07-16 10:00</td>
+                        <td>01:20:35</td>
+                        <td>황성민</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 페이징 -->
+    <div class="pagination-container">
+        <button class="btn btn-outline btn-sm">첫 페이지</button>
+        <button class="btn btn-outline btn-sm">이전</button>
+        <div style="display: flex; gap: 5px;">
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-outline btn-sm">2</button>
+            <button class="btn btn-outline btn-sm">3</button>
+            <button class="btn btn-outline btn-sm">4</button>
+            <button class="btn btn-outline btn-sm">5</button>
+            <span style="padding: 8px;">...</span>
+            <button class="btn btn-outline btn-sm">15</button>
+        </div>
+        <button class="btn btn-outline btn-sm">다음</button>
+        <button class="btn btn-outline btn-sm">마지막 페이지</button>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchMeetings() {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const company = document.getElementById('company-select').value;
+            const status = document.getElementById('status-select').value;
+            const searchType = document.getElementById('search-type').value;
+            const searchText = document.getElementById('search-text').value;
+            
+            console.log('검색 조건:', {
+                startDate, endDate, company, status, searchType, searchText
+            });
+            
+            alert('검색 기능이 실행되었습니다.');
+        }
+        
+        // 엑셀 다운로드
+        function downloadExcel() {
+            console.log('엑셀 다운로드 시작');
+            alert('엑셀 파일을 다운로드합니다.');
+        }
+        
+        // 상세 페이지 이동
+        function openMeetingDetail(row) {
+            const cells = row.cells;
+            const orderNumber = cells[1].textContent;
+            const title = cells[2].textContent;
+            const clientName = cells[3].textContent;
+            const contact = cells[4].textContent;
+            const requestDate = cells[5].textContent;
+            const workTime = cells[6].textContent;
+            const worker = cells[7].textContent;
+            const status = cells[8].querySelector('.status-badge').textContent;
+            
+            // URL 파라미터 생성
+            const params = new URLSearchParams({
+                orderNumber: orderNumber,
+                title: title,
+                client: clientName,
+                contact: contact,
+                requestDate: requestDate,
+                workTime: workTime,
+                worker: worker,
+                status: status
+            });
+            
+            // 페이지 이동
+            try {
+                // iframe 환경에서 실행 중인지 확인
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    const detailUrl = `pages/soribaro/enterprise/meeting-detail.html?${params.toString()}`;
+                    window.parent.loadPage(detailUrl);
+                } else {
+                    const detailUrl = `meeting-detail.html?${params.toString()}`;
+                    window.location.href = detailUrl;
+                }
+            } catch (error) {
+                // 오류 발생 시 기본적인 페이지 이동 시도
+                window.location.href = `meeting-detail.html?${params.toString()}`;
+            }
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모든 테이블 행에 클릭 이벤트 추가
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            tableRows.forEach((row) => {
+                row.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    openMeetingDetail(this);
+                });
+                
+                // 커서 포인터 스타일 추가
+                row.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>

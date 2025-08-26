@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>시스템 관리</title>
+    <link rel="stylesheet" href="../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">⚙️ 시스템 관리</h1>
+    
+    <!-- 시스템 상태 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>서버 상태</h3>
+            <div class="value" style="color: #10b981;">정상</div>
+        </div>
+        <div class="stat-card">
+            <h3>데이터베이스</h3>
+            <div class="value" style="color: #10b981;">연결됨</div>
+        </div>
+        <div class="stat-card">
+            <h3>디스크 사용량</h3>
+            <div class="value" style="color: #f59e0b;">67%</div>
+        </div>
+        <div class="stat-card">
+            <h3>활성 사용자</h3>
+            <div class="value">1,234</div>
+        </div>
+    </div>
+
+    <!-- 시스템 관리 메뉴 -->
+    <div class="analysis-grid">
+        <div class="analysis-card">
+            <h4>📊 시스템 모니터링</h4>
+            <div style="margin-top: 20px;">
+                <div class="progress-item">
+                    <span>CPU 사용률</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="progress-bar" style="width: 100px;">
+                            <div class="progress-fill" style="width: 45%; background-color: #10b981;"></div>
+                        </div>
+                        <span>45%</span>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <span>메모리 사용률</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="progress-bar" style="width: 100px;">
+                            <div class="progress-fill" style="width: 72%; background-color: #f59e0b;"></div>
+                        </div>
+                        <span>72%</span>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <span>네트워크 트래픽</span>
+                    <div style="display: flex; align-items: center; gap: 10px;">
+                        <div class="progress-bar" style="width: 100px;">
+                            <div class="progress-fill" style="width: 38%; background-color: #10b981;"></div>
+                        </div>
+                        <span>38%</span>
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-sm" style="margin-top: 15px; width: 100%;">자세히 보기</button>
+        </div>
+
+        <div class="analysis-card">
+            <h4>🔧 시스템 설정</h4>
+            <div style="margin-top: 20px; display: flex; flex-direction: column; gap: 10px;">
+                <button class="btn btn-outline btn-sm">일반 설정</button>
+                <button class="btn btn-outline btn-sm">보안 설정</button>
+                <button class="btn btn-outline btn-sm">알림 설정</button>
+                <button class="btn btn-outline btn-sm">백업 설정</button>
+                <button class="btn btn-outline btn-sm">로그 설정</button>
+            </div>
+        </div>
+
+        <div class="analysis-card">
+            <h4>👥 사용자 관리</h4>
+            <div style="margin-top: 20px;">
+                <div class="progress-item">
+                    <span>관리자</span>
+                    <span style="font-weight: bold; color: #3b82f6;">5명</span>
+                </div>
+                <div class="progress-item">
+                    <span>직원</span>
+                    <span style="font-weight: bold; color: #10b981;">23명</span>
+                </div>
+                <div class="progress-item">
+                    <span>작업자</span>
+                    <span style="font-weight: bold; color: #f59e0b;">156명</span>
+                </div>
+            </div>
+            <button class="btn btn-primary btn-sm" style="margin-top: 15px; width: 100%;">사용자 관리</button>
+        </div>
+    </div>
+
+    <!-- 시스템 로그 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>📝 최근 시스템 로그</span>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">🔄 새로고침</button>
+                    <button class="btn btn-outline btn-sm">📊 전체 로그</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>시간</th>
+                    <th>레벨</th>
+                    <th>카테고리</th>
+                    <th>메시지</th>
+                    <th>사용자</th>
+                    <th>IP 주소</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2024-12-19 10:45:23</td>
+                    <td><span class="status status-progress">INFO</span></td>
+                    <td>로그인</td>
+                    <td>사용자 로그인 성공</td>
+                    <td>김관리자</td>
+                    <td>192.168.1.100</td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 10:43:15</td>
+                    <td><span class="status status-pending">WARN</span></td>
+                    <td>시스템</td>
+                    <td>디스크 사용량 70% 초과</td>
+                    <td>System</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 10:40:32</td>
+                    <td><span class="status status-completed">SUCCESS</span></td>
+                    <td>백업</td>
+                    <td>데이터베이스 백업 완료</td>
+                    <td>System</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 10:38:47</td>
+                    <td><span class="status status-progress">INFO</span></td>
+                    <td>파일</td>
+                    <td>파일 업로드 완료: project_doc.pdf</td>
+                    <td>이작업자</td>
+                    <td>192.168.1.150</td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 10:35:22</td>
+                    <td><span class="status" style="background-color: #fee2e2; color: #dc2626;">ERROR</span></td>
+                    <td>인증</td>
+                    <td>로그인 실패 (잘못된 패스워드)</td>
+                    <td>unknown</td>
+                    <td>203.45.67.89</td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 10:32:15</td>
+                    <td><span class="status status-progress">INFO</span></td>
+                    <td>프로젝트</td>
+                    <td>프로젝트 생성: 대기업 회의록</td>
+                    <td>박매니저</td>
+                    <td>192.168.1.120</td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 10:30:44</td>
+                    <td><span class="status status-completed">SUCCESS</span></td>
+                    <td>시스템</td>
+                    <td>시스템 상태 체크 완료</td>
+                    <td>System</td>
+                    <td>-</td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 10:28:33</td>
+                    <td><span class="status status-progress">INFO</span></td>
+                    <td>회원</td>
+                    <td>신규 회원 가입: 김신규</td>
+                    <td>김신규</td>
+                    <td>121.78.234.156</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+        </div>
+    </div>
+
+    <!-- 빠른 작업 -->
+    <div class="search-section">
+        <h3 style="margin-bottom: 20px; color: #2c3e50;">⚡ 빠른 작업</h3>
+        <div class="search-grid">
+            <button class="btn btn-primary">🔄 시스템 재시작</button>
+            <button class="btn btn-secondary">💾 백업 실행</button>
+            <button class="btn btn-outline">🧹 캐시 삭제</button>
+            <button class="btn btn-outline">📊 성능 보고서</button>
+            <button class="btn btn-outline">🔐 보안 검사</button>
+            <button class="btn btn-outline">📧 알림 테스트</button>
+        </div>
+    </div>
+
+    <script src="../scripts/common.js"></script>
+</body>
+</html> 

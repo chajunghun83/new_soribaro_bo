@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰번호 리스트 관리</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">🎫 쿠폰번호 리스트 관리</h1>
+    
+    <!-- 쿠폰 통계 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>총 발급 쿠폰</h3>
+            <div class="value">1,245</div>
+        </div>
+        <div class="stat-card">
+            <h3>사용된 쿠폰</h3>
+            <div class="value">834</div>
+        </div>
+        <div class="stat-card">
+            <h3>미사용 쿠폰</h3>
+            <div class="value">411</div>
+        </div>
+        <div class="stat-card">
+            <h3>만료된 쿠폰</h3>
+            <div class="value">67</div>
+        </div>
+    </div>
+
+    <!-- 쿠폰 생성 섹션 -->
+    <div class="search-section">
+        <h3 style="margin-bottom: 20px; color: #2c3e50;">🆕 새 쿠폰 생성</h3>
+        <div class="search-grid">
+            <div class="form-group">
+                <label>쿠폰 유형</label>
+                <select>
+                    <option value="">쿠폰 유형 선택</option>
+                    <option value="discount_percent">할인율 (10%, 20%)</option>
+                    <option value="discount_amount">할인금액 (1,000원, 5,000원)</option>
+                    <option value="free_service">무료 서비스</option>
+                    <option value="special_event">특별 이벤트</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>할인 값</label>
+                <input type="number" placeholder="할인 값을 입력하세요 (10, 1000 등)">
+            </div>
+            <div class="form-group">
+                <label>발급 수량</label>
+                <input type="number" placeholder="발급할 쿠폰 수량" value="100">
+            </div>
+        </div>
+        <div class="search-grid">
+            <div class="form-group">
+                <label>유효 기간 (시작)</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>유효 기간 (종료)</label>
+                <input type="date">
+            </div>
+            <div class="form-group">
+                <label>쿠폰 설명</label>
+                <input type="text" placeholder="쿠폰에 대한 설명을 입력하세요">
+            </div>
+        </div>
+        <div class="search-buttons">
+            <button class="btn btn-primary">🎫 쿠폰 생성</button>
+        </div>
+    </div>
+
+    <!-- 검색 폼 -->
+    <div class="search-section">
+        <h3 style="margin-bottom: 20px; color: #2c3e50;">🔍 쿠폰 검색</h3>
+        <div class="search-grid">
+            <div class="form-group">
+                <label>쿠폰 코드</label>
+                <input type="text" placeholder="쿠폰 코드를 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>쿠폰 상태</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="active">활성</option>
+                    <option value="used">사용됨</option>
+                    <option value="expired">만료됨</option>
+                    <option value="disabled">비활성</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>쿠폰 유형</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="discount_percent">할인율</option>
+                    <option value="discount_amount">할인금액</option>
+                    <option value="free_service">무료 서비스</option>
+                    <option value="special_event">특별 이벤트</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-buttons">
+            <button class="btn btn-outline">초기화</button>
+            <button class="btn btn-primary">🔍 검색</button>
+        </div>
+    </div>
+
+    <!-- 쿠폰 목록 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>🎫 총 1,245개의 쿠폰</span>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                    <button class="btn btn-secondary btn-sm">🚫 선택 쿠폰 비활성화</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
+                    <th>쿠폰 코드</th>
+                    <th>쿠폰 유형</th>
+                    <th>할인 값</th>
+                    <th>생성일</th>
+                    <th>유효기간</th>
+                    <th>사용일</th>
+                    <th>사용자</th>
+                    <th>상태</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>DISCOUNT20-A1B2</code></td>
+                    <td>할인율</td>
+                    <td>20%</td>
+                    <td>2024-12-01</td>
+                    <td>2024-12-31</td>
+                    <td>2024-12-15</td>
+                    <td>김영희</td>
+                    <td><span class="status status-completed">사용됨</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세보기</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>AMOUNT5000-C3D4</code></td>
+                    <td>할인금액</td>
+                    <td>5,000원</td>
+                    <td>2024-12-05</td>
+                    <td>2024-12-30</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">수정</button>
+                            <button class="btn btn-secondary btn-sm">비활성화</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>FREE-SERVICE-E5F6</code></td>
+                    <td>무료 서비스</td>
+                    <td>녹취록 1건</td>
+                    <td>2024-12-10</td>
+                    <td>2025-01-10</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">수정</button>
+                            <button class="btn btn-secondary btn-sm">비활성화</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>DISCOUNT10-G7H8</code></td>
+                    <td>할인율</td>
+                    <td>10%</td>
+                    <td>2024-11-15</td>
+                    <td>2024-11-30</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td><span class="status status-pending">만료됨</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세보기</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>SPECIAL-EVENT-I9J0</code></td>
+                    <td>특별 이벤트</td>
+                    <td>30%</td>
+                    <td>2024-12-18</td>
+                    <td>2024-12-25</td>
+                    <td>2024-12-20</td>
+                    <td>박철수</td>
+                    <td><span class="status status-completed">사용됨</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세보기</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>AMOUNT3000-K1L2</code></td>
+                    <td>할인금액</td>
+                    <td>3,000원</td>
+                    <td>2024-12-12</td>
+                    <td>2025-01-12</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">수정</button>
+                            <button class="btn btn-secondary btn-sm">비활성화</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>DISCOUNT15-M3N4</code></td>
+                    <td>할인율</td>
+                    <td>15%</td>
+                    <td>2024-12-08</td>
+                    <td>2024-12-28</td>
+                    <td>2024-12-19</td>
+                    <td>이정민</td>
+                    <td><span class="status status-completed">사용됨</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세보기</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><code>FREE-MEETING-O5P6</code></td>
+                    <td>무료 서비스</td>
+                    <td>회의록 1건</td>
+                    <td>2024-12-16</td>
+                    <td>2025-02-16</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">수정</button>
+                            <button class="btn btn-secondary btn-sm">비활성화</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">62</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+        </div>
+    </div>
+
+    <script src="../../scripts/common.js"></script>
+</body>
+</html> 

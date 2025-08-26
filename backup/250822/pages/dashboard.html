@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대시보드 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .page-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+        }
+        
+        .page-subtitle {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        /* 대시보드 카드 */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        
+        .dashboard-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            transition: box-shadow 0.2s ease;
+        }
+        
+        .dashboard-card:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        
+        .card-icon {
+            font-size: 32px;
+            margin-bottom: 12px;
+            display: block;
+        }
+        
+        .card-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #6c757d;
+            margin-bottom: 8px;
+        }
+        
+        .card-value {
+            font-size: 28px;
+            font-weight: 600;
+            color: #3b82f6;
+            margin-bottom: 6px;
+        }
+        
+        .card-desc {
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 400;
+        }
+        
+        .card-change {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-top: 8px;
+        }
+        
+        .card-change.positive {
+            background: rgba(46, 204, 113, 0.1);
+            color: #27ae60;
+        }
+        
+        .card-change.negative {
+            background: rgba(231, 76, 60, 0.1);
+            color: #e74c3c;
+        }
+        
+        /* 컨텐츠 영역 */
+        .content-section {
+            background: white;
+            padding: 24px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+            margin-bottom: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-indicator {
+            background: #3b82f6;
+            padding: 16px;
+            border-radius: 6px;
+            color: white;
+        }
+        
+        .status-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-desc {
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 15px;
+        }
+        
+        .status-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .status-badge {
+            background: rgba(255, 255, 255, 0.25);
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        /* 차트 영역 */
+        .chart-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .chart-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e9ecef;
+        }
+        
+        .chart-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 16px;
+        }
+        
+        .chart-placeholder {
+            height: 180px;
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .chart-section {
+                grid-template-columns: 1fr;
+            }
+            
+            body {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">📊 통합 대시보드</h1>
+        <p class="page-subtitle">소리바로와 클립데스크 서비스의 통합 현황을 한눈에 확인하세요</p>
+    </div>
+    
+    <div class="dashboard-grid">
+        <div class="dashboard-card">
+            <span class="card-icon">🔊</span>
+            <div class="card-title">소리바로 작업 현황</div>
+            <div class="card-value">152</div>
+            <div class="card-desc">진행 중인 작업 건수</div>
+            <div class="card-change positive">+12% (전주 대비)</div>
+        </div>
+        
+        <div class="dashboard-card">
+            <span class="card-icon">🎬</span>
+            <div class="card-title">클립데스크 작업 현황</div>
+            <div class="card-value">89</div>
+            <div class="card-desc">진행 중인 영상 작업</div>
+            <div class="card-change positive">+8% (전주 대비)</div>
+        </div>
+        
+        <div class="dashboard-card">
+            <span class="card-icon">👥</span>
+            <div class="card-title">웍스파이 연동 현황</div>
+            <div class="card-value">47</div>
+            <div class="card-desc">활성 작업자 수</div>
+            <div class="card-change positive">+5% (전주 대비)</div>
+        </div>
+        
+        <div class="dashboard-card">
+            <span class="card-icon">💰</span>
+            <div class="card-title">일일 매출</div>
+            <div class="card-value">₩2.4M</div>
+            <div class="card-desc">오늘 매출 현황</div>
+            <div class="card-change positive">+15% (어제 대비)</div>
+        </div>
+    </div>
+    
+    <div class="content-section">
+        <h2 class="section-title">
+            <span>🔗</span>
+            웍스파이 연동 시스템
+        </h2>
+        <div class="status-indicator">
+            <div class="status-title">
+                <span>✅</span>
+                연동 상태: 정상
+            </div>
+            <div class="status-desc">
+                소리바로 BO와 웍스파이 FO 간의 실시간 데이터 동기화가 정상적으로 작동 중입니다.<br>
+                프로젝트 모집부터 작업자 배정까지의 전체 워크플로우가 통합 관리되고 있습니다.
+            </div>
+            <div class="status-badges">
+                <span class="status-badge">마지막 동기화: 2분 전</span>
+                <span class="status-badge">대기 중인 지원자: 23명</span>
+                <span class="status-badge">금일 신규 등록: 8명</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="chart-section">
+        <div class="chart-card">
+            <div class="chart-title">주간 작업 추이</div>
+            <div class="chart-placeholder">
+                📊 차트 영역<br>
+                (실제 차트 라이브러리 연동 예정)
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <div class="chart-title">서비스별 비율</div>
+            <div class="chart-placeholder">
+                🥧 파이 차트 영역<br>
+                (실제 차트 라이브러리 연동 예정)
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

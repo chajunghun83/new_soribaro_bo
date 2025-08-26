@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>통합 관리자 페이지</title>
+    <link rel="stylesheet" href="styles/common.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>🏢 통합 관리자</h2>
+            </div>
+            
+            <!-- 대시보드 -->
+            <div class="menu-item" onclick="showPage('dashboard')">
+                <span class="menu-icon">📊</span> 대시보드
+            </div>
+            
+            <!-- 회원 관리 -->
+            <div class="menu-item" onclick="toggleSubmenu('member-submenu')">
+                <span class="menu-icon">👥</span> 회원 관리
+                <span style="margin-left: auto;">▼</span>
+            </div>
+            <div id="member-submenu" class="submenu expanded">
+                <div class="menu-item submenu-item active" onclick="showPage('members-search')">
+                    <span class="menu-icon">🔍</span> 회원조회
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('withdrawn-members')">
+                    <span class="menu-icon">🚪</span> 탈퇴 회원 관리
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('blocked-members')">
+                    <span class="menu-icon">🚫</span> 차단 회원
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('coupon-management')">
+                    <span class="menu-icon">🎫</span> 쿠폰번호 리스트 관리
+                </div>
+            </div>
+            
+            <!-- 웍스파이 메뉴 -->
+            <div class="menu-item" onclick="toggleSubmenu('workspy-submenu')">
+                <span class="menu-icon">⚡</span> 웍스파이 메뉴
+                <span style="margin-left: auto;">▼</span>
+            </div>
+            <div id="workspy-submenu" class="submenu">
+                <div class="menu-item submenu-item" onclick="showPage('workspy-recruitment')">
+                    <span class="menu-icon">👔</span> 채용 관리(웍스파이)
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('workspy-projects')">
+                    <span class="menu-icon">📋</span> 프로젝트 관리(웍스파이)
+                </div>
+            </div>
+            
+            <!-- 서비스별 관리 -->
+            <div class="menu-item" onclick="toggleSubmenu('service-submenu')">
+                <span class="menu-icon">🔧</span> 서비스별 관리
+                <span style="margin-left: auto;">▼</span>
+            </div>
+            <div id="service-submenu" class="submenu">
+                <div class="menu-item submenu-item" onclick="toggleSubmenu('soribaro-submenu')">
+                    <span class="menu-icon">🎙️</span> 소리바로
+                    <span style="margin-left: auto;">▼</span>
+                </div>
+                <div id="soribaro-submenu" class="submenu submenu-level2">
+                    <div class="menu-item submenu-item submenu-level2-item" onclick="showPage('soribaro-recording')">
+                        <span class="menu-icon">📝</span> 녹취록 작업현황관리
+                    </div>
+                    <div class="menu-item submenu-item submenu-level2-item" onclick="showPage('soribaro-recording-orders')">
+                        <span class="menu-icon">📋</span> 녹취록 의뢰현황관리
+                    </div>
+                    <div class="menu-item submenu-item submenu-level2-item" onclick="showPage('soribaro-meeting')">
+                        <span class="menu-icon">💼</span> 회의록 작업현황관리
+                    </div>
+                    <div class="menu-item submenu-item submenu-level2-item" onclick="showPage('soribaro-vod')">
+                        <span class="menu-icon">🎬</span> VOD 작업현황관리
+                    </div>
+                    <div class="menu-item submenu-item submenu-level2-item" onclick="showPage('soribaro-translation')">
+                        <span class="menu-icon">🌐</span> 번역 작업현황관리
+                    </div>
+                </div>
+                <div class="menu-item submenu-item" onclick="toggleSubmenu('clipdesk-submenu')">
+                    <span class="menu-icon">✂️</span> 클립데스크
+                    <span style="margin-left: auto;">▼</span>
+                </div>
+                <div id="clipdesk-submenu" class="submenu submenu-level2">
+                    <div class="menu-item submenu-item submenu-level2-item" onclick="showPage('clipdesk-work')">
+                        <span class="menu-icon">📝</span> 작업현황관리
+                    </div>
+                    <div class="menu-item submenu-item submenu-level2-item" onclick="showPage('clipdesk-orders')">
+                        <span class="menu-icon">📋</span> 의뢰현황관리
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 고객 관리 -->
+            <div class="menu-item" onclick="showPage('customer-management')">
+                <span class="menu-icon">🏢</span> 고객 관리
+            </div>
+            
+            <!-- 콘텐츠 관리 -->
+            <div class="menu-item" onclick="toggleSubmenu('content-submenu')">
+                <span class="menu-icon">📄</span> 콘텐츠 관리
+                <span style="margin-left: auto;">▼</span>
+            </div>
+            <div id="content-submenu" class="submenu">
+                <div class="menu-item submenu-item" onclick="showPage('post-management')">
+                    <span class="menu-icon">📝</span> 게시물 관리
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('marketing-content')">
+                    <span class="menu-icon">📢</span> 마케팅 콘텐츠
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('work-reviews')">
+                    <span class="menu-icon">⭐</span> 작업리뷰
+                </div>
+            </div>
+            
+            <!-- 정책 및 설정 -->
+            <div class="menu-item" onclick="toggleSubmenu('policy-submenu')">
+                <span class="menu-icon">📋</span> 정책 및 설정
+                <span style="margin-left: auto;">▼</span>
+            </div>
+            <div id="policy-submenu" class="submenu">
+                <div class="menu-item submenu-item" onclick="showPage('price-policy')">
+                    <span class="menu-icon">💰</span> 가격 정책
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('template-management')">
+                    <span class="menu-icon">📝</span> 템플릿 관리
+                </div>
+                <div class="menu-item submenu-item" onclick="showPage('basic-settings')">
+                    <span class="menu-icon">⚙️</span> 기본 설정
+                </div>
+            </div>
+            
+            <!-- 시스템 관리 -->
+            <div class="menu-item" onclick="showPage('system-management')">
+                <span class="menu-icon">⚙️</span> 시스템 관리
+            </div>
+        </div>
+
+        <!-- 메인 콘텐츠 -->
+        <div class="main-content">
+            <iframe id="content-frame" class="content-frame" src="pages/dashboard.html"></iframe>
+        </div>
+    </div>
+
+    <script src="scripts/common.js"></script>
+</body>
+</html>

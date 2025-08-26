@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회의록 작업 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+        
+        .content-placeholder {
+            background: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            text-align: center;
+            color: #6b7280;
+        }
+        
+        .content-placeholder h2 {
+            font-size: 24px;
+            margin-bottom: 16px;
+            color: #374151;
+        }
+        
+        .content-placeholder p {
+            font-size: 16px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1 class="page-title">
+            <span>📄</span>
+            회의록 작업 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로 돌아가기
+        </button>
+    </div>
+    
+    <div class="content-placeholder">
+        <h2>상세 페이지 준비중</h2>
+        <p>회의록 작업 상세 페이지는 추후 구현 예정입니다.<br>
+        현재는 목록 페이지에서 기본 정보를 확인하실 수 있습니다.</p>
+    </div>
+
+    <script>
+        function goBack() {
+            // iframe 환경에서는 부모 창으로 이동
+            if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                window.parent.loadPage('pages/soribaro/enterprise/meeting-management.html');
+            } else {
+                // 직접 접근한 경우
+                window.location.href = 'meeting-management.html';
+            }
+        }
+    </script>
+</body>
+</html>

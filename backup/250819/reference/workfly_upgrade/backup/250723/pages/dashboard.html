@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>대시보드</title>
+    <link rel="stylesheet" href="../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">📊 대시보드</h1>
+    
+    <!-- 전체 통계 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>진행중 프로젝트</h3>
+            <div class="value">24</div>
+        </div>
+        <div class="stat-card">
+            <h3>대기중 프로젝트</h3>
+            <div class="value">8</div>
+        </div>
+        <div class="stat-card">
+            <h3>완료된 프로젝트</h3>
+            <div class="value">156</div>
+        </div>
+        <div class="stat-card">
+            <h3>가용 작업자</h3>
+            <div class="value">12</div>
+        </div>
+    </div>
+
+    <!-- 서비스별 현황 -->
+    <div class="analysis-grid">
+        <div class="analysis-card">
+            <h4>소리바로 작업 현황</h4>
+            <div class="progress-item">
+                <span>녹취록 작업</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 75%;"></div>
+                    </div>
+                    <span>75%</span>
+                </div>
+            </div>
+            <div class="progress-item">
+                <span>회의록 작업</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 60%;"></div>
+                    </div>
+                    <span>60%</span>
+                </div>
+            </div>
+            <div class="progress-item">
+                <span>VOD 작업</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%;"></div>
+                    </div>
+                    <span>45%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analysis-card">
+            <h4>웍스파이 현황</h4>
+            <div class="progress-item">
+                <span>채용 진행</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 85%;"></div>
+                    </div>
+                    <span>85%</span>
+                </div>
+            </div>
+            <div class="progress-item">
+                <span>프로젝트 관리</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 70%;"></div>
+                    </div>
+                    <span>70%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="analysis-card">
+            <h4>회원 현황</h4>
+            <div class="progress-item">
+                <span>총 회원 수</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: bold; color: #3b82f6;">2,156명</span>
+                </div>
+            </div>
+            <div class="progress-item">
+                <span>활성 회원</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: bold; color: #10b981;">1,845명</span>
+                </div>
+            </div>
+            <div class="progress-item">
+                <span>이번 달 신규</span>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="font-weight: bold; color: #f59e0b;">234명</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 최근 활동 -->
+    <div class="table-section">
+        <div class="table-header">
+            📈 최근 활동
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>시간</th>
+                    <th>활동</th>
+                    <th>사용자</th>
+                    <th>상태</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>2024-12-19 09:30</td>
+                    <td>회원 가입</td>
+                    <td>김영희</td>
+                    <td><span class="status status-completed">완료</span></td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 09:25</td>
+                    <td>녹취록 작업 완료</td>
+                    <td>박철수</td>
+                    <td><span class="status status-completed">완료</span></td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 09:20</td>
+                    <td>프로젝트 등록</td>
+                    <td>이미영</td>
+                    <td><span class="status status-progress">진행중</span></td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 09:15</td>
+                    <td>작업자 배정</td>
+                    <td>관리자</td>
+                    <td><span class="status status-pending">대기</span></td>
+                </tr>
+                <tr>
+                    <td>2024-12-19 09:10</td>
+                    <td>쿠폰 발급</td>
+                    <td>관리자</td>
+                    <td><span class="status status-completed">완료</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html> 

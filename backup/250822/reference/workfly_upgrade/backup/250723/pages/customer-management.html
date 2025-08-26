@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객 관리</title>
+    <link rel="stylesheet" href="../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">🏢 고객 관리</h1>
+    
+    <!-- 고객 통계 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>전체 고객사</h3>
+            <div class="value">89</div>
+        </div>
+        <div class="stat-card">
+            <h3>활성 고객</h3>
+            <div class="value">67</div>
+        </div>
+        <div class="stat-card">
+            <h3>신규 고객 (이번 달)</h3>
+            <div class="value">8</div>
+        </div>
+        <div class="stat-card">
+            <h3>VIP 고객</h3>
+            <div class="value">12</div>
+        </div>
+    </div>
+
+    <!-- 검색 폼 -->
+    <div class="search-section">
+        <div class="search-grid">
+            <div class="form-group">
+                <label>고객사명</label>
+                <input type="text" placeholder="고객사명을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>업종</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="manufacturing">제조업</option>
+                    <option value="finance">금융업</option>
+                    <option value="it">IT/소프트웨어</option>
+                    <option value="education">교육기관</option>
+                    <option value="government">정부기관</option>
+                    <option value="healthcare">의료/헬스케어</option>
+                    <option value="retail">유통/소매</option>
+                    <option value="media">미디어/방송</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>고객 등급</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="vip">VIP</option>
+                    <option value="premium">프리미엄</option>
+                    <option value="standard">일반</option>
+                    <option value="basic">베이직</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-buttons">
+            <button class="btn btn-outline">초기화</button>
+            <button class="btn btn-primary">🔍 검색</button>
+            <button class="btn btn-secondary">🏢 신규 고객 등록</button>
+        </div>
+    </div>
+
+    <!-- 고객 목록 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>🏢 총 89개 고객사</span>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                    <button class="btn btn-primary btn-sm">📈 고객 분석 리포트</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
+                    <th>고객사명</th>
+                    <th>담당자</th>
+                    <th>연락처</th>
+                    <th>업종</th>
+                    <th>고객 등급</th>
+                    <th>등록일</th>
+                    <th>최근 프로젝트</th>
+                    <th>상태</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>삼성전자</strong></td>
+                    <td>김삼성</td>
+                    <td>02-2255-0114</td>
+                    <td>제조업</td>
+                    <td><span class="status" style="background-color: #fef3c7; color: #f59e0b;">VIP</span></td>
+                    <td>2023-03-15</td>
+                    <td>2024-12-18</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>LG화학</strong></td>
+                    <td>이엘지</td>
+                    <td>02-3773-1114</td>
+                    <td>제조업</td>
+                    <td><span class="status" style="background-color: #fef3c7; color: #f59e0b;">VIP</span></td>
+                    <td>2023-05-20</td>
+                    <td>2024-12-15</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>국민은행</strong></td>
+                    <td>박금융</td>
+                    <td>02-2073-7000</td>
+                    <td>금융업</td>
+                    <td><span class="status" style="background-color: #e0e7ff; color: #3730a3;">프리미엄</span></td>
+                    <td>2023-08-10</td>
+                    <td>2024-11-30</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>네이버</strong></td>
+                    <td>정네이버</td>
+                    <td>031-784-4000</td>
+                    <td>IT/소프트웨어</td>
+                    <td><span class="status" style="background-color: #fef3c7; color: #f59e0b;">VIP</span></td>
+                    <td>2023-01-25</td>
+                    <td>2024-12-10</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>서울대학교</strong></td>
+                    <td>최교육</td>
+                    <td>02-880-5114</td>
+                    <td>교육기관</td>
+                    <td><span class="status" style="background-color: #e0e7ff; color: #3730a3;">프리미엄</span></td>
+                    <td>2023-09-05</td>
+                    <td>2024-12-05</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>외교부</strong></td>
+                    <td>한외교</td>
+                    <td>02-2100-7999</td>
+                    <td>정부기관</td>
+                    <td><span class="status" style="background-color: #dcfce7; color: #166534;">일반</span></td>
+                    <td>2023-11-12</td>
+                    <td>2024-12-20</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>삼성병원</strong></td>
+                    <td>윤의료</td>
+                    <td>02-3410-2114</td>
+                    <td>의료/헬스케어</td>
+                    <td><span class="status" style="background-color: #e0e7ff; color: #3730a3;">프리미엄</span></td>
+                    <td>2024-02-14</td>
+                    <td>2024-11-25</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>롯데마트</strong></td>
+                    <td>장유통</td>
+                    <td>02-2118-7000</td>
+                    <td>유통/소매</td>
+                    <td><span class="status" style="background-color: #dcfce7; color: #166534;">일반</span></td>
+                    <td>2024-06-30</td>
+                    <td>-</td>
+                    <td><span class="status status-pending">대기</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary btn-sm">프로젝트 배정</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>KBS</strong></td>
+                    <td>조방송</td>
+                    <td>02-781-1000</td>
+                    <td>미디어/방송</td>
+                    <td><span class="status" style="background-color: #e0e7ff; color: #3730a3;">프리미엄</span></td>
+                    <td>2023-07-18</td>
+                    <td>2024-12-08</td>
+                    <td><span class="status status-progress">활성</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>스타트업X</strong></td>
+                    <td>김스타트</td>
+                    <td>02-123-4567</td>
+                    <td>IT/소프트웨어</td>
+                    <td><span class="status" style="background-color: #f3f4f6; color: #9ca3af;">베이직</span></td>
+                    <td>2024-12-01</td>
+                    <td>-</td>
+                    <td><span class="status status-pending">신규</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary btn-sm">온보딩</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">12</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+        </div>
+    </div>
+
+    <script src="../scripts/common.js"></script>
+</body>
+</html> 

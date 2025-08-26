@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소리바로 BO 관리자 페이지</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        /* 컨테이너 */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 사이드바 */
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #2c3e50, #34495e);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        /* 로고 영역 */
+        .logo {
+            padding: 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+        }
+        
+        .menu-title {
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            flex: 1;
+        }
+        
+        .menu-icon {
+            margin-right: 10px;
+            width: 16px;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        .submenu.active {
+            max-height: 800px;
+        }
+        
+        .submenu-item {
+            padding: 12px 20px;
+            padding-left: 40px !important;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .submenu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .submenu-item.active {
+            background-color: rgba(52, 152, 219, 0.3);
+            border-left: 4px solid #3498db;
+            color: white;
+            font-weight: 600;
+        }
+        
+        /* 3단계 서브메뉴 */
+        .submenu-level-2 {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(0,0,0,0.2);
+        }
+        
+        .submenu-level-2.active {
+            max-height: 800px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+        
+        .submenu-level-2 .submenu-item {
+            padding-left: 60px !important;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.7);
+        }
+        
+        .submenu-level-2 .submenu-item:hover, .submenu-level-2 .submenu-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid #3498db;
+            color: white;
+        }
+        
+        /* 서브메뉴 스크롤바 스타일 (웹킷) */
+        .submenu-level-2.active::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .submenu-level-2.active::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .submenu-level-2.active::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
+        .submenu-level-2.active::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        /* 메뉴 확장/축소 화살표 */
+        .menu-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .menu-item.active .menu-arrow {
+            transform: rotate(90deg);
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .submenu-item.has-children {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .submenu-item .menu-arrow {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        /* 메인 컨텐츠 */
+        .main-content {
+            flex: 1;
+            margin-left: 260px;
+            padding: 30px;
+            background-color: #f5f6fa;
+        }
+        
+        .content-frame {
+            width: 100%;
+            height: calc(100vh - 60px);
+            border: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* 로딩 애니메이션 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 60px);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 웍스파이 연동 표시 */
+        .workspy-badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 500;
+            margin-left: 6px;
+        }
+
+        /* 반응형 개선 */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 240px;
+            }
+            .main-content {
+                margin-left: 240px;
+            }
+        }
+        
+        /* 페이지 스타일 */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+  <body>
+    <div class="container">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <!-- 로고 영역 -->
+            <div class="logo">
+                <h2>🏢 소리바로 BO</h2>
+            </div>
+        <!-- 대시보드 -->
+        <div class="menu-item active" onclick="loadPage('pages/dashboard.html')">
+            <div class="menu-title">
+                <span class="menu-icon">🏠</span>
+                대시보드
+            </div>
+        </div>
+        
+        <!-- 사용자 관리 -->
+        <div class="menu-item" onclick="toggleSubmenu('user-management')">
+            <div class="menu-title">
+                <span class="menu-icon">👥</span>
+                사용자 관리
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="user-management">
+            <div class="submenu-item" onclick="loadPage('pages/user/worker-management.html')">
+                작업자 관리<span class="workspy-badge">웍스파이 연동</span>
+            </div>
+        </div>
+        
+        <!-- 소리바로 서비스 -->
+        <div class="menu-item" onclick="toggleSubmenu('soribaro-service')">
+            <div class="menu-title">
+                <span class="menu-icon">🔊</span>
+                소리바로 서비스
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="soribaro-service">
+                <!-- 녹취록 (B2C) -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('b2c-service')">
+                    녹취록 (B2C)
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="b2c-service">
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/b2c/request-management.html')">의뢰현황관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/b2c/work-management.html')">작업현황관리</div>
+                </div>
+                
+                <!-- 엔터프라이즈 (B2B) -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('b2b-service')">
+                    엔터프라이즈 (B2B)
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="b2b-service">
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/enterprise/meeting-management.html')">회의록 작업관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/enterprise/vod-management.html')">VOD 작업관리</div>
+                </div>
+                
+                <!-- 번역 서비스 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('translation-service')">
+                    번역 서비스
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="translation-service">
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/translation/work-management.html')">번역 작업관리</div>
+                </div>
+                
+                <!-- 가격 정책 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('pricing-policy')">
+                    가격 정책
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="pricing-policy">
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/pricing/notarization-pricing.html')">공증신청/기록완본</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/pricing/recording-pricing.html')">다기록/통화기록</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/pricing/point-policy.html')">포인트 정책</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/pricing/customer-point-history.html')">고객 포인트 변경 내역</div>
+                </div>
+                
+                <!-- 고객 응대 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('customer-support')">
+                    고객 응대
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="customer-support">
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/customer/inquiry-application.html')">문의/신청</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/customer/customer-voice.html')">고객의 소리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/customer/contact-us.html')">Contact US</div>
+                </div>
+                
+                <!-- 설정 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('soribaro-settings')">
+                    설정
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="soribaro-settings">
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/faq-management.html')">FAQ</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/notice-management.html')">공지사항관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/popup-event-management.html')">팝업 이벤트 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/mail-template-management.html')">메일 템플릿 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/aligo-template-management.html')">알리고 템플릿 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/property-management.html')">프로퍼티 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/terms-management.html')">서비스 약관 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/enterprise-company-management.html')">엔터프라이즈 업체 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/enterprise-account-management.html')">엔터프라이즈 계정 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/soribaro/settings/admin-account-management.html')">관리자 계정 관리</div>
+                </div>
+        </div>
+        
+        <!-- 클립데스크 서비스 -->
+        <div class="menu-item" onclick="toggleSubmenu('clipdesk-service')">
+            <div class="menu-title">
+                <span class="menu-icon">🎬</span>
+                클립데스크 서비스
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="clipdesk-service">
+                <!-- 영상작업관리 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('video-management')">
+                    영상작업관리
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="video-management">
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/video/request-management.html')">의뢰현황관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/video/work-management.html')">작업현황관리</div>
+                </div>
+                
+                <!-- 고객응대/설정 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('clipdesk-settings')">
+                    고객응대/설정
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="clipdesk-settings">
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/settings/popup-management.html')">팝업 이벤트 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/settings/mail-template.html')">메일 템플릿 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/settings/request-items.html')">고객 의뢰 항목 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/settings/portfolio-management.html')">포토폴리오 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/settings/blog-management.html')">블로그 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/settings/review-management.html')">리뷰 관리</div>
+                    <div class="submenu-item" onclick="loadPage('pages/clipdesk/settings/notification-mail-check.html')">알림 메일 확인</div>
+                </div>
+        </div>
+        
+        <!-- 시스템 관리 -->
+        <div class="menu-item" onclick="loadPage('pages/system/management.html')">
+            <div class="menu-title">
+                <span class="menu-icon">⚙️</span>
+                시스템 관리
+            </div>
+        </div>
+        
+        <!-- 로그아웃 -->
+        <div class="menu-item" onclick="logout()">
+            <div class="menu-title">
+                <span class="menu-icon">🚪</span>
+                로그아웃
+            </div>
+        </div>
+    </div>
+        
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <iframe id="content-frame" class="content-frame" src="pages/dashboard.html"></iframe>
+        </div>
+    </div>
+    
+    <script>
+        // 메뉴 토글 함수
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId);
+            if (!submenu) return;
+            
+            const isCurrentlyActive = submenu.classList.contains('active');
+            
+            // 클릭된 메뉴가 이미 활성화되어 있으면 닫기
+            if (isCurrentlyActive) {
+                submenu.classList.remove('active');
+                // 부모 메뉴 아이템의 active 클래스도 제거
+                const parentMenuItem = submenu.previousElementSibling;
+                if (parentMenuItem && parentMenuItem.classList.contains('has-children')) {
+                    parentMenuItem.classList.remove('active');
+                }
+            } else {
+                // 같은 레벨의 다른 서브메뉴들 닫기
+                const parentElement = submenu.parentElement;
+                const siblingSubmenus = parentElement.querySelectorAll('.submenu, .submenu-level-2, .submenu-level-3');
+                
+                siblingSubmenus.forEach(sibling => {
+                    if (sibling !== submenu && sibling.parentElement === parentElement) {
+                        sibling.classList.remove('active');
+                        // 해당 서브메뉴의 부모 메뉴 아이템도 비활성화
+                        const siblingParent = sibling.previousElementSibling;
+                        if (siblingParent && siblingParent.classList.contains('has-children')) {
+                            siblingParent.classList.remove('active');
+                        }
+                    }
+                });
+                
+                // 현재 서브메뉴 활성화
+                submenu.classList.add('active');
+                // 부모 메뉴 아이템 활성화
+                const parentMenuItem = submenu.previousElementSibling;
+                if (parentMenuItem && parentMenuItem.classList.contains('has-children')) {
+                    parentMenuItem.classList.add('active');
+                }
+            }
+            
+            // 이벤트 전파 중단
+            event.stopPropagation();
+        }
+        
+        // 페이지 로드 함수
+        function loadPage(pageUrl) {
+            const contentFrame = document.getElementById('content-frame');
+            
+            // 로딩 표시
+            showLoading();
+            
+            // 모든 메뉴 아이템 비활성화
+            document.querySelectorAll('.menu-item, .submenu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 현재 페이지에 해당하는 메뉴 아이템 활성화
+            setActiveMenu(pageUrl);
+            
+            // iframe으로 페이지 로드
+            contentFrame.src = pageUrl;
+            
+            // 이벤트 전파 중단
+            if (event) {
+                event.stopPropagation();
+            }
+        }
+        
+        // 활성 메뉴 설정 함수
+        function setActiveMenu(pageUrl) {
+            // 모든 서브메뉴 항목에서 해당 페이지 URL을 가진 항목 찾기
+            const allMenuItems = document.querySelectorAll('.menu-item, .submenu-item');
+            
+            allMenuItems.forEach(item => {
+                const onclick = item.getAttribute('onclick');
+                if (onclick && onclick.includes(pageUrl)) {
+                    // 해당 메뉴 아이템 활성화
+                    item.classList.add('active');
+                    
+                    // 상위 메뉴들 열기 및 활성화
+                    let currentElement = item;
+                    while (currentElement) {
+                        // 서브메뉴인 경우 열기
+                        if (currentElement.classList.contains('submenu') || 
+                            currentElement.classList.contains('submenu-level-2') ||
+                            currentElement.classList.contains('submenu-level-3')) {
+                            currentElement.classList.add('active');
+                        }
+                        
+                        // 부모 메뉴 아이템 활성화 (has-children 클래스가 있는 경우)
+                        if (currentElement.previousElementSibling && 
+                            currentElement.previousElementSibling.classList.contains('has-children')) {
+                            currentElement.previousElementSibling.classList.add('active');
+                        }
+                        
+                        // 최상위 메뉴까지 올라가기
+                        currentElement = currentElement.parentElement;
+                        if (currentElement && currentElement.classList.contains('menu-item')) {
+                            currentElement.classList.add('active');
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 로딩 표시 함수
+        function showLoading() {
+            const mainContent = document.querySelector('.main-content');
+            const contentFrame = document.getElementById('content-frame');
+            
+            // 임시로 로딩 div 생성
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.innerHTML = '<div class="loading-spinner"></div>';
+            loadingDiv.id = 'loading-indicator';
+            
+            // 기존 로딩 인디케이터 제거
+            const existingLoading = document.getElementById('loading-indicator');
+            if (existingLoading) {
+                existingLoading.remove();
+            }
+            
+            // 로딩 인디케이터 추가
+            mainContent.appendChild(loadingDiv);
+            contentFrame.style.display = 'none';
+            
+            // 페이지 로드 완료 후 로딩 제거
+            setTimeout(() => {
+                loadingDiv.remove();
+                contentFrame.style.display = 'block';
+            }, 800);
+        }
+        
+        // 로그아웃 함수
+        function logout() {
+            if (confirm('로그아웃 하시겠습니까?')) {
+                alert('로그아웃되었습니다.');
+                // 실제로는 로그인 페이지로 리다이렉트
+            }
+        }
+        
+        // 초기 로드 시 처리
+        document.addEventListener('DOMContentLoaded', function() {
+            // 기본적으로 대시보드 표시
+            const contentFrame = document.getElementById('content-frame');
+            if (!contentFrame.src || contentFrame.src.includes('about:blank')) {
+                loadPage('pages/dashboard.html');
+            } else {
+                // 이미 페이지가 로드된 경우 해당 메뉴 활성화
+                const currentSrc = contentFrame.src;
+                const pageUrl = currentSrc.substring(currentSrc.lastIndexOf('/') + 1);
+                setActiveMenu(pageUrl);
+            }
+        });
+    </script>
+</body>
+</html> 

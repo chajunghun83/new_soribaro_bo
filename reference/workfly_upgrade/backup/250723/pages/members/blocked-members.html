@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>차단 회원</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">🚫 차단 회원</h1>
+    
+    <!-- 차단 회원 통계 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>총 차단 회원 수</h3>
+            <div class="value">23</div>
+        </div>
+        <div class="stat-card">
+            <h3>영구 차단</h3>
+            <div class="value">8</div>
+        </div>
+        <div class="stat-card">
+            <h3>일시 정지</h3>
+            <div class="value">15</div>
+        </div>
+        <div class="stat-card">
+            <h3>해제 요청</h3>
+            <div class="value">3</div>
+        </div>
+    </div>
+
+    <!-- 검색 폼 -->
+    <div class="search-section">
+        <div class="search-grid">
+            <div class="form-group">
+                <label>차단 회원명</label>
+                <input type="text" placeholder="차단 회원명을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>차단 사유</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="inappropriate_behavior">부적절한 행동</option>
+                    <option value="spam">스팸/광고</option>
+                    <option value="fraud">사기/허위정보</option>
+                    <option value="copyright">저작권 침해</option>
+                    <option value="payment_issue">결제 문제</option>
+                    <option value="terms_violation">이용약관 위반</option>
+                    <option value="other">기타</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>차단 유형</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="permanent">영구 차단</option>
+                    <option value="temporary">일시 정지</option>
+                    <option value="service_restriction">서비스 제한</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-buttons">
+            <button class="btn btn-outline">초기화</button>
+            <button class="btn btn-primary">🔍 검색</button>
+        </div>
+    </div>
+
+    <!-- 차단 회원 목록 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>🚫 총 23명의 차단 회원</span>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                    <button class="btn btn-primary btn-sm">✅ 차단 해제</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>휴대전화</th>
+                    <th>차단일</th>
+                    <th>차단 사유</th>
+                    <th>차단 유형</th>
+                    <th>해제 예정일</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>김불량</td>
+                    <td>bad.kim@gmail.com</td>
+                    <td>010-1**1-1111</td>
+                    <td>2024-12-01</td>
+                    <td>부적절한 행동</td>
+                    <td><span class="status status-pending">일시 정지</span></td>
+                    <td>2024-12-31</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">해제</button>
+                            <button class="btn btn-secondary btn-sm">연장</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>이스팸</td>
+                    <td>spam.lee@naver.com</td>
+                    <td>010-2**2-2222</td>
+                    <td>2024-11-15</td>
+                    <td>스팸/광고</td>
+                    <td><span class="status status-completed">영구 차단</span></td>
+                    <td>-</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세보기</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>박사기</td>
+                    <td>fraud.park@gmail.com</td>
+                    <td>010-3**3-3333</td>
+                    <td>2024-12-10</td>
+                    <td>사기/허위정보</td>
+                    <td><span class="status status-completed">영구 차단</span></td>
+                    <td>-</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세보기</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>정위반</td>
+                    <td>violation.jung@daum.net</td>
+                    <td>010-4**4-4444</td>
+                    <td>2024-12-18</td>
+                    <td>이용약관 위반</td>
+                    <td><span class="status status-pending">일시 정지</span></td>
+                    <td>2025-01-18</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">해제</button>
+                            <button class="btn btn-secondary btn-sm">연장</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>최저작</td>
+                    <td>copyright.choi@gmail.com</td>
+                    <td>010-5**5-5555</td>
+                    <td>2024-12-05</td>
+                    <td>저작권 침해</td>
+                    <td><span class="status status-progress">서비스 제한</span></td>
+                    <td>2024-12-25</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">해제</button>
+                            <button class="btn btn-secondary btn-sm">연장</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>한결제</td>
+                    <td>payment.han@naver.com</td>
+                    <td>010-6**6-6666</td>
+                    <td>2024-12-12</td>
+                    <td>결제 문제</td>
+                    <td><span class="status status-pending">일시 정지</span></td>
+                    <td>2024-12-30</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">해제</button>
+                            <button class="btn btn-secondary btn-sm">연장</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>윤기타</td>
+                    <td>other.yoon@gmail.com</td>
+                    <td>010-7**7-7777</td>
+                    <td>2024-11-28</td>
+                    <td>기타</td>
+                    <td><span class="status status-completed">영구 차단</span></td>
+                    <td>-</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세보기</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>장문제</td>
+                    <td>problem.jang@daum.net</td>
+                    <td>010-8**8-8888</td>
+                    <td>2024-12-16</td>
+                    <td>부적절한 행동</td>
+                    <td><span class="status status-pending">일시 정지</span></td>
+                    <td>2025-01-16</td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">해제</button>
+                            <button class="btn btn-secondary btn-sm">연장</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+        </div>
+    </div>
+
+    <script src="../../scripts/common.js"></script>
+</body>
+</html> 

@@ -4143,9 +4143,11 @@
             
             <!-- 모달 하단 버튼 -->
             <div class="modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeProjectDetailModal()">닫기</button>
-                <button type="button" class="btn-edit" onclick="editProjectDetail()">수정</button>
                 <button type="button" class="btn-cancel" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer;" onclick="closeEnterpriseProject()">프로젝트 마감</button>
+                <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <button type="button" class="btn-secondary" onclick="closeProjectDetailModal()">닫기</button>
+                    <button type="button" class="btn-edit" onclick="editProjectDetail()">수정</button>
+                </div>
             </div>
         </div>
     </div>

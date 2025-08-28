@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ 관리 - 소리바로 BO</title>
+    <title>고객 포인트 변경 내역 - 소리바로 BO</title>
     <style>
         * {
             margin: 0;
@@ -70,6 +70,16 @@
             white-space: nowrap;
         }
         
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 120px;
+        }
+        
         .search-input {
             padding: 8px 12px;
             border: 1px solid #d1d5db;
@@ -77,7 +87,13 @@
             font-size: 14px;
             background: white;
             color: #374151;
-            min-width: 200px;
+            min-width: 150px;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
         .search-btn {
@@ -159,8 +175,8 @@
             cursor: pointer;
         }
         
-        /* 서비스 유형 배지 */
-        .service-badge {
+        /* 포인트 구분 배지 */
+        .point-badge {
             padding: 4px 8px;
             border-radius: 12px;
             font-size: 12px;
@@ -168,62 +184,35 @@
             white-space: nowrap;
         }
         
-        .service-korean {
+        .point-welcome {
             background: #dbeafe;
             color: #1e40af;
         }
         
-        .service-english {
+        .point-reception {
             background: #fef3c7;
             color: #92400e;
         }
         
-        /* 카테고리 배지 */
-        .category-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .category-service {
+        .point-payment {
             background: #dcfce7;
             color: #166534;
         }
         
-        .category-account {
-            background: #f3e8ff;
-            color: #7c3aed;
-        }
-        
-        .category-billing {
-            background: #fce7f3;
-            color: #be185d;
-        }
-        
-        .category-notary {
-            background: #e0f2fe;
-            color: #0369a1;
-        }
-        
-        /* 공개여부 배지 */
-        .visibility-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .visibility-public {
-            background: #dcfce7;
-            color: #166534;
-        }
-        
-        .visibility-private {
+        .point-deduction {
             background: #fee2e2;
             color: #dc2626;
+        }
+        
+        /* 포인트 변경 스타일 */
+        .point-increase {
+            color: #059669;
+            font-weight: 600;
+        }
+        
+        .point-decrease {
+            color: #dc2626;
+            font-weight: 600;
         }
         
         /* 하단 액션 영역 */
@@ -293,8 +282,8 @@
 <body>
     <div class="page-header">
         <h1 class="page-title">
-            <span>❓</span>
-            FAQ 관리
+            <span>📊</span>
+            고객 포인트 변경 내역
         </h1>
     </div>
     
@@ -303,18 +292,30 @@
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">제목 검색</label>
-                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+                <label class="search-label">검색 조건</label>
+                <select id="searchType" class="search-select">
+                    <option value="userEmail">이메일</option>
+                    <option value="userName">이름</option>
+                    <option value="userPhone">전화번호</option>
+                </select>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
             </div>
             
-            <button class="search-btn" onclick="searchFaqData()">
+            <div class="search-group">
+                <label class="search-label">조회 기간</label>
+                <input type="date" id="startDate" class="search-input">
+                <span style="margin: 0 8px;">~</span>
+                <input type="date" id="endDate" class="search-input">
+            </div>
+            
+            <button class="search-btn" onclick="searchCustomerPointData()">
                 <span>🔍</span>
                 검색
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
-                <span>📝</span>
-                등록
+                <span>💰</span>
+                포인트 지급
             </button>
         </div>
     </div>
@@ -322,7 +323,7 @@
     <!-- 테이블 영역 -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">FAQ 목록</h2>
+            <h2 class="table-title">고객 포인트 변경 내역</h2>
             <div class="table-info">총 <span id="totalCount">10</span>건</div>
         </div>
         
@@ -330,126 +331,137 @@
             <thead>
                 <tr>
                     <th width="60">NO.</th>
-                    <th width="300">제목</th>
-                    <th width="100">서비스 유형</th>
-                    <th width="120">카테고리</th>
-                    <th width="80">공개여부</th>
+                    <th width="120">이메일</th>
+                    <th width="100">이름</th>
+                    <th width="120">전화번호</th>
+                    <th width="120">포인트구분</th>
+                    <th width="120">보유포인트</th>
+                    <th width="120">변경포인트</th>
+                    <th width="120">포인트합계</th>
                     <th width="100">등록자</th>
-                    <th width="150">등록일시</th>
-                    <th width="100">수정자</th>
-                    <th width="150">수정일시</th>
+                    <th width="180">변경일</th>
                 </tr>
             </thead>
-            <tbody id="faqTableBody">
-                <tr onclick="goToDetail('FAQ001')">
+            <tbody id="customerPointTableBody">
+                <tr onclick="goToDetail('CP001')">
                     <td>10</td>
-                    <td>소리바로 서비스 이용 방법</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-service">서비스 이용</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-27 09:00:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-27 09:00:00</td>
+                    <td>kim.cs@email.com</td>
+                    <td>김철수</td>
+                    <td>010-1234-5678</td>
+                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td>0</td>
+                    <td class="point-increase">+1,000</td>
+                    <td>1,000</td>
+                    <td>김철수</td>
+                    <td>2025-08-27 14:30:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ002')">
+                <tr onclick="goToDetail('CP002')">
                     <td>9</td>
-                    <td>회원가입은 어떻게 하나요?</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-account">계정정보</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
+                    <td>lee.yh@email.com</td>
+                    <td>이영희</td>
+                    <td>010-2345-6789</td>
+                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td>2,000</td>
+                    <td class="point-increase">+500</td>
+                    <td>2,500</td>
                     <td>관리자</td>
-                    <td>2025-08-27 10:30:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-27 10:30:00</td>
+                    <td>2025-08-27 13:15:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ003')">
+                <tr onclick="goToDetail('CP003')">
                     <td>8</td>
-                    <td>결제 방법과 환불 정책</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-billing">결제하기</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
+                    <td>park.ms@email.com</td>
+                    <td>박민수</td>
+                    <td>010-3456-7890</td>
+                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td>3,200</td>
+                    <td class="point-increase">+2,000</td>
+                    <td>5,200</td>
                     <td>관리자</td>
-                    <td>2025-08-26 11:15:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-26 11:15:00</td>
+                    <td>2025-08-27 12:45:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ004')">
+                <tr onclick="goToDetail('CP004')">
                     <td>7</td>
-                    <td>공증서비스 신청 절차</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-notary">공증</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-26 14:00:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-26 14:00:00</td>
+                    <td>jung.sj@email.com</td>
+                    <td>정수진</td>
+                    <td>010-4567-8901</td>
+                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td>0</td>
+                    <td class="point-increase">+1,000</td>
+                    <td>1,000</td>
+                    <td>정수진</td>
+                    <td>2025-08-27 11:20:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ005')">
+                <tr onclick="goToDetail('CP005')">
                     <td>6</td>
-                    <td>How to use Soribaro service</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-service">Service</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
+                    <td>choi.dm@email.com</td>
+                    <td>최동민</td>
+                    <td>010-5678-9012</td>
+                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td>1,300</td>
+                    <td class="point-increase">+500</td>
+                    <td>1,800</td>
                     <td>관리자</td>
-                    <td>2025-08-25 15:30:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-25 15:30:00</td>
+                    <td>2025-08-27 10:30:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ006')">
+                <tr onclick="goToDetail('CP006')">
                     <td>5</td>
-                    <td>Account registration guide</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-account">Account</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
+                    <td>han.my@email.com</td>
+                    <td>한미영</td>
+                    <td>010-6789-0123</td>
+                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td>5,500</td>
+                    <td class="point-increase">+3,000</td>
+                    <td>8,500</td>
                     <td>관리자</td>
-                    <td>2025-08-25 16:45:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-25 16:45:00</td>
+                    <td>2025-08-26 16:45:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ007')">
+                <tr onclick="goToDetail('CP007')">
                     <td>4</td>
-                    <td>Payment and refund policy</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-billing">Billing FAQ</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-24 08:00:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-24 08:00:00</td>
+                    <td>kang.th@email.com</td>
+                    <td>강태호</td>
+                    <td>010-7890-1234</td>
+                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td>0</td>
+                    <td class="point-increase">+1,000</td>
+                    <td>1,000</td>
+                    <td>강태호</td>
+                    <td>2025-08-26 15:20:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ008')">
+                <tr onclick="goToDetail('CP008')">
                     <td>3</td>
-                    <td>Notarization service procedure</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-notary">Notarization</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
+                    <td>yoon.sy@email.com</td>
+                    <td>윤서연</td>
+                    <td>010-8901-2345</td>
+                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td>1,600</td>
+                    <td class="point-increase">+500</td>
+                    <td>2,100</td>
                     <td>관리자</td>
-                    <td>2025-08-24 09:30:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-24 09:30:00</td>
+                    <td>2025-08-26 14:10:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ009')">
+                <tr onclick="goToDetail('CP009')">
                     <td>2</td>
-                    <td>파일 업로드 오류 해결</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-service">서비스 이용</span></td>
-                    <td><span class="visibility-badge visibility-private">비공개</span></td>
+                    <td>lim.jh@email.com</td>
+                    <td>임재현</td>
+                    <td>010-9012-3456</td>
+                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td>2,700</td>
+                    <td class="point-increase">+1,500</td>
+                    <td>4,200</td>
                     <td>관리자</td>
-                    <td>2025-08-23 10:15:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-23 10:15:00</td>
+                    <td>2025-08-26 13:30:00</td>
                 </tr>
-                <tr onclick="goToDetail('FAQ010')">
+                <tr onclick="goToDetail('CP010')">
                     <td>1</td>
-                    <td>비밀번호 재설정 방법</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-account">계정정보</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-23 11:00:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-23 11:00:00</td>
+                    <td>cho.hj@email.com</td>
+                    <td>조혜진</td>
+                    <td>010-0123-4567</td>
+                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td>0</td>
+                    <td class="point-increase">+1,000</td>
+                    <td>1,000</td>
+                    <td>조혜진</td>
+                    <td>2025-08-26 12:15:00</td>
                 </tr>
             </tbody>
         </table>
@@ -467,24 +479,52 @@
     
 
     <script>
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('고객 포인트 변경 내역 페이지 로드 완료');
+            
+            // 기본 날짜 설정 (최근 30일)
+            const now = new Date();
+            const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
+            
+            document.getElementById('startDate').value = thirtyDaysAgo.toISOString().slice(0, 10);
+            document.getElementById('endDate').value = now.toISOString().slice(0, 10);
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadCustomerPointData();
+        });
+        
         // 검색 기능
-        function searchFaqData() {
+        function searchCustomerPointData() {
+            const searchType = document.getElementById('searchType').value;
             const searchKeyword = document.getElementById('searchKeyword').value;
-            console.log('검색어:', searchKeyword);
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            console.log('검색 조건:', { searchType, searchKeyword, startDate, endDate });
             
             // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+            alert(`검색 기능이 실행됩니다.\n검색 조건: ${getSearchTypeName(searchType)}\n검색어: ${searchKeyword || '전체'}\n기간: ${startDate} ~ ${endDate}`);
+        }
+        
+        function getSearchTypeName(searchType) {
+            const names = {
+                'userEmail': '이메일',
+                'userName': '이름',
+                'userPhone': '전화번호'
+            };
+            return names[searchType] || '이메일';
         }
         
         // 상세 페이지 이동
         function goToDetail(id) {
-            const url = `faq-detail.html?id=${id}`;
+            const url = `customer-point-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 등록 페이지로 이동
+        // 포인트 지급 페이지로 이동
         function openRegisterModal() {
-            window.location.href = 'faq-register.html';
+            window.location.href = 'customer-point-register.html';
         }
         
         // 페이지네이션
@@ -493,25 +533,10 @@
             // 실제 구현 시 페이지 데이터 로딩
         }
         
-        // 페이지 로드 시 초기화
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('FAQ 관리 페이지 로드 완료');
-            
-            // 엔터키로 검색
-            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    searchFaqData();
-                }
-            });
-            
-            // 실제 구현 시 서버에서 데이터 로딩
-            loadFaqData();
-        });
-        
         // 데이터 로딩 함수
-        function loadFaqData() {
+        function loadCustomerPointData() {
             // 실제 구현 시 서버 API 호출
-            console.log('FAQ 데이터 로딩');
+            console.log('고객 포인트 변경 내역 데이터 로딩');
         }
     </script>
 </body>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ 관리 - 소리바로 BO</title>
+    <title>서비스 약관 관리 - 소리바로 BO</title>
     <style>
         * {
             margin: 0;
@@ -68,6 +68,16 @@
             color: #374151;
             font-size: 14px;
             white-space: nowrap;
+        }
+        
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 120px;
         }
         
         .search-input {
@@ -159,8 +169,8 @@
             cursor: pointer;
         }
         
-        /* 서비스 유형 배지 */
-        .service-badge {
+        /* 사용자구분 배지 */
+        .user-badge {
             padding: 4px 8px;
             border-radius: 12px;
             font-size: 12px;
@@ -168,47 +178,43 @@
             white-space: nowrap;
         }
         
-        .service-korean {
+        .user-system {
             background: #dbeafe;
             color: #1e40af;
         }
         
-        .service-english {
+        .user-general {
             background: #fef3c7;
             color: #92400e;
         }
         
-        /* 카테고리 배지 */
-        .category-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-        }
-        
-        .category-service {
+        .user-admin {
             background: #dcfce7;
             color: #166534;
         }
         
-        .category-account {
+        .user-stenographer {
             background: #f3e8ff;
             color: #7c3aed;
         }
         
-        .category-billing {
+        .user-enterprise {
             background: #fce7f3;
             color: #be185d;
         }
         
-        .category-notary {
+        .user-reviewer {
             background: #e0f2fe;
             color: #0369a1;
         }
         
-        /* 공개여부 배지 */
-        .visibility-badge {
+        .user-clipdesk {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+        
+        /* 사용 여부 배지 */
+        .status-badge {
             padding: 4px 8px;
             border-radius: 12px;
             font-size: 12px;
@@ -216,12 +222,12 @@
             white-space: nowrap;
         }
         
-        .visibility-public {
+        .status-active {
             background: #dcfce7;
             color: #166534;
         }
         
-        .visibility-private {
+        .status-inactive {
             background: #fee2e2;
             color: #dc2626;
         }
@@ -293,8 +299,8 @@
 <body>
     <div class="page-header">
         <h1 class="page-title">
-            <span>❓</span>
-            FAQ 관리
+            <span>📋</span>
+            서비스 약관 관리
         </h1>
     </div>
     
@@ -303,11 +309,15 @@
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">제목 검색</label>
-                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+                <label class="search-label">검색 조건</label>
+                <select id="searchType" class="search-select">
+                    <option value="userType">사용자구분</option>
+                    <option value="title">제목</option>
+                </select>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
             </div>
             
-            <button class="search-btn" onclick="searchFaqData()">
+            <button class="search-btn" onclick="searchTermsData()">
                 <span>🔍</span>
                 검색
             </button>
@@ -322,7 +332,7 @@
     <!-- 테이블 영역 -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">FAQ 목록</h2>
+            <h2 class="table-title">서비스 약관 목록</h2>
             <div class="table-info">총 <span id="totalCount">10</span>건</div>
         </div>
         
@@ -330,124 +340,124 @@
             <thead>
                 <tr>
                     <th width="60">NO.</th>
-                    <th width="300">제목</th>
-                    <th width="100">서비스 유형</th>
-                    <th width="120">카테고리</th>
-                    <th width="80">공개여부</th>
+                    <th width="120">사용자구분</th>
+                    <th width="300">약관제목</th>
+                    <th width="80">사용여부</th>
+                    <th width="60">순서</th>
+                    <th width="150">시작일</th>
+                    <th width="150">종료일</th>
                     <th width="100">등록자</th>
-                    <th width="150">등록일시</th>
-                    <th width="100">수정자</th>
-                    <th width="150">수정일시</th>
+                    <th width="180">등록일시</th>
                 </tr>
             </thead>
-            <tbody id="faqTableBody">
-                <tr onclick="goToDetail('FAQ001')">
-                    <td>10</td>
-                    <td>소리바로 서비스 이용 방법</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-service">서비스 이용</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-27 09:00:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-27 09:00:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ002')">
-                    <td>9</td>
-                    <td>회원가입은 어떻게 하나요?</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-account">계정정보</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-27 10:30:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-27 10:30:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ003')">
-                    <td>8</td>
-                    <td>결제 방법과 환불 정책</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-billing">결제하기</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-26 11:15:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-26 11:15:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ004')">
-                    <td>7</td>
-                    <td>공증서비스 신청 절차</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-notary">공증</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-26 14:00:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-26 14:00:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ005')">
-                    <td>6</td>
-                    <td>How to use Soribaro service</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-service">Service</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-25 15:30:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-25 15:30:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ006')">
-                    <td>5</td>
-                    <td>Account registration guide</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-account">Account</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-25 16:45:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-25 16:45:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ007')">
-                    <td>4</td>
-                    <td>Payment and refund policy</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-billing">Billing FAQ</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-24 08:00:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-24 08:00:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ008')">
-                    <td>3</td>
-                    <td>Notarization service procedure</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="category-badge category-notary">Notarization</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-24 09:30:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-24 09:30:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ009')">
-                    <td>2</td>
-                    <td>파일 업로드 오류 해결</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-service">서비스 이용</span></td>
-                    <td><span class="visibility-badge visibility-private">비공개</span></td>
-                    <td>관리자</td>
-                    <td>2025-08-23 10:15:00</td>
-                    <td>관리자</td>
-                    <td>2025-08-23 10:15:00</td>
-                </tr>
-                <tr onclick="goToDetail('FAQ010')">
+            <tbody id="termsTableBody">
+                <tr onclick="goToDetail('TERMS001')">
+                    <td>15</td>
+                    <td><span class="user-badge user-system">시스템관리자</span></td>
+                    <td>소리바로 서비스 이용약관</td>
+                    <td><span class="status-badge status-active">Y</span></td>
                     <td>1</td>
-                    <td>비밀번호 재설정 방법</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="category-badge category-account">계정정보</span></td>
-                    <td><span class="visibility-badge visibility-public">공개</span></td>
+                    <td>2025-01-01</td>
+                    <td>2025-12-31</td>
                     <td>관리자</td>
-                    <td>2025-08-23 11:00:00</td>
+                    <td>2025-08-27 09:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS002')">
+                    <td>14</td>
+                    <td><span class="user-badge user-general">사용자</span></td>
+                    <td>개인정보 처리방침</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>2</td>
+                    <td>2025-01-01</td>
+                    <td>2025-12-31</td>
+                    <td>관리자</td>
+                    <td>2025-08-27 10:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS003')">
+                    <td>13</td>
+                    <td><span class="user-badge user-admin">관리자</span></td>
+                    <td>관리자 운영 가이드라인</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>3</td>
+                    <td>2025-02-01</td>
+                    <td>2025-12-31</td>
+                    <td>관리자</td>
+                    <td>2025-08-26 11:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS004')">
+                    <td>12</td>
+                    <td><span class="user-badge user-stenographer">속기사</span></td>
+                    <td>속기사 작업 규정</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>1</td>
+                    <td>2025-03-01</td>
+                    <td>2025-12-31</td>
+                    <td>관리자</td>
+                    <td>2025-08-26 14:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS005')">
+                    <td>11</td>
+                    <td><span class="user-badge user-enterprise">기업사용자</span></td>
+                    <td>기업 서비스 이용약관</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>1</td>
+                    <td>2025-04-01</td>
+                    <td>2025-12-31</td>
+                    <td>관리자</td>
+                    <td>2025-08-25 15:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS006')">
+                    <td>10</td>
+                    <td><span class="user-badge user-reviewer">검수자</span></td>
+                    <td>검수자 품질관리 규정</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>2</td>
+                    <td>2025-05-01</td>
+                    <td>2026-04-30</td>
+                    <td>관리자</td>
+                    <td>2025-08-25 16:45:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS007')">
+                    <td>9</td>
+                    <td><span class="user-badge user-clipdesk">클립데스크 사용자</span></td>
+                    <td>클립데스크 서비스 약관</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>1</td>
+                    <td>2025-06-01</td>
+                    <td>2026-05-31</td>
+                    <td>관리자</td>
+                    <td>2025-08-24 08:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS008')">
+                    <td>8</td>
+                    <td><span class="user-badge user-general">사용자</span></td>
+                    <td>회원가입 및 탈퇴 정책</td>
+                    <td><span class="status-badge status-inactive">N</span></td>
+                    <td>3</td>
+                    <td>2025-07-01</td>
+                    <td>2025-07-31</td>
+                    <td>관리자</td>
+                    <td>2025-08-24 09:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS009')">
+                    <td>7</td>
+                    <td><span class="user-badge user-enterprise">기업사용자</span></td>
+                    <td>기업 계약 조건</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>2</td>
+                    <td>2025-08-01</td>
+                    <td>2026-07-31</td>
+                    <td>관리자</td>
+                    <td>2025-08-23 10:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('TERMS010')">
+                    <td>6</td>
+                    <td><span class="user-badge user-stenographer">속기사</span></td>
+                    <td>속기사 보안 서약서</td>
+                    <td><span class="status-badge status-active">Y</span></td>
+                    <td>2</td>
+                    <td>2025-08-15</td>
+                    <td>2026-08-14</td>
                     <td>관리자</td>
                     <td>2025-08-23 11:00:00</td>
                 </tr>
@@ -468,23 +478,33 @@
 
     <script>
         // 검색 기능
-        function searchFaqData() {
+        function searchTermsData() {
+            const searchType = document.getElementById('searchType').value;
             const searchKeyword = document.getElementById('searchKeyword').value;
-            console.log('검색어:', searchKeyword);
+            console.log('검색 조건:', { searchType, searchKeyword });
             
             // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+            alert('검색 기능이 실행됩니다.\n검색 조건: ' + getSearchTypeName(searchType) + '\n검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 검색 조건명 반환
+        function getSearchTypeName(type) {
+            const typeNames = {
+                'userType': '사용자구분',
+                'title': '제목'
+            };
+            return typeNames[type] || type;
         }
         
         // 상세 페이지 이동
         function goToDetail(id) {
-            const url = `faq-detail.html?id=${id}`;
+            const url = `terms-detail.html?id=${id}`;
             window.location.href = url;
         }
         
         // 등록 페이지로 이동
         function openRegisterModal() {
-            window.location.href = 'faq-register.html';
+            window.location.href = 'terms-register.html';
         }
         
         // 페이지네이션
@@ -495,23 +515,23 @@
         
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('FAQ 관리 페이지 로드 완료');
+            console.log('서비스 약관 관리 페이지 로드 완료');
             
             // 엔터키로 검색
             document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
-                    searchFaqData();
+                    searchTermsData();
                 }
             });
             
             // 실제 구현 시 서버에서 데이터 로딩
-            loadFaqData();
+            loadTermsData();
         });
         
         // 데이터 로딩 함수
-        function loadFaqData() {
+        function loadTermsData() {
             // 실제 구현 시 서버 API 호출
-            console.log('FAQ 데이터 로딩');
+            console.log('서비스 약관 데이터 로딩');
         }
     </script>
 </body>

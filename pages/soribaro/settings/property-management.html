@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로퍼티 관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: auto;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 코드 배지 */
+        .property-code {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        /* 설명 텍스트 */
+        .description-text {
+            text-align: left;
+            max-width: 300px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>⚙️</span>
+            프로퍼티 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div style="flex: 1;"></div>
+            <div class="search-group">
+                <label class="search-label">코드 검색</label>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="코드를 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchPropertyData()">
+                <span>🔍</span>
+                검색
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">프로퍼티 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">NO.</th>
+                    <th width="180">코드</th>
+                    <th width="200">값</th>
+                    <th width="300">설명</th>
+                    <th width="180">등록일시</th>
+                </tr>
+            </thead>
+            <tbody id="propertyTableBody">
+                <tr onclick="viewProperty('PROP043')">
+                    <td>10</td>
+                    <td><span class="property-code">KAKAO_CLIENT_ID_OF_CLIP</span></td>
+                    <td>135d1e9c87bee2dcac2e2adfbed078ac</td>
+                    <td class="description-text">클립데스크의 카카오 클라이언트 ID</td>
+                    <td>2025-04-29 17:33:47</td>
+                </tr>
+                <tr onclick="viewProperty('PROP042')">
+                    <td>9</td>
+                    <td><span class="property-code">NAVER_CLIENT_ID_OF_CLIP</span></td>
+                    <td>w1Stg5j0BPxI6CH47v7</td>
+                    <td class="description-text">클립데스크의 네이버 클라이언트 ID</td>
+                    <td>2025-04-29 17:33:47</td>
+                </tr>
+                <tr onclick="viewProperty('PROP041')">
+                    <td>8</td>
+                    <td><span class="property-code">GOOGLE_CLIENT_ID_OF_CLIP</span></td>
+                    <td>829601327868-dbcupk2d22fp2vk4n5tupmft8g8f17f6.apps.googleusercontent.com</td>
+                    <td class="description-text">클립데스크의 구글 클라이언트 ID</td>
+                    <td>2025-04-29 17:33:47</td>
+                </tr>
+                <tr onclick="viewProperty('PROP040')">
+                    <td>7</td>
+                    <td><span class="property-code">KAKAO_CLIENT_SECRET_OF_CLIP</span></td>
+                    <td>zYykrCjEqbQ3h1cSTLuCZo0hahHlmHzL</td>
+                    <td class="description-text">클립데스크의 카카오 클라이언트 보안 비밀번호</td>
+                    <td>2025-04-29 17:33:47</td>
+                </tr>
+                <tr onclick="viewProperty('PROP039')">
+                    <td>6</td>
+                    <td><span class="property-code">NAVER_CLIENT_SECRET_OF_CLIP</span></td>
+                    <td>82dZBwCdwV</td>
+                    <td class="description-text">클립데스크의 네이버 보안 비밀번호</td>
+                    <td>2025-04-29 17:33:47</td>
+                </tr>
+                <tr onclick="viewProperty('PROP038')">
+                    <td>5</td>
+                    <td><span class="property-code">GOOGLE_CLIENT_SECRET_OF_CLIP</span></td>
+                    <td>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</td>
+                    <td class="description-text">클립데스크의 구글 클라이언트 보안 비밀번호</td>
+                    <td>2025-04-29 17:33:47</td>
+                </tr>
+                <tr onclick="viewProperty('PROP037')">
+                    <td>4</td>
+                    <td><span class="property-code">ALIGO_TPL_PRIMARY_B2B</span></td>
+                    <td>TL_5918</td>
+                    <td class="description-text">알리고 초안완성(B2B) 템플릿 코드</td>
+                    <td>2023-02-01 17:32:08</td>
+                </tr>
+                <tr onclick="viewProperty('PROP036')">
+                    <td>3</td>
+                    <td><span class="property-code">ALIGO_TPL_ALLOCATE_B2B</span></td>
+                    <td>TL_5750</td>
+                    <td class="description-text">알리고 배정완료(B2B) 템플릿 코드</td>
+                    <td>2023-02-01 17:32:06</td>
+                </tr>
+                <tr onclick="viewProperty('PROP035')">
+                    <td>2</td>
+                    <td><span class="property-code">ALIGO_TPL_STENO_REFUSE</span></td>
+                    <td>TK_8154</td>
+                    <td class="description-text">알리고 요청거절 템플릿 코드</td>
+                    <td>2023-01-19 17:56:33</td>
+                </tr>
+                <tr onclick="viewProperty('PROP034')">
+                    <td>1</td>
+                    <td><span class="property-code">ALIGO_TPL_NOTA_UPLOAD</span></td>
+                    <td>TJ_9729</td>
+                    <td class="description-text">알리고 MNG 공증파일 업로드</td>
+                    <td>2022-09-21 08:32:16</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+    
+
+    <script>
+        // 검색 기능
+        function searchPropertyData() {
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            console.log('검색어:', searchKeyword);
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 프로퍼티 상세 조회 (목록에서만 조회 가능)
+        function viewProperty(id) {
+            // 실제 구현 시 모달 팝업이나 사이드 패널로 상세 정보 표시
+            const propertyData = getMockPropertyData(id);
+            alert(`프로퍼티 정보\n\n코드: ${propertyData.code}\n값: ${propertyData.value}\n설명: ${propertyData.description}`);
+        }
+        
+        // 임시 데이터 조회
+        function getMockPropertyData(id) {
+            const mockDatabase = {
+                'PROP043': {
+                    code: 'KAKAO_CLIENT_ID_OF_CLIP',
+                    value: '135d1e9c87bee2dcac2e2adfbed078ac',
+                    description: '클립데스크의 카카오 클라이언트 ID'
+                },
+                'PROP042': {
+                    code: 'NAVER_CLIENT_ID_OF_CLIP',
+                    value: 'w1Stg5j0BPxI6CH47v7',
+                    description: '클립데스크의 네이버 클라이언트 ID'
+                },
+                'PROP041': {
+                    code: 'GOOGLE_CLIENT_ID_OF_CLIP',
+                    value: '829601327868-dbcupk2d22fp2vk4n5tupmft8g8f17f6.apps.googleusercontent.com',
+                    description: '클립데스크의 구글 클라이언트 ID'
+                },
+                'PROP040': {
+                    code: 'KAKAO_CLIENT_SECRET_OF_CLIP',
+                    value: 'zYykrCjEqbQ3h1cSTLuCZo0hahHlmHzL',
+                    description: '클립데스크의 카카오 클라이언트 보안 비밀번호'
+                },
+                'PROP039': {
+                    code: 'NAVER_CLIENT_SECRET_OF_CLIP',
+                    value: '82dZBwCdwV',
+                    description: '클립데스크의 네이버 보안 비밀번호'
+                },
+                'PROP038': {
+                    code: 'GOOGLE_CLIENT_SECRET_OF_CLIP',
+                    value: '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',
+                    description: '클립데스크의 구글 클라이언트 보안 비밀번호'
+                },
+                'PROP037': {
+                    code: 'ALIGO_TPL_PRIMARY_B2B',
+                    value: 'TL_5918',
+                    description: '알리고 초안완성(B2B) 템플릿 코드'
+                },
+                'PROP036': {
+                    code: 'ALIGO_TPL_ALLOCATE_B2B',
+                    value: 'TL_5750',
+                    description: '알리고 배정완료(B2B) 템플릿 코드'
+                },
+                'PROP035': {
+                    code: 'ALIGO_TPL_STENO_REFUSE',
+                    value: 'TK_8154',
+                    description: '알리고 요청거절 템플릿 코드'
+                },
+                'PROP034': {
+                    code: 'ALIGO_TPL_NOTA_UPLOAD',
+                    value: 'TJ_9729',
+                    description: '알리고 MNG 공증파일 업로드'
+                }
+            };
+            
+            return mockDatabase[id] || {
+                code: '알 수 없음',
+                value: '알 수 없음',
+                description: '프로퍼티 정보를 찾을 수 없습니다.'
+            };
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('프로퍼티 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchPropertyData();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadPropertyData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadPropertyData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('프로퍼티 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

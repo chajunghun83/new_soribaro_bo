@@ -78,14 +78,10 @@ new_soribaro_bo/
     │       ├── mail-template-detail.html               → 메일 템플릿 상세정보
     │       ├── mail-template-register.html             → 메일 템플릿 등록
     │       └── notification-mail-check.html            → 알림 메일 확인
-    ├── report/
-    │   ├── work-report.html                            → 작업 결과 리포트
-    │   └── work-report-detail.html                     → 작업 결과 리포트 상세정보
     └── system/
         ├── admin-account-management.html               → 관리자 계정 관리
         ├── admin-account-detail.html                   → 관리자 계정 상세정보
-        ├── admin-account-register.html                 → 관리자 계정 등록
-        └── common-code-management.html                 → 공통코드 관리
+        └── admin-account-register.html                 → 관리자 계정 등록
 
 ================================================================================
 
@@ -334,27 +330,12 @@ new_soribaro_bo/
             → 특징: 50개 항목 표시, 조회 전용, 로딩 스피너
 
 📊 Report 🆕 신규 추가 (시스템 관리 상단 배치)
-    ├── 작업 결과 리포트 ✅ 구현 완료
-    │   → pages/report/work-report.html (목록 페이지)
+    ├── 작업 결과 리포트
+    │   → pages/report/work-report.html
     │   → 기능: 서비스별 작업 통계, 작업자별 성과 분석, 기간별 리포트
-    │   → 검색: 날짜 범위, 작업항목(소리바로-B2C/회의록/VOD/번역, 클립데스크), 텍스트 검색(주문번호/제목/작업자)
-    │   → 테이블: NO, 작업항목, 주문번호, 제목, 작업자, 총 작업시간, 작업 배정일, 작업 제출일
-    │   → 통계: 전체 작업 건수, A/B/C/D/E급 분포
-    │   └── 작업 결과 리포트 상세정보 ✅ 구현 완료
-    │       → pages/report/work-report-detail.html
-    │       → 기능: 개별 작업 결과 상세 조회, 작업정보/코멘트/결과 등급/비교자료 확인/다운로드
-    │       → 코멘트 시스템: 번역(7항목), 가이드라인(9항목), 싱크(3항목), 기타(1항목)
-    │       → 모달 시스템: 라인 NO, 타임코드, 코멘트 테이블
-    │       → 결과 등급: A급/B급/C급/D급/E급 선택
-    │       → 비교자료: 작업 항목별 다른 비교 화면 (소리바로-번역은 3영역)
-    │       → 파일 다운로드: 비교자료 확인, 비교자료 다운로드
-    └── 작업자 작업현황 ✅ 구현 완료
+    └── 작업자 작업현황
         → pages/report/work-status.html
-        → 기능: 작업자별 작업 현황 조회, 분야별 작업시간 통계, 금액 계산
-        → 검색: 날짜 범위, 전체 검색(이름/전화번호)
-        → 테이블: NO, 이름, 전화번호, 교육(분), 미디어(분), 회의록(분), 녹취록(분), 현장속기(분), 금액(원)
-        → 정렬: 이름순/금액순 오름차순/내림차순
-        → 금액 계산: 분당 500원 기준 자동 계산
+        → 기능: 실시간 작업 현황, 진행률 모니터링, 대시보드 연동
 
 ⚙️ 시스템 관리 🔄 구조 개편 (단일 메뉴 → 서브메뉴 구조)
     ├── 관리자/검수자 관리 ✅ 구현 완료
@@ -371,12 +352,9 @@ new_soribaro_bo/
     │       → pages/system/admin-account-register.html
     │       → 기능: 템플릿 기반 일괄 등록, Excel 다운로드/업로드, 플랫폼별 관리
     │       → 특징: enterprise-customer-register.html과 동일한 구조
-    ├── 공통코드 관리 ✅ 구현 완료
-    │   → pages/system/common-code-management.html (목록 페이지)
-    │   → 기능: 시스템 공통코드 관리, 코드그룹별 분류, 사용여부 관리
-    │   → 검색: 코드 그룹, 사용여부, 검색 조건 (코드, 코드명, 코드값)
-    │   → 테이블: NO, 코드 그룹, 코드, 코드명, 코드값, 정렬순서, 사용여부, 등록자, 등록일시
-    │   → 코드 그룹: SYSTEM(시스템), USER(사용자), SERVICE(서비스), PAYMENT(결제)
+    ├── 🆕 공통코드 관리 (신규 추가)
+    │   → pages/system/common-code-management.html
+    │   → 기능: 시스템 공통코드 관리, 코드그룹 관리, 다국어 지원
     └── 로그아웃
         → JavaScript 함수로 구현
         → 기능: 안전한 세션 종료, 로그인 이력 기록
@@ -386,7 +364,7 @@ new_soribaro_bo/
 📊 개발 현황 통계
 ================================================================================
 
-구현완료 파일: 70개
+구현완료 파일: 65개
 - index.html (메인 진입점)
 - file_structure.txt (파일 구조 다이어그램)
 - pages/dashboard.html (대시보드)
@@ -452,12 +430,6 @@ new_soribaro_bo/
 - pages/system/admin-account-management.html (관리자 계정 관리)
 - pages/system/admin-account-detail.html (관리자 계정 상세정보)
 - pages/system/admin-account-register.html (관리자 계정 등록)
-- pages/system/common-code-management.html (공통코드 관리)
-- pages/report/work-report.html (작업 결과 리포트)
-- pages/report/work-report-detail.html (작업 결과 리포트 상세정보)
-- pages/report/work-status.html (작업자 작업현황)
-- pages/report/work-comparison.html (작업물 비교 - 일반)
-- pages/report/work-comparison-translation.html (작업물 비교 - 번역 전용)
 
 개발 예정 메뉴: 23+ 개
 주요 서비스 영역: 4개 (대시보드, 소리바로, 클립데스크, 시스템관리)

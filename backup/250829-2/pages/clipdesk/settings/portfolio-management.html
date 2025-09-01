@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포트폴리오 관리 - 클립데스크 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 120px;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 영상종류 배지 */
+        .video-type-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .video-long {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .video-short {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        /* 하단 액션 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 600px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-row {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #ef4444;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            background: #f9fafb;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .file-upload-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-btn:hover {
+            background: #2563eb;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .selected-file {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-remove {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .file-remove:hover {
+            background: #dc2626;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: #4b5563;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .btn-modify {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-modify:hover {
+            background: #d97706;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>🎬</span>
+            포트폴리오 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div class="search-group">
+                <select id="videoType" class="search-select">
+                    <option value="">영상종류</option>
+                    <option value="long">롱폼</option>
+                    <option value="short">숏폼</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <select id="status" class="search-select">
+                    <option value="">상태</option>
+                    <option value="active">사용중</option>
+                    <option value="inactive">미사용</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <select id="searchType" class="search-select">
+                    <option value="">전체</option>
+                    <option value="item">항목</option>
+                    <option value="detail">상세</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchPortfolioData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterModal()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">포트폴리오 목록</h2>
+            <div class="table-info">총 <span id="totalCount">12</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">NO.</th>
+                    <th width="200">항목</th>
+                    <th width="300">상세</th>
+                    <th width="100">영상종류</th>
+                    <th width="100">등록자</th>
+                    <th width="150">등록일시</th>
+                    <th width="80">상태</th>
+                </tr>
+            </thead>
+            <tbody id="portfolioTableBody">
+                <tr onclick="goToDetail('PORT001')">
+                    <td>12</td>
+                    <td>기업 홍보영상</td>
+                    <td>ABC 기업 브랜드 소개</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-27 09:00:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT002')">
+                    <td>11</td>
+                    <td>제품 소개영상</td>
+                    <td>신제품 런칭 특징 안내</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-27 10:30:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT003')">
+                    <td>10</td>
+                    <td>인스타그램 릴스</td>
+                    <td>젊은층 타겟 마케팅</td>
+                    <td><span class="video-type-badge video-short">숏폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-26 11:15:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT004')">
+                    <td>9</td>
+                    <td>유튜브 쇼츠</td>
+                    <td>60초 임팩트 콘텐츠</td>
+                    <td><span class="video-type-badge video-short">숏폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-26 14:00:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT005')">
+                    <td>8</td>
+                    <td>교육 콘텐츠</td>
+                    <td>온라인 강의용 영상</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-25 15:30:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT006')">
+                    <td>7</td>
+                    <td>이벤트 영상</td>
+                    <td>기업 행사 하이라이트</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-25 16:45:00</td>
+                    <td><span class="status-badge status-inactive">미사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT007')">
+                    <td>6</td>
+                    <td>틱톡 챌린지</td>
+                    <td>Z세대 바이럴 콘텐츠</td>
+                    <td><span class="video-type-badge video-short">숏폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-24 08:00:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT008')">
+                    <td>5</td>
+                    <td>브랜딩 영상</td>
+                    <td>기업 가치 스토리</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-24 09:30:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT009')">
+                    <td>4</td>
+                    <td>인터뷰 영상</td>
+                    <td>CEO 기업문화 소개</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-23 10:15:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT010')">
+                    <td>3</td>
+                    <td>애니메이션</td>
+                    <td>모션그래픽 설명 영상</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-23 11:00:00</td>
+                    <td><span class="status-badge status-inactive">미사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT011')">
+                    <td>2</td>
+                    <td>라이브 방송</td>
+                    <td>실시간 커머스 콘텐츠</td>
+                    <td><span class="video-type-badge video-long">롱폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-22 14:20:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('PORT012')">
+                    <td>1</td>
+                    <td>바이럴 영상</td>
+                    <td>SNS 확산 콘텐츠</td>
+                    <td><span class="video-type-badge video-short">숏폼</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-22 15:45:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+
+    <!-- 포트폴리오 등록/수정 모달 -->
+    <div class="modal-overlay" id="portfolioModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">포트폴리오 등록</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label required">항목</label>
+                    <input type="text" id="modalItem" class="form-input" placeholder="항목을 입력하세요" maxlength="12">
+                    <div class="form-help">24Byte까지 입력 가능합니다.</div>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label required">상세</label>
+                    <input type="text" id="modalDetail" class="form-input" placeholder="상세 내용을 입력하세요" maxlength="12">
+                    <div class="form-help">24Byte까지 입력 가능합니다.</div>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label">상태</label>
+                    <select id="modalStatus" class="form-select">
+                        <option value="active">사용</option>
+                        <option value="inactive">미사용</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label">영상종류</label>
+                    <select id="modalVideoType" class="form-select">
+                        <option value="long">롱폼</option>
+                        <option value="short">숏폼</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label">카테고리</label>
+                    <select id="modalCategory" class="form-select">
+                        <option value="all">전체</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label required">유튜브 링크</label>
+                    <input type="url" id="modalYoutubeLink" class="form-input" placeholder="https://www.youtube.com/watch?v=...">
+                    <div class="form-help">유튜브 영상 URL을 입력하세요.</div>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label required">파일</label>
+                    <div class="file-upload-area" onclick="document.getElementById('modalFileInput').click()" 
+                         ondrop="handleFileDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <button type="button" class="file-upload-btn">파일 선택</button>
+                        <div class="file-info">또는 파일을 여기에 드래그하세요</div>
+                    </div>
+                    <input type="file" id="modalFileInput" accept="video/*" style="display: none;" onchange="handleFileSelect(this)">
+                    <div id="selectedFileInfo"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">닫기</button>
+                <button class="btn-save" id="modalSaveBtn" onclick="savePortfolio()">저장</button>
+                <button class="btn-modify" id="modalModifyBtn" onclick="modifyPortfolio()" style="display: none;">수정</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchPortfolioData() {
+            const videoType = document.getElementById('videoType').value;
+            const status = document.getElementById('status').value;
+            const searchType = document.getElementById('searchType').value;
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            
+            console.log('검색 조건:', {
+                videoType: videoType || '영상종류',
+                status: status || '상태',
+                searchType: searchType || '전체',
+                keyword: searchKeyword || '전체'
+            });
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n' +
+                  '영상종류: ' + (videoType || '영상종류') + '\n' +
+                  '상태: ' + (status || '상태') + '\n' +
+                  '검색범위: ' + (searchType || '전체') + '\n' +
+                  '검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 현재 편집 중인 포트폴리오 ID
+        let currentPortfolioId = null;
+
+        // 상세 페이지 이동 (모달로 변경)
+        function goToDetail(id) {
+            currentPortfolioId = id;
+            
+            // 샘플 데이터 (실제로는 서버에서 가져옴)
+            const sampleData = {
+                'PORT001': { item: '기업 홍보영상', detail: 'ABC 기업 브랜드 소개', status: 'active', videoType: 'long', youtubeLink: 'https://www.youtube.com/watch?v=sample1' },
+                'PORT002': { item: '제품 소개영상', detail: '신제품 런칭 특징 안내', status: 'active', videoType: 'long', youtubeLink: 'https://www.youtube.com/watch?v=sample2' },
+                'PORT003': { item: '인스타그램 릴스', detail: '젊은층 타겟 마케팅', status: 'active', videoType: 'short', youtubeLink: 'https://www.youtube.com/watch?v=sample3' }
+            };
+            
+            const data = sampleData[id] || {};
+            
+            // 모달 제목 변경
+            document.getElementById('modalTitle').textContent = '포트폴리오 상세';
+            
+            // 폼 데이터 채우기
+            document.getElementById('modalItem').value = data.item || '';
+            document.getElementById('modalDetail').value = data.detail || '';
+            document.getElementById('modalStatus').value = data.status || 'active';
+            document.getElementById('modalVideoType').value = data.videoType || 'long';
+            document.getElementById('modalCategory').value = 'all';
+            document.getElementById('modalYoutubeLink').value = data.youtubeLink || '';
+            
+            // 파일 정보 초기화
+            document.getElementById('selectedFileInfo').innerHTML = '';
+            
+            // 버튼 상태 변경
+            document.getElementById('modalSaveBtn').style.display = 'none';
+            document.getElementById('modalModifyBtn').style.display = 'inline-block';
+            
+            // 모달 표시
+            document.getElementById('portfolioModal').classList.add('show');
+        }
+        
+        // 등록 모달 열기
+        function openRegisterModal() {
+            currentPortfolioId = null;
+            
+            // 모달 제목 변경
+            document.getElementById('modalTitle').textContent = '포트폴리오 등록';
+            
+            // 폼 초기화
+            document.getElementById('modalItem').value = '';
+            document.getElementById('modalDetail').value = '';
+            document.getElementById('modalStatus').value = 'active';
+            document.getElementById('modalVideoType').value = 'long';
+            document.getElementById('modalCategory').value = 'all';
+            document.getElementById('modalYoutubeLink').value = '';
+            
+            // 파일 정보 초기화
+            document.getElementById('selectedFileInfo').innerHTML = '';
+            
+            // 버튼 상태 변경
+            document.getElementById('modalSaveBtn').style.display = 'inline-block';
+            document.getElementById('modalModifyBtn').style.display = 'none';
+            
+            // 모달 표시
+            document.getElementById('portfolioModal').classList.add('show');
+        }
+        
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('portfolioModal').classList.remove('show');
+            currentPortfolioId = null;
+        }
+        
+        // 포트폴리오 저장
+        function savePortfolio() {
+            const item = document.getElementById('modalItem').value.trim();
+            const detail = document.getElementById('modalDetail').value.trim();
+            const status = document.getElementById('modalStatus').value;
+            const videoType = document.getElementById('modalVideoType').value;
+            const category = document.getElementById('modalCategory').value;
+            const youtubeLink = document.getElementById('modalYoutubeLink').value.trim();
+            const fileInput = document.getElementById('modalFileInput');
+            
+            // 필수 항목 검증
+            if (!item) {
+                alert('항목을 입력해주세요.');
+                document.getElementById('modalItem').focus();
+                return;
+            }
+            
+            if (!detail) {
+                alert('상세 내용을 입력해주세요.');
+                document.getElementById('modalDetail').focus();
+                return;
+            }
+            
+            if (!youtubeLink) {
+                alert('유튜브 링크를 입력해주세요.');
+                document.getElementById('modalYoutubeLink').focus();
+                return;
+            }
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('파일을 선택해주세요.');
+                return;
+            }
+            
+            // 실제 구현 시 서버로 데이터 전송
+            const formData = {
+                item,
+                detail,
+                status,
+                videoType,
+                category,
+                youtubeLink,
+                file: fileInput.files[0]
+            };
+            
+            console.log('포트폴리오 저장:', formData);
+            alert('포트폴리오가 등록되었습니다.');
+            closeModal();
+            
+            // 실제 구현 시 목록 새로고침
+            loadPortfolioData();
+        }
+        
+        // 포트폴리오 수정
+        function modifyPortfolio() {
+            if (!currentPortfolioId) {
+                alert('수정할 포트폴리오가 선택되지 않았습니다.');
+                return;
+            }
+            
+            const item = document.getElementById('modalItem').value.trim();
+            const detail = document.getElementById('modalDetail').value.trim();
+            const status = document.getElementById('modalStatus').value;
+            const videoType = document.getElementById('modalVideoType').value;
+            const category = document.getElementById('modalCategory').value;
+            const youtubeLink = document.getElementById('modalYoutubeLink').value.trim();
+            
+            // 필수 항목 검증 (파일은 수정 시 선택사항)
+            if (!item) {
+                alert('항목을 입력해주세요.');
+                document.getElementById('modalItem').focus();
+                return;
+            }
+            
+            if (!detail) {
+                alert('상세 내용을 입력해주세요.');
+                document.getElementById('modalDetail').focus();
+                return;
+            }
+            
+            if (!youtubeLink) {
+                alert('유튜브 링크를 입력해주세요.');
+                document.getElementById('modalYoutubeLink').focus();
+                return;
+            }
+            
+            // 실제 구현 시 서버로 데이터 전송
+            const formData = {
+                id: currentPortfolioId,
+                item,
+                detail,
+                status,
+                videoType,
+                category,
+                youtubeLink
+            };
+            
+            const fileInput = document.getElementById('modalFileInput');
+            if (fileInput.files && fileInput.files.length > 0) {
+                formData.file = fileInput.files[0];
+            }
+            
+            console.log('포트폴리오 수정:', formData);
+            alert('포트폴리오가 수정되었습니다.');
+            closeModal();
+            
+            // 실제 구현 시 목록 새로고침
+            loadPortfolioData();
+        }
+        
+        // 파일 선택 처리
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (file) {
+                displaySelectedFile(file);
+            }
+        }
+        
+        // 드래그 앤 드롭 처리
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+        
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+        
+        function handleFileDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                document.getElementById('modalFileInput').files = files;
+                displaySelectedFile(file);
+            }
+        }
+        
+        // 선택된 파일 표시
+        function displaySelectedFile(file) {
+            const maxSize = 100 * 1024 * 1024; // 100MB
+            
+            if (file.size > maxSize) {
+                alert('파일 크기는 100MB를 초과할 수 없습니다.');
+                document.getElementById('modalFileInput').value = '';
+                return;
+            }
+            
+            const fileInfo = document.getElementById('selectedFileInfo');
+            const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+            
+            fileInfo.innerHTML = `
+                <div class="selected-file">
+                    <span>📹 ${file.name} (${fileSize}MB)</span>
+                    <button type="button" class="file-remove" onclick="removeSelectedFile()">제거</button>
+                </div>
+            `;
+        }
+        
+        // 선택된 파일 제거
+        function removeSelectedFile() {
+            document.getElementById('modalFileInput').value = '';
+            document.getElementById('selectedFileInfo').innerHTML = '';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('포트폴리오 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchPortfolioData();
+                }
+            });
+            
+            // 셀렉트 박스 변경 시 자동 검색 (선택사항)
+            document.getElementById('videoType').addEventListener('change', function() {
+                // searchPortfolioData(); // 자동 검색을 원할 경우 주석 해제
+            });
+            
+            document.getElementById('status').addEventListener('change', function() {
+                // searchPortfolioData(); // 자동 검색을 원할 경우 주석 해제
+            });
+            
+            document.getElementById('searchType').addEventListener('change', function() {
+                // searchPortfolioData(); // 자동 검색을 원할 경우 주석 해제
+            });
+            
+            // 모달 외부 클릭 시 닫기
+            document.getElementById('portfolioModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // ESC 키로 모달 닫기
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadPortfolioData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadPortfolioData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('포트폴리오 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

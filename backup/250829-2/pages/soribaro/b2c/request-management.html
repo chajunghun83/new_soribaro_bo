@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B2C 의뢰현황관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 통계 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+        
+        .search-grid-unified {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1.2fr 1.2fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .search-buttons {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-outline {
+            background: white;
+            color: #6b7280;
+            border: 1px solid #d1d5db;
+        }
+        
+        .btn-outline:hover {
+            background: #f9fafb;
+        }
+        
+        .btn-sm {
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .table-header {
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .table-controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+        
+        th, td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 13px;
+        }
+        
+        th {
+            background: #6b7280;
+            color: white;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        tbody tr:hover {
+            background-color: #f9fafb;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .status-received { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .status-inprogress { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .status-completed { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .status-cancelled { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        
+        /* 페이징 */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 25px;
+            gap: 10px;
+            background: #f8f9fa;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .pagination-container .btn {
+            padding: 8px 12px;
+        }
+        
+        .page-size-controls {
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: #6b7280;
+        }
+        
+        .page-size-controls select {
+            padding: 4px 8px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            .search-grid-unified {
+                grid-template-columns: 1fr;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">
+        <span>📋</span>
+        의뢰현황관리
+    </h1>
+    
+    <!-- 의뢰 통계 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>전체 의뢰</h3>
+            <div class="value">124</div>
+        </div>
+        <div class="stat-card">
+            <h3>접수 대기</h3>
+            <div class="value">12</div>
+        </div>
+        <div class="stat-card">
+            <h3>작업 중</h3>
+            <div class="value">45</div>
+        </div>
+        <div class="stat-card">
+            <h3>완료</h3>
+            <div class="value">67</div>
+        </div>
+    </div>
+
+    <!-- 검색 조건 -->
+    <div class="search-section">
+        <div class="search-grid-unified">
+            <div class="form-group">
+                <label>시작일</label>
+                <input type="date" value="2025-06-30">
+            </div>
+            <div class="form-group">
+                <label>종료일</label>
+                <input type="date" value="2025-07-31">
+            </div>
+            <div class="form-group">
+                <label>서비스 구분</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="transcription">통화기록</option>
+                    <option value="minutes">회의록</option>
+                    <option value="dictation">받아쓰기</option>
+                    <option value="subtitles">자막</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>결제 구분</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="card">카드결제</option>
+                    <option value="bank">계좌이체</option>
+                    <option value="point">포인트결제</option>
+                    <option value="free">무료</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>진행 상태</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="received">접수</option>
+                    <option value="inprogress">진행중</option>
+                    <option value="completed">완료</option>
+                    <option value="cancelled">취소</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- 검색 버튼들 -->
+        <div class="search-buttons">
+            <button class="btn btn-outline">초기화</button>
+            <button class="btn btn-primary">🔍 검색</button>
+        </div>
+    </div>
+
+    <!-- 의뢰 목록 테이블 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div class="table-controls">
+                <div class="table-info">
+                    <span><strong>📋 총 124건</strong></span>
+                </div>
+                <div>
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                </div>
+            </div>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table>
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>주문번호</th>
+                        <th>의뢰자명</th>
+                        <th>연락처</th>
+                        <th>의뢰일</th>
+                        <th>사용포인트</th>
+                        <th>결제금액</th>
+                        <th>서비스구분</th>
+                        <th>결제구분</th>
+                        <th>파일개수</th>
+                        <th>진행상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>10</td>
+                        <td>20250723033432</td>
+                        <td>김진</td>
+                        <td>010-2394-9235</td>
+                        <td>2025-07-23 16:52</td>
+                        <td>0</td>
+                        <td>40,000</td>
+                        <td>통화기록</td>
+                        <td>계좌이체</td>
+                        <td>1</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>9</td>
+                        <td>20250722045512</td>
+                        <td>이수진</td>
+                        <td>010-5555-1234</td>
+                        <td>2025-07-22 10:15</td>
+                        <td>5,000</td>
+                        <td>95,000</td>
+                        <td>다기록</td>
+                        <td>카드결제</td>
+                        <td>2</td>
+                        <td><span class="status-badge status-inprogress">진행중</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>8</td>
+                        <td>20250721033330</td>
+                        <td>김재원</td>
+                        <td>010-4663-7577</td>
+                        <td>2025-07-21 17:43</td>
+                        <td>0</td>
+                        <td>149,200</td>
+                        <td>통화기록</td>
+                        <td>계좌이체</td>
+                        <td>1</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>7</td>
+                        <td>20250721033312</td>
+                        <td>박용서</td>
+                        <td>010-8832-6390</td>
+                        <td>2025-07-21 13:49</td>
+                        <td>3,000</td>
+                        <td>89,000</td>
+                        <td>통화기록</td>
+                        <td>계좌이체</td>
+                        <td>1</td>
+                        <td><span class="status-badge status-cancelled">취소</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>6</td>
+                        <td>20250720012345</td>
+                        <td>정민호</td>
+                        <td>010-9876-5432</td>
+                        <td>2025-07-20 14:30</td>
+                        <td>0</td>
+                        <td>120,000</td>
+                        <td>다기록</td>
+                        <td>계좌이체</td>
+                        <td>3</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>5</td>
+                        <td>20250719067890</td>
+                        <td>최영희</td>
+                        <td>010-1111-2222</td>
+                        <td>2025-07-19 09:45</td>
+                        <td>10,000</td>
+                        <td>50,000</td>
+                        <td>다기록</td>
+                        <td>포인트결제</td>
+                        <td>1</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>4</td>
+                        <td>20250718098765</td>
+                        <td>황성민</td>
+                        <td>010-3333-4444</td>
+                        <td>2025-07-18 16:20</td>
+                        <td>2,000</td>
+                        <td>78,000</td>
+                        <td>통화기록</td>
+                        <td>카드결제</td>
+                        <td>1</td>
+                        <td><span class="status-badge status-inprogress">진행중</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>3</td>
+                        <td>20250717054321</td>
+                        <td>김미영</td>
+                        <td>010-5555-6666</td>
+                        <td>2025-07-17 11:10</td>
+                        <td>0</td>
+                        <td>200,000</td>
+                        <td>다기록</td>
+                        <td>계좌이체</td>
+                        <td>4</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>2</td>
+                        <td>20250716013579</td>
+                        <td>박철수</td>
+                        <td>010-7777-8888</td>
+                        <td>2025-07-16 13:55</td>
+                        <td>1,500</td>
+                        <td>65,500</td>
+                        <td>다기록</td>
+                        <td>카드결제</td>
+                        <td>2</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openRequestDetail(this)">
+                        <td>1</td>
+                        <td>20250715024680</td>
+                        <td>임해영</td>
+                        <td>010-9999-0000</td>
+                        <td>2025-07-15 15:25</td>
+                        <td>7,000</td>
+                        <td>93,000</td>
+                        <td>통화기록</td>
+                        <td>계좌이체</td>
+                        <td>1</td>
+                        <td><span class="status-badge status-inprogress">진행중</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container">
+            <button class="btn btn-outline btn-sm">첫 페이지</button>
+            <button class="btn btn-outline btn-sm">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm">1</button>
+                <button class="btn btn-outline btn-sm">2</button>
+                <button class="btn btn-outline btn-sm">3</button>
+                <button class="btn btn-outline btn-sm">4</button>
+                <button class="btn btn-outline btn-sm">5</button>
+                <span style="padding: 8px;">...</span>
+                <button class="btn btn-outline btn-sm">13</button>
+            </div>
+            <button class="btn btn-outline btn-sm">다음</button>
+            <button class="btn btn-outline btn-sm">마지막</button>
+            <div class="page-size-controls">
+                <span>페이지당</span>
+                <select>
+                    <option>10</option>
+                    <option>20</option>
+                    <option>30</option>
+                    <option>50</option>
+                </select>
+                <span>개씩 보기</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 의뢰 상세 정보 페이지로 이동
+        function openRequestDetail(row) {
+            const cells = row.querySelectorAll('td');
+            const orderNumber = cells[1].textContent;
+            const clientName = cells[2].textContent;
+            const contact = cells[3].textContent;
+            const requestDate = cells[4].textContent;
+            const paymentAmount = cells[6].textContent;
+            const serviceType = cells[7].textContent;
+            const paymentMethod = cells[8].textContent;
+            const statusElement = cells[10].querySelector('.status-badge');
+            const status = statusElement.className.includes('received') ? 'received' : 
+                          statusElement.className.includes('inprogress') ? 'inprogress' :
+                          statusElement.className.includes('completed') ? 'completed' : 'cancelled';
+            
+            // URL 파라미터로 데이터 전달
+            const params = new URLSearchParams({
+                orderNumber: orderNumber,
+                clientName: clientName,
+                contact: contact,
+                requestDate: requestDate,
+                serviceType: serviceType,
+                paymentMethod: paymentMethod,
+                paymentAmount: paymentAmount.replace(',', ''),
+                status: status
+            });
+            
+            try {
+                // iframe 환경에서 부모 페이지로 페이지 로드 요청
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    window.parent.loadPage('pages/soribaro/b2c/request-detail.html?' + params.toString());
+                } else {
+                    // 직접 페이지 이동
+                    window.location.href = 'request-detail.html?' + params.toString();
+                }
+            } catch (e) {
+                console.error('페이지 이동 실패:', e);
+                window.location.href = 'request-detail.html?' + params.toString();
+            }
+        }
+
+        // 테이블 행 hover 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f9fafb';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

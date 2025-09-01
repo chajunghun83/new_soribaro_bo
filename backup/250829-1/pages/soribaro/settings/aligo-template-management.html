@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>알리고 템플릿 관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: auto;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 템플릿코드 배지 */
+        .template-code {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        
+        /* 하단 액션 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📱</span>
+            알리고 템플릿 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div style="flex: 1;"></div>
+            <div class="search-group">
+                <label class="search-label">제목 검색</label>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchTemplateData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterModal()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">알리고 템플릿 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">NO.</th>
+                    <th width="400">제목</th>
+                    <th width="150">템플릿코드</th>
+                    <th width="200">등록일시</th>
+                </tr>
+            </thead>
+            <tbody id="templateTableBody">
+                <tr onclick="goToDetail('TEMPLATE001')">
+                    <td>10</td>
+                    <td>회원가입 인증번호 발송</td>
+                    <td><span class="template-code">TL_5927</span></td>
+                    <td>2025-08-27 09:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE002')">
+                    <td>9</td>
+                    <td>비밀번호 재설정 안내</td>
+                    <td><span class="template-code">TL_5928</span></td>
+                    <td>2025-08-27 10:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE003')">
+                    <td>8</td>
+                    <td>작업 완료 알림</td>
+                    <td><span class="template-code">TL_5929</span></td>
+                    <td>2025-08-26 11:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE004')">
+                    <td>7</td>
+                    <td>결제 완료 확인</td>
+                    <td><span class="template-code">TL_5930</span></td>
+                    <td>2025-08-26 14:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE005')">
+                    <td>6</td>
+                    <td>서비스 이용 안내</td>
+                    <td><span class="template-code">TL_5931</span></td>
+                    <td>2025-08-25 15:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE006')">
+                    <td>5</td>
+                    <td>이벤트 참여 안내</td>
+                    <td><span class="template-code">TL_5932</span></td>
+                    <td>2025-08-25 16:45:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE007')">
+                    <td>4</td>
+                    <td>공지사항 안내</td>
+                    <td><span class="template-code">TL_5933</span></td>
+                    <td>2025-08-24 08:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE008')">
+                    <td>3</td>
+                    <td>정기점검 안내</td>
+                    <td><span class="template-code">TL_5934</span></td>
+                    <td>2025-08-24 09:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE009')">
+                    <td>2</td>
+                    <td>고객센터 이용 안내</td>
+                    <td><span class="template-code">TL_5935</span></td>
+                    <td>2025-08-23 10:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('TEMPLATE010')">
+                    <td>1</td>
+                    <td>서비스 업데이트 안내</td>
+                    <td><span class="template-code">TL_5936</span></td>
+                    <td>2025-08-23 11:00:00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+    
+
+    <script>
+        // 검색 기능
+        function searchTemplateData() {
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            console.log('검색어:', searchKeyword);
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 상세 페이지 이동
+        function goToDetail(id) {
+            const url = `aligo-template-detail.html?id=${id}`;
+            window.location.href = url;
+        }
+        
+        // 등록 페이지로 이동
+        function openRegisterModal() {
+            window.location.href = 'aligo-template-register.html';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('알리고 템플릿 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchTemplateData();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadTemplateData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadTemplateData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('알리고 템플릿 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

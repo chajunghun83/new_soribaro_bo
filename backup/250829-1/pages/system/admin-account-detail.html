@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 계정 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            width: 100%;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .info-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .info-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .edit-mode .info-value {
+            display: none;
+        }
+        
+        .edit-mode .info-input,
+        .edit-mode .info-select {
+            display: block;
+        }
+        
+        .info-input,
+        .info-select {
+            display: none;
+        }
+        
+        /* 유형 배지 */
+        .type-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .type-admin {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .type-reviewer {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 작업 권한 배지 */
+        .permission-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .permission-soribaro {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .permission-clipdesk {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .permission-report {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-dormant {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* 미디어 컨테이너 (프로필사진 + QR 코드) */
+        .media-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        /* 프로필사진 영역 */
+        .profile-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .profile-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-image {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .no-profile {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* QR 코드 영역 */
+        .qr-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .qr-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-image {
+            max-width: 150px;
+            max-height: 150px;
+            object-fit: contain;
+        }
+
+        /* 설명 영역 */
+        .description-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .description-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 200px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        .description-textarea {
+            display: none;
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.8;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .description-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .edit-mode .description-display {
+            display: none;
+        }
+        
+        .edit-mode .description-textarea {
+            display: block;
+        }
+
+        /* 권한 체크박스 */
+        .permission-checkboxes {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .edit-mode .permission-checkboxes {
+            display: flex;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            margin: 0;
+            cursor: pointer;
+        }
+
+        /* 주소 검색 관련 스타일 */
+        .address-edit-container {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .edit-mode .address-edit-container {
+            display: flex;
+        }
+        
+        .address-search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .address-search-btn:hover {
+            background: #2563eb;
+        }
+
+        /* 로그인 이력 섹션 */
+        .login-history-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .history-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .history-table th,
+        .history-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 13px;
+        }
+        
+        .history-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .history-table td {
+            color: #6b7280;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        #editModeButtons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(107, 114, 128, 0.3);
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(239, 68, 68, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>👨‍💼</span>
+            관리자 계정 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid" id="basicInfoGrid">
+                    <div class="info-label">아이디</div>
+                    <div>
+                        <div class="info-value" id="adminId">admin.master@soribaro.com</div>
+                        <input type="email" class="info-input" id="adminIdInput" value="admin.master@soribaro.com">
+                    </div>
+                    
+                    <div class="info-label">이름</div>
+                    <div>
+                        <div class="info-value" id="adminName">김관리</div>
+                        <input type="text" class="info-input" id="adminNameInput" value="김관리">
+                    </div>
+                    
+                    <div class="info-label">전화번호</div>
+                    <div>
+                        <div class="info-value" id="phoneNumber">010-1234-5678</div>
+                        <input type="text" class="info-input" id="phoneNumberInput" value="010-1234-5678">
+                    </div>
+                    
+                    <div class="info-label">주소</div>
+                    <div>
+                        <div class="info-value" id="address">서울특별시 강남구 테헤란로 152</div>
+                        <div class="address-edit-container">
+                            <input type="text" class="info-input" id="addressInput" value="서울특별시 강남구 테헤란로 152" readonly>
+                            <button type="button" class="address-search-btn" id="addressSearchBtn" onclick="searchAddress()">
+                                <span>📍</span>
+                                주소검색
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="info-label">등록일</div>
+                    <div class="info-value" id="regDate">2025-01-01</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 권한 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">권한 정보</div>
+            <div class="info-content">
+                <div class="info-grid" id="permissionInfoGrid">
+                    <div class="info-label">유형</div>
+                    <div>
+                        <div class="info-value">
+                            <span id="adminType" class="type-badge type-admin">관리자</span>
+                        </div>
+                        <select class="info-select" id="adminTypeSelect">
+                            <option value="관리자">관리자</option>
+                            <option value="검수자">검수자</option>
+                        </select>
+                    </div>
+                    
+                    <div class="info-label">작업권한</div>
+                    <div>
+                        <div class="info-value" id="workPermissionDisplay">
+                            <span class="permission-badge permission-soribaro">소리바로</span>
+                        </div>
+                        <div class="permission-checkboxes" id="workPermissionCheckboxes">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="소리바로-B2C"> 소리바로-B2C
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="소리바로-회의록"> 소리바로-회의록
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="소리바로-VOD"> 소리바로-VOD
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="소리바로-번역"> 소리바로-번역
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="클립데스크"> 클립데스크
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="Report"> Report
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="info-label">상태</div>
+                    <div>
+                        <div class="info-value">
+                            <span id="adminStatus" class="status-badge status-active">정상</span>
+                        </div>
+                        <select class="info-select" id="adminStatusSelect">
+                            <option value="대기">대기</option>
+                            <option value="정상">정상</option>
+                            <option value="휴면">휴면</option>
+                            <option value="탈퇴">탈퇴</option>
+                        </select>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 프로필사진 & QR 코드 컨테이너 -->
+    <div class="media-container">
+        <!-- 프로필사진 섹션 -->
+        <div class="profile-section" id="profileSection">
+            <div class="section-title">프로필사진</div>
+            <div class="info-content">
+                <div class="profile-display" id="profileDisplay">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNzUiIHI9Ijc1IiBmaWxsPSIjRTVFN0VCIi8+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNjAiIHI9IjI1IiBmaWxsPSIjOUI5Q0EwIi8+CjxwYXRoIGQ9Ik0zMCAxMjBDMzAgMTA0LjUgNTEuNSA5MCA3NSA5MEM5OC41IDkwIDEyMCAxMDQuNSAxMjAgMTIwVjEzMEgzMFYxMjBaIiBmaWxsPSIjOUI5Q0EwIi8+Cjwvc3ZnPg==" 
+                         alt="프로필사진" class="profile-image" id="profileImage">
+                </div>
+            </div>
+        </div>
+        
+        <!-- QR 코드 섹션 -->
+        <div class="qr-section">
+            <div class="section-title">QR Code</div>
+            <div class="info-content">
+                <div class="qr-display" id="qrDisplay">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSJ3aGl0ZSIvPgo8IS0tIFFSIENvZGUgUGF0dGVybiAtLT4KPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSIxMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSI1MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjkwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjExMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K" 
+                         alt="QR Code" class="qr-image" id="qrImage">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 설명 섹션 -->
+    <div class="description-section" id="descriptionSection">
+        <div class="section-title">설명</div>
+        <div class="info-content">
+            <div class="description-display" id="adminDescription">관리자 계정으로, 소리바로 플랫폼의 전반적인 시스템 관리 업무를 담당합니다.
+
+담당 업무:
+- 사용자 계정 관리
+- 시스템 설정 관리  
+- 데이터 모니터링
+- 고객 지원 업무
+
+권한 범위:
+- 모든 관리자 기능 접근 가능
+- 사용자 데이터 조회/수정
+- 시스템 로그 확인
+- 백업 및 복구 작업
+
+특이사항:
+- 마스터 관리자 권한 보유
+- 24시간 시스템 모니터링 담당
+- 긴급 상황 대응 책임자</div>
+            <textarea class="description-textarea" id="descriptionTextarea" rows="10" placeholder="관리자에 대한 상세 설명을 입력하세요...">관리자 계정으로, 소리바로 플랫폼의 전반적인 시스템 관리 업무를 담당합니다.
+
+담당 업무:
+- 사용자 계정 관리
+- 시스템 설정 관리  
+- 데이터 모니터링
+- 고객 지원 업무
+
+권한 범위:
+- 모든 관리자 기능 접근 가능
+- 사용자 데이터 조회/수정
+- 시스템 로그 확인
+- 백업 및 복구 작업
+
+특이사항:
+- 마스터 관리자 권한 보유
+- 24시간 시스템 모니터링 담당
+- 긴급 상황 대응 책임자</textarea>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <div id="viewModeButtons">
+            <button class="btn-action btn-edit" onclick="toggleEditMode()">
+                <span>✏️</span>
+                수정
+            </button>
+        </div>
+        <div id="editModeButtons" style="display: none;">
+            <button class="btn-action btn-save" onclick="saveAdmin()">
+                <span>💾</span>
+                저장
+            </button>
+            <button class="btn-action btn-cancel" onclick="cancelEdit()">
+                <span>❌</span>
+                취소
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        let isEditMode = false;
+        let originalData = null;
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('관리자 계정 상세 페이지 로드, ID:', itemId);
+            loadAdminDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadAdminDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'ADMIN001': {
+                    adminId: 'admin.master@soribaro.com',
+                    adminName: '김관리',
+                    phoneNumber: '010-1234-5678',
+                    address: '서울특별시 강남구 테헤란로 152',
+                    adminEmail: 'admin.master@soribaro.com',
+                    regDate: '2025-01-01',
+                    lastLogin: '2025-08-28 09:30:15',
+                    adminType: '관리자',
+                    adminTypeClass: 'type-admin',
+                    workPermissions: ['소리바로-B2C', '소리바로-회의록'],
+                    adminStatus: '정상',
+                    adminStatusClass: 'status-active',
+                    loginCount: '247회',
+                    description: `관리자 계정으로, 소리바로 플랫폼의 전반적인 시스템 관리 업무를 담당합니다.
+
+담당 업무:
+- 사용자 계정 관리
+- 시스템 설정 관리  
+- 데이터 모니터링
+- 고객 지원 업무
+
+권한 범위:
+- 모든 관리자 기능 접근 가능
+- 사용자 데이터 조회/수정
+- 시스템 로그 확인
+- 백업 및 복구 작업
+
+특이사항:
+- 마스터 관리자 권한 보유
+- 24시간 시스템 모니터링 담당
+- 긴급 상황 대응 책임자`
+                },
+                'ADMIN002': {
+                    adminId: 'admin.soribaro@soribaro.com',
+                    adminName: '이소리',
+                    phoneNumber: '010-2345-6789',
+                    address: '서울특별시 서초구 서초대로74길 11',
+                    adminEmail: 'admin.soribaro@soribaro.com',
+                    regDate: '2025-01-05',
+                    lastLogin: '2025-08-28 08:45:30',
+                    adminType: '관리자',
+                    adminTypeClass: 'type-admin',
+                    workPermissions: ['소리바로-VOD', '소리바로-번역'],
+                    adminStatus: '정상',
+                    adminStatusClass: 'status-active',
+                    loginCount: '189회',
+                    description: '소리바로 플랫폼 관리 담당자입니다.'
+                },
+                'ADMIN003': {
+                    adminId: 'admin.clipdesk@clipdesk.com',
+                    adminName: '박클립',
+                    phoneNumber: '010-3456-7890',
+                    address: '제주특별자치도 제주시 첨단로 242',
+                    adminEmail: 'admin.clipdesk@clipdesk.com',
+                    regDate: '2025-01-10',
+                    lastLogin: '2025-08-28 10:15:45',
+                    adminType: '관리자',
+                    adminTypeClass: 'type-admin',
+                    workPermissions: ['클립데스크', 'Report'],
+                    adminStatus: '정상',
+                    adminStatusClass: 'status-active',
+                    loginCount: '156회',
+                    description: '클립데스크 플랫폼 관리 담당자입니다.'
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['ADMIN001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            // 원본 데이터 저장
+            originalData = { ...data };
+            
+            // 표시 요소 업데이트
+            document.getElementById('adminId').textContent = data.adminId;
+            document.getElementById('adminName').textContent = data.adminName;
+            document.getElementById('phoneNumber').textContent = data.phoneNumber;
+            document.getElementById('address').textContent = data.address;
+            document.getElementById('regDate').textContent = data.regDate;
+            
+            // 입력 요소 업데이트
+            document.getElementById('adminIdInput').value = data.adminId;
+            document.getElementById('adminNameInput').value = data.adminName;
+            document.getElementById('phoneNumberInput').value = data.phoneNumber;
+            document.getElementById('addressInput').value = data.address;
+            document.getElementById('adminTypeSelect').value = data.adminType;
+            document.getElementById('adminStatusSelect').value = data.adminStatus;
+            
+            // 권한 체크박스 업데이트
+            const checkboxes = document.querySelectorAll('#workPermissionCheckboxes input[type="checkbox"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = data.workPermissions && data.workPermissions.includes(checkbox.value);
+            });
+            
+            // 설명 업데이트
+            document.getElementById('adminDescription').textContent = data.description || '';
+            document.getElementById('descriptionTextarea').value = data.description || '';
+            
+            // 배지 업데이트
+            const typeElement = document.getElementById('adminType');
+            typeElement.textContent = data.adminType;
+            typeElement.className = 'type-badge ' + data.adminTypeClass;
+            
+            // 권한 배지 표시 업데이트
+            const permissionDisplay = document.getElementById('workPermissionDisplay');
+            if (data.workPermissions && data.workPermissions.length > 0) {
+                permissionDisplay.innerHTML = data.workPermissions.map(permission => {
+                    let badgeClass = 'permission-badge';
+                    if (permission.includes('소리바로')) badgeClass += ' permission-soribaro';
+                    else if (permission === '클립데스크') badgeClass += ' permission-clipdesk';
+                    else if (permission === 'Report') badgeClass += ' permission-report';
+                    
+                    return `<span class="${badgeClass}">${permission}</span>`;
+                }).join(' ');
+            } else {
+                permissionDisplay.innerHTML = '<span class="permission-badge">권한 없음</span>';
+            }
+            
+            const statusElement = document.getElementById('adminStatus');
+            statusElement.textContent = data.adminStatus;
+            statusElement.className = 'status-badge ' + data.adminStatusClass;
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'admin-account-management.html';
+        }
+        
+        // 편집 모드 토글
+        function toggleEditMode() {
+            isEditMode = true;
+            document.getElementById('basicInfoGrid').classList.add('edit-mode');
+            document.getElementById('permissionInfoGrid').classList.add('edit-mode');
+            document.getElementById('descriptionSection').classList.add('edit-mode');
+            document.getElementById('viewModeButtons').style.display = 'none';
+            document.getElementById('editModeButtons').style.display = 'flex';
+        }
+        
+        // 편집 취소
+        function cancelEdit() {
+            isEditMode = false;
+            document.getElementById('basicInfoGrid').classList.remove('edit-mode');
+            document.getElementById('permissionInfoGrid').classList.remove('edit-mode');
+            document.getElementById('descriptionSection').classList.remove('edit-mode');
+            document.getElementById('viewModeButtons').style.display = 'flex';
+            document.getElementById('editModeButtons').style.display = 'none';
+            
+            // 원본 데이터로 복원
+            if (originalData) {
+                updateUI(originalData);
+            }
+        }
+        
+        // 저장 기능
+        function saveAdmin() {
+            // 입력 값 검증
+            const adminId = document.getElementById('adminIdInput').value.trim();
+            const adminName = document.getElementById('adminNameInput').value.trim();
+            const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
+            const address = document.getElementById('addressInput').value.trim();
+            const adminType = document.getElementById('adminTypeSelect').value;
+            const adminStatus = document.getElementById('adminStatusSelect').value;
+            
+            // 선택된 권한들 수집
+            const selectedPermissions = [];
+            const checkboxes = document.querySelectorAll('#workPermissionCheckboxes input[type="checkbox"]:checked');
+            checkboxes.forEach(checkbox => {
+                selectedPermissions.push(checkbox.value);
+            });
+            const description = document.getElementById('descriptionTextarea').value.trim();
+            
+            if (!adminId) {
+                alert('아이디를 입력해주세요.');
+                document.getElementById('adminIdInput').focus();
+                return;
+            }
+            
+            if (!adminName) {
+                alert('이름을 입력해주세요.');
+                document.getElementById('adminNameInput').focus();
+                return;
+            }
+            
+            if (!phoneNumber) {
+                alert('전화번호를 입력해주세요.');
+                document.getElementById('phoneNumberInput').focus();
+                return;
+            }
+            
+            if (!address) {
+                alert('주소를 입력해주세요.');
+                document.getElementById('addressInput').focus();
+                return;
+            }
+            
+            // 저장 확인
+            if (confirm('변경사항을 저장하시겠습니까?')) {
+                // 유형 클래스 매핑
+                const adminTypeClass = adminType === '관리자' ? 'type-admin' : 'type-reviewer';
+                
+                // 상태 클래스 매핑
+                const statusClassMap = {
+                    '대기': 'status-pending',
+                    '정상': 'status-active',
+                    '휴면': 'status-dormant',
+                    '탈퇴': 'status-inactive'
+                };
+                const adminStatusClass = statusClassMap[adminStatus];
+                
+                // 업데이트된 데이터로 UI 갱신
+                const updatedData = {
+                    ...originalData,
+                    adminId: adminId,
+                    adminName: adminName,
+                    phoneNumber: phoneNumber,
+                    address: address,
+                    adminType: adminType,
+                    adminTypeClass: adminTypeClass,
+                    workPermissions: selectedPermissions,
+                    adminStatus: adminStatus,
+                    adminStatusClass: adminStatusClass,
+                    description: description
+                };
+                
+                updateUI(updatedData);
+                
+                // 편집 모드 종료
+                isEditMode = false;
+                document.getElementById('basicInfoGrid').classList.remove('edit-mode');
+                document.getElementById('permissionInfoGrid').classList.remove('edit-mode');
+                document.getElementById('descriptionSection').classList.remove('edit-mode');
+                document.getElementById('viewModeButtons').style.display = 'flex';
+                document.getElementById('editModeButtons').style.display = 'none';
+                
+                // 실제 구현 시 서버 API 호출
+                console.log('저장된 데이터:', updatedData);
+                alert('관리자 계정 정보가 성공적으로 저장되었습니다.');
+            }
+        }
+        
+        // 주소 검색 기능
+        function searchAddress() {
+            // 실제 구현 시 다음 주소 API 등을 사용
+            const sampleAddresses = [
+                '서울특별시 강남구 테헤란로 152',
+                '서울특별시 서초구 서초대로74길 11',
+                '경기도 성남시 분당구 판교역로 166',
+                '서울특별시 마포구 월드컵북로 396',
+                '제주특별자치도 제주시 첨단로 242'
+            ];
+            
+            const selectedAddress = sampleAddresses[Math.floor(Math.random() * sampleAddresses.length)];
+            document.getElementById('addressInput').value = selectedAddress;
+            
+            alert(`주소가 선택되었습니다:\n${selectedAddress}`);
+        }
+    </script>
+</body>
+</html>

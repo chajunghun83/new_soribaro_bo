@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>관리자 계정 관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 150px;
+            cursor: pointer;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 유형 배지 */
+        .type-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .type-admin {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .type-reviewer {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 작업 권한 배지 */
+        .permission-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .permission-soribaro {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .permission-clipdesk {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .permission-report {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .permission-multiple {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-dormant {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        /* 하단 액션 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>👨‍💼</span>
+            관리자 계정 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div class="search-group">
+                <label class="search-label">플랫폼</label>
+                <select id="platformFilter" class="search-select">
+                    <option value="">전체</option>
+                    <option value="소리바로">소리바로</option>
+                    <option value="클립데스크">클립데스크</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <label class="search-label">검색 조건</label>
+                <select id="searchType" class="search-select">
+                    <option value="name">이름</option>
+                    <option value="id">아이디</option>
+                    <option value="phone">전화번호</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchAdminData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterPage()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">관리자 계정 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="50">NO.</th>
+                    <th width="180">아이디</th>
+                    <th width="80">이름</th>
+                    <th width="120">전화번호</th>
+                    <th width="70">유형</th>
+                    <th width="280">작업 권한</th>
+                    <th width="70">상태</th>
+                </tr>
+            </thead>
+            <tbody id="adminTableBody">
+                <tr onclick="goToDetail('ADMIN001')">
+                    <td>10</td>
+                    <td>admin.master@soribaro.com</td>
+                    <td>김관리</td>
+                    <td>010-1234-5678</td>
+                    <td><span class="type-badge type-admin">관리자</span></td>
+                    <td>
+                        <div class="permission-multiple">
+                            <span class="permission-badge permission-soribaro">소리바로-B2C</span>
+                            <span class="permission-badge permission-soribaro">소리바로-회의록</span>
+                        </div>
+                    </td>
+                    <td><span class="status-badge status-active">정상</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN002')">
+                    <td>9</td>
+                    <td>admin.soribaro@soribaro.com</td>
+                    <td>이소리</td>
+                    <td>010-2345-6789</td>
+                    <td><span class="type-badge type-admin">관리자</span></td>
+                    <td>
+                        <div class="permission-multiple">
+                            <span class="permission-badge permission-soribaro">소리바로-VOD</span>
+                            <span class="permission-badge permission-soribaro">소리바로-번역</span>
+                        </div>
+                    </td>
+                    <td><span class="status-badge status-active">정상</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN003')">
+                    <td>8</td>
+                    <td>admin.clipdesk@clipdesk.com</td>
+                    <td>박클립</td>
+                    <td>010-3456-7890</td>
+                    <td><span class="type-badge type-admin">관리자</span></td>
+                    <td>
+                        <div class="permission-multiple">
+                            <span class="permission-badge permission-clipdesk">클립데스크</span>
+                            <span class="permission-badge permission-report">Report</span>
+                        </div>
+                    </td>
+                    <td><span class="status-badge status-active">정상</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN004')">
+                    <td>7</td>
+                    <td>reviewer.sori@soribaro.com</td>
+                    <td>최검수</td>
+                    <td>010-4567-8901</td>
+                    <td><span class="type-badge type-reviewer">검수자</span></td>
+                    <td><span class="permission-badge permission-soribaro">소리바로-회의록</span></td>
+                    <td><span class="status-badge status-active">정상</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN005')">
+                    <td>6</td>
+                    <td>reviewer.clip@clipdesk.com</td>
+                    <td>정영상</td>
+                    <td>010-5678-9012</td>
+                    <td><span class="type-badge type-reviewer">검수자</span></td>
+                    <td><span class="permission-badge permission-clipdesk">클립데스크</span></td>
+                    <td><span class="status-badge status-pending">대기</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN006')">
+                    <td>5</td>
+                    <td>admin.support@soribaro.com</td>
+                    <td>한지원</td>
+                    <td>010-6789-0123</td>
+                    <td><span class="type-badge type-admin">관리자</span></td>
+                    <td>
+                        <div class="permission-multiple">
+                            <span class="permission-badge permission-soribaro">소리바로-B2C</span>
+                            <span class="permission-badge permission-soribaro">소리바로-VOD</span>
+                        </div>
+                    </td>
+                    <td><span class="status-badge status-dormant">휴면</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN007')">
+                    <td>4</td>
+                    <td>reviewer.qa@clipdesk.com</td>
+                    <td>송품질</td>
+                    <td>010-7890-1234</td>
+                    <td><span class="type-badge type-reviewer">검수자</span></td>
+                    <td>
+                        <div class="permission-multiple">
+                            <span class="permission-badge permission-clipdesk">클립데스크</span>
+                            <span class="permission-badge permission-report">Report</span>
+                        </div>
+                    </td>
+                    <td><span class="status-badge status-active">정상</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN008')">
+                    <td>3</td>
+                    <td>admin.temp@soribaro.com</td>
+                    <td>임시관</td>
+                    <td>010-8901-2345</td>
+                    <td><span class="type-badge type-admin">관리자</span></td>
+                    <td><span class="permission-badge permission-soribaro">소리바로-번역</span></td>
+                    <td><span class="status-badge status-inactive">탈퇴</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN009')">
+                    <td>2</td>
+                    <td>admin.system@soribaro.com</td>
+                    <td>시스템</td>
+                    <td>010-9012-3456</td>
+                    <td><span class="type-badge type-admin">관리자</span></td>
+                    <td>
+                        <div class="permission-multiple">
+                            <span class="permission-badge permission-soribaro">소리바로-B2C</span>
+                            <span class="permission-badge permission-soribaro">소리바로-회의록</span>
+                            <span class="permission-badge permission-soribaro">소리바로-VOD</span>
+                        </div>
+                    </td>
+                    <td><span class="status-badge status-active">정상</span></td>
+                </tr>
+                <tr onclick="goToDetail('ADMIN010')">
+                    <td>1</td>
+                    <td>reviewer.final@clipdesk.com</td>
+                    <td>최종검</td>
+                    <td>010-0123-4567</td>
+                    <td><span class="type-badge type-reviewer">검수자</span></td>
+                    <td><span class="permission-badge permission-report">Report</span></td>
+                    <td><span class="status-badge status-active">정상</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchAdminData() {
+            const platformFilter = document.getElementById('platformFilter').value;
+            const searchType = document.getElementById('searchType').value;
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            
+            console.log('검색 조건:', {
+                platform: platformFilter,
+                type: searchType,
+                keyword: searchKeyword
+            });
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n플랫폼: ' + (platformFilter || '전체') + '\n검색 조건: ' + searchType + '\n검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 상세 페이지 이동
+        function goToDetail(id) {
+            const url = `admin-account-detail.html?id=${id}`;
+            window.location.href = url;
+        }
+        
+        // 등록 페이지로 이동
+        function openRegisterPage() {
+            window.location.href = 'admin-account-register.html';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('관리자 계정 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchAdminData();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadAdminData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadAdminData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('관리자 계정 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

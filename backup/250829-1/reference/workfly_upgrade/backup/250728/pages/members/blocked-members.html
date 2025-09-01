@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>차단 회원 관리</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+    <style>
+        /* 전체 페이지 스크롤 최적화 */
+        * {
+            box-sizing: border-box;
+        }
+        
+        html {
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            overflow-x: hidden;
+        }
+        
+        /* 페이지 컨테이너 최적화 */
+        .table-section {
+            max-width: 100%;
+            overflow-x: auto;
+        }
+        
+        .table-section table {
+            min-width: 1200px;
+        }
+        
+        /* 테이블 헤더 중앙정렬 */
+        table th {
+            text-align: center;
+        }
+        
+        /* 특정 컬럼 데이터 중앙정렬: NO, 이름, 이메일, URL, 차단시간, 해제처리자, 해제 */
+        table td:nth-child(1), table td:nth-child(2), table td:nth-child(3), table td:nth-child(4), 
+        table td:nth-child(5), table td:nth-child(6), table td:nth-child(7) {
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="background: #f5f6fa; padding: 30px; margin: 0; min-height: 100vh; box-sizing: border-box; overflow-x: hidden;">
+    <h1 class="page-title">🚫 차단 회원 관리</h1>
+    
+    <!-- 검색 폼 -->
+    <div class="search-section">
+        <div class="search-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="form-group">
+                <label>이름</label>
+                <input type="text" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" placeholder="이메일을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>차단일</label>
+                <input type="date">
+            </div>
+        </div>
+        <div class="search-buttons">
+            <button class="btn btn-outline">검색 조건 초기화</button>
+            <button class="btn btn-primary">🔍 검색</button>
+        </div>
+    </div>
+
+    <!-- 차단 회원 목록 테이블 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>🚫 총 86건</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>이름</th>
+                    <th>이메일</th>
+                    <th>URL</th>
+                    <th>차단시간</th>
+                    <th>해제처리자</th>
+                    <th>해제</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>86</td>
+                    <td>배영숙</td>
+                    <td>ysuk7722002@naver.com</td>
+                    <td>/api/project/list</td>
+                    <td>2025.07.17 10:34</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>85</td>
+                    <td>심수경</td>
+                    <td>rubysk80@naver.com</td>
+                    <td>/api/project/list</td>
+                    <td>2025.06.12 15:12</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>84</td>
+                    <td>박진수</td>
+                    <td>jinsu.park@gmail.com</td>
+                    <td>/api/project/list</td>
+                    <td>2025.05.28 09:45</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>83</td>
+                    <td>김미라</td>
+                    <td>mira.kim@hotmail.com</td>
+                    <td>/api/project/list</td>
+                    <td>2025.04.15 16:20</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>82</td>
+                    <td>이동훈</td>
+                    <td>donghoon.lee@daum.net</td>
+                    <td>/api/project/list</td>
+                    <td>2025.03.22 14:18</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>81</td>
+                    <td>최서현</td>
+                    <td>seohyun.choi@yahoo.com</td>
+                    <td>/api/project/list</td>
+                    <td>2025.02.10 11:30</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>80</td>
+                    <td>정민호</td>
+                    <td>minho.jung@nate.com</td>
+                    <td>/api/project/list</td>
+                    <td>2025.01.28 13:55</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>79</td>
+                    <td>홍예진</td>
+                    <td>yejin.hong@gmail.com</td>
+                    <td>/api/project/list</td>
+                    <td>2024.12.15 10:42</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>78</td>
+                    <td>신재원</td>
+                    <td>jaewon.shin@naver.com</td>
+                    <td>/api/project/list</td>
+                    <td>2024.11.30 15:22</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+                <tr>
+                    <td>77</td>
+                    <td>윤채영</td>
+                    <td>chaeyoung.yoon@daum.net</td>
+                    <td>/api/project/list</td>
+                    <td>2024.10.18 12:08</td>
+                    <td>-</td>
+                    <td><button class="btn btn-outline btn-sm" onclick="unblockMember(this)" style="background: #dc2626; color: white; border: none;">해제</button></td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">9</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+            <div style="margin-left: 20px; display: flex; align-items: center; gap: 5px;">
+                <span style="font-size: 13px;">페이지당</span>
+                <select style="padding: 3px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <span style="font-size: 13px;">개씩 보기</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../scripts/common.js"></script>
+    <script>
+        // 차단 회원 해제 기능
+        function unblockMember(button) {
+            const row = button.closest('tr');
+            const name = row.cells[1].textContent;
+            const email = row.cells[2].textContent;
+            
+            if (confirm(`${name} (${email}) 회원의 차단을 해제하시겠습니까?`)) {
+                // 버튼 비활성화 및 텍스트 변경
+                button.textContent = '해제완료';
+                button.style.background = '#6b7280';
+                button.disabled = true;
+                button.style.cursor = 'not-allowed';
+                
+                // 행 배경색 변경
+                row.style.backgroundColor = '#f9fafb';
+                row.style.opacity = '0.7';
+                
+                // 해제처리자 컬럼 업데이트 (5번째 컬럼)
+                row.cells[5].textContent = '관리자';
+                
+                // 실제로는 서버 API 호출
+                console.log('차단 해제:', name, email);
+                
+                alert('차단이 해제되었습니다.');
+            }
+        }
+
+        // 테이블 행 hover 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    if (!this.style.backgroundColor) {
+                        this.style.backgroundColor = '#f9fafb';
+                    }
+                });
+                row.addEventListener('mouseleave', function() {
+                    if (this.style.backgroundColor === 'rgb(249, 250, 251)' && this.style.opacity !== '0.7') {
+                        this.style.backgroundColor = '';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

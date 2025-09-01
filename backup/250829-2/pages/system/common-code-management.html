@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공통코드 관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 150px;
+            cursor: pointer;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 코드 그룹 배지 */
+        .group-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .group-system {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .group-user {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .group-service {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .group-payment {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 사용여부 배지 */
+        .use-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .use-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .use-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        /* 하단 액션 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>⚙️</span>
+            공통코드 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div class="search-group">
+                <label class="search-label">코드 그룹</label>
+                <select id="groupFilter" class="search-select">
+                    <option value="">전체</option>
+                    <option value="SYSTEM">시스템</option>
+                    <option value="USER">사용자</option>
+                    <option value="SERVICE">서비스</option>
+                    <option value="PAYMENT">결제</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <label class="search-label">사용여부</label>
+                <select id="useFilter" class="search-select">
+                    <option value="">전체</option>
+                    <option value="Y">사용</option>
+                    <option value="N">미사용</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <label class="search-label">검색 조건</label>
+                <select id="searchType" class="search-select">
+                    <option value="code">코드</option>
+                    <option value="name">코드명</option>
+                    <option value="value">코드값</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchCodeData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterPage()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">공통코드 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">NO.</th>
+                    <th width="120">코드 그룹</th>
+                    <th width="150">코드</th>
+                    <th width="200">코드명</th>
+                    <th width="200">코드값</th>
+                    <th width="80">정렬순서</th>
+                    <th width="100">사용여부</th>
+                    <th width="120">등록자</th>
+                    <th width="150">등록일시</th>
+                </tr>
+            </thead>
+            <tbody id="codeTableBody">
+                <tr onclick="goToDetail('CODE001')">
+                    <td>10</td>
+                    <td><span class="group-badge group-system">SYSTEM</span></td>
+                    <td>SYS_STATUS</td>
+                    <td>시스템 상태</td>
+                    <td>ACTIVE</td>
+                    <td>1</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-01 09:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE002')">
+                    <td>9</td>
+                    <td><span class="group-badge group-user">USER</span></td>
+                    <td>USER_TYPE</td>
+                    <td>사용자 유형</td>
+                    <td>ADMIN</td>
+                    <td>1</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-01 09:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE003')">
+                    <td>8</td>
+                    <td><span class="group-badge group-user">USER</span></td>
+                    <td>USER_TYPE</td>
+                    <td>사용자 유형</td>
+                    <td>REVIEWER</td>
+                    <td>2</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-01 09:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE004')">
+                    <td>7</td>
+                    <td><span class="group-badge group-service">SERVICE</span></td>
+                    <td>PLATFORM</td>
+                    <td>플랫폼</td>
+                    <td>SORIBARO</td>
+                    <td>1</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-01 09:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE005')">
+                    <td>6</td>
+                    <td><span class="group-badge group-service">SERVICE</span></td>
+                    <td>PLATFORM</td>
+                    <td>플랫폼</td>
+                    <td>CLIPDESK</td>
+                    <td>2</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-01 09:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE006')">
+                    <td>5</td>
+                    <td><span class="group-badge group-service">SERVICE</span></td>
+                    <td>WORK_STATUS</td>
+                    <td>작업 상태</td>
+                    <td>PENDING</td>
+                    <td>1</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-02 10:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE007')">
+                    <td>4</td>
+                    <td><span class="group-badge group-service">SERVICE</span></td>
+                    <td>WORK_STATUS</td>
+                    <td>작업 상태</td>
+                    <td>IN_PROGRESS</td>
+                    <td>2</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-02 10:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE008')">
+                    <td>3</td>
+                    <td><span class="group-badge group-service">SERVICE</span></td>
+                    <td>WORK_STATUS</td>
+                    <td>작업 상태</td>
+                    <td>COMPLETED</td>
+                    <td>3</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-02 10:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE009')">
+                    <td>2</td>
+                    <td><span class="group-badge group-payment">PAYMENT</span></td>
+                    <td>PAY_METHOD</td>
+                    <td>결제 방법</td>
+                    <td>CARD</td>
+                    <td>1</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-03 11:00</td>
+                </tr>
+                <tr onclick="goToDetail('CODE010')">
+                    <td>1</td>
+                    <td><span class="group-badge group-payment">PAYMENT</span></td>
+                    <td>PAY_METHOD</td>
+                    <td>결제 방법</td>
+                    <td>BANK</td>
+                    <td>2</td>
+                    <td><span class="use-badge use-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-01-03 11:00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchCodeData() {
+            const groupFilter = document.getElementById('groupFilter').value;
+            const useFilter = document.getElementById('useFilter').value;
+            const searchType = document.getElementById('searchType').value;
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            
+            console.log('검색 조건:', {
+                group: groupFilter,
+                use: useFilter,
+                type: searchType,
+                keyword: searchKeyword
+            });
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n코드 그룹: ' + (groupFilter || '전체') + '\n사용여부: ' + (useFilter || '전체') + '\n검색 조건: ' + searchType + '\n검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 상세 페이지 이동
+        function goToDetail(id) {
+            const url = `common-code-detail.html?id=${id}`;
+            window.location.href = url;
+        }
+        
+        // 등록 페이지로 이동
+        function openRegisterPage() {
+            window.location.href = 'common-code-register.html';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('공통코드 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchCodeData();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadCodeData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadCodeData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('공통코드 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

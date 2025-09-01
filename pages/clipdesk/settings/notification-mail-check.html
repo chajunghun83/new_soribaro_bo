@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>알림 메일 확인 - 클립데스크 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 조회 영역 */
+        .refresh-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .refresh-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+        
+        .refresh-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .refresh-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 20px;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 10px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+        }
+        
+        /* 전송여부 배지 */
+        .send-status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-success {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-error {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 로딩 스피너 */
+        .loading {
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .loading.show {
+            display: flex;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f4f6;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            margin-left: 15px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📬</span>
+            알림 메일 확인
+        </h1>
+    </div>
+    
+    <!-- 조회 영역 -->
+    <div class="refresh-section">
+        <div class="refresh-row">
+            <button class="refresh-btn" onclick="refreshMailData()">
+                <span>🔄</span>
+                새로고침
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">알림 메일 목록</h2>
+            <div class="table-info">총 <span id="totalCount">50</span>건</div>
+        </div>
+        
+        <!-- 로딩 스피너 -->
+        <div class="loading" id="loadingSpinner">
+            <div class="spinner"></div>
+            <div class="loading-text">데이터를 불러오는 중...</div>
+        </div>
+        
+        <table class="data-table" id="mailTable">
+            <thead>
+                <tr>
+                    <th width="80">NO.</th>
+                    <th width="180">전송일시</th>
+                    <th width="250">템플릿 이름</th>
+                    <th width="300">전송 이메일</th>
+                    <th width="120">전송여부</th>
+                </tr>
+            </thead>
+            <tbody id="mailTableBody">
+                <tr>
+                    <td>50</td>
+                    <td>2025-08-28 09:00:15</td>
+                    <td>회원가입 완료 안내</td>
+                    <td>kim.youngsu@company.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>49</td>
+                    <td>2025-08-28 09:02:30</td>
+                    <td>가편집 초안 완성 알림</td>
+                    <td>lee.minji@startup.co.kr</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>48</td>
+                    <td>2025-08-28 09:05:45</td>
+                    <td>결제 완료 확인</td>
+                    <td>park.junho@brand.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td>2025-08-28 09:08:12</td>
+                    <td>본편집 수정 완료 안내</td>
+                    <td>jung.suhyun@media.net</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>46</td>
+                    <td>2025-08-28 09:10:33</td>
+                    <td>작업 배정 알림</td>
+                    <td>choi.eunyoung@edu.ac.kr</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>45</td>
+                    <td>2025-08-28 09:12:55</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td>han.sangwoo@event.org</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>44</td>
+                    <td>2025-08-28 09:15:18</td>
+                    <td>본편집 최종 승인 안내</td>
+                    <td>song.mirae@future.inc</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>43</td>
+                    <td>2025-08-28 09:17:42</td>
+                    <td>가편집 수정 완료 안내</td>
+                    <td>yoon.dohyun@interview.tv</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>42</td>
+                    <td>2025-08-28 09:20:05</td>
+                    <td>작업 거절 안내</td>
+                    <td>kang.hyejin@animation.co</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>41</td>
+                    <td>2025-08-28 09:22:28</td>
+                    <td>결제 요청 안내</td>
+                    <td>lim.jaehyun@live.stream</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>40</td>
+                    <td>2025-08-28 09:24:51</td>
+                    <td>가편집 최종 승인 안내</td>
+                    <td>oh.seyoung@viral.media</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>39</td>
+                    <td>2025-08-28 09:27:14</td>
+                    <td>본편집 초안 완성 알림</td>
+                    <td>shin.jiwon@wedding.love</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>38</td>
+                    <td>2025-08-28 09:29:37</td>
+                    <td>회원가입 완료 안내</td>
+                    <td>bae.hyunsu@recipe.chef</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>37</td>
+                    <td>2025-08-28 09:32:00</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td>jo.areum@travel.blog</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>36</td>
+                    <td>2025-08-28 09:34:23</td>
+                    <td>결제 완료 확인</td>
+                    <td>hong.gildong@petshop.kr</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>35</td>
+                    <td>2025-08-28 09:36:46</td>
+                    <td>작업 배정 알림</td>
+                    <td>test.user1@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>34</td>
+                    <td>2025-08-28 09:39:09</td>
+                    <td>가편집 초안 완성 알림</td>
+                    <td>test.user2@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>33</td>
+                    <td>2025-08-28 09:41:32</td>
+                    <td>본편집 수정 완료 안내</td>
+                    <td>test.user3@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>32</td>
+                    <td>2025-08-28 09:43:55</td>
+                    <td>작업 거절 안내</td>
+                    <td>test.user4@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>31</td>
+                    <td>2025-08-28 09:46:18</td>
+                    <td>결제 요청 안내</td>
+                    <td>test.user5@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td>2025-08-28 09:48:41</td>
+                    <td>본편집 최종 승인 안내</td>
+                    <td>test.user6@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td>2025-08-28 09:51:04</td>
+                    <td>가편집 수정 완료 안내</td>
+                    <td>test.user7@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>28</td>
+                    <td>2025-08-28 09:53:27</td>
+                    <td>회원가입 완료 안내</td>
+                    <td>test.user8@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td>2025-08-28 09:55:50</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td>test.user9@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>26</td>
+                    <td>2025-08-28 09:58:13</td>
+                    <td>작업 배정 알림</td>
+                    <td>test.user10@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td>2025-08-28 10:00:36</td>
+                    <td>결제 완료 확인</td>
+                    <td>test.user11@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>24</td>
+                    <td>2025-08-28 10:02:59</td>
+                    <td>본편집 초안 완성 알림</td>
+                    <td>test.user12@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>23</td>
+                    <td>2025-08-28 10:05:22</td>
+                    <td>가편집 최종 승인 안내</td>
+                    <td>test.user13@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>22</td>
+                    <td>2025-08-28 10:07:45</td>
+                    <td>작업 거절 안내</td>
+                    <td>test.user14@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td>2025-08-28 10:10:08</td>
+                    <td>결제 요청 안내</td>
+                    <td>test.user15@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td>2025-08-28 10:12:31</td>
+                    <td>본편집 수정 완료 안내</td>
+                    <td>test.user16@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td>2025-08-28 10:14:54</td>
+                    <td>가편집 초안 완성 알림</td>
+                    <td>test.user17@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td>2025-08-28 10:17:17</td>
+                    <td>회원가입 완료 안내</td>
+                    <td>test.user18@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td>2025-08-28 10:19:40</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td>test.user19@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>2025-08-28 10:22:03</td>
+                    <td>작업 배정 알림</td>
+                    <td>test.user20@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>2025-08-28 10:24:26</td>
+                    <td>본편집 최종 승인 안내</td>
+                    <td>test.user21@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>2025-08-28 10:26:49</td>
+                    <td>결제 완료 확인</td>
+                    <td>test.user22@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>2025-08-28 10:29:12</td>
+                    <td>가편집 수정 완료 안내</td>
+                    <td>test.user23@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>2025-08-28 10:31:35</td>
+                    <td>작업 거절 안내</td>
+                    <td>test.user24@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>2025-08-28 10:33:58</td>
+                    <td>결제 요청 안내</td>
+                    <td>test.user25@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>2025-08-28 10:36:21</td>
+                    <td>본편집 초안 완성 알림</td>
+                    <td>test.user26@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>2025-08-28 10:38:44</td>
+                    <td>가편집 최종 승인 안내</td>
+                    <td>test.user27@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>2025-08-28 10:41:07</td>
+                    <td>회원가입 완료 안내</td>
+                    <td>test.user28@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>2025-08-28 10:43:30</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td>test.user29@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>2025-08-28 10:45:53</td>
+                    <td>작업 배정 알림</td>
+                    <td>test.user30@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>2025-08-28 10:48:16</td>
+                    <td>본편집 수정 완료 안내</td>
+                    <td>test.user31@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>2025-08-28 10:50:39</td>
+                    <td>결제 완료 확인</td>
+                    <td>test.user32@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>2025-08-28 10:53:02</td>
+                    <td>가편집 수정 완료 안내</td>
+                    <td>test.user33@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2025-08-28 10:55:25</td>
+                    <td>작업 거절 안내</td>
+                    <td>test.user34@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td>2025-08-28 10:57:48</td>
+                    <td>결제 요청 안내</td>
+                    <td>test.user35@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td>2025-08-28 11:00:11</td>
+                    <td>본편집 초안 완성 알림</td>
+                    <td>test.user36@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td>2025-08-28 11:02:34</td>
+                    <td>가편집 최종 승인 안내</td>
+                    <td>test.user37@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td>2025-08-28 11:04:57</td>
+                    <td>회원가입 완료 안내</td>
+                    <td>test.user38@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td>2025-08-28 11:07:20</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td>test.user39@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td>2025-08-28 11:09:43</td>
+                    <td>작업 배정 알림</td>
+                    <td>test.user40@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td>2025-08-28 11:12:06</td>
+                    <td>본편집 수정 완료 안내</td>
+                    <td>test.user41@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>2025-08-28 11:14:29</td>
+                    <td>결제 완료 확인</td>
+                    <td>test.user42@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>2025-08-28 11:16:52</td>
+                    <td>가편집 수정 완료 안내</td>
+                    <td>test.user43@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>2025-08-28 11:19:15</td>
+                    <td>작업 거절 안내</td>
+                    <td>test.user44@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>2025-08-28 11:21:38</td>
+                    <td>결제 요청 안내</td>
+                    <td>test.user45@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>2025-08-28 11:24:01</td>
+                    <td>본편집 최종 승인 안내</td>
+                    <td>test.user46@clipdesk.com</td>
+                    <td><span class="send-status-badge status-error">비정상</span></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>2025-08-28 11:26:24</td>
+                    <td>가편집 초안 완성 알림</td>
+                    <td>test.user47@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>2025-08-28 11:28:47</td>
+                    <td>회원가입 완료 안내</td>
+                    <td>test.user48@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>2025-08-28 11:31:10</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td>test.user49@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>2025-08-28 11:33:33</td>
+                    <td>작업 배정 알림</td>
+                    <td>test.user50@clipdesk.com</td>
+                    <td><span class="send-status-badge status-success">정상</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+
+    <script>
+        // 새로고침 버튼 클릭 (페이지 리프레시)
+        function refreshMailData() {
+            console.log('알림 메일 데이터 새로고침 시작');
+            
+            // 로딩 스피너 표시
+            document.getElementById('loadingSpinner').classList.add('show');
+            document.getElementById('mailTable').style.opacity = '0.5';
+            
+            // 새로고침 버튼 비활성화
+            const refreshBtn = document.querySelector('.refresh-btn');
+            refreshBtn.disabled = true;
+            refreshBtn.style.opacity = '0.6';
+            refreshBtn.innerHTML = '<span>⏳</span>새로고침 중...';
+            
+            // 실제 구현 시 서버 API 호출
+            setTimeout(() => {
+                // 로딩 완료 후 UI 복원
+                document.getElementById('loadingSpinner').classList.remove('show');
+                document.getElementById('mailTable').style.opacity = '1';
+                
+                // 새로고침 버튼 활성화
+                refreshBtn.disabled = false;
+                refreshBtn.style.opacity = '1';
+                refreshBtn.innerHTML = '<span>🔄</span>새로고침';
+                
+                console.log('알림 메일 데이터 새로고침 완료');
+                alert('알림 메일 데이터가 최신 상태로 업데이트되었습니다.');
+            }, 1500); // 1.5초 로딩 시뮬레이션
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('알림 메일 확인 페이지 로드 완료');
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadNotificationMailData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadNotificationMailData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('알림 메일 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

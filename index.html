@@ -209,13 +209,32 @@
         .main-content {
             flex: 1;
             margin-left: 260px;
-            padding: 30px;
             background-color: #f5f6fa;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 헤더 영역 */
+        .main-header {
+            background: #f8f9fa;
+            padding: 10px 30px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 45px;
+            flex-shrink: 0;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            padding: 30px;
+            padding-top: 0;
         }
         
         .content-frame {
             width: 100%;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 105px);
             border: none;
             background: white;
             border-radius: 8px;
@@ -228,10 +247,12 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            height: calc(100vh - 60px);
+            height: calc(100vh - 105px);
             background: white;
             border-radius: 8px;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 30px;
+            margin-top: 0;
         }
         
         .loading-spinner {
@@ -258,6 +279,243 @@
             font-size: 10px;
             font-weight: 500;
             margin-left: 6px;
+        }
+
+        /* 프로필 메뉴 */
+        .profile-menu {
+            position: relative;
+        }
+
+        .profile-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .profile-button:hover {
+            background: #f8f9fa;
+            border-color: #d1d5db;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-text {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .profile-greeting {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .profile-arrow {
+            font-size: 10px;
+            color: #6b7280;
+            margin-left: 2px;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 180px;
+            display: none;
+            overflow: hidden;
+        }
+
+        .profile-dropdown.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f9fafb;
+        }
+
+        .dropdown-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 비밀번호 변경 모달 */
+        .password-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-content {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-help {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .modal-btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #4b5563;
         }
 
         /* 반응형 개선 */
@@ -464,11 +722,82 @@
                 로그아웃
             </div>
         </div>
+        
+        <!-- 구분선 -->
+        <div style="height: 1px; background: rgba(255,255,255,0.2); margin: 15px 20px;"></div>
+        
+        <!-- 작업자 페이지 -->
+        <div class="menu-item" onclick="switchToWorkerPage()" style="background-color: rgba(0,0,0,0.1);">
+            <div class="menu-title">
+                <span class="menu-icon">👤</span>
+                작업자 페이지
+            </div>
+        </div>
     </div>
         
         <!-- 메인 컨텐츠 -->
         <div class="main-content">
-            <iframe id="content-frame" class="content-frame" src="pages/dashboard.html"></iframe>
+            <!-- 헤더 영역 -->
+            <div class="main-header">
+                <div class="profile-menu">
+                    <div class="profile-button" onclick="toggleProfileDropdown()">
+                        <div class="profile-avatar">관</div>
+                        <div class="profile-text">
+                            <span class="profile-greeting">반갑습니다</span>
+                            <span class="profile-name">관리자님</span>
+                            <span class="profile-arrow">▼</span>
+                        </div>
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-item" onclick="openProfileEdit()">
+                            <span class="dropdown-icon">👤</span>
+                            개인정보수정
+                        </div>
+                        <div class="dropdown-item" onclick="openPasswordChange()">
+                            <span class="dropdown-icon">🔒</span>
+                            비밀번호 변경
+                        </div>
+                        <div class="dropdown-item" onclick="logoutFromProfile()">
+                            <span class="dropdown-icon">🚪</span>
+                            로그아웃
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 컨텐츠 래퍼 -->
+            <div class="content-wrapper">
+                <iframe id="content-frame" class="content-frame" src="pages/dashboard.html"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 비밀번호 변경 모달 -->
+    <div id="passwordModal" class="password-modal-overlay" style="display: none;">
+        <div class="password-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">🔒 비밀번호 변경</h2>
+                <button class="modal-close" onclick="closePasswordModal()">&times;</button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="form-label" for="newPassword">신규 비밀번호</label>
+                    <input type="password" id="newPassword" class="form-input" placeholder="새로운 비밀번호를 입력하세요">
+                    <div class="form-help">영문, 숫자, 특수문자 포함 8~16자리로 입력해 주세요</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">비밀번호 확인</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="비밀번호를 다시 입력하세요">
+                    <div class="form-help">영문, 숫자, 특수문자 포함 8~16자리로 입력해 주세요</div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closePasswordModal()">닫기</button>
+                <button class="modal-btn modal-btn-primary" onclick="changePassword()">변경하기</button>
+            </div>
         </div>
     </div>
     
@@ -605,6 +934,122 @@
                 loadingDiv.remove();
                 contentFrame.style.display = 'block';
             }, 800);
+        }
+        
+        // 프로필 드롭다운 토글
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('active');
+            
+            // 외부 클릭 시 드롭다운 닫기
+            if (dropdown.classList.contains('active')) {
+                document.addEventListener('click', closeProfileDropdownOnOutsideClick);
+            } else {
+                document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
+            }
+            
+            event.stopPropagation();
+        }
+
+        // 외부 클릭 시 프로필 드롭다운 닫기
+        function closeProfileDropdownOnOutsideClick(event) {
+            const profileMenu = document.querySelector('.profile-menu');
+            if (!profileMenu.contains(event.target)) {
+                document.getElementById('profileDropdown').classList.remove('active');
+                document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
+            }
+        }
+
+        // 개인정보수정 페이지 열기
+        function openProfileEdit() {
+            document.getElementById('profileDropdown').classList.remove('active');
+            
+            // 현재 관리자 ID (실제로는 로그인 세션에서 가져올 값)
+            const currentAdminId = 'ADMIN001';
+            
+            // iframe에서 관리자 상세 페이지 로드
+            loadPage(`pages/system/admin-account-detail.html?id=${currentAdminId}`);
+        }
+
+        // 비밀번호 변경 모달 열기
+        function openPasswordChange() {
+            document.getElementById('profileDropdown').classList.remove('active');
+            document.getElementById('passwordModal').style.display = 'flex';
+            
+            // 입력 필드 초기화
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            
+            // 첫 번째 입력 필드에 포커스
+            setTimeout(() => {
+                document.getElementById('newPassword').focus();
+            }, 100);
+        }
+
+        // 비밀번호 변경 모달 닫기
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            
+            // 입력 필드 초기화
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        // 비밀번호 변경 처리
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // 비밀번호 유효성 검사
+            if (!newPassword) {
+                alert('신규 비밀번호를 입력해주세요.');
+                document.getElementById('newPassword').focus();
+                return;
+            }
+            
+            if (!confirmPassword) {
+                alert('비밀번호 확인을 입력해주세요.');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            
+            // 비밀번호 패턴 검사 (영문, 숫자, 특수문자 포함 8~16자리)
+            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
+            
+            if (!passwordPattern.test(newPassword)) {
+                alert('비밀번호는 영문, 숫자, 특수문자를 포함하여 8~16자리로 입력해주세요.');
+                document.getElementById('newPassword').focus();
+                return;
+            }
+            
+            // 비밀번호 일치 확인
+            if (newPassword !== confirmPassword) {
+                alert('비밀번호가 일치하지 않습니다.');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            
+            // 비밀번호 변경 확인
+            if (confirm('비밀번호를 변경하시겠습니까?')) {
+                // 실제 구현 시 서버 API 호출
+                setTimeout(() => {
+                    alert('비밀번호가 성공적으로 변경되었습니다.');
+                    closePasswordModal();
+                }, 500);
+            }
+        }
+
+        // 프로필에서 로그아웃
+        function logoutFromProfile() {
+            document.getElementById('profileDropdown').classList.remove('active');
+            logout();
+        }
+
+        // 작업자 페이지로 전환
+        function switchToWorkerPage() {
+            if (confirm('작업자 페이지로 이동하시겠습니까?')) {
+                window.location.href = 'index_work.html';
+            }
         }
         
         // 로그아웃 함수

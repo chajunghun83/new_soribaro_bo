@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메일 템플릿 등록 - 클립데스크 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr 150px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .info-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+        
+        .info-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-textarea {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 400px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .content-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .btn-list {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-list:hover {
+            background: #4b5563;
+        }
+
+        .required {
+            color: #dc2626;
+            margin-left: 4px;
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📧</span>
+            <span id="pageTitle">메일 템플릿 등록</span>
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">템플릿 타입<span class="required">*</span></div>
+                    <select id="templateType" class="info-select">
+                        <option value="">템플릿 타입을 선택하세요</option>
+                        <option value="signup_complete">회원가입 완료</option>
+                        <option value="edit_draft_complete">가편집 초안 완성</option>
+                        <option value="edit_modify_complete">가편집 수정 완료</option>
+                        <option value="edit_final_approve">가편집 최종 승인</option>
+                        <option value="main_draft_complete">본편집 초안 완성</option>
+                        <option value="main_modify_complete">본편집 수정 완료</option>
+                        <option value="main_final_approve">본편집 최종 승인</option>
+                        <option value="work_assign">작업 배정</option>
+                        <option value="work_reject">작업 거절</option>
+                        <option value="edit_request">편집 의뢰</option>
+                        <option value="payment_complete">결제 완료</option>
+                        <option value="payment_request">결제 요청 메일</option>
+                    </select>
+                    
+                    <div class="info-label">이메일 제목<span class="required">*</span></div>
+                    <input type="text" id="emailTitle" class="info-input" placeholder="이메일 제목을 입력하세요">
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-label">이메일 제목 코드<span class="required">*</span></div>
+                    <input type="text" id="emailTitleCode" class="info-input" placeholder="예: SIGNUP/COMPLETE">
+                    
+                    <div class="info-label">이메일 코드<span class="required">*</span></div>
+                    <input type="text" id="emailCode" class="info-input" placeholder="예: SU_COMP">
+                </div>
+                
+                <div class="info-grid">
+                    <div></div>
+                    <div class="form-help">영문 대소문자와 '/' 조합으로 입력하세요</div>
+                    <div></div>
+                    <div class="form-help">영문 대소문자와 '_' 조합으로 입력하세요</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">메일 내용</div>
+        <div class="info-content">
+            <textarea class="content-textarea" id="emailContent" placeholder="메일 내용을 입력하세요...
+
+예시:
+안녕하세요, 클립데스크입니다.
+
+회원가입이 성공적으로 완료되었습니다.
+
+이제 클립데스크의 모든 서비스를 이용하실 수 있습니다.
+- 영상 편집 의뢰
+- 포트폴리오 관리
+- 작업 진행 상황 확인
+
+궁금한 사항이 있으시면 언제든 고객센터로 문의해주세요.
+
+감사합니다."></textarea>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-action btn-list" onclick="goBack()">
+            <span>📋</span>
+            목록
+        </button>
+        <button class="btn-action btn-save" onclick="saveMailTemplate()">
+            <span id="saveIcon">📝</span>
+            <span id="saveText">저장</span>
+        </button>
+    </div>
+
+    <script>
+        let isEditMode = false;
+        let editItemId = null;
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('메일 템플릿 등록 페이지 로드');
+            
+            // URL 파라미터 확인 (수정 모드인지)
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+            const id = urlParams.get('id');
+            
+            if (mode === 'edit' && id) {
+                isEditMode = true;
+                editItemId = id;
+                document.getElementById('pageTitle').textContent = '메일 템플릿 수정';
+                document.getElementById('saveIcon').textContent = '✏️';
+                document.getElementById('saveText').textContent = '수정';
+                
+                // 기존 데이터 로드
+                loadExistingData(id);
+            }
+        });
+        
+        // 기존 데이터 로드 (수정 모드)
+        function loadExistingData(id) {
+            // 실제 구현 시 서버 API 호출
+            const mockData = getMockData(id);
+            
+            document.getElementById('templateType').value = mockData.templateType;
+            document.getElementById('emailTitle').value = mockData.emailTitle;
+            document.getElementById('emailTitleCode').value = mockData.emailTitleCode;
+            document.getElementById('emailCode').value = mockData.emailCode;
+            document.getElementById('emailContent').value = mockData.emailContent;
+        }
+        
+        // 임시 데이터 (수정 모드용)
+        function getMockData(id) {
+            const mockDatabase = {
+                'MAIL001': {
+                    templateType: 'signup_complete',
+                    emailTitle: '회원가입 완료 안내',
+                    emailTitleCode: 'SIGNUP/COMPLETE',
+                    emailCode: 'SU_COMP',
+                    emailContent: `안녕하세요, 클립데스크입니다.
+
+회원가입이 성공적으로 완료되었습니다.
+
+이제 클립데스크의 모든 서비스를 이용하실 수 있습니다.
+- 영상 편집 의뢰
+- 포트폴리오 관리
+- 작업 진행 상황 확인
+
+궁금한 사항이 있으시면 언제든 고객센터로 문의해주세요.
+
+감사합니다.`
+                },
+                'MAIL002': {
+                    templateType: 'edit_draft_complete',
+                    emailTitle: '가편집 초안 완성 알림',
+                    emailTitleCode: 'EDIT/DRAFT/COMPLETE',
+                    emailCode: 'ED_DR_COMP',
+                    emailContent: `안녕하세요, 클립데스크입니다.
+
+요청하신 영상의 가편집 초안이 완성되었습니다.
+
+주문번호: [ORDER_NO]
+작업명: [WORK_NAME]
+
+마이페이지에서 초안을 확인하시고 피드백을 남겨주세요.
+수정사항이 있으시면 상세히 기재해주시면 반영하여 작업하겠습니다.
+
+감사합니다.`
+                }
+            };
+            
+            return mockDatabase[id] || {};
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'mail-template-management.html';
+        }
+        
+        // 저장/수정 기능
+        function saveMailTemplate() {
+            // 필수 항목 검증
+            const templateType = document.getElementById('templateType').value.trim();
+            const emailTitle = document.getElementById('emailTitle').value.trim();
+            const emailTitleCode = document.getElementById('emailTitleCode').value.trim();
+            const emailCode = document.getElementById('emailCode').value.trim();
+            const emailContent = document.getElementById('emailContent').value.trim();
+            
+            if (!templateType) {
+                alert('템플릿 타입을 선택해주세요.');
+                document.getElementById('templateType').focus();
+                return;
+            }
+            
+            if (!emailTitle) {
+                alert('이메일 제목을 입력해주세요.');
+                document.getElementById('emailTitle').focus();
+                return;
+            }
+            
+            if (!emailTitleCode) {
+                alert('이메일 제목 코드를 입력해주세요.');
+                document.getElementById('emailTitleCode').focus();
+                return;
+            }
+            
+            if (!emailCode) {
+                alert('이메일 코드를 입력해주세요.');
+                document.getElementById('emailCode').focus();
+                return;
+            }
+            
+            if (!emailContent) {
+                alert('메일 내용을 입력해주세요.');
+                document.getElementById('emailContent').focus();
+                return;
+            }
+            
+            // 코드 형식 검증
+            const titleCodePattern = /^[A-Za-z\/]+$/;
+            const emailCodePattern = /^[A-Za-z_]+$/;
+            
+            if (!titleCodePattern.test(emailTitleCode)) {
+                alert('이메일 제목 코드는 영문 대소문자와 \'/\'만 사용 가능합니다.');
+                document.getElementById('emailTitleCode').focus();
+                return;
+            }
+            
+            if (!emailCodePattern.test(emailCode)) {
+                alert('이메일 코드는 영문 대소문자와 \'_\'만 사용 가능합니다.');
+                document.getElementById('emailCode').focus();
+                return;
+            }
+            
+            // 등록/수정 확인
+            const action = isEditMode ? '수정' : '등록';
+            if (confirm(`메일 템플릿을 ${action}하시겠습니까?`)) {
+                // 실제 구현 시 서버 API 호출
+                const formData = {
+                    templateType: templateType,
+                    emailTitle: emailTitle,
+                    emailTitleCode: emailTitleCode,
+                    emailCode: emailCode,
+                    emailContent: emailContent
+                };
+                
+                console.log(`${action} 데이터:`, formData);
+                alert(`메일 템플릿 ${action}이 완료되었습니다.`);
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

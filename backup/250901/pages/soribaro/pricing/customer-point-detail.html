@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객 포인트 변경 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 포인트 구분 배지 */
+        .point-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .point-welcome {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .point-reception {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .point-payment {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+
+
+        /* 포인트 변경 스타일 */
+        .point-increase {
+            color: #059669;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .point-decrease {
+            color: #dc2626;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        /* 설명 영역 */
+        .description-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .description-content {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📊</span>
+            고객 포인트 변경 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 고객 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">고객 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">이메일</div>
+                    <div class="info-value" id="userEmail">kim.cs@email.com</div>
+                    
+                    <div class="info-label">이름</div>
+                    <div class="info-value" id="userName">김철수</div>
+                    
+                    <div class="info-label">전화번호</div>
+                    <div class="info-value" id="userPhone">010-1234-5678</div>
+                    
+                    <div class="info-label">포인트구분</div>
+                    <div class="info-value">
+                        <span id="pointBadge" class="point-badge point-welcome">웰컴적립</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 포인트 변경 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">포인트 변경 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">보유포인트</div>
+                    <div class="info-value" id="beforePoint">0</div>
+                    
+                    <div class="info-label">변경포인트</div>
+                    <div class="info-value">
+                        <span id="pointChange" class="point-increase">+1,000</span>
+                    </div>
+                    
+                    <div class="info-label">포인트합계</div>
+                    <div class="info-value" id="afterPoint">1,000</div>
+                    
+                    <div class="info-label">등록자</div>
+                    <div class="info-value" id="registeredBy">관리자</div>
+                    
+                    <div class="info-label">변경일</div>
+                    <div class="info-value" id="registeredDate">2025-08-27 14:30:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 상세 설명 섹션 -->
+    <div class="description-section">
+        <div class="section-title">변경 사유</div>
+        <div class="info-content">
+            <div class="description-content" id="changeReason">
+                신규 회원 가입 웰컴 포인트 지급입니다.
+                
+                ■ 지급 기준
+                - 신규 회원 가입 완료 시 자동 지급
+                - 본인 인증 완료 후 즉시 적립
+                - 최초 1회만 지급되는 혜택
+                
+                ■ 포인트 활용 안내
+                - 모든 소리바로 서비스 이용 시 사용 가능
+                - 현금과 동일한 가치로 사용
+                - 유효기간: 적립일로부터 365일
+                
+                ■ 주의사항
+                - 회원 탈퇴 시 포인트 자동 소멸
+                - 부정 사용 시 회수 조치 가능
+                - 현금 환불 불가
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('고객 포인트 변경 상세 페이지 로드, ID:', itemId);
+            loadCustomerPointDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadCustomerPointDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'CP001': {
+                    userEmail: 'kim.cs@email.com',
+                    userName: '김철수',
+                    userPhone: '010-1234-5678',
+                    pointType: '웰컴적립',
+                    pointClass: 'point-welcome',
+                    pointChange: '+1,000',
+                    pointChangeClass: 'point-increase',
+                    beforePoint: '0',
+                    afterPoint: '1,000',
+                    registeredBy: '김철수',
+                    changedDate: '2025-08-27 14:30:00',
+                    changeReason: `신규 회원 가입 웰컴 포인트 지급입니다.
+                
+■ 지급 기준
+- 신규 회원 가입 완료 시 자동 지급
+- 본인 인증 완료 후 즉시 적립
+- 최초 1회만 지급되는 혜택
+
+■ 포인트 활용 안내
+- 모든 소리바로 서비스 이용 시 사용 가능
+- 현금과 동일한 가치로 사용
+- 유효기간: 적립일로부터 365일
+
+■ 주의사항
+- 회원 탈퇴 시 포인트 자동 소멸
+- 부정 사용 시 회수 조치 가능
+- 현금 환불 불가`
+                },
+                'CP002': {
+                    userEmail: 'lee.yh@email.com',
+                    userName: '이영희',
+                    userPhone: '010-2345-6789',
+                    pointType: '접수',
+                    pointClass: 'point-reception',
+                    pointChange: '+500',
+                    pointChangeClass: 'point-increase',
+                    beforePoint: '2,000',
+                    afterPoint: '2,500',
+                    registeredBy: '관리자',
+                    changedDate: '2025-08-27 13:15:00',
+                    changeReason: `서비스 접수 완료에 따른 포인트 적립입니다.
+                
+■ 적립 기준
+- 서비스 접수 완료 시 자동 적립
+- 결제 완료 후 즉시 지급
+- 접수 건당 1회 적립
+
+■ 포인트 활용 안내
+- 다음 서비스 이용 시 할인 적용
+- 누적 적립을 통한 등급 혜택
+- 유효기간: 적립일로부터 180일
+
+■ 주의사항
+- 서비스 취소 시 포인트 회수
+- 중복 접수 시 1회만 적립
+- 법인 고객은 별도 정책 적용`
+                },
+                'CP003': {
+                    userEmail: 'park.ms@email.com',
+                    userName: '박민수',
+                    userPhone: '010-3456-7890',
+                    pointType: '포인트 지급',
+                    pointClass: 'point-payment',
+                    pointChange: '+2,000',
+                    pointChangeClass: 'point-increase',
+                    beforePoint: '3,200',
+                    afterPoint: '5,200',
+                    registeredBy: '관리자',
+                    changedDate: '2025-08-27 12:45:00',
+                    changeReason: `관리자가 직접 지급한 포인트입니다.
+                
+■ 지급 사유
+- 고객 만족도 조사 참여 보상
+- 서비스 품질 개선 기여
+- 특별 이벤트 참여 혜택
+
+■ 포인트 활용 안내
+- 모든 소리바로 서비스 이용 시 사용 가능
+- 현금과 동일한 가치로 사용
+- 다른 할인과 중복 적용 불가
+
+■ 주의사항
+- 일회성 지급으로 재지급 불가
+- 타 포인트와 합산 사용 가능
+- 유효기간: 적립일로부터 90일`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['CP001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('userEmail').textContent = data.userEmail;
+            document.getElementById('userName').textContent = data.userName;
+            document.getElementById('userPhone').textContent = data.userPhone;
+            document.getElementById('pointBadge').textContent = data.pointType;
+            document.getElementById('pointBadge').className = `point-badge ${data.pointClass}`;
+            document.getElementById('pointChange').textContent = data.pointChange;
+            document.getElementById('pointChange').className = data.pointChangeClass;
+            document.getElementById('beforePoint').textContent = data.beforePoint;
+            document.getElementById('afterPoint').textContent = data.afterPoint;
+            document.getElementById('registeredBy').textContent = data.registeredBy;
+            document.getElementById('registeredDate').textContent = data.changedDate;
+            document.getElementById('changeReason').textContent = data.changeReason;
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'customer-point-management.html';
+        }
+    </script>
+</body>
+</html>

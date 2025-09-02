@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>리뷰 관리 - 클립데스크 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 150px;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 별점 표시 */
+        .star-rating {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .star {
+            color: #fbbf24;
+            font-size: 16px;
+        }
+        
+        .star.empty {
+            color: #d1d5db;
+        }
+        
+        /* 내용 컬럼 스타일 */
+        .content-cell {
+            text-align: left;
+            max-width: 300px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 600px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .detail-row {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .detail-label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .detail-value {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .detail-value.large {
+            font-size: 16px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .modal-star-rating {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-top: 5px;
+        }
+
+        .modal-star {
+            color: #fbbf24;
+            font-size: 20px;
+        }
+
+        .modal-star.empty {
+            color: #d1d5db;
+        }
+
+        .rating-text {
+            margin-left: 10px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .content-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 8px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-close {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-close:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>⭐</span>
+            리뷰 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div class="search-group">
+                <select id="searchType" class="search-select">
+                    <option value="">전체</option>
+                    <option value="requestName">의뢰명</option>
+                    <option value="reviewer">등록자</option>
+                    <option value="email">이메일</option>
+                    <option value="rating">별점</option>
+                    <option value="content">내용</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchReviewData()">
+                <span>🔍</span>
+                검색
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">리뷰 목록</h2>
+            <div class="table-info">총 <span id="totalCount">15</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">NO.</th>
+                    <th width="200">의뢰명</th>
+                    <th width="100">등록자</th>
+                    <th width="180">이메일</th>
+                    <th width="150">등록일시</th>
+                    <th width="80">별점</th>
+                    <th width="300">내용</th>
+                </tr>
+            </thead>
+            <tbody id="reviewTableBody">
+                <tr onclick="goToDetail('REV001')">
+                    <td>15</td>
+                    <td>기업 홍보영상 제작</td>
+                    <td>김영수</td>
+                    <td>kim.youngsu@company.com</td>
+                    <td>2025-08-27 09:00:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">정말 만족스러운 결과물이었습니다. 퀄리티가 기대 이상이었고...</td>
+                </tr>
+                <tr onclick="goToDetail('REV002')">
+                    <td>14</td>
+                    <td>제품 소개영상</td>
+                    <td>이민지</td>
+                    <td>lee.minji@startup.co.kr</td>
+                    <td>2025-08-27 10:30:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">전문적인 편집과 빠른 작업 처리에 감사드립니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV003')">
+                    <td>13</td>
+                    <td>인스타그램 릴스</td>
+                    <td>박준호</td>
+                    <td>park.junho@brand.com</td>
+                    <td>2025-08-26 11:15:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">트렌디한 감각으로 제작해주셔서 반응이 매우 좋았습니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV004')">
+                    <td>12</td>
+                    <td>유튜브 쇼츠</td>
+                    <td>정수현</td>
+                    <td>jung.suhyun@media.net</td>
+                    <td>2025-08-26 14:00:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">기본적인 편집은 괜찮았지만 좀 더 창의적이었으면...</td>
+                </tr>
+                <tr onclick="goToDetail('REV005')">
+                    <td>11</td>
+                    <td>교육 콘텐츠</td>
+                    <td>최은영</td>
+                    <td>choi.eunyoung@edu.ac.kr</td>
+                    <td>2025-08-25 15:30:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">교육용으로 제작한 영상이 학생들에게 매우 호응이 좋습니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV006')">
+                    <td>10</td>
+                    <td>이벤트 영상</td>
+                    <td>한상우</td>
+                    <td>han.sangwoo@event.org</td>
+                    <td>2025-08-25 16:45:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">이벤트 현장의 분위기를 잘 담아주셨네요. 만족합니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV007')">
+                    <td>9</td>
+                    <td>브랜딩 영상</td>
+                    <td>송미래</td>
+                    <td>song.mirae@future.inc</td>
+                    <td>2025-08-24 08:00:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">우리 브랜드의 가치를 완벽하게 표현해주셨습니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV008')">
+                    <td>8</td>
+                    <td>인터뷰 영상</td>
+                    <td>윤도현</td>
+                    <td>yoon.dohyun@interview.tv</td>
+                    <td>2025-08-24 09:30:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">인터뷰 편집이 자연스럽고 전문적이었습니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV009')">
+                    <td>7</td>
+                    <td>애니메이션 제작</td>
+                    <td>강혜진</td>
+                    <td>kang.hyejin@animation.co</td>
+                    <td>2025-08-23 10:15:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">복잡한 내용을 쉽게 이해할 수 있도록 제작해주셨네요...</td>
+                </tr>
+                <tr onclick="goToDetail('REV010')">
+                    <td>6</td>
+                    <td>라이브 방송</td>
+                    <td>임재현</td>
+                    <td>lim.jaehyun@live.stream</td>
+                    <td>2025-08-23 11:00:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">라이브 방송 편집에서 아쉬운 부분이 있었습니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV011')">
+                    <td>5</td>
+                    <td>바이럴 영상</td>
+                    <td>오세영</td>
+                    <td>oh.seyoung@viral.media</td>
+                    <td>2025-08-22 14:20:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">바이럴 포인트를 정확히 잡아서 제작해주셨습니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV012')">
+                    <td>4</td>
+                    <td>웨딩 영상</td>
+                    <td>신지원</td>
+                    <td>shin.jiwon@wedding.love</td>
+                    <td>2025-08-22 15:45:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">평생 간직할 소중한 추억을 아름답게 담아주셨어요...</td>
+                </tr>
+                <tr onclick="goToDetail('REV013')">
+                    <td>3</td>
+                    <td>요리 레시피</td>
+                    <td>배현수</td>
+                    <td>bae.hyunsu@recipe.chef</td>
+                    <td>2025-08-21 16:30:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">요리 과정을 단계별로 잘 정리해주셨습니다...</td>
+                </tr>
+                <tr onclick="goToDetail('REV014')">
+                    <td>2</td>
+                    <td>여행 브이로그</td>
+                    <td>조아름</td>
+                    <td>jo.areum@travel.blog</td>
+                    <td>2025-08-21 17:15:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">여행의 감동을 그대로 느낄 수 있는 멋진 영상이었어요...</td>
+                </tr>
+                <tr onclick="goToDetail('REV015')">
+                    <td>1</td>
+                    <td>펫샵 광고영상</td>
+                    <td>홍길동</td>
+                    <td>hong.gildong@petshop.kr</td>
+                    <td>2025-08-21 18:00:00</td>
+                    <td>
+                        <div class="star-rating">
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star">★</span>
+                            <span class="star empty">★</span>
+                            <span class="star empty">★</span>
+                        </div>
+                    </td>
+                    <td class="content-cell">반려동물의 귀여움을 잘 표현했지만 음향이 아쉬웠어요...</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+
+    <!-- 리뷰 상세보기 모달 -->
+    <div class="modal-overlay" id="reviewModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">리뷰 상세</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-row">
+                    <label class="detail-label">의뢰명</label>
+                    <div class="detail-value large" id="modalRequestName">-</div>
+                </div>
+                
+                <div class="detail-row">
+                    <label class="detail-label">등록자</label>
+                    <div class="detail-value" id="modalReviewer">-</div>
+                </div>
+                
+                <div class="detail-row">
+                    <label class="detail-label">이메일</label>
+                    <div class="detail-value" id="modalEmail">-</div>
+                </div>
+                
+                <div class="detail-row">
+                    <label class="detail-label">등록일시</label>
+                    <div class="detail-value" id="modalRegDate">-</div>
+                </div>
+                
+                <div class="detail-row">
+                    <label class="detail-label">별점</label>
+                    <div class="modal-star-rating" id="modalStarRating">
+                        <span class="modal-star">★</span>
+                        <span class="modal-star">★</span>
+                        <span class="modal-star">★</span>
+                        <span class="modal-star">★</span>
+                        <span class="modal-star">★</span>
+                        <span class="rating-text">5점</span>
+                    </div>
+                </div>
+                
+                <div class="detail-row">
+                    <label class="detail-label">내용</label>
+                    <div class="content-box" id="modalContent">-</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-close" onclick="closeModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchReviewData() {
+            const searchType = document.getElementById('searchType').value;
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            
+            console.log('검색 조건:', {
+                searchType: searchType || '전체',
+                keyword: searchKeyword || '전체'
+            });
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n' +
+                  '검색범위: ' + (searchType || '전체') + '\n' +
+                  '검색어: ' + (searchKeyword || '전체'));
+        }
+
+        // 상세 페이지 이동 (리뷰 상세 모달 표시)
+        function goToDetail(id) {
+            // 샘플 데이터 (실제로는 서버에서 가져옴)
+            const sampleData = {
+                'REV001': { 
+                    requestName: '기업 홍보영상 제작', 
+                    reviewer: '김영수', 
+                    email: 'kim.youngsu@company.com', 
+                    regDate: '2025-08-27 09:00:00', 
+                    rating: 5, 
+                    content: '정말 만족스러운 결과물이었습니다. 퀄리티가 기대 이상이었고, 담당자분께서 세심하게 신경써주셔서 원하는 방향으로 완벽하게 제작되었습니다. 특히 색감과 음향 부분이 정말 뛰어났고, 클라이언트들의 반응도 매우 좋았습니다. 다음에도 꼭 다시 의뢰하고 싶습니다.' 
+                },
+                'REV002': { 
+                    requestName: '제품 소개영상', 
+                    reviewer: '이민지', 
+                    email: 'lee.minji@startup.co.kr', 
+                    regDate: '2025-08-27 10:30:00', 
+                    rating: 4, 
+                    content: '전문적인 편집과 빠른 작업 처리에 감사드립니다. 제품의 특징을 잘 살려서 제작해주셨고, 고객들이 이해하기 쉽게 구성되어 있어서 만족합니다. 다만 음향 부분에서 조금 더 신경써주셨으면 하는 아쉬움이 있습니다.' 
+                },
+                'REV003': { 
+                    requestName: '인스타그램 릴스', 
+                    reviewer: '박준호', 
+                    email: 'park.junho@brand.com', 
+                    regDate: '2025-08-26 11:15:00', 
+                    rating: 5, 
+                    content: '트렌디한 감각으로 제작해주셔서 반응이 매우 좋았습니다. 젊은 타겟층에게 어필할 수 있는 스타일로 완성되어서 만족도가 높습니다. 편집 템포와 음악 선택도 완벽했습니다.' 
+                }
+            };
+            
+            const data = sampleData[id] || {
+                requestName: '샘플 의뢰명',
+                reviewer: '샘플 등록자',
+                email: 'sample@email.com',
+                regDate: '2025-08-27 12:00:00',
+                rating: 3,
+                content: '샘플 리뷰 내용입니다.'
+            };
+            
+            // 모달에 데이터 채우기
+            document.getElementById('modalRequestName').textContent = data.requestName;
+            document.getElementById('modalReviewer').textContent = data.reviewer;
+            document.getElementById('modalEmail').textContent = data.email;
+            document.getElementById('modalRegDate').textContent = data.regDate;
+            document.getElementById('modalContent').textContent = data.content;
+            
+            // 별점 표시
+            displayStarRating(data.rating);
+            
+            // 모달 표시
+            document.getElementById('reviewModal').classList.add('show');
+        }
+        
+        // 별점 표시 함수
+        function displayStarRating(rating) {
+            const starContainer = document.getElementById('modalStarRating');
+            const stars = starContainer.querySelectorAll('.modal-star');
+            const ratingText = starContainer.querySelector('.rating-text');
+            
+            // 모든 별을 초기화
+            stars.forEach((star, index) => {
+                if (index < rating) {
+                    star.classList.remove('empty');
+                } else {
+                    star.classList.add('empty');
+                }
+            });
+            
+            // 별점 텍스트 업데이트
+            ratingText.textContent = `${rating}점`;
+        }
+        
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('reviewModal').classList.remove('show');
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('리뷰 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchReviewData();
+                }
+            });
+            
+            // 셀렉트 박스 변경 시 자동 검색 (선택사항)
+            document.getElementById('searchType').addEventListener('change', function() {
+                // searchReviewData(); // 자동 검색을 원할 경우 주석 해제
+            });
+            
+            // 모달 외부 클릭 시 닫기
+            document.getElementById('reviewModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // ESC 키로 모달 닫기
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadReviewData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadReviewData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('리뷰 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

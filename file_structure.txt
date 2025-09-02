@@ -81,6 +81,10 @@ new_soribaro_bo/
     ├── report/
     │   ├── work-report.html                            → 작업 결과 리포트
     │   └── work-report-detail.html                     → 작업 결과 리포트 상세정보
+    ├── worker/
+    │   ├── notice.html                                 → 작업자 공지사항
+    │   ├── transcription.html                          → 작업자 녹취록 작업 목록
+    │   └── transcription-detail.html                   → 작업자 녹취록 작업 상세
     └── system/
         ├── admin-account-management.html               → 관리자 계정 관리
         ├── admin-account-detail.html                   → 관리자 계정 상세정보
@@ -400,7 +404,7 @@ new_soribaro_bo/
 📊 개발 현황 통계
 ================================================================================
 
-구현완료 파일: 73개
+구현완료 파일: 76개
 - index.html (메인 진입점)
 - file_structure.txt (파일 구조 다이어그램)
 - pages/dashboard.html (웍스파이 프로젝트 관리)
@@ -472,6 +476,10 @@ new_soribaro_bo/
 - pages/report/work-status.html (작업자 작업현황)
 - pages/report/work-comparison.html (작업물 비교 - 일반)
 - pages/report/work-comparison-translation.html (작업물 비교 - 번역 전용)
+- index_work.html (작업자 메인 페이지)
+- pages/worker/notice.html (작업자 공지사항)
+- pages/worker/transcription.html (작업자 녹취록 작업 목록)
+- pages/worker/transcription-detail.html (작업자 녹취록 작업 상세)
 
 개발 예정 메뉴: 23+ 개
 주요 서비스 영역: 4개 (대시보드, 소리바로, 클립데스크, 시스템관리)
@@ -579,5 +587,26 @@ new_soribaro_bo/
 ⚙️ 시스템 관리
     ├── 관리자/검수자 관리
     └── 공통코드 관리
+
+👤 작업자 페이지 🆕 신규 추가
+    ├── 공지사항 ✅ 구현 완료
+    │   → pages/worker/notice.html
+    │   → 기능: 작업자 전용 공지사항, 환영 메시지, 공지사항 토글 확인
+    └── 작업현황관리
+        └── 녹취록 ✅ 구현 완료
+            → pages/worker/transcription.html (목록 페이지)
+            → 기능: 배정된 녹취록 작업 목록, 배정일 기간 검색
+            → 검색: 배정일 범위 (시작일~종료일)
+            → 테이블: NO, 배정일, 서비스 구분, 파일명, 재생시간, 작업상태, 제출일
+            → 서비스 구분: 통화기록(파란색), 다기록(주황색)
+            → 작업상태: 접수(파란색), 작업중(주황색), 완료(녹색)
+            └── 녹취록 작업 상세 ✅ 구현 완료
+                → pages/worker/transcription-detail.html
+                → 기능: 개별 녹취록 작업 상세 정보, 음성 플레이어, 구간/화자 정보, 파일 공유
+                → 작업 정보: 파일명, 서비스 구분, 배정일, 작업상태, 재생시간, 제출일
+                → 음성 플레이어: 재생/다운로드, 녹음일/장소 정보
+                → 구간 정보: 시간 테이블, 화자설정 (상담원/고객)
+                → 파일 공유: 가이드라인, 템플릿, 보안 안내 파일
+                → 액션 버튼: 작업 시작 → 작업 제출 → 결과 다운로드 (상태별 변경)
 
 🚪 로그아웃

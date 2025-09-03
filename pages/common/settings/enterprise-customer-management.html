@@ -244,6 +244,26 @@
             background: #059669;
         }
         
+        .btn-excel {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+        
+        .btn-excel:hover {
+            background: #d97706;
+        }
+        
         /* 페이지네이션 */
         .pagination {
             display: flex;
@@ -324,6 +344,11 @@
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>📝</span>
                 등록
+            </button>
+            
+            <button class="btn-excel" onclick="downloadExcel()">
+                <span>📊</span>
+                엑셀 다운로드
             </button>
         </div>
     </div>
@@ -479,6 +504,26 @@
         // 등록 페이지로 이동
         function openRegisterModal() {
             window.location.href = 'enterprise-customer-register.html';
+        }
+        
+        // 엑셀 다운로드
+        function downloadExcel() {
+            const platformFilter = document.getElementById('platformFilter').value;
+            const searchType = document.getElementById('searchType').value;
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            
+            console.log('엑셀 다운로드 실행:', {
+                platform: platformFilter,
+                type: searchType,
+                keyword: searchKeyword
+            });
+            
+            // 실제 구현 시 서버 API 호출하여 엑셀 파일 생성 및 다운로드
+            alert('엑셀 다운로드가 시작됩니다.\n' + 
+                  '플랫폼: ' + (platformFilter || '전체') + '\n' +
+                  '검색 조건: ' + searchType + '\n' +
+                  '검색어: ' + (searchKeyword || '전체') + '\n' +
+                  '파일명: 엔터프라이즈_고객_목록_' + new Date().toISOString().slice(0, 10) + '.xlsx');
         }
         
         // 페이지네이션

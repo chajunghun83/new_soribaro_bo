@@ -81,8 +81,8 @@
 
         .basic-info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
             margin-bottom: 25px;
         }
 
@@ -1165,12 +1165,16 @@
         </h2>
         <div class="basic-info-grid">
             <div class="info-item">
-                <span class="info-label">업체명</span>
-                <div class="info-value" id="company-name">서울시교육지원청</div>
+                <span class="info-label">제목</span>
+                <div class="info-value" id="file-title">2025년 1차 정책위원회 회의록</div>
             </div>
             <div class="info-item">
-                <span class="info-label">파일 제목</span>
-                <div class="info-value" id="file-title">2025년 1차 정책위원회 회의록</div>
+                <span class="info-label">업체명</span>
+                <div class="info-value" id="company-name">서울특별시청</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">의뢰자명</span>
+                <div class="info-value" id="client-name">차정훈</div>
             </div>
         </div>
     </div>
@@ -1742,6 +1746,7 @@
             return {
                 orderNumber: urlParams.get('orderNumber'),
                 title: urlParams.get('title'),
+                company: urlParams.get('company'),
                 client: urlParams.get('client'),
                 contact: urlParams.get('contact'),
                 requestDate: urlParams.get('requestDate'),
@@ -1756,11 +1761,14 @@
             const params = getUrlParams();
             
             // 기본 정보 설정
-            if (params.client) {
-                document.getElementById('company-name').textContent = decodeURIComponent(params.client);
-            }
             if (params.title) {
                 document.getElementById('file-title').textContent = decodeURIComponent(params.title);
+            }
+            if (params.company) {
+                document.getElementById('company-name').textContent = decodeURIComponent(params.company);
+            }
+            if (params.client) {
+                document.getElementById('client-name').textContent = decodeURIComponent(params.client);
             }
         });
 

@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>탈퇴 회원 관리</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+    <style>
+        /* 테이블 헤더 중앙정렬 */
+        table th {
+            text-align: center;
+        }
+        
+        /* 특정 컬럼 데이터 중앙정렬: NO, 이름, 성별, 이메일, 휴대전화, 생년월일, 주소, 사용기종, 탈퇴일 */
+        table td:nth-child(1), table td:nth-child(2), table td:nth-child(3), table td:nth-child(4), table td:nth-child(5), 
+        table td:nth-child(6), table td:nth-child(7), table td:nth-child(8), table td:nth-child(9) {
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">👋 탈퇴 회원 관리</h1>
+    
+    <!-- 검색 폼 -->
+    <div class="search-section">
+        <div class="search-grid" style="grid-template-columns: repeat(4, 1fr);">
+            <div class="form-group">
+                <label>이름</label>
+                <input type="text" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>휴대전화</label>
+                <input type="tel" placeholder="전화번호를 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" placeholder="이메일을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>탈퇴일</label>
+                <input type="date">
+            </div>
+        </div>
+        <div class="search-buttons">
+            <button class="btn btn-outline">검색 조건 초기화</button>
+            <button class="btn btn-primary">🔍 검색</button>
+        </div>
+    </div>
+
+    <!-- 회원 목록 테이블 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>👋 총 86건</span>
+                    <select id="columnSelect" style="padding: 5px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+                        <option value="">컬럼선택</option>
+                        <option value="no" class="selected-column">✓ NO</option>
+                        <option value="name" class="selected-column">✓ 이름</option>
+                        <option value="gender" class="selected-column">✓ 성별</option>
+                        <option value="email" class="selected-column">✓ 이메일</option>
+                        <option value="phone" class="selected-column">✓ 휴대전화</option>
+                        <option value="birth" class="selected-column">✓ 생년월일</option>
+                        <option value="address" class="selected-column">✓ 주소</option>
+                        <option value="device" class="selected-column">✓ 사용기종</option>
+                        <option value="leave-date" class="selected-column">✓ 탈퇴일</option>
+                        <option value="korean-assoc">한국AI속기사협회</option>
+                        <option value="worker-grade">작업자등급</option>
+                        <option value="unemployment">실업급여부</option>
+                        <option value="reregister">재차등록부</option>
+                        <option value="stenography">속기사등급</option>
+                        <option value="education">최종학력</option>
+                        <option value="additional-info">추가정보작성여부</option>
+                        <option value="marketing">마케팅수신동의여부</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>이름</th>
+                    <th>성별</th>
+                    <th>이메일</th>
+                    <th>휴대전화</th>
+                    <th>생년월일</th>
+                    <th>주소</th>
+                    <th>사용기종</th>
+                    <th>탈퇴일</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>86</td>
+                    <td>이지영</td>
+                    <td>여성</td>
+                    <td>jiyoung.lee@gmail.com_delete</td>
+                    <td>010-1**4-5678_delete</td>
+                    <td>1985.**.23</td>
+                    <td>서울특별시 서초구</td>
+                    <td>소리자바</td>
+                    <td>2025.01.20</td>
+                </tr>
+                <tr>
+                    <td>85</td>
+                    <td>박민수</td>
+                    <td>남성</td>
+                    <td>minsu.park@naver.com_delete</td>
+                    <td>010-2**7-9012_delete</td>
+                    <td>1990.**.15</td>
+                    <td>부산광역시 해운대구</td>
+                    <td>일반키보드</td>
+                    <td>2025.01.18</td>
+                </tr>
+                <tr>
+                    <td>84</td>
+                    <td>김수연</td>
+                    <td>여성</td>
+                    <td>suyeon.kim@daum.net_delete</td>
+                    <td>010-3**8-3456_delete</td>
+                    <td>1988.**.07</td>
+                    <td>대구광역시 수성구</td>
+                    <td>소리자바</td>
+                    <td>2025.01.15</td>
+                </tr>
+                <tr>
+                    <td>83</td>
+                    <td>정현우</td>
+                    <td>남성</td>
+                    <td>hyunwoo.jung@gmail.com_delete</td>
+                    <td>010-4**9-7890_delete</td>
+                    <td>1987.**.22</td>
+                    <td>인천광역시 남동구</td>
+                    <td>일반키보드</td>
+                    <td>2025.01.12</td>
+                </tr>
+                <tr>
+                    <td>82</td>
+                    <td>최유진</td>
+                    <td>여성</td>
+                    <td>yujin.choi@hotmail.com_delete</td>
+                    <td>010-5**0-1234_delete</td>
+                    <td>1992.**.30</td>
+                    <td>광주광역시 서구</td>
+                    <td>소리자바</td>
+                    <td>2025.01.10</td>
+                </tr>
+                <tr>
+                    <td>81</td>
+                    <td>한지민</td>
+                    <td>여성</td>
+                    <td>jimin.han@yahoo.com_delete</td>
+                    <td>010-6**1-2345_delete</td>
+                    <td>1986.**.18</td>
+                    <td>대전광역시 유성구</td>
+                    <td>일반키보드</td>
+                    <td>2025.01.08</td>
+                </tr>
+                <tr>
+                    <td>80</td>
+                    <td>송태호</td>
+                    <td>남성</td>
+                    <td>taeho.song@nate.com_delete</td>
+                    <td>010-7**2-3456_delete</td>
+                    <td>1989.**.09</td>
+                    <td>울산광역시 남구</td>
+                    <td>소리자바</td>
+                    <td>2025.01.05</td>
+                </tr>
+                <tr>
+                    <td>79</td>
+                    <td>윤서영</td>
+                    <td>여성</td>
+                    <td>seoyoung.yoon@gmail.com_delete</td>
+                    <td>010-8**3-4567_delete</td>
+                    <td>1991.**.25</td>
+                    <td>경기도 성남시</td>
+                    <td>일반키보드</td>
+                    <td>2025.01.03</td>
+                </tr>
+                <tr>
+                    <td>78</td>
+                    <td>임동현</td>
+                    <td>남성</td>
+                    <td>donghyun.lim@naver.com_delete</td>
+                    <td>010-9**4-5678_delete</td>
+                    <td>1984.**.12</td>
+                    <td>충청북도 청주시</td>
+                    <td>소리자바</td>
+                    <td>2024.12.28</td>
+                </tr>
+                <tr>
+                    <td>77</td>
+                    <td>강예원</td>
+                    <td>여성</td>
+                    <td>yewon.kang@daum.net_delete</td>
+                    <td>010-1**5-6789_delete</td>
+                    <td>1993.**.03</td>
+                    <td>전라북도 전주시</td>
+                    <td>일반키보드</td>
+                    <td>2024.12.25</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">9</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+            <div style="margin-left: 20px; display: flex; align-items: center; gap: 5px;">
+                <span style="font-size: 13px;">페이지당</span>
+                <select style="padding: 3px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+                    <option>10</option>
+                    <option>20</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <span style="font-size: 13px;">개씩 보기</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 회원 상세정보 팝업 -->
+    <div id="memberDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="position: relative; width: 90%; max-width: 800px; margin: 5% auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); max-height: 90vh; overflow-y: auto;">
+            <!-- 팝업 헤더 -->
+            <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center; border-radius: 12px 12px 0 0;">
+                <h2 style="margin: 0; font-size: 1.3rem; font-weight: 600; display: flex; align-items: center; gap: 10px;">
+                    👤 회원 상세정보
+                </h2>
+                <button onclick="closeWithdrawnMemberDetail()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.2s;">×</button>
+            </div>
+
+            <!-- 팝업 본문 -->
+            <div style="padding: 30px 25px;">
+                <!-- 기본 정보 -->
+                <div style="display: grid; grid-template-columns: 150px 1fr 150px 1fr; gap: 15px 25px; margin-bottom: 30px; align-items: center;">
+                    <span style="font-weight: 500; color: #6b7280;">이름</span>
+                    <span id="detail-name" style="color: #374151;">이지영</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">휴대전화</span>
+                    <span id="detail-phone" style="color: #374151;">010-1234-5678_delete</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">주소</span>
+                    <span id="detail-address" style="color: #374151;">서울특별시 서초구</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">사용기종</span>
+                    <span id="detail-device" style="color: #374151;">소리자바</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">성별</span>
+                    <span id="detail-gender" style="color: #374151;">여성</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">생년월일</span>
+                    <span id="detail-birth" style="color: #374151;">1985.03.23</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">이메일</span>
+                    <span id="detail-email" style="color: #374151;">jiyoung.lee@gmail.com_delete</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">최종학력</span>
+                    <span id="detail-education" style="color: #374151;">대학교졸업</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">학과/전공</span>
+                    <span id="detail-major" style="color: #374151;">컴퓨터공학과</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">학교명</span>
+                    <span id="detail-school" style="color: #374151;">서울대학교</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">회원가입일</span>
+                    <span id="detail-join-date" style="color: #374151;">2023.05.15</span>
+                    
+                    <span style="font-weight: 500; color: #6b7280;">탈퇴일</span>
+                    <span id="detail-leave-date" style="color: #374151;">2025.01.20</span>
+                </div>
+
+                <!-- 버디 사용 -->
+                <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 20px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <span style="font-weight: 600; color: #374151; font-size: 16px;">🤝 버디 사용</span>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+                            <input type="checkbox" id="buddy-use" style="width: 18px; height: 18px;">
+                            <span style="color: #6b7280;">버디 사용</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- 관리자 메모 -->
+                <div style="border-top: 1px solid #e5e7eb; padding-top: 20px; margin-top: 20px;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <span style="font-weight: 600; color: #374151; font-size: 16px;">📝 관리자 메모</span>
+                    </div>
+                    <textarea id="admin-memo" placeholder="관리자 메모를 입력하세요..." style="width: 100%; min-height: 100px; padding: 12px; border: 1px solid #d1d5db; border-radius: 8px; resize: vertical; font-family: inherit; font-size: 14px; color: #374151; line-height: 1.5;" rows="4"></textarea>
+                </div>
+
+                <!-- 버튼 영역 -->
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb;">
+                    <button onclick="closeWithdrawnMemberDetail()" style="padding: 12px 24px; background: #6b7280; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; min-width: 80px;">
+                        닫기
+                    </button>
+                    <button onclick="saveWithdrawnAdminMemo()" style="padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2); min-width: 80px;">
+                        저장
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../scripts/common.js"></script>
+    <script>
+        // 테이블 행 클릭 시 상세 정보 팝업 열기
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                openWithdrawnMemberDetail(this);
+            });
+        });
+
+        // 탈퇴 회원 상세 정보 팝업 열기
+        function openWithdrawnMemberDetail(row) {
+            const cells = row.querySelectorAll('td');
+            if (cells.length >= 9) {
+                const memberData = {
+                    name: cells[1].textContent,
+                    gender: cells[2].textContent,
+                    email: cells[3].textContent,
+                    phone: cells[4].textContent,
+                    birth: cells[5].textContent,
+                    address: cells[6].textContent,
+                    device: cells[7].textContent,
+                    leaveDate: cells[8].textContent
+                };
+                
+                // 실제 데이터로 팝업 내용 업데이트
+                if (memberData) {
+                    document.getElementById('detail-name').textContent = memberData.name || '이지영';
+                    document.getElementById('detail-phone').textContent = memberData.phone || '010-1234-5678_delete';
+                    document.getElementById('detail-address').textContent = memberData.address || '서울특별시 서초구';
+                    document.getElementById('detail-device').textContent = memberData.device || '소리자바';
+                    document.getElementById('detail-gender').textContent = memberData.gender || '여성';  
+                    document.getElementById('detail-birth').textContent = memberData.birth || '1985.03.23';
+                    document.getElementById('detail-email').textContent = memberData.email || 'jiyoung.lee@gmail.com_delete';
+                    document.getElementById('detail-leave-date').textContent = memberData.leaveDate || '2025.01.20';
+                    
+                    // 버디 사용 체크박스 상태 설정
+                    document.getElementById('buddy-use').checked = false;
+                    
+                    // 관리자 메모 초기화
+                    document.getElementById('admin-memo').value = '';
+                }
+                
+                document.getElementById('memberDetailModal').style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // 탈퇴 회원 상세 정보 팝업 닫기
+        function closeWithdrawnMemberDetail() {
+            document.getElementById('memberDetailModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+
+        // ESC 키로 팝업 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeWithdrawnMemberDetail();
+            }
+        });
+
+        // 팝업 배경 클릭 시 닫기
+        document.getElementById('memberDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeWithdrawnMemberDetail();
+            }
+        });
+
+        // 관리자 메모 저장
+        function saveWithdrawnAdminMemo() {
+            const memo = document.getElementById('admin-memo').value;
+            // 실제 저장 로직 구현
+            console.log('관리자 메모:', memo);
+            alert('관리자 메모가 저장되었습니다.');
+        }
+
+        // 테이블 행 hover 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f9fafb';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

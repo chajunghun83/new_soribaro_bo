@@ -81,8 +81,8 @@
 
         .basic-info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
             margin-bottom: 25px;
         }
 
@@ -1169,12 +1169,16 @@
         </h2>
         <div class="basic-info-grid">
             <div class="info-item">
-                <span class="info-label">프로젝트 제목</span>
+                <span class="info-label">제목</span>
                 <div class="info-value" id="project-title">2025년 온라인 강의 촬영 영상</div>
             </div>
             <div class="info-item">
                 <span class="info-label">업체명</span>
                 <div class="info-value" id="company-name">서울대학교</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">의뢰자명</span>
+                <div class="info-value" id="client-name">김민수</div>
             </div>
         </div>
     </div>
@@ -1192,7 +1196,7 @@
                     <tr>
                         <th style="width: 60px;"><input type="checkbox" id="selectAllFiles" onchange="toggleAllFiles(this)"></th>
                         <th>파일 이름</th>
-                        <th style="width: 120px;">총 구간합계</th>
+                        <th style="width: 120px;">파일 길이</th>
                         <th style="width: 130px;">작업자</th>
                         <th style="width: 120px;">진행상태</th>
                     </tr>
@@ -1438,104 +1442,26 @@
                 <div class="form-row">
                     <div class="form-group full-width">
                         <label>파일 업로드</label>
-                        <div class="file-upload-area" style="height: 80px; display: flex; align-items: center; justify-content: center;">
+                        <div class="file-upload-area" style="height: 200px; display: flex; align-items: center; justify-content: center;">
                             <div class="file-upload-content" style="text-align: center;">
-                                <div class="file-upload-icon" style="margin-bottom: 8px;">🎵</div>
+                                <div class="file-upload-icon" style="margin-bottom: 12px; font-size: 48px;">🎬</div>
                                 <div class="file-upload-text">
-                                    <p style="margin: 0;">파일을 업로드하세요</p>
+                                    <p style="margin: 0; font-size: 18px; font-weight: 500; margin-bottom: 8px;">파일을 업로드하세요</p>
+                                    <p style="margin: 0; font-size: 14px; color: #6b7280;">비디오 또는 오디오 파일을 선택해주세요</p>
                                 </div>
                             </div>
                             <div class="file-preview" id="newFilePreview" style="display: none;">
                                 <div id="newFileInfo" style="text-align: center;">
-                                    <div style="font-size: 24px; margin-bottom: 8px;">🎵</div>
-                                    <div id="newFileName" style="font-weight: 500; margin-bottom: 4px;">파일명</div>
-                                    <div id="newFileSize" style="font-size: 12px; color: #6b7280;">파일 크기</div>
+                                    <div style="font-size: 48px; margin-bottom: 12px;">🎬</div>
+                                    <div id="newFileName" style="font-weight: 500; margin-bottom: 8px; font-size: 16px;">파일명</div>
+                                    <div id="newFileSize" style="font-size: 14px; color: #6b7280;">파일 크기</div>
                                 </div>
                                 <button type="button" class="file-remove-btn" onclick="removeNewFile()">✕</button>
                             </div>
                         </div>
-                        <div style="text-align: right; margin-top: 10px;">
-                            <button type="button" class="file-upload-btn" onclick="document.getElementById('newFileInput').click()">파일 선택</button>
-                            <input type="file" id="newFileInput" accept="audio/*" style="display: none;" onchange="handleNewFileUpload(this)">
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 편집 정보 -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>녹음일 <span style="color: #ef4444;">*</span></label>
-                        <input type="date" id="recordDate" required>
-                    </div>
-                    <div class="form-group">
-                        <label>녹음장소</label>
-                        <input type="text" id="recordLocation" placeholder="녹음장소를 입력하세요">
-                    </div>
-                </div>
-                
-                <!-- 구간설정 -->
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label>구간설정 <span style="color: #ef4444;">*</span></label>
-                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
-                            <label style="display: flex; align-items: center; gap: 8px; margin: 0;">
-                                <input type="radio" name="sectionType" value="full" checked onchange="toggleSectionInputs()">
-                                전체
-                            </label>
-                            <label style="display: flex; align-items: center; gap: 8px; margin: 0;">
-                                <input type="radio" name="sectionType" value="partial" onchange="toggleSectionInputs()">
-                                부분
-                            </label>
-                        </div>
-                        
-                        <!-- 전체 구간 입력 -->
-                        <div id="fullSectionDisplay">
-                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                <input type="text" id="fullStartTime" value="00:00:00" readonly style="flex: 1; text-align: center; background: #f9fafb; color: #6b7280;">
-                                <span>~</span>
-                                <input type="text" id="fullEndTime" value="01:00:00" readonly style="flex: 1; text-align: center; background: #f9fafb; color: #6b7280;">
-                            </div>
-                        </div>
-                        
-                        <!-- 부분 구간 입력 -->
-                        <div id="sectionInputs" style="display: none;">
-                            <div id="sectionList">
-                                <div class="section-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                    <input type="text" placeholder="00:00:00" style="flex: 1; text-align: center;" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-                                    <span>~</span>
-                                    <input type="text" placeholder="00:30:00" style="flex: 1; text-align: center;" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-                                    <button type="button" onclick="removeSection(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
-                                </div>
-                            </div>
-                            <div style="text-align: right; margin-top: 10px;">
-                                <button type="button" onclick="addSection()" style="background: none; border: 1px solid #d1d5db; color: #6b7280; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
-                                    + 구간추가
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- 화자정보 -->
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label>화자정보</label>
-                        <div id="speakerInputs">
-                            <div class="speaker-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
-                                <input type="text" placeholder="화자1 이름" style="flex: 0.5;">
-                                <input type="text" placeholder="목소리 특징" style="flex: 1.5;">
-                                <button type="button" onclick="removeSpeaker(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
-                            </div>
-                            <div class="speaker-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
-                                <input type="text" placeholder="화자2 이름" style="flex: 0.5;">
-                                <input type="text" placeholder="목소리 특징" style="flex: 1.5;">
-                                <button type="button" onclick="removeSpeaker(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
-                            </div>
-                        </div>
-                        <div style="text-align: right; margin-top: 10px;">
-                            <button type="button" onclick="addSpeaker()" style="background: none; border: 1px solid #d1d5db; color: #6b7280; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
-                                + 대화자 추가
-                            </button>
+                        <div style="text-align: center; margin-top: 20px;">
+                            <button type="button" class="file-upload-btn" onclick="document.getElementById('newFileInput').click()" style="padding: 12px 24px; font-size: 16px;">파일 선택</button>
+                            <input type="file" id="newFileInput" accept="video/*,audio/*" style="display: none;" onchange="handleNewFileUpload(this)">
                         </div>
                     </div>
                 </div>
@@ -1611,6 +1537,7 @@
             return {
                 orderNumber: urlParams.get('orderNumber'),
                 title: urlParams.get('title'),
+                company: urlParams.get('company'),
                 client: urlParams.get('client'),
                 contact: urlParams.get('contact'),
                 requestDate: urlParams.get('requestDate'),
@@ -1625,11 +1552,14 @@
             const params = getUrlParams();
             
             // 기본 정보 설정
-            if (params.client) {
-                document.getElementById('company-name').textContent = decodeURIComponent(params.client);
-            }
             if (params.title) {
                 document.getElementById('project-title').textContent = decodeURIComponent(params.title);
+            }
+            if (params.company) {
+                document.getElementById('company-name').textContent = decodeURIComponent(params.company);
+            }
+            if (params.client) {
+                document.getElementById('client-name').textContent = decodeURIComponent(params.client);
             }
         });
 
@@ -2707,15 +2637,8 @@
         function openFileAddModal() {
             document.getElementById('fileAddModal').style.display = 'flex';
             
-            // 오늘 날짜를 기본값으로 설정
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('recordDate').value = today;
-            
             // 폼 초기화
             document.getElementById('fileAddForm').reset();
-            document.getElementById('recordDate').value = today; // reset 후 다시 설정
-            document.querySelector('input[name="sectionType"][value="full"]').checked = true;
-            toggleSectionInputs();
         }
         
         function closeFileAddModal() {
@@ -2728,9 +2651,9 @@
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 
-                // 파일 크기 체크 (100MB)
-                if (file.size > 100 * 1024 * 1024) {
-                    alert('파일 크기는 100MB를 초과할 수 없습니다.');
+                // 파일 크기 체크 (500MB)
+                if (file.size > 500 * 1024 * 1024) {
+                    alert('파일 크기는 500MB를 초과할 수 없습니다.');
                     input.value = '';
                     return;
                 }
@@ -2742,19 +2665,6 @@
                 // 업로드 영역 숨기고 미리보기 표시
                 document.querySelector('#fileAddModal .file-upload-content').style.display = 'none';
                 document.getElementById('newFilePreview').style.display = 'flex';
-                
-                // 파일명에서 확장자 제거하여 기본 녹음장소로 설정
-                const baseName = file.name.replace(/\.[^/.]+$/, "");
-                document.getElementById('recordLocation').value = baseName + ' 회의실';
-                
-                // 전체 구간 길이 업데이트 (실제로는 파일 메타데이터에서 추출)
-                // 임시로 랜덤한 시간 생성
-                const randomMinutes = Math.floor(Math.random() * 60) + 10; // 10-70분
-                const randomSeconds = Math.floor(Math.random() * 60);
-                const endTime = `${String(Math.floor(randomMinutes / 60)).padStart(2, '0')}:${String(randomMinutes % 60).padStart(2, '0')}:${String(randomSeconds).padStart(2, '0')}`;
-                
-                document.getElementById('fullStartTime').value = '00:00:00';
-                document.getElementById('fullEndTime').value = endTime;
             }
         }
         
@@ -2846,42 +2756,23 @@
         }
         
         function addNewFile() {
+            // 파일이 선택되었는지 확인
+            const fileInput = document.getElementById('newFileInput');
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('업로드할 파일을 선택해주세요.');
+                return;
+            }
+            
+            const selectedFile = fileInput.files[0];
+            
             // 시연용 임의 데이터 생성
-            const sampleFileNames = [
-                '새로운_회의록_음성1.mp3',
-                '추가_회의_녹음파일.m4a',
-                '정책회의_20250819.wav',
-                '기획회의_음성자료.mp3',
-                '운영회의_녹음본.m4a'
-            ];
-            
             const sampleDurations = ['00:25:30', '00:45:15', '01:12:45', '00:38:20', '00:52:10'];
-            const sampleLocations = ['본사 대회의실', '지사 회의실', '온라인 화상회의', '외부 세미나실', '임원 회의실'];
-            
-            // 랜덤 데이터 선택
-            const randomIndex = Math.floor(Math.random() * sampleFileNames.length);
-            const fileName = sampleFileNames[randomIndex];
-            const duration = sampleDurations[randomIndex];
-            const location = sampleLocations[randomIndex];
-            
-            // 오늘 날짜
-            const today = new Date().toISOString().split('T')[0];
-            
-            // 임의의 화자 정보
-            const sampleSpeakers = [
-                { name: '김위원장', feature: '중저음, 명확한 발음' },
-                { name: '박과장', feature: '빠른 말투, 높은 톤' },
-                { name: '이담당관', feature: '차분한 목소리' }
-            ];
+            const randomIndex = Math.floor(Math.random() * sampleDurations.length);
             
             // 새 파일 데이터 생성 (시연용)
             const newFileData = {
-                file: { name: fileName },
-                recordDate: today,
-                recordLocation: location,
-                sectionType: 'full',
-                duration: duration,
-                speakers: sampleSpeakers.slice(0, 2) // 처음 2명만 사용
+                file: { name: selectedFile.name },
+                duration: sampleDurations[randomIndex]
             };
             
             // 파일 리스트에 추가
@@ -2905,11 +2796,6 @@
             const newRow = document.createElement('tr');
             newRow.onclick = () => showFileDetail(newRow, newFileId);
             
-            // 화자 정보 문자열 생성
-            const speakerInfo = fileData.speakers.map(speaker => 
-                `${speaker.name} (${speaker.feature})`
-            ).join('<br>');
-            
             newRow.innerHTML = `
                 <td><input type="checkbox" class="file-checkbox" id="file-${newFileId}" onclick="event.stopPropagation(); toggleFileCheckbox(this, ${newFileId});"></td>
                 <td class="file-name">${fileData.file.name}</td>
@@ -2921,20 +2807,6 @@
             `;
             
             tbody.appendChild(newRow);
-            
-            // 파일 상세 정보도 저장 (나중에 상세보기에서 사용)
-            if (!window.fileDetailData) {
-                window.fileDetailData = {};
-            }
-            
-            window.fileDetailData[newFileId] = {
-                fileName: fileData.file.name,
-                recordDate: fileData.recordDate,
-                recordLocation: fileData.recordLocation,
-                duration: fileData.duration,
-                speakers: speakerInfo,
-                sectionType: fileData.sectionType
-            };
         }
         
         // 파일 분할 관련 함수들

@@ -547,23 +547,17 @@
                 <h2>🏢 소리바로 BO</h2>
             </div>
         <!-- 웍스파이 프로젝트 관리 -->
-        <div class="menu-item active" onclick="loadPage('pages/dashboard.html')">
+        <div class="menu-item" onclick="loadPage('pages/dashboard.html')">
             <div class="menu-title">
                 <span class="menu-icon">🚀</span>
-                웍스파이 프로젝트 관리
+                <s>웍스파이 프로젝트 관리</s>
             </div>
         </div>
         
-        <!-- 사용자 관리 -->
-        <div class="menu-item" onclick="toggleSubmenu('user-management')">
+        <!-- 작업자 관리 -->
+        <div class="menu-item active" onclick="loadPage('pages/user/worker-management.html')">
             <div class="menu-title">
                 <span class="menu-icon">👥</span>
-                사용자 관리
-                <span class="menu-arrow">▶</span>
-            </div>
-        </div>
-        <div class="submenu" id="user-management">
-            <div class="submenu-item" onclick="loadPage('pages/user/worker-management.html')">
                 작업자 관리<span class="workspy-badge">웍스파이 연동</span>
             </div>
         </div>
@@ -684,7 +678,7 @@
         </div>
         <div class="submenu" id="report-menu">
             <div class="submenu-item" onclick="loadPage('pages/report/work-report.html')">작업 결과 리포트</div>
-            <div class="submenu-item" onclick="loadPage('pages/report/work-status.html')">작업자 작업 현황(추후 개발)</div>
+            <div class="submenu-item" onclick="loadPage('pages/report/work-status.html')"><s>작업자 작업 현황(추후 개발)</s></div>
         </div>
         
         <!-- 통합 서비스 관리 -->
@@ -711,7 +705,7 @@
             </div>
         </div>
         <div class="submenu" id="system-management">
-            <div class="submenu-item" onclick="loadPage('pages/system/admin-account-management.html')">관리자/검수자 관리</div>
+            <div class="submenu-item" onclick="loadPage('pages/system/admin-account-management.html')">관리자 관리</div>
             <div class="submenu-item" onclick="loadPage('pages/system/common-code-management.html')">공통코드 관리</div>
         </div>
         
@@ -767,7 +761,7 @@
             
             <!-- 컨텐츠 래퍼 -->
             <div class="content-wrapper">
-                <iframe id="content-frame" class="content-frame" src="pages/dashboard.html"></iframe>
+                <iframe id="content-frame" class="content-frame" src="pages/user/worker-management.html"></iframe>
             </div>
         </div>
     </div>
@@ -1062,10 +1056,10 @@
         
         // 초기 로드 시 처리
         document.addEventListener('DOMContentLoaded', function() {
-            // 기본적으로 웍스파이 프로젝트 관리 표시
+            // 기본적으로 작업자 관리 표시
             const contentFrame = document.getElementById('content-frame');
             if (!contentFrame.src || contentFrame.src.includes('about:blank')) {
-                loadPage('pages/dashboard.html');
+                loadPage('pages/user/worker-management.html');
             } else {
                 // 이미 페이지가 로드된 경우 해당 메뉴 활성화
                 const currentSrc = contentFrame.src;

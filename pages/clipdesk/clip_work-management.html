@@ -72,8 +72,8 @@
         
         .search-grid-unified {
             display: grid;
-            grid-template-columns: 1fr 0.6fr 1fr 0.8fr;
-            gap: 10px;
+            grid-template-columns: 0.8fr 1fr 0.6fr 1fr 0.8fr;
+            gap: 15px;
             margin-bottom: 15px;
             align-items: end;
         }
@@ -578,6 +578,14 @@
     <!-- 검색 영역 -->
     <div class="search-section">
         <div class="search-grid-unified">
+            <div class="form-group">
+                <label>웍스파이 중요 프로젝트</label>
+                <select id="workspy-filter" onchange="filterWorkspyImportant()">
+                    <option value="">선택</option>
+                    <option value="all">노출</option>
+                    <option value="important">미노출</option>
+                </select>
+            </div>
             <div class="date-range-group">
                 <div class="form-group">
                     <label for="start-date">시작일</label>
@@ -920,6 +928,43 @@
             document.getElementById('detailWorkTime').textContent = data.workTime;
             document.getElementById('detailRequestDate').textContent = data.requestDate;
             document.getElementById('detailCompleteDate').textContent = data.completeDate;
+        }
+        
+        // 웍스파이 중요 프로젝트 필터링 기능
+        function filterWorkspyImportant() {
+            const filterValue = document.getElementById('workspy-filter').value;
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            console.log('웍스파이 중요 프로젝트 필터:', filterValue);
+            
+            if (filterValue === 'important') {
+                // 미노출: 중요 항목만 표시
+                tableRows.forEach((row, index) => {
+                    // 실제 구현 시에는 서버에서 중요 플래그를 받아와야 함
+                    // 임시로 3번째마다 중요 항목으로 처리
+                    const isImportant = (index + 1) % 3 === 1;
+                    
+                    if (isImportant) {
+                        row.style.display = '';
+                        // 중요 항목 시각적 표시 (배경색 변경)
+                        row.style.backgroundColor = '#fef3c7';
+                        row.style.borderLeft = '4px solid #f59e0b';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                alert('웍스파이 중요 프로젝트만 표시됩니다.');
+            } else {
+                // 선택 또는 노출: 모든 항목 표시
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                    row.style.backgroundColor = '';
+                    row.style.borderLeft = '';
+                });
+                
+                console.log('모든 작업 표시');
+            }
         }
         
         // 페이지 로드 시 초기화

@@ -30,35 +30,6 @@
             gap: 12px;
         }
         
-        /* 통계 카드 */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: white;
-            padding: 25px;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-            text-align: center;
-        }
-        
-        .stat-card h3 {
-            font-size: 14px;
-            color: #6b7280;
-            margin-bottom: 12px;
-            font-weight: 500;
-        }
-        
-        .stat-card .value {
-            font-size: 32px;
-            font-weight: 600;
-            color: #3b82f6;
-        }
         
         /* 검색 영역 */
         .search-section {
@@ -72,9 +43,9 @@
         
         .search-grid-unified {
             display: grid;
-            grid-template-columns: 1fr 1fr 1.2fr 1.2fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr auto;
             gap: 15px;
-            margin-bottom: 20px;
+            align-items: end;
         }
         
         .form-group {
@@ -105,10 +76,10 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        .search-buttons {
+        .search-button-wrapper {
             display: flex;
-            gap: 12px;
-            justify-content: flex-end;
+            align-items: end;
+            padding-bottom: 0;
         }
         
         .btn {
@@ -252,17 +223,17 @@
             
             .search-grid-unified {
                 grid-template-columns: 1fr;
+                gap: 10px;
             }
             
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
+            .search-button-wrapper {
+                justify-content: center;
+                margin-top: 15px;
             }
         }
         
         @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
+            
         }
     </style>
 </head>
@@ -272,25 +243,6 @@
         의뢰현황관리
     </h1>
     
-    <!-- 의뢰 통계 -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>전체 의뢰</h3>
-            <div class="value">124</div>
-        </div>
-        <div class="stat-card">
-            <h3>접수 대기</h3>
-            <div class="value">12</div>
-        </div>
-        <div class="stat-card">
-            <h3>작업 중</h3>
-            <div class="value">45</div>
-        </div>
-        <div class="stat-card">
-            <h3>완료</h3>
-            <div class="value">67</div>
-        </div>
-    </div>
 
     <!-- 검색 조건 -->
     <div class="search-section">
@@ -308,19 +260,15 @@
                 <select>
                     <option value="">전체</option>
                     <option value="transcription">통화기록</option>
-                    <option value="minutes">회의록</option>
-                    <option value="dictation">받아쓰기</option>
-                    <option value="subtitles">자막</option>
+                    <option value="dictation">다기록</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>결제 구분</label>
                 <select>
                     <option value="">전체</option>
-                    <option value="card">카드결제</option>
                     <option value="bank">계좌이체</option>
-                    <option value="point">포인트결제</option>
-                    <option value="free">무료</option>
+                    <option value="card">카드결제</option>
                 </select>
             </div>
             <div class="form-group">
@@ -328,18 +276,14 @@
                 <select>
                     <option value="">전체</option>
                     <option value="received">접수</option>
-                    <option value="inprogress">진행중</option>
-                    <option value="completed">완료</option>
                     <option value="cancelled">취소</option>
                 </select>
             </div>
+            <div class="search-button-wrapper">
+                <button class="btn btn-primary">🔍 검색</button>
+            </div>
         </div>
 
-        <!-- 검색 버튼들 -->
-        <div class="search-buttons">
-            <button class="btn btn-outline">초기화</button>
-            <button class="btn btn-primary">🔍 검색</button>
-        </div>
     </div>
 
     <!-- 의뢰 목록 테이블 -->

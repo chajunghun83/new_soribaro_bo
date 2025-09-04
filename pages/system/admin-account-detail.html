@@ -155,6 +155,11 @@
             display: none;
         }
         
+        /* 유형 항목은 편집 모드에서도 항상 표시 */
+        .edit-mode .info-value.always-visible {
+            display: block;
+        }
+        
         /* 유형 배지 */
         .type-badge {
             padding: 4px 12px;
@@ -295,55 +300,6 @@
             object-fit: contain;
         }
 
-        /* 설명 영역 */
-        .description-section {
-            grid-column: 1 / -1;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            border: 1px solid #e5e7eb;
-            overflow: hidden;
-            margin-top: 20px;
-        }
-        
-        .description-display {
-            background: #f9fafb;
-            border: 1px solid #e5e7eb;
-            border-radius: 6px;
-            padding: 20px;
-            min-height: 200px;
-            color: #374151;
-            font-size: 14px;
-            line-height: 1.8;
-            white-space: pre-wrap;
-        }
-
-        .description-textarea {
-            display: none;
-            width: 100%;
-            min-height: 200px;
-            padding: 20px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-            line-height: 1.8;
-            resize: vertical;
-            font-family: inherit;
-        }
-        
-        .description-textarea:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-        }
-        
-        .edit-mode .description-display {
-            display: none;
-        }
-        
-        .edit-mode .description-textarea {
-            display: block;
-        }
 
         /* 권한 체크박스 */
         .permission-checkboxes {
@@ -515,7 +471,7 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>👨‍💼</span>
-            관리자/검수자 관리 상세정보
+            관리자 관리 상세정보
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
@@ -572,13 +528,9 @@
                 <div class="info-grid" id="permissionInfoGrid">
                     <div class="info-label">유형</div>
                     <div>
-                        <div class="info-value">
+                        <div class="info-value always-visible">
                             <span id="adminType" class="type-badge type-admin">관리자</span>
                         </div>
-                        <select class="info-select" id="adminTypeSelect">
-                            <option value="관리자">관리자</option>
-                            <option value="검수자">검수자</option>
-                        </select>
                     </div>
                     
                     <div class="info-label">작업권한</div>
@@ -587,6 +539,9 @@
                             <span class="permission-badge permission-soribaro">소리바로</span>
                         </div>
                         <div class="permission-checkboxes" id="workPermissionCheckboxes">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="마스터관리자"> 마스터관리자 (Report)
+                            </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" value="소리바로-B2C"> 소리바로-B2C
                             </label>
@@ -601,9 +556,6 @@
                             </label>
                             <label class="checkbox-item">
                                 <input type="checkbox" value="클립데스크"> 클립데스크
-                            </label>
-                            <label class="checkbox-item">
-                                <input type="checkbox" value="Report"> Report
                             </label>
                         </div>
                     </div>
@@ -651,48 +603,6 @@
         </div>
     </div>
     
-    <!-- 설명 섹션 -->
-    <div class="description-section" id="descriptionSection">
-        <div class="section-title">설명</div>
-        <div class="info-content">
-            <div class="description-display" id="adminDescription">관리자 계정으로, 소리바로 플랫폼의 전반적인 시스템 관리 업무를 담당합니다.
-
-담당 업무:
-- 사용자 계정 관리
-- 시스템 설정 관리  
-- 데이터 모니터링
-- 고객 지원 업무
-
-권한 범위:
-- 모든 관리자 기능 접근 가능
-- 사용자 데이터 조회/수정
-- 시스템 로그 확인
-- 백업 및 복구 작업
-
-특이사항:
-- 마스터 관리자 권한 보유
-- 24시간 시스템 모니터링 담당
-- 긴급 상황 대응 책임자</div>
-            <textarea class="description-textarea" id="descriptionTextarea" rows="10" placeholder="관리자에 대한 상세 설명을 입력하세요...">관리자 계정으로, 소리바로 플랫폼의 전반적인 시스템 관리 업무를 담당합니다.
-
-담당 업무:
-- 사용자 계정 관리
-- 시스템 설정 관리  
-- 데이터 모니터링
-- 고객 지원 업무
-
-권한 범위:
-- 모든 관리자 기능 접근 가능
-- 사용자 데이터 조회/수정
-- 시스템 로그 확인
-- 백업 및 복구 작업
-
-특이사항:
-- 마스터 관리자 권한 보유
-- 24시간 시스템 모니터링 담당
-- 긴급 상황 대응 책임자</textarea>
-        </div>
-    </div>
     
     <!-- 하단 액션 버튼 -->
     <div class="bottom-actions">
@@ -841,7 +751,6 @@
             document.getElementById('adminNameInput').value = data.adminName;
             document.getElementById('phoneNumberInput').value = data.phoneNumber;
             document.getElementById('addressInput').value = data.address;
-            document.getElementById('adminTypeSelect').value = data.adminType;
             document.getElementById('adminStatusSelect').value = data.adminStatus;
             
             // 권한 체크박스 업데이트
@@ -850,9 +759,6 @@
                 checkbox.checked = data.workPermissions && data.workPermissions.includes(checkbox.value);
             });
             
-            // 설명 업데이트
-            document.getElementById('adminDescription').textContent = data.description || '';
-            document.getElementById('descriptionTextarea').value = data.description || '';
             
             // 배지 업데이트
             const typeElement = document.getElementById('adminType');
@@ -871,9 +777,9 @@
             if (data.workPermissions && data.workPermissions.length > 0) {
                 permissionDisplay.innerHTML = data.workPermissions.map(permission => {
                     let badgeClass = 'permission-badge';
-                    if (permission.includes('소리바로')) badgeClass += ' permission-soribaro';
+                    if (permission === '마스터관리자') badgeClass += ' permission-report';
+                    else if (permission.includes('소리바로')) badgeClass += ' permission-soribaro';
                     else if (permission === '클립데스크') badgeClass += ' permission-clipdesk';
-                    else if (permission === 'Report') badgeClass += ' permission-report';
                     
                     return `<span class="${badgeClass}">${permission}</span>`;
                 }).join(' ');
@@ -896,7 +802,6 @@
             isEditMode = true;
             document.getElementById('basicInfoGrid').classList.add('edit-mode');
             document.getElementById('permissionInfoGrid').classList.add('edit-mode');
-            document.getElementById('descriptionSection').classList.add('edit-mode');
             document.getElementById('viewModeButtons').style.display = 'none';
             document.getElementById('editModeButtons').style.display = 'flex';
         }
@@ -906,7 +811,6 @@
             isEditMode = false;
             document.getElementById('basicInfoGrid').classList.remove('edit-mode');
             document.getElementById('permissionInfoGrid').classList.remove('edit-mode');
-            document.getElementById('descriptionSection').classList.remove('edit-mode');
             document.getElementById('viewModeButtons').style.display = 'flex';
             document.getElementById('editModeButtons').style.display = 'none';
             
@@ -923,7 +827,7 @@
             const adminName = document.getElementById('adminNameInput').value.trim();
             const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
             const address = document.getElementById('addressInput').value.trim();
-            const adminType = document.getElementById('adminTypeSelect').value;
+            const adminType = '관리자';
             const adminStatus = document.getElementById('adminStatusSelect').value;
             
             // 선택된 권한들 수집
@@ -932,7 +836,6 @@
             checkboxes.forEach(checkbox => {
                 selectedPermissions.push(checkbox.value);
             });
-            const description = document.getElementById('descriptionTextarea').value.trim();
             
             if (!adminId) {
                 alert('아이디를 입력해주세요.');
@@ -984,7 +887,7 @@
             
             if (confirm(saveMessage)) {
                 // 유형 클래스 매핑
-                const adminTypeClass = adminType === '관리자' ? 'type-admin' : 'type-reviewer';
+                const adminTypeClass = 'type-admin';
                 
                 // 상태 클래스 매핑
                 const statusClassMap = {
@@ -1006,8 +909,7 @@
                     adminTypeClass: adminTypeClass,
                     workPermissions: selectedPermissions,
                     adminStatus: adminStatus,
-                    adminStatusClass: adminStatusClass,
-                    description: description
+                    adminStatusClass: adminStatusClass
                 };
                 
                 updateUI(updatedData);
@@ -1016,7 +918,6 @@
                 isEditMode = false;
                 document.getElementById('basicInfoGrid').classList.remove('edit-mode');
                 document.getElementById('permissionInfoGrid').classList.remove('edit-mode');
-                document.getElementById('descriptionSection').classList.remove('edit-mode');
                 document.getElementById('viewModeButtons').style.display = 'flex';
                 document.getElementById('editModeButtons').style.display = 'none';
                 

@@ -63,29 +63,18 @@
         /* 검색 영역 */
         .search-section {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             border: 1px solid #e5e7eb;
             margin-bottom: 25px;
         }
         
-        .search-grid-unified {
+        .search-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr 0.7fr 0.8fr auto;
-            gap: 10px;
-            align-items: end;
-            margin-bottom: 15px;
-        }
-        
-        .date-range-group {
-            display: flex;
-            gap: 8px;
-            align-items: end;
-        }
-        
-        .date-range-group .form-group {
-            flex: 1;
+            grid-template-columns: 0.8fr 1.2fr 1.2fr 1fr 0.8fr 1.5fr;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         
         .form-group {
@@ -94,18 +83,18 @@
         }
         
         .form-group label {
-            font-size: 13px;
+            font-size: 14px;
             font-weight: 500;
             color: #374151;
-            margin-bottom: 6px;
+            margin-bottom: 8px;
         }
         
         .form-group input,
         .form-group select {
-            padding: 8px 10px;
+            padding: 10px 12px;
             border: 1px solid #d1d5db;
-            border-radius: 5px;
-            font-size: 13px;
+            border-radius: 6px;
+            font-size: 14px;
             background: white;
         }
         
@@ -116,32 +105,24 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        .text-search-group {
+        .search-input-group {
             display: flex;
             gap: 8px;
         }
         
-        .text-search-group select {
-            flex: 0 0 130px;
+        .search-input-group select {
+            min-width: 100px;
         }
         
-        .text-search-group input {
+        .search-input-group input {
             flex: 1;
+            min-width: 150px;
         }
         
         .search-buttons {
             display: flex;
             gap: 10px;
             justify-content: flex-end;
-            align-items: end;
-        }
-        .btn-group-left, .btn-group-right { display: flex; gap: 10px; }
-        .btn-search { width: 90px; min-width: 90px; flex: 0 0 90px; }
-        
-        /* 검색 영역 날짜 입력 너비 조정 */
-        .search-section input[type="date"] {
-            width: 200px;
-            box-sizing: border-box;
         }
         
         .btn {
@@ -423,20 +404,41 @@
     
     <!-- 검색 영역 -->
     <div class="search-section">
-        <div class="search-grid-unified">
-            <div class="date-range-group">
-                <div class="form-group">
-                    <label for="start-date">시작일</label>
-                    <input type="date" id="start-date" value="2025-07-01">
-                </div>
-                <div class="form-group">
-                    <label for="end-date">종료일</label>
-                    <input type="date" id="end-date" value="2025-07-31">
-                </div>
-            </div>
-            
+        <div class="search-grid">
             <div class="form-group">
-                <label for="status-select">진행상태</label>
+                <label>웍스파이 중요 프로젝트</label>
+                <select id="workspy-filter" onchange="filterWorkspyImportant()">
+                    <option value="">선택</option>
+                    <option value="all">노출</option>
+                    <option value="important">미노출</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>시작일</label>
+                <input type="date" id="start-date" value="2025-07-01">
+            </div>
+            <div class="form-group">
+                <label>종료일</label>
+                <input type="date" id="end-date" value="2025-07-31">
+            </div>
+            <div class="form-group">
+                <label>업체명</label>
+                <select id="company-select">
+                    <option value="">전체</option>
+                    <option value="seoul-university">서울대학교</option>
+                    <option value="yonsei-university">연세대학교</option>
+                    <option value="korea-university">고려대학교</option>
+                    <option value="sungkyunkwan-university">성균관대학교</option>
+                    <option value="hanyang-university">한양대학교</option>
+                    <option value="chungang-university">중앙대학교</option>
+                    <option value="ewha-university">이화여자대학교</option>
+                    <option value="kaist">카이스트</option>
+                    <option value="postech">포스텍</option>
+                    <option value="sogang-university">서강대학교</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>진행상태</label>
                 <select id="status-select">
                     <option value="">전체</option>
                     <option value="received">접수</option>
@@ -448,7 +450,7 @@
             </div>
             <div class="form-group">
                 <label>텍스트 검색</label>
-                <div class="text-search-group">
+                <div class="search-input-group">
                     <select id="search-type">
                         <option value="order">주문번호</option>
                         <option value="title">제목</option>
@@ -458,28 +460,26 @@
                     <input type="text" id="search-text" placeholder="검색어를 입력하세요">
                 </div>
             </div>
-            <div class="search-buttons">
-                <div class="btn-group-left">
-                    <button class="btn btn-primary btn-search" onclick="searchMeetings()">
-                        <span>🔍</span>
-                        검색
-                    </button>
-                    <button class="btn btn-success" onclick="downloadExcel()">
-                        <span>📊</span>
-                        엑셀 다운로드
-                    </button>
-                </div>
-                <div class="btn-group-right">
-                    <button class="btn btn-secondary" onclick="downloadFinalOutputs()" style="background: #6b7280; color: white;">
-                        <span>💾</span>
-                        최종 산출물 다운로드
-                    </button>
-                    <button class="btn btn-secondary" onclick="openProjectAddModal()" style="background: #059669; color: white;">
-                        <span>➕</span>
-                        프로젝트 추가
-                    </button>
-                </div>
-            </div>
+        </div>
+        
+        <!-- 버튼 영역 -->
+        <div class="search-buttons">
+            <button class="btn btn-primary" onclick="searchMeetings()">
+                <span>🔍</span>
+                검색
+            </button>
+            <button class="btn btn-success" onclick="downloadExcel()">
+                <span>📊</span>
+                엑셀 다운로드
+            </button>
+            <button class="btn btn-secondary" onclick="downloadFinalOutputs()" style="background: #6b7280; color: white;">
+                <span>💾</span>
+                최종 산출물 다운로드
+            </button>
+            <button class="btn btn-secondary" onclick="openProjectAddModal()" style="background: #059669; color: white;">
+                <span>➕</span>
+                프로젝트 추가
+            </button>
         </div>
     </div>
     
@@ -649,12 +649,13 @@
         function searchMeetings() {
             const startDate = document.getElementById('start-date').value;
             const endDate = document.getElementById('end-date').value;
+            const company = document.getElementById('company-select').value;
             const status = document.getElementById('status-select').value;
             const searchType = document.getElementById('search-type').value;
             const searchText = document.getElementById('search-text').value;
             
             console.log('검색 조건:', {
-                startDate, endDate, status, searchType, searchText
+                startDate, endDate, company, status, searchType, searchText
             });
             
             alert('검색 기능이 실행되었습니다.');
@@ -943,6 +944,43 @@
             alert('새 프로젝트가 성공적으로 추가되었습니다.');
         }
         
+        // 웍스파이 중요 프로젝트 필터링 기능
+        function filterWorkspyImportant() {
+            const filterValue = document.getElementById('workspy-filter').value;
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            console.log('웍스파이 중요 프로젝트 필터:', filterValue);
+            
+            if (filterValue === 'important') {
+                // 미노출: 중요 항목만 표시
+                tableRows.forEach((row, index) => {
+                    // 실제 구현 시에는 서버에서 중요 플래그를 받아와야 함
+                    // 임시로 3번째마다 중요 항목으로 처리
+                    const isImportant = (index + 1) % 3 === 1;
+                    
+                    if (isImportant) {
+                        row.style.display = '';
+                        // 중요 항목 시각적 표시 (배경색 변경)
+                        row.style.backgroundColor = '#fef3c7';
+                        row.style.borderLeft = '4px solid #f59e0b';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                alert('웍스파이 중요 프로젝트만 표시됩니다.');
+            } else {
+                // 선택 또는 노출: 모든 항목 표시
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                    row.style.backgroundColor = '';
+                    row.style.borderLeft = '';
+                });
+                
+                console.log('모든 작업 표시');
+            }
+        }
+        
         function addProjectToTable(projectData) {
             const tbody = document.querySelector('.data-table tbody');
             if (!tbody) {
@@ -985,6 +1023,43 @@
             console.log(`새 프로젝트 추가됨: No.${newRowNumber}, 제목: ${projectData.title}`);
         }
 
+        // 웍스파이 중요 프로젝트 필터링 기능
+        function filterWorkspyImportant() {
+            const filterValue = document.getElementById('workspy-filter').value;
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            console.log('웍스파이 중요 프로젝트 필터:', filterValue);
+            
+            if (filterValue === 'important') {
+                // 미노출: 중요 항목만 표시
+                tableRows.forEach((row, index) => {
+                    // 실제 구현 시에는 서버에서 중요 플래그를 받아와야 함
+                    // 임시로 3번째마다 중요 항목으로 처리
+                    const isImportant = (index + 1) % 3 === 1;
+                    
+                    if (isImportant) {
+                        row.style.display = '';
+                        // 중요 항목 시각적 표시 (배경색 변경)
+                        row.style.backgroundColor = '#fef3c7';
+                        row.style.borderLeft = '4px solid #f59e0b';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                alert('웍스파이 중요 프로젝트만 표시됩니다.');
+            } else {
+                // 선택 또는 노출: 모든 항목 표시
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                    row.style.backgroundColor = '';
+                    row.style.borderLeft = '';
+                });
+                
+                console.log('모든 작업 표시');
+            }
+        }
+        
         // 최종 산출물 다운로드 (기획용)
         function downloadFinalOutputs() {
             // 산출물 다운로드 모달 열기

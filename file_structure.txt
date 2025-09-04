@@ -96,17 +96,16 @@ new_soribaro_bo/
 🗂️ 메뉴 구조와 파일 매핑 (2025.09.02 업데이트)
 ================================================================================
 
-🚀 웍스파이 프로젝트 관리
+🚀 ~~웍스파이 프로젝트 관리~~ (개발 중단)
     → pages/dashboard.html
     → 기능: 웍스파이 프로젝트 목록 조회, 프로젝트 상세정보, 작업자 관리
     → 검색: 모집기간 범위, 작업항목(소리바로-B2C/회의록/VOD/번역, 클립데스크), 텍스트 검색(주문번호/프로젝트명)
     → 테이블: NO, 주문번호, 작업항목, 프로젝트명, 작업자, 모집기간, 모집상태, 작업기간, 작업상태
     → 상세 모달: 프로젝트 정보 탭, 작업자 관리 탭 (배정/미배정 기능 포함)
 
-👥 사용자 관리
-    └── 작업자 관리 (웍스파이 연동)
-        → pages/user/worker-management.html
-        → 기능: 작업자 프로필 관리, 웍스파이 연동 상태, 작업자 배정 관리
+👥 작업자 관리 (웍스파이 연동) ✨ 기본 페이지
+    → pages/user/worker-management.html
+    → 기능: 작업자 프로필 관리, 웍스파이 연동 상태, 작업자 배정 관리
 
 🔊 소리바로 서비스
     ├── 녹취록 (B2C)
@@ -364,7 +363,7 @@ new_soribaro_bo/
     │       │       → 한→영 번역 30개 라인, 의료 전문용어, 3패널 동기화 스크롤
     │       → 비교자료 확인: 전체화면 새창, Overview Ruler, 답글 시스템
     │       → 비교자료 다운로드: 작업 항목별 맞춤 메시지 (번역: 출발어+작업본+검수본, 기타: 작업본+검수본)
-    └── 작업자 작업 현황(추후 개발) ✅ 구현 완료
+    └── ~~작업자 작업 현황(추후 개발)~~ ✅ 구현 완료 (개발 중단)
         → pages/report/work-status.html
         → 기능: 작업자별 서비스 현황 조회, 등급별 작업시간 통계, 금액 계산
         → 검색: 날짜 범위, 전체 검색(이름/전화번호)
@@ -375,17 +374,17 @@ new_soribaro_bo/
         → 금액 계산: 분당 500원 기준 자동 계산 (총 작업시간 × 500원)
 
 ⚙️ 시스템 관리 🔄 구조 개편 (단일 메뉴 → 서브메뉴 구조)
-    ├── 관리자/검수자 관리 ✅ 구현 완료
+    ├── 관리자 관리 ✅ 구현 완료
     │   → pages/system/admin-account-management.html (목록 페이지)
-    │   → 기능: 관리자/검수자 계정 생성/수정, 복수 권한 관리, 템플릿 일괄 등록
+    │   → 기능: 관리자 계정 생성/수정, 복수 권한 관리, 템플릿 일괄 등록
     │   → 검색: 플랫폼, 검색 조건 (이름, 아이디, 전화번호)
-    │   → 테이블: NO, 아이디, 이름, 유형(관리자/검수자), 관리자 권한(복수 선택), 전화번호, 상태
+    │   → 테이블: NO, 아이디, 이름, 유형(관리자), 관리자 권한(복수 선택), 전화번호, 상태
     │   → 권한 옵션: 소리바로-B2C, 소리바로-회의록, 소리바로-VOD, 소리바로-번역, 클립데스크, Report
-    │   ├── 관리자/검수자 상세정보 ✅ 구현 완료
+    │   ├── 관리자 상세정보 ✅ 구현 완료
     │   │   → pages/system/admin-account-detail.html
     │   │   → 기능: 개별 계정 상세 조회, 기본정보/연락처정보, 프로필사진/QR코드, 설명, 인라인 편집
     │   │   → 특징: enterprise-customer-detail.html과 동일한 구조, 복수 권한 체크박스 선택
-    │   └── 관리자/검수자 등록 ✅ 구현 완료
+    │   └── 관리자 등록 ✅ 구현 완료
     │       → pages/system/admin-account-register.html
     │       → 기능: 템플릿 기반 일괄 등록, Excel 다운로드/업로드, 플랫폼별 관리
     │       → 특징: enterprise-customer-register.html과 동일한 구조
@@ -467,9 +466,9 @@ new_soribaro_bo/
 - pages/clipdesk/settings/mail-template-detail.html (메일 템플릿 상세정보)
 - pages/clipdesk/settings/mail-template-register.html (메일 템플릿 등록)
 - pages/clipdesk/settings/notification-mail-check.html (알림 메일 확인)
-- pages/system/admin-account-management.html (관리자 계정 관리)
-- pages/system/admin-account-detail.html (관리자 계정 상세정보)
-- pages/system/admin-account-register.html (관리자 계정 등록)
+- pages/system/admin-account-management.html (관리자 관리)
+- pages/system/admin-account-detail.html (관리자 상세정보)
+- pages/system/admin-account-register.html (관리자 등록)
 - pages/system/common-code-management.html (공통코드 관리)
 - pages/report/work-report.html (작업 결과 리포트)
 - pages/report/work-report-detail.html (작업 결과 리포트 상세정보)
@@ -537,10 +536,9 @@ new_soribaro_bo/
 📋 메뉴 구조 (2025.09.02 최종)
 ================================================================================
 
-🚀 웍스파이 프로젝트 관리
+🚀 ~~웍스파이 프로젝트 관리~~ (개발 중단)
 
-👥 사용자 관리
-    └── 작업자 관리
+👥 작업자 관리 (웍스파이 연동)
 
 🔊 소리바로 서비스
     ├── 녹취록 (B2C)
@@ -578,7 +576,7 @@ new_soribaro_bo/
 
 📊 Report
     ├── 작업 결과 리포트
-    └── 작업자 작업 현황(추후 개발)
+    └── ~~작업자 작업 현황(추후 개발)~~ (개발 중단)
 
 🔧 통합 서비스 관리
     ├── 서비스 약관 관리
@@ -587,7 +585,7 @@ new_soribaro_bo/
     └── 프로퍼티 관리
 
 ⚙️ 시스템 관리
-    ├── 관리자/검수자 관리
+    ├── 관리자 관리
     └── 공통코드 관리
 
 👤 작업자 페이지 🆕 신규 추가

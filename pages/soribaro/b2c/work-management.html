@@ -72,9 +72,9 @@
         
         .search-grid-unified {
             display: grid;
-            grid-template-columns: 1fr 1fr 1.2fr 1.2fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr 2fr auto;
             gap: 15px;
-            margin-bottom: 20px;
+            align-items: end;
         }
         
         .form-group {
@@ -105,11 +105,26 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        .search-buttons {
+        .search-button-wrapper {
             display: flex;
-            gap: 12px;
-            justify-content: flex-end;
+            align-items: end;
+            padding-bottom: 0;
         }
+        
+        .search-input-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .search-input-group select {
+            min-width: 100px;
+        }
+        
+        .search-input-group input {
+            flex: 1;
+            min-width: 150px;
+        }
+        
         
         .btn {
             padding: 10px 20px;
@@ -252,6 +267,17 @@
             
             .search-grid-unified {
                 grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .search-button-wrapper {
+                justify-content: center;
+                margin-top: 15px;
+            }
+            
+            .search-input-group {
+                flex-direction: column;
+                gap: 8px;
             }
             
             .stats-grid {
@@ -296,6 +322,14 @@
     <div class="search-section">
         <div class="search-grid-unified">
             <div class="form-group">
+                <label>웍스파이 중요 프로젝트</label>
+                <select id="importantFilter" onchange="filterImportant()">
+                    <option value="">선택</option>
+                    <option value="all">노출</option>
+                    <option value="important">미노출</option>
+                </select>
+            </div>
+            <div class="form-group">
                 <label>시작일</label>
                 <input type="date" value="2025-06-30">
             </div>
@@ -308,37 +342,35 @@
                 <select>
                     <option value="">전체</option>
                     <option value="transcription">통화기록</option>
-                    <option value="minutes">회의록</option>
-                    <option value="dictation">받아쓰기</option>
-                    <option value="subtitles">자막</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>작업자</label>
-                <select>
-                    <option value="">전체</option>
-                    <option value="worker1">황진은</option>
-                    <option value="worker2">박현주</option>
-                    <option value="worker3">이정재</option>
-                    <option value="worker4">김수진</option>
+                    <option value="dictation">다기록</option>
                 </select>
             </div>
             <div class="form-group">
                 <label>진행 상태</label>
                 <select>
                     <option value="">전체</option>
-                    <option value="waiting">대기</option>
-                    <option value="inprogress">진행중</option>
+                    <option value="received">접수</option>
+                    <option value="working">작업중</option>
+                    <option value="draft">초안완료</option>
                     <option value="completed">완료</option>
                     <option value="cancelled">취소</option>
                 </select>
             </div>
-        </div>
-
-        <!-- 검색 버튼들 -->
-        <div class="search-buttons">
-            <button class="btn btn-outline">초기화</button>
-            <button class="btn btn-primary">🔍 검색</button>
+            <div class="form-group">
+                <label>전체</label>
+                <div class="search-input-group">
+                    <select>
+                        <option value="fileName">파일이름</option>
+                        <option value="clientName">의뢰자명</option>
+                        <option value="contact">연락처</option>
+                        <option value="worker">작업자</option>
+                    </select>
+                    <input type="text" placeholder="검색어를 입력하세요">
+                </div>
+            </div>
+            <div class="search-button-wrapper">
+                <button class="btn btn-primary">🔍 검색</button>
+            </div>
         </div>
     </div>
 
@@ -639,6 +671,52 @@
                 });
             });
         });
+        
+        // 중요 필터링 기능
+        function filterImportant() {
+            const filterValue = document.getElementById('importantFilter').value;
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            console.log('웍스파이 중요 프로젝트 필터:', filterValue);
+            
+            if (filterValue === 'important') {
+                // 미노출: 중요 항목만 표시
+                tableRows.forEach((row, index) => {
+                    // 실제 구현 시에는 서버에서 중요 플래그를 받아와야 함
+                    // 임시로 3번째마다 중요 항목으로 처리
+                    const isImportant = (index + 1) % 3 === 1; // 3의 배수마다 중요 항목으로 설정
+                    
+                    if (isImportant) {
+                        row.style.display = '';
+                        // 중요 항목 시각적 표시 (배경색 변경)
+                        row.style.backgroundColor = '#fef3c7';
+                        row.style.borderLeft = '4px solid #f59e0b';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                alert('웍스파이 중요 프로젝트만 표시됩니다.');
+            } else if (filterValue === 'all') {
+                // 노출: 모든 항목 표시 (중요 항목 강조 없음)
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                    row.style.backgroundColor = '';
+                    row.style.borderLeft = '';
+                });
+                
+                console.log('모든 작업 표시 (일반 모드)');
+            } else {
+                // 선택: 기본 상태 (모든 항목 표시)
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                    row.style.backgroundColor = '';
+                    row.style.borderLeft = '';
+                });
+                
+                console.log('기본 상태 (선택)');
+            }
+        }
     </script>
 </body>
 </html> 

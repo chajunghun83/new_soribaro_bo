@@ -147,19 +147,24 @@
         }
         
         .speaker-item input:first-child {
-            width: 120px;
+            width: 80px !important;
+            min-width: 80px;
+            max-width: 80px;
             padding: 8px 12px;
             border: 1px solid #d1d5db;
             border-radius: 6px;
             font-size: 14px;
+            box-sizing: border-box;
         }
         
         .speaker-item input:nth-child(2) {
             flex: 1;
+            min-width: 0;
             padding: 8px 12px;
             border: 1px solid #d1d5db;
             border-radius: 6px;
             font-size: 14px;
+            box-sizing: border-box;
         }
         
         .remove-speaker-btn {

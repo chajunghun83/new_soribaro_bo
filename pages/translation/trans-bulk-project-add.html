@@ -80,135 +80,6 @@
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
             gap: 30px;
-            margin-bottom: 25px;
-        }
-        
-        .basic-info-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin-bottom: 25px;
-        }
-        
-        .section-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .radio-group {
-            display: flex;
-            gap: 30px;
-            margin-bottom: 0px;
-            white-space: nowrap;
-        }
-        
-        .radio-group label {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
-            cursor: pointer;
-            white-space: nowrap;
-        }
-        
-        .time-range {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .time-range input {
-            flex: 1;
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-            text-align: center;
-        }
-        
-        .time-range input:read-only {
-            background: #f9fafb;
-            color: #6b7280;
-        }
-        
-        .speaker-group {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        
-        .speaker-item {
-            margin-bottom: 5px;
-        }
-        
-        .speaker-item:last-child {
-            margin-bottom: 0;
-        }
-        
-        .speaker-item {
-            display: flex;
-            gap: 8px;
-            align-items: center;
-        }
-        
-        .speaker-item input:first-child {
-            width: 120px !important;
-            min-width: 120px;
-            max-width: 120px;
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        
-        .speaker-item input:nth-child(2) {
-            flex: 1;
-            min-width: 0;
-            padding: 8px 12px;
-            border: 1px solid #d1d5db;
-            border-radius: 6px;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        
-        .remove-speaker-btn {
-            width: 24px;
-            height: 24px;
-            background: #ef4444;
-            color: white;
-            border: none;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background 0.2s;
-        }
-        
-        .remove-speaker-btn:hover {
-            background: #dc2626;
-        }
-        
-        .add-button {
-            align-self: flex-start;
-            padding: 6px 12px;
-            background: none;
-            border: 1px solid #d1d5db;
-            color: #6b7280;
-            border-radius: 4px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .add-button:hover {
-            border-color: #3b82f6;
-            color: #3b82f6;
         }
         
         .basic-info-grid .form-group {
@@ -234,47 +105,11 @@
             transform: translateY(-1px);
         }
         
-        .basic-info-grid .form-group label,
-        .basic-info-row .form-group label {
+        .basic-info-grid .form-group label {
             margin-bottom: 12px;
             font-size: 16px;
             font-weight: 600;
             color: #374151;
-        }
-        
-        .basic-info-row .form-group {
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .basic-info-row .form-group > label {
-            margin-bottom: 12px;
-        }
-        
-        .section-group {
-            margin-top: 0;
-        }
-        
-        .speaker-group {
-            margin-top: 0;
-        }
-        
-        .basic-info-row .form-group input {
-            padding: 15px 20px;
-            border: 1px solid #d1d5db;
-            border-radius: 10px;
-            font-size: 16px;
-            background: white;
-            transition: all 0.2s;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        
-        .basic-info-row .form-group input:focus {
-            outline: none;
-            border-color: #3b82f6;
-            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-            transform: translateY(-1px);
         }
         
         /* 필수 입력 표시 */
@@ -618,107 +453,41 @@
                 <label for="companyName">업체명 <span class="required">*</span></label>
                 <select id="companyName" required style="padding: 15px 20px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 16px; background: white; transition: all 0.2s; width: 100%; box-sizing: border-box; cursor: pointer;">
                     <option value="">업체를 선택하세요</option>
-                    <option value="서울특별시청">서울특별시청</option>
-                    <option value="부산광역시청">부산광역시청</option>
-                    <option value="인천광역시청">인천광역시청</option>
-                    <option value="대구광역시청">대구광역시청</option>
-                    <option value="광주광역시청">광주광역시청</option>
-                    <option value="대전광역시청">대전광역시청</option>
-                    <option value="울산광역시청">울산광역시청</option>
-                    <option value="세종특별자치시청">세종특별자치시청</option>
-                    <option value="경기도청">경기도청</option>
-                    <option value="강원도청">강원도청</option>
-                    <option value="충청북도청">충청북도청</option>
-                    <option value="충청남도청">충청남도청</option>
-                    <option value="전라북도청">전라북도청</option>
-                    <option value="전라남도청">전라남도청</option>
-                    <option value="경상북도청">경상북도청</option>
-                    <option value="경상남도청">경상남도청</option>
-                    <option value="제주특별자치도청">제주특별자치도청</option>
-                    <option value="교육부">교육부</option>
-                    <option value="보건복지부">보건복지부</option>
-                    <option value="환경부">환경부</option>
-                    <option value="국토교통부">국토교통부</option>
-                    <option value="문화체육관광부">문화체육관광부</option>
-                    <option value="농림축산식품부">농림축산식품부</option>
-                    <option value="산업통상자원부">산업통상자원부</option>
-                    <option value="고용노동부">고용노동부</option>
-                    <option value="여성가족부">여성가족부</option>
-                    <option value="국회사무처">국회사무처</option>
-                    <option value="대법원">대법원</option>
-                    <option value="헌법재판소">헌법재판소</option>
-                    <option value="중앙선거관리위원회">중앙선거관리위원회</option>
+                    <option value="서울대학교">서울대학교</option>
+                    <option value="연세대학교">연세대학교</option>
+                    <option value="고려대학교">고려대학교</option>
+                    <option value="성균관대학교">성균관대학교</option>
+                    <option value="한양대학교">한양대학교</option>
+                    <option value="중앙대학교">중앙대학교</option>
+                    <option value="경희대학교">경희대학교</option>
+                    <option value="이화여자대학교">이화여자대학교</option>
+                    <option value="서강대학교">서강대학교</option>
+                    <option value="동국대학교">동국대학교</option>
+                    <option value="홍익대학교">홍익대학교</option>
+                    <option value="건국대학교">건국대학교</option>
+                    <option value="국민대학교">국민대학교</option>
+                    <option value="세종대학교">세종대학교</option>
+                    <option value="단국대학교">단국대학교</option>
+                    <option value="카이스트">카이스트</option>
+                    <option value="포스텍">포스텍</option>
+                    <option value="GIST">GIST</option>
+                    <option value="UNIST">UNIST</option>
+                    <option value="DGIST">DGIST</option>
+                    <option value="부산대학교">부산대학교</option>
+                    <option value="전남대학교">전남대학교</option>
+                    <option value="경북대학교">경북대학교</option>
+                    <option value="충남대학교">충남대학교</option>
+                    <option value="전북대학교">전북대학교</option>
+                    <option value="강원대학교">강원대학교</option>
+                    <option value="제주대학교">제주대학교</option>
+                    <option value="인하대학교">인하대학교</option>
+                    <option value="아주대학교">아주대학교</option>
+                    <option value="가천대학교">가천대학교</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="clientName">의뢰자명 <span class="required">*</span></label>
                 <input type="text" id="clientName" placeholder="의뢰자명을 입력하세요" required>
-            </div>
-        </div>
-        
-        <!-- 두 번째 행: 녹음일, 녹음장소 -->
-        <div class="basic-info-row">
-            <div class="form-group">
-                <label for="recordDate">녹음일 <span class="required">*</span></label>
-                <input type="date" id="recordDate" required>
-            </div>
-            <div class="form-group">
-                <label for="recordLocation">녹음장소</label>
-                <input type="text" id="recordLocation" placeholder="녹음장소를 입력하세요">
-            </div>
-        </div>
-        
-        <!-- 세 번째 행: 구간설정, 화자정보 -->
-        <div class="basic-info-row">
-            <div class="form-group">
-                <label>구간설정 <span class="required">*</span></label>
-                <div class="section-group">
-                    <div class="radio-group">
-                        <label>
-                            <input type="radio" name="sectionType" value="full" checked onchange="toggleSectionDisplay()">
-                            전체
-                        </label>
-                        <label>
-                            <input type="radio" name="sectionType" value="partial" onchange="toggleSectionDisplay()">
-                            부분
-                        </label>
-                    </div>
-                    
-                    <div id="fullSectionDisplay" class="time-range">
-                        <input type="text" id="fullStartTime" value="00:00:00" readonly>
-                        <span>~</span>
-                        <input type="text" id="fullEndTime" value="01:00:00" readonly>
-                    </div>
-                    
-                    <div id="partialSectionDisplay" style="display: none;">
-                        <div id="sectionList">
-                            <div class="time-range" style="margin-bottom: 8px;">
-                                <input type="text" placeholder="00:00:00" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-                                <span>~</span>
-                                <input type="text" placeholder="00:30:00" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-                            </div>
-                        </div>
-                        <button type="button" class="add-button" onclick="addSectionRow()">+ 구간추가</button>
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>화자정보</label>
-                <div class="speaker-group">
-                    <div id="speakerList">
-                        <div class="speaker-item">
-                            <input type="text" placeholder="화자1 이름">
-                            <input type="text" placeholder="목소리 특징">
-                            <button type="button" class="remove-speaker-btn" onclick="removeSpeakerRow(this)">✕</button>
-                        </div>
-                        <div class="speaker-item">
-                            <input type="text" placeholder="화자2 이름">
-                            <input type="text" placeholder="목소리 특징">
-                            <button type="button" class="remove-speaker-btn" onclick="removeSpeakerRow(this)">✕</button>
-                        </div>
-                    </div>
-                    <button type="button" class="add-button" onclick="addSpeakerRow()">+ 대화자 추가</button>
-                </div>
             </div>
         </div>
     </div>
@@ -1542,12 +1311,12 @@
             
             // 웍스파이 등록 확인
             if (confirm(`${uploadedProjects.length}개의 프로젝트를 웍스파이에 등록하시겠습니까?\n\n등록 후에는 웍스파이 플랫폼에서 작업자 모집이 시작됩니다.`)) {
-                // 부모 창(meeting-management.html)에 프로젝트 추가
+                // 부모 창(trans-management.html)에 프로젝트 추가
                 addProjectsToParentPage(projectTitle, companyName, clientName);
                 
                 // 등록 처리 (시뮬레이션)
                 setTimeout(() => {
-                    alert(`🎉 성공!\n\n${uploadedProjects.length}개의 프로젝트가 웍스파이에 성공적으로 등록되었습니다.\n\n• 프로젝트 등록 완료\n• 작업자 모집 시작\n• 관리자 페이지에서 진행상황 확인 가능\n• 회의록 작업관리 페이지에 항목이 추가되었습니다.`);
+                    alert(`🎉 성공!\n\n${uploadedProjects.length}개의 프로젝트가 웍스파이에 성공적으로 등록되었습니다.\n\n• 프로젝트 등록 완료\n• 작업자 모집 시작\n• 관리자 페이지에서 진행상황 확인 가능\n• 번역 작업관리 페이지에 항목이 추가되었습니다.`);
                     
                     // 등록 완료 후 데이터 초기화
                     uploadedProjects = [];
@@ -1579,7 +1348,7 @@
             }
         }
         
-        // 부모 페이지(meeting-management.html)에 프로젝트 추가
+        // 부모 페이지(trans-management.html)에 프로젝트 추가
         function addProjectsToParentPage(projectTitle, companyName, clientName) {
             try {
                 // localStorage를 사용하여 데이터 전달 (더 안전한 방법)
@@ -1676,75 +1445,9 @@
             registerToWorkspy();
         }
         
-        // 구간설정 토글 함수
-        function toggleSectionDisplay() {
-            const fullDisplay = document.getElementById('fullSectionDisplay');
-            const partialDisplay = document.getElementById('partialSectionDisplay');
-            const partialRadio = document.querySelector('input[name="sectionType"][value="partial"]');
-            
-            if (partialRadio.checked) {
-                fullDisplay.style.display = 'none';
-                partialDisplay.style.display = 'block';
-            } else {
-                fullDisplay.style.display = 'flex';
-                partialDisplay.style.display = 'none';
-            }
-        }
-        
-        // 구간 추가
-        function addSectionRow() {
-            const sectionList = document.getElementById('sectionList');
-            const newRow = document.createElement('div');
-            newRow.className = 'time-range';
-            newRow.style.marginBottom = '8px';
-            newRow.innerHTML = `
-                <input type="text" placeholder="00:00:00" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-                <span>~</span>
-                <input type="text" placeholder="00:30:00" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
-            `;
-            sectionList.appendChild(newRow);
-        }
-        
-        // 화자 추가
-        function addSpeakerRow() {
-            const speakerList = document.getElementById('speakerList');
-            const speakerCount = speakerList.children.length + 1;
-            const newRow = document.createElement('div');
-            newRow.className = 'speaker-item';
-            newRow.innerHTML = `
-                <input type="text" placeholder="화자${speakerCount} 이름">
-                <input type="text" placeholder="목소리 특징">
-                <button type="button" class="remove-speaker-btn" onclick="removeSpeakerRow(this)">✕</button>
-            `;
-            speakerList.appendChild(newRow);
-        }
-        
-        // 화자 제거
-        function removeSpeakerRow(button) {
-            const speakerList = document.getElementById('speakerList');
-            if (speakerList.children.length > 1) {
-                button.parentElement.remove();
-                
-                // 화자 번호 재정렬
-                const rows = speakerList.querySelectorAll('.speaker-item');
-                rows.forEach((row, index) => {
-                    const nameInput = row.querySelector('input[type="text"]');
-                    if (nameInput && nameInput.placeholder.includes('화자')) {
-                        nameInput.placeholder = `화자${index + 1} 이름`;
-                    }
-                });
-            } else {
-                alert('최소 1명의 화자는 필요합니다.');
-            }
-        }
-        
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
             updateProjectList();
-            
-            // 오늘 날짜를 기본값으로 설정
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('recordDate').value = today;
             
             // 키보드 이벤트 리스너 추가
             document.addEventListener('keydown', handleKeyboardNavigation);

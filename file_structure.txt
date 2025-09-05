@@ -23,8 +23,10 @@ new_soribaro_bo/
     │   ├── enterprise/
     │   │   ├── meeting-management.html                 → 엔터프라이즈 회의록 작업관리
     │   │   ├── meeting-detail.html                     → 엔터프라이즈 회의록 작업 상세정보
+    │   │   ├── meeting-bulk-project-add.html           → 엔터프라이즈 회의록 다건 프로젝트 추가
     │   │   ├── vod-management.html                     → 엔터프라이즈 VOD 작업관리
-    │   │   └── vod-detail.html                         → 엔터프라이즈 VOD 작업 상세정보
+    │   │   ├── vod-detail.html                         → 엔터프라이즈 VOD 작업 상세정보
+    │   │   └── vod-bulk-project-add.html               → 엔터프라이즈 VOD 다건 프로젝트 추가
     │   ├── pricing/
     │   │   ├── notary-management.html                  → 공증신청/기록완본 관리
     │   │   ├── notary-detail.html                      → 공증신청/기록완본 상세정보
@@ -125,31 +127,46 @@ new_soribaro_bo/
     ├── 엔터프라이즈 (B2B)
     │   ├── 회의록 작업관리
     │   │   → pages/soribaro/enterprise/meeting-management.html
-    │   │   → 기능: 회의록 작업 현황 조회, 기업별 작업 관리, 진행상태 추적
+    │   │   → 기능: 회의록 작업 현황 조회, 기업별 작업 관리, 진행상태 추적, 프로젝트 추가, 다건 프로젝트 추가
     │   │   → 검색: 날짜, 기업명칭, 진행상태, 텍스트 검색 (주문번호, 제목, 의뢰자명, 연락처, 작업자)
-    │   │   → 테이블: NO, 주문번호, 제목, 의뢰자명, 연락처, 의뢰일, 총 작업시간, 작업자, 진행상태
+    │   │   → 테이블: NO, 주문번호, 제목, 업체명, 의뢰자명, 연락처, 의뢰일, 총 작업시간, 작업자, 진행상태
     │   │   → 진행상태: 접수, 작업중, 초안완성, 완료
+    │   │   └── 회의록 다건 프로젝트 추가 🆕 신규 구현
+    │   │       → pages/soribaro/enterprise/meeting-bulk-project-add.html
+    │   │       → 기능: Excel 스타일 대량 회의록 프로젝트 추가, 기본정보(녹음일/녹음장소/구간설정/화자정보), 웍스파이 등록
+    │   │       → 특징: 3행 기본정보 레이아웃 (프로젝트제목/업체명/의뢰자명 → 녹음일/녹음장소 → 구간설정/화자정보)
+    │   │       → 시스템: localStorage 기반 창 간 통신, meeting-management.html 연동, 20개 프로젝트 시뮬레이션
     │   └── VOD 작업관리
     │       → pages/soribaro/enterprise/vod-management.html
-    │       → 기능: VOD 작업 현황 조회, 기업별 작업 관리, 진행상태 추적, 프로젝트 추가
-    │       └── VOD 작업 상세정보
-    │           → pages/soribaro/enterprise/vod-detail.html
-    │           → 기능: 파일 리스트/상세, 오디오 플레이어, 구간표, 화자정보, 웍스파이 프로젝트 등록/상세, 작업관리(전사/검수 툴 실행), 파일공유, 작업 특이사항, 초안완성 시연
+    │       → 기능: VOD 작업 현황 조회, 기업별 작업 관리, 진행상태 추적, 프로젝트 추가, 다건 프로젝트 추가
+    │       ├── VOD 작업 상세정보
+    │       │   → pages/soribaro/enterprise/vod-detail.html
+    │       │   → 기능: 파일 리스트/상세, 오디오 플레이어, 구간표, 화자정보, 웍스파이 프로젝트 등록/상세, 작업관리(전사/검수 툴 실행), 파일공유, 작업 특이사항, 초안완성 시연
+    │       └── VOD 다건 프로젝트 추가 🆕 신규 구현
+    │           → pages/soribaro/enterprise/vod-bulk-project-add.html
+    │           → 기능: Excel 스타일 대량 프로젝트 추가, 파일 업로드, 셀 편집, 웍스파이 등록
+    │           → 특징: 2분할 레이아웃 (드래그 영역 | 파일 목록), Excel 스타일 편집 (셀 선택/키보드 네비게이션/복사 붙여넣기)
+    │           → 시스템: localStorage 기반 창 간 통신, vod-management.html 연동, 20개 프로젝트 시뮬레이션
     │
     ├── 번역 서비스 ✅ 완전 구현 완료
     │   └── 번역 작업관리
     │       → pages/translation/trans-management.html
-    │       → 기능: 번역 작업 현황 조회, 기업별 번역 작업 관리, 진행상태 추적, 산출물 다운로드
-    │       → 검색: 날짜, 진행상태, 텍스트 검색 (주문번호, 제목, 의뢰자명, 작업자)
-    │       → 테이블: NO, 주문번호, 제목, 의뢰자명, 의뢰일, 총 작업시간, 작업자, 진행상태
+    │       → 기능: 번역 작업 현황 조회, 기업별 번역 작업 관리, 진행상태 추적, 산출물 다운로드, 다건 프로젝트 추가
+    │       → 검색: 날짜, 진행상태, 텍스트 검색 (주문번호, 제목, 업체명, 의뢰자명, 작업자)
+    │       → 테이블: NO, 주문번호, 제목, 방식, 업체명, 의뢰자명, 의뢰일, 총 작업시간, 진행상태
     │       → 진행상태: 접수, 작업중, 초안완성, 검수완료, 작업완료
-    │       └── 번역 작업 상세정보 ✅ 완전 기능 구현
-    │           → pages/translation/trans-detail.html
-    │           → 기능: 번역 파일 리스트/상세, 웍스파이 프로젝트 등록/상세, 3단계 작업관리 시스템
-    │           → 🔥 신규 기능: 3개 영역별 작업자 배정 시스템 (출발어/중간어/번역가)
-    │           → 🔥 신규 기능: 중간어 영역 건너뛰기 기능
-    │           → 🔥 신규 기능: 고급 작업자 검색 (엔터키 검색, 상호 배타적 선택)
-    │           → 🔥 신규 기능: 프롬프트 관리 (개별 표시, 일괄 변경)
+    │       ├── 번역 작업 상세정보 ✅ 완전 기능 구현
+    │       │   → pages/translation/trans-detail.html
+    │       │   → 기능: 번역 파일 리스트/상세, 웍스파이 프로젝트 등록/상세, 3단계 작업관리 시스템
+    │       │   → 🔥 신규 기능: 3개 영역별 작업자 배정 시스템 (출발어/중간어/번역가)
+    │       │   → 🔥 신규 기능: 중간어 영역 건너뛰기 기능
+    │       │   → 🔥 신규 기능: 고급 작업자 검색 (엔터키 검색, 상호 배타적 선택)
+    │       │   → 🔥 신규 기능: 프롬프트 관리 (개별 표시, 일괄 변경)
+    │       └── 번역 다건 프로젝트 추가 🆕 신규 구현
+    │           → pages/translation/trans-bulk-project-add.html
+    │           → 기능: Excel 스타일 대량 번역 프로젝트 추가, 파일 업로드, 셀 편집, 웍스파이 등록
+    │           → 특징: 2분할 레이아웃 (드래그 영역 | 파일 목록), Excel 스타일 편집 (셀 선택/키보드 네비게이션/복사 붙여넣기)
+    │           → 시스템: localStorage 기반 창 간 통신, trans-management.html 연동, 20개 프로젝트 시뮬레이션
     │
     ├── 가격 정책
     │   ├── 공증신청/기록완본 ✅ 구현 완료
@@ -403,7 +420,7 @@ new_soribaro_bo/
 📊 개발 현황 통계
 ================================================================================
 
-구현완료 파일: 78개
+구현완료 파일: 81개
 - index.html (메인 진입점)
 - file_structure.txt (파일 구조 다이어그램)
 - pages/dashboard.html (웍스파이 프로젝트 관리)
@@ -415,8 +432,10 @@ new_soribaro_bo/
 - pages/soribaro/b2c/work-detail.html (B2C 작업 상세정보)
 - pages/soribaro/enterprise/meeting-management.html (엔터프라이즈 회의록 작업관리)
 - pages/soribaro/enterprise/meeting-detail.html (엔터프라이즈 회의록 작업 상세정보)
+- pages/soribaro/enterprise/meeting-bulk-project-add.html (엔터프라이즈 회의록 다건 프로젝트 추가)
 - pages/soribaro/enterprise/vod-management.html (엔터프라이즈 VOD 작업관리)
 - pages/soribaro/enterprise/vod-detail.html (엔터프라이즈 VOD 작업 상세정보)
+- pages/soribaro/enterprise/vod-bulk-project-add.html (엔터프라이즈 VOD 다건 프로젝트 추가)
 - pages/soribaro/settings/faq-management.html (FAQ 관리)
 - pages/soribaro/pricing/notary-management.html (공증신청/기록완본 관리)
 - pages/soribaro/pricing/notary-detail.html (공증신청/기록완본 상세정보)
@@ -432,6 +451,7 @@ new_soribaro_bo/
 - pages/soribaro/pricing/customer-point-register.html (고객 포인트 지급)
 - pages/translation/trans-management.html (번역 작업관리)
 - pages/translation/trans-detail.html (번역 작업 상세정보)
+- pages/translation/trans-bulk-project-add.html (번역 다건 프로젝트 추가)
 - pages/clipdesk/clip_work-management.html (클립데스크 작업현황관리)
 - pages/clipdesk/clip_work-detail.html (클립데스크 작업현황 상세정보)
 - pages/soribaro/customer/contact-management.html (Contact US 관리)

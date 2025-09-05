@@ -309,29 +309,6 @@
         회의록 작업관리
     </h1>
     
-    <!-- 통계 영역 -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>총 작업 건수</h3>
-            <div class="value">156</div>
-        </div>
-        <div class="stat-card">
-            <h3>접수</h3>
-            <div class="value">23</div>
-        </div>
-        <div class="stat-card">
-            <h3>작업중</h3>
-            <div class="value">45</div>
-        </div>
-        <div class="stat-card">
-            <h3>초안완성</h3>
-            <div class="value">32</div>
-        </div>
-        <div class="stat-card">
-            <h3>완료</h3>
-            <div class="value">56</div>
-        </div>
-    </div>
     
     <!-- 검색 영역 -->
     <div class="search-section">
@@ -394,10 +371,6 @@
         
         <!-- 버튼 영역 -->
         <div class="search-buttons">
-            <button class="btn btn-primary" onclick="searchMeetings()">
-                <span>🔍</span>
-                검색
-            </button>
             <button class="btn btn-success" onclick="downloadExcel()">
                 <span>📊</span>
                 엑셀 다운로드
@@ -405,6 +378,14 @@
             <button class="btn btn-secondary" onclick="openProjectAddModal()" style="background: #059669; color: white;">
                 <span>➕</span>
                 프로젝트 추가
+            </button>
+            <button class="btn btn-secondary" onclick="openBulkProjectAdd()" style="background: #7c3aed; color: white;">
+                <span>📁</span>
+                다건 프로젝트 추가
+            </button>
+            <button class="btn btn-primary" onclick="searchMeetings()">
+                <span>🔍</span>
+                검색
             </button>
         </div>
         </div>
@@ -636,8 +617,89 @@
             }
         }
         
+        // 다건 프로젝트 데이터 확인 및 추가
+        function checkForBulkProjects() {
+            const bulkProjectsAdded = localStorage.getItem('bulkProjectsAdded');
+            const bulkProjectsData = localStorage.getItem('bulkProjectsData');
+            
+            if (bulkProjectsAdded === 'true' && bulkProjectsData) {
+                try {
+                    const projectsArray = JSON.parse(bulkProjectsData);
+                    console.log('localStorage에서 다건 프로젝트 데이터 발견:', projectsArray.length);
+                    
+                    // 프로젝트 추가
+                    addBulkProjectsToTable(projectsArray);
+                    
+                    // localStorage 정리
+                    localStorage.removeItem('bulkProjectsAdded');
+                    localStorage.removeItem('bulkProjectsData');
+                    
+                } catch (error) {
+                    console.error('localStorage 데이터 파싱 오류:', error);
+                    localStorage.removeItem('bulkProjectsAdded');
+                    localStorage.removeItem('bulkProjectsData');
+                }
+            }
+        }
+        
+        // 다건 프로젝트 추가 (새창에서 호출)
+        function addBulkProjectsToTable(projectsArray) {
+            const tbody = document.querySelector('.data-table tbody');
+            if (!tbody) {
+                console.error('테이블 tbody를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 현재 최대 번호 확인
+            const currentRows = tbody.querySelectorAll('tr');
+            let maxNo = Math.max(...Array.from(currentRows).map(row => {
+                const noCell = row.querySelector('td:first-child'); // 첫 번째 컬럼이 NO
+                return noCell ? parseInt(noCell.textContent) || 0 : 0;
+            }));
+            
+            // 프로젝트를 작은 번호부터 순서대로 추가
+            projectsArray.forEach((projectData, index) => {
+                const newRowNumber = maxNo + 1 + index;
+                
+                // 새 행 생성
+                const newRow = document.createElement('tr');
+                newRow.style.cursor = 'pointer';
+                newRow.onclick = () => openMeetingDetail(newRow);
+                
+                // 상태에 따른 스타일 설정
+                const statusClass = projectData.status === '접수' ? 'status-received' : 'status-inprogress';
+                
+                // 연락처는 임시로 생성
+                const randomContact = `02-${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}`;
+                
+                newRow.innerHTML = `
+                    <td>${newRowNumber}</td>
+                    <td>${projectData.orderNumber}</td>
+                    <td>${projectData.title}</td>
+                    <td>${projectData.companyName}</td>
+                    <td>${projectData.clientName}</td>
+                    <td>${randomContact}</td>
+                    <td>${projectData.requestDate}</td>
+                    <td>${projectData.workTime}</td>
+                    <td>-</td>
+                    <td><span class="status-badge ${statusClass}">${projectData.status}</span></td>
+                `;
+                
+                // 테이블 맨 위에 삽입 (첫 번째 행으로)
+                tbody.insertBefore(newRow, tbody.firstChild);
+            });
+            
+            console.log(`${projectsArray.length}개의 다건 프로젝트가 추가되었습니다. (NO: ${maxNo + 1} ~ ${maxNo + projectsArray.length})`);
+            
+            // 성공 알림
+            alert(`🎉 다건 프로젝트 등록 완료!\n\n${projectsArray.length}개의 프로젝트가 회의록 작업관리에 추가되었습니다.\n(NO: ${maxNo + 1} ~ ${maxNo + projectsArray.length})`);
+        }
+        
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            // 다건 프로젝트 데이터 확인
+            checkForBulkProjects();
+            
             // 모든 테이블 행에 클릭 이벤트 추가
             const tableRows = document.querySelectorAll('.data-table tbody tr');
             
@@ -872,6 +934,45 @@
             
             alert('새 프로젝트가 성공적으로 추가되었습니다.');
         }
+        
+        // 다건 프로젝트 추가 페이지 열기
+        function openBulkProjectAdd() {
+            try {
+                // 새 창에서 다건 프로젝트 추가 페이지 전체화면으로 열기
+                const bulkAddUrl = 'meeting-bulk-project-add.html';
+                
+                // 화면 크기 가져오기
+                const screenWidth = screen.availWidth;
+                const screenHeight = screen.availHeight;
+                
+                // 전체화면 설정
+                const windowFeatures = `width=${screenWidth},height=${screenHeight},left=0,top=0,scrollbars=yes,resizable=yes,status=yes,toolbar=no,menubar=no,location=no`;
+                const newWindow = window.open(bulkAddUrl, 'bulkProjectAdd', windowFeatures);
+                
+                if (newWindow) {
+                    newWindow.focus();
+                    // 최대화 시도 (브라우저에 따라 지원 여부가 다름)
+                    try {
+                        newWindow.moveTo(0, 0);
+                        newWindow.resizeTo(screenWidth, screenHeight);
+                    } catch (resizeError) {
+                        console.log('창 크기 조정 제한:', resizeError);
+                    }
+                } else {
+                    // 팝업이 차단된 경우 현재 창에서 열기
+                    window.location.href = bulkAddUrl;
+                }
+            } catch (error) {
+                console.error('다건 프로젝트 추가 페이지 열기 실패:', error);
+                // 오류 발생 시 현재 창에서 열기
+                window.location.href = 'meeting-bulk-project-add.html';
+            }
+        }
+        
+        // 페이지 포커스 시에도 확인 (창 전환 시)
+        window.addEventListener('focus', function() {
+            checkForBulkProjects();
+        });
         
         // 웍스파이 중요 프로젝트 필터링 기능
         function filterWorkspyImportant() {

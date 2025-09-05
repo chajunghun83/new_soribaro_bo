@@ -81,7 +81,7 @@
 
         .basic-info-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 30px;
             margin-bottom: 25px;
         }
@@ -1219,6 +1219,10 @@
                 <span class="info-label">업체명</span>
                 <div class="info-value" id="company-name">외교부</div>
             </div>
+            <div class="info-item">
+                <span class="info-label">의뢰자명</span>
+                <div class="info-value" id="client-name">김민수</div>
+            </div>
         </div>
     </div>
 
@@ -1360,15 +1364,16 @@
         </div>
         
         <div style="overflow-x: auto;">
-            <table style="width: 100%; min-width: 1100px; border-collapse: collapse;">
+            <table style="width: 100%; min-width: 1200px; border-collapse: collapse;">
                 <thead>
                     <tr style="background: #f8f9fa;">
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">파일이름</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">재생시간</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업시간</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자(상태)</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">출발어</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">전사툴</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; min-width: 150px;">산출물</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자 상태</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">진행상태</th>
                     </tr>
                 </thead>
                 <tbody id="work-management-table-body">
@@ -1400,15 +1405,17 @@
         </div>
         
         <div style="overflow-x: auto;">
-            <table style="width: 100%; min-width: 1100px; border-collapse: collapse;">
+            <table style="width: 100%; min-width: 1300px; border-collapse: collapse;">
                 <thead>
                     <tr style="background: #f8f9fa;">
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">파일이름</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">재생시간</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업시간</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자(상태)</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">출발어</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">중간어</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">전사툴</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; min-width: 150px;">산출물</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자 상태</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">진행상태</th>
                     </tr>
                 </thead>
                 <tbody id="work-management-intermediate-table-body">
@@ -1444,15 +1451,17 @@
         </div>
         
         <div style="overflow-x: auto;">
-            <table style="width: 100%; min-width: 1100px; border-collapse: collapse;">
+            <table style="width: 100%; min-width: 1300px; border-collapse: collapse;">
                 <thead>
                     <tr style="background: #f8f9fa;">
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">파일이름</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">재생시간</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업시간</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자(상태)</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">중간어</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">도착어</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">전사툴</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; min-width: 150px;">산출물</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자 상태</th>
+                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">진행상태</th>
                     </tr>
                 </thead>
                 <tbody id="work-management-translator-table-body">
@@ -1789,8 +1798,11 @@
             const params = getUrlParams();
             
             // 기본 정보 설정
+            if (params.company) {
+                document.getElementById('company-name').textContent = decodeURIComponent(params.company);
+            }
             if (params.client) {
-                document.getElementById('company-name').textContent = decodeURIComponent(params.client);
+                document.getElementById('client-name').textContent = decodeURIComponent(params.client);
             }
             if (params.title) {
                 document.getElementById('project-title').textContent = decodeURIComponent(params.title);
@@ -2742,11 +2754,16 @@
                 if (file) {
                     const workerName = ''; // 중간어 영역 초기에는 작업자 없음
                     
+                    // 중간어 영역 작업자(상태) 표시
+                    const intermediateWorkerStatus = workerName ? `${workerName}(작업중)` : '-';
+                    
                     tableHTML += `
                         <tr style="border-bottom: 1px solid #e5e7eb;">
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.name}</td>
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.duration}</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${workerName}</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${intermediateWorkerStatus}</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">한글</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">영어</td>
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
                                 <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                                     <button class="tool-btn" style="padding: 6px 12px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="launchIntermediateTranscriptionTool()">
@@ -2803,11 +2820,16 @@
                 if (file) {
                     const workerName = ''; // 번역가 영역 초기에는 작업자 없음
                     
+                    // 번역가 영역 작업자(상태) 표시
+                    const translatorWorkerStatus = workerName ? `${workerName}(작업중)` : '-';
+                    
                     tableHTML += `
                         <tr style="border-bottom: 1px solid #e5e7eb;">
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.name}</td>
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.duration}</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${workerName}</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${translatorWorkerStatus}</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">영어</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">칸나다어</td>
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
                                 <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                                     <button class="tool-btn" style="padding: 6px 12px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="launchTranslatorTranscriptionTool()">
@@ -2840,7 +2862,7 @@
             // 모든 행의 산출물 컬럼을 다운로드 버튼으로 업데이트
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach((row, index) => {
-                const outputCell = row.querySelector('td:nth-child(5)'); // 산출물 컬럼
+                const outputCell = row.querySelector('td:nth-child(6)'); // 산출물 컬럼 (새로운 구조에서 6번째)
                 if (outputCell) {
                     const fileName = row.querySelector('td:nth-child(1)').textContent; // 파일명
                     outputCell.innerHTML = `
@@ -2860,7 +2882,7 @@
             // 모든 행의 산출물 컬럼을 다운로드 버튼으로 업데이트
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach((row, index) => {
-                const outputCell = row.querySelector('td:nth-child(5)'); // 산출물 컬럼
+                const outputCell = row.querySelector('td:nth-child(7)'); // 산출물 컬럼 (새로운 구조에서 7번째)
                 if (outputCell) {
                     const fileName = row.querySelector('td:nth-child(1)').textContent; // 파일명
                     outputCell.innerHTML = `
@@ -2880,7 +2902,7 @@
             // 모든 행의 산출물 컬럼을 다운로드 버튼으로 업데이트
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach((row, index) => {
-                const outputCell = row.querySelector('td:nth-child(5)'); // 산출물 컬럼
+                const outputCell = row.querySelector('td:nth-child(7)'); // 산출물 컬럼 (새로운 구조에서 7번째)
                 if (outputCell) {
                     const fileName = row.querySelector('td:nth-child(1)').textContent; // 파일명
                     outputCell.innerHTML = `
@@ -3933,11 +3955,15 @@
                         }
                     }
                     
+                    // 작업자(상태) 표시 형식 생성
+                    const workerStatusDisplay = assignedWorker ? `${assignedWorker}(${workerStatus})` : '-';
+                    
                     tableHTML += `
                         <tr style="border-bottom: 1px solid #e5e7eb;">
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.name}</td>
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.duration}</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${assignedWorker || '-'}</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${workerStatusDisplay}</td>
+                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">한글</td>
                             <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
                                 <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
                                     <button class="tool-btn" style="padding: 6px 12px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="launchTranscriptionTool()">
@@ -4411,14 +4437,14 @@
             const tableBody = document.getElementById('work-management-table-body');
             if (!tableBody) return;
             
-            // 모든 행의 작업자 컬럼 업데이트
+            // 모든 행의 작업자(상태) 컬럼 업데이트
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach(row => {
-                const workerCell = row.querySelector('td:nth-child(3)'); // 작업자 컬럼
-                const statusCell = row.querySelector('td:nth-child(6)'); // 작업자 상태 컬럼
+                const workerCell = row.querySelector('td:nth-child(3)'); // 작업자(상태) 컬럼
+                const statusCell = row.querySelector('td:nth-child(7)'); // 진행상태 컬럼
                 
                 if (workerCell && statusCell) {
-                    workerCell.textContent = workerName;
+                    workerCell.textContent = `${workerName}(작업중)`;
                     statusCell.innerHTML = '<span class="status-badge status-inprogress">작업중</span>';
                 }
             });
@@ -4540,14 +4566,14 @@
             const tableBody = document.getElementById('work-management-intermediate-table-body');
             if (!tableBody) return;
             
-            // 모든 행의 작업자 컬럼 업데이트
+            // 모든 행의 작업자(상태) 컬럼 업데이트
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach(row => {
-                const workerCell = row.querySelector('td:nth-child(3)'); // 작업자 컬럼
-                const statusCell = row.querySelector('td:nth-child(6)'); // 작업자 상태 컬럼
+                const workerCell = row.querySelector('td:nth-child(3)'); // 작업자(상태) 컬럼
+                const statusCell = row.querySelector('td:nth-child(8)'); // 진행상태 컬럼
                 
                 if (workerCell && statusCell) {
-                    workerCell.textContent = workerName;
+                    workerCell.textContent = `${workerName}(작업중)`;
                     statusCell.innerHTML = '<span class="status-badge status-inprogress">작업중</span>';
                 }
             });
@@ -4669,14 +4695,14 @@
             const tableBody = document.getElementById('work-management-translator-table-body');
             if (!tableBody) return;
             
-            // 모든 행의 작업자 컬럼 업데이트
+            // 모든 행의 작업자(상태) 컬럼 업데이트
             const rows = tableBody.querySelectorAll('tr');
             rows.forEach(row => {
-                const workerCell = row.querySelector('td:nth-child(3)'); // 작업자 컬럼
-                const statusCell = row.querySelector('td:nth-child(6)'); // 작업자 상태 컬럼
+                const workerCell = row.querySelector('td:nth-child(3)'); // 작업자(상태) 컬럼
+                const statusCell = row.querySelector('td:nth-child(8)'); // 진행상태 컬럼
                 
                 if (workerCell && statusCell) {
-                    workerCell.textContent = workerName;
+                    workerCell.textContent = `${workerName}(작업중)`;
                     statusCell.innerHTML = '<span class="status-badge status-inprogress">작업중</span>';
                 }
             });

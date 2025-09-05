@@ -378,29 +378,6 @@
         VOD 작업관리
     </h1>
     
-    <!-- 통계 영역 -->
-    <div class="stats-grid">
-        <div class="stat-card">
-            <h3>총 작업 건수</h3>
-            <div class="value">156</div>
-        </div>
-        <div class="stat-card">
-            <h3>접수</h3>
-            <div class="value">23</div>
-        </div>
-        <div class="stat-card">
-            <h3>작업중</h3>
-            <div class="value">45</div>
-        </div>
-        <div class="stat-card">
-            <h3>초안완성</h3>
-            <div class="value">32</div>
-        </div>
-        <div class="stat-card">
-            <h3>완료</h3>
-            <div class="value">56</div>
-        </div>
-    </div>
     
     <!-- 검색 영역 -->
     <div class="search-section">
@@ -464,10 +441,6 @@
         
         <!-- 버튼 영역 -->
         <div class="search-buttons">
-            <button class="btn btn-primary" onclick="searchMeetings()">
-                <span>🔍</span>
-                검색
-            </button>
             <button class="btn btn-success" onclick="downloadExcel()">
                 <span>📊</span>
                 엑셀 다운로드
@@ -479,6 +452,14 @@
             <button class="btn btn-secondary" onclick="openProjectAddModal()" style="background: #059669; color: white;">
                 <span>➕</span>
                 프로젝트 추가
+            </button>
+            <button class="btn btn-secondary" onclick="openBulkProjectAdd()" style="background: #7c3aed; color: white;">
+                <span>📁</span>
+                다건 프로젝트 추가
+            </button>
+            <button class="btn btn-primary" onclick="searchMeetings()">
+                <span>🔍</span>
+                검색
             </button>
         </div>
     </div>
@@ -707,8 +688,36 @@
             }
         }
         
+        // 다건 프로젝트 데이터 확인 및 추가
+        function checkForBulkProjects() {
+            const bulkProjectsAdded = localStorage.getItem('bulkProjectsAdded');
+            const bulkProjectsData = localStorage.getItem('bulkProjectsData');
+            
+            if (bulkProjectsAdded === 'true' && bulkProjectsData) {
+                try {
+                    const projectsArray = JSON.parse(bulkProjectsData);
+                    console.log('localStorage에서 다건 프로젝트 데이터 발견:', projectsArray.length);
+                    
+                    // 프로젝트 추가
+                    addBulkProjectsToTable(projectsArray);
+                    
+                    // localStorage 정리
+                    localStorage.removeItem('bulkProjectsAdded');
+                    localStorage.removeItem('bulkProjectsData');
+                    
+                } catch (error) {
+                    console.error('localStorage 데이터 파싱 오류:', error);
+                    localStorage.removeItem('bulkProjectsAdded');
+                    localStorage.removeItem('bulkProjectsData');
+                }
+            }
+        }
+        
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            // 다건 프로젝트 데이터 확인
+            checkForBulkProjects();
+            
             // 모든 테이블 행에 클릭 이벤트 추가
             const tableRows = document.querySelectorAll('.data-table tbody tr');
             
@@ -722,6 +731,11 @@
                 // 커서 포인터 스타일 추가
                 row.style.cursor = 'pointer';
             });
+        });
+        
+        // 페이지 포커스 시에도 확인 (창 전환 시)
+        window.addEventListener('focus', function() {
+            checkForBulkProjects();
         });
         
         // 프로젝트 추가 모달 관련 함수들
@@ -981,6 +995,101 @@
             }
         }
         
+        // 다건 프로젝트 추가 (새창에서 호출)
+        function addBulkProjectsToTable(projectsArray) {
+            const tbody = document.querySelector('.data-table tbody');
+            if (!tbody) {
+                console.error('테이블 tbody를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 현재 최대 번호 확인
+            const currentRows = tbody.querySelectorAll('tr');
+            let maxNo = Math.max(...Array.from(currentRows).map(row => {
+                const noCell = row.querySelector('td:nth-child(2)'); // 체크박스 다음이 NO 컬럼
+                return noCell ? parseInt(noCell.textContent) || 0 : 0;
+            }));
+            
+            // 20개 프로젝트를 작은 번호부터 순서대로 추가 (작은 숫자가 아래로)
+            projectsArray.forEach((projectData, index) => {
+                const newRowNumber = maxNo + 1 + index; // 11, 12, 13, ... 30
+                
+                // 새 행 생성
+                const newRow = document.createElement('tr');
+                newRow.style.cursor = 'pointer';
+                newRow.onclick = () => openMeetingDetail(newRow);
+                
+                // 상태에 따른 스타일 설정
+                const statusClass = projectData.status === '접수' ? 'status-received' : 'status-inprogress';
+                
+                newRow.innerHTML = `
+                    <td><input type="checkbox" class="row-checkbox" onclick="event.stopPropagation();"></td>
+                    <td>${newRowNumber}</td>
+                    <td>${projectData.orderNumber}</td>
+                    <td>${projectData.title}</td>
+                    <td>${projectData.companyName}</td>
+                    <td>${projectData.clientName}</td>
+                    <td>${projectData.requestDate}</td>
+                    <td>${projectData.workTime}</td>
+                    <td>-</td>
+                    <td><span class="status-badge ${statusClass}">${projectData.status}</span></td>
+                `;
+                
+                // 테이블 맨 위에 삽입 (첫 번째 행으로) - 11번이 먼저 삽입되고, 그 위에 12번, 13번... 30번 순서로 삽입
+                tbody.insertBefore(newRow, tbody.firstChild);
+            });
+            
+            console.log(`${projectsArray.length}개의 다건 프로젝트가 추가되었습니다. (NO: ${maxNo + 1} ~ ${maxNo + projectsArray.length})`);
+            
+            // 테이블 새로고침 효과
+            refreshTableDisplay();
+            
+            // 성공 알림
+            alert(`🎉 다건 프로젝트 등록 완료!\n\n${projectsArray.length}개의 프로젝트가 VOD 작업관리에 추가되었습니다.\n(NO: ${maxNo + 1} ~ ${maxNo + projectsArray.length})`);
+        }
+        
+        // 다건 추가 후 리프레시 처리
+        function refreshAfterBulkAdd() {
+            // 페이지 전체 리프레시 효과
+            document.body.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                document.body.style.opacity = '1';
+                
+                // 테이블 하이라이트 효과
+                const newRows = document.querySelectorAll('.data-table tbody tr');
+                newRows.forEach((row, index) => {
+                    if (index < 20) { // 새로 추가된 20개 행
+                        row.style.backgroundColor = '#dcfce7';
+                        row.style.transition = 'background-color 2s ease';
+                        
+                        // 2초 후 원래 색으로 복원
+                        setTimeout(() => {
+                            row.style.backgroundColor = '';
+                        }, 2000);
+                    }
+                });
+                
+                console.log('VOD 작업관리 페이지가 리프레시되었습니다.');
+            }, 300);
+        }
+        
+        // 테이블 표시 새로고침
+        function refreshTableDisplay() {
+            const tableContainer = document.querySelector('.table-container');
+            if (tableContainer) {
+                // 테이블 페이드 효과
+                tableContainer.style.opacity = '0.5';
+                tableContainer.style.transform = 'scale(0.98)';
+                
+                setTimeout(() => {
+                    tableContainer.style.opacity = '1';
+                    tableContainer.style.transform = 'scale(1)';
+                    tableContainer.style.transition = 'all 0.5s ease';
+                }, 200);
+            }
+        }
+        
         function addProjectToTable(projectData) {
             const tbody = document.querySelector('.data-table tbody');
             if (!tbody) {
@@ -1057,6 +1166,22 @@
                 });
                 
                 console.log('모든 작업 표시');
+            }
+        }
+        
+        // 다건 프로젝트 추가 새창 열기
+        function openBulkProjectAdd() {
+            // 새창으로 다건 프로젝트 추가 페이지 열기 (화면에 꽉 차게)
+            const newWindow = window.open(
+                'vod-bulk-project-add.html', 
+                'bulkProjectAdd', 
+                'width=' + screen.width + ',height=' + screen.height + ',scrollbars=yes,resizable=yes,left=0,top=0'
+            );
+            
+            if (newWindow) {
+                newWindow.focus();
+            } else {
+                alert('팝업이 차단되었습니다. 팝업 차단을 해제해주세요.');
             }
         }
         

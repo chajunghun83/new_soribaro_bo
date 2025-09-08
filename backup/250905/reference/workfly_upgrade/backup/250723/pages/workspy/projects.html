@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>프로젝트 관리(웍스파이)</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">📋 프로젝트 관리(웍스파이)</h1>
+    
+    <!-- 프로젝트 통계 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>전체 프로젝트</h3>
+            <div class="value">188</div>
+        </div>
+        <div class="stat-card">
+            <h3>진행중</h3>
+            <div class="value">24</div>
+        </div>
+        <div class="stat-card">
+            <h3>완료</h3>
+            <div class="value">156</div>
+        </div>
+        <div class="stat-card">
+            <h3>지연</h3>
+            <div class="value">8</div>
+        </div>
+    </div>
+
+    <!-- 검색 폼 -->
+    <div class="search-section">
+        <div class="search-grid">
+            <div class="form-group">
+                <label>프로젝트명</label>
+                <input type="text" placeholder="프로젝트명을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>고객사</label>
+                <input type="text" placeholder="고객사명을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>프로젝트 상태</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="planning">기획 단계</option>
+                    <option value="in_progress">진행중</option>
+                    <option value="review">검토 중</option>
+                    <option value="completed">완료</option>
+                    <option value="on_hold">보류</option>
+                    <option value="cancelled">취소</option>
+                </select>
+            </div>
+        </div>
+        <div class="search-grid">
+            <div class="form-group">
+                <label>담당 PM</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="pm1">김프로젝트</option>
+                    <option value="pm2">이매니저</option>
+                    <option value="pm3">박관리자</option>
+                    <option value="pm4">정책임자</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>프로젝트 유형</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="transcription">전사/녹취</option>
+                    <option value="translation">번역</option>
+                    <option value="editing">편집</option>
+                    <option value="consultation">컨설팅</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>우선순위</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="urgent">긴급</option>
+                    <option value="high">높음</option>
+                    <option value="normal">보통</option>
+                    <option value="low">낮음</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-buttons">
+            <button class="btn btn-outline">초기화</button>
+            <button class="btn btn-primary">🔍 검색</button>
+            <button class="btn btn-secondary">📋 새 프로젝트</button>
+        </div>
+    </div>
+
+    <!-- 프로젝트 목록 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span>📋 총 188개의 프로젝트</span>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                    <button class="btn btn-primary btn-sm">📈 진행률 리포트</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
+                    <th>프로젝트명</th>
+                    <th>고객사</th>
+                    <th>담당 PM</th>
+                    <th>프로젝트 유형</th>
+                    <th>시작일</th>
+                    <th>마감일</th>
+                    <th>진행률</th>
+                    <th>상태</th>
+                    <th>우선순위</th>
+                    <th>관리</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>대기업 회의록 프로젝트</strong></td>
+                    <td>삼성전자</td>
+                    <td>김프로젝트</td>
+                    <td>전사/녹취</td>
+                    <td>2024-12-01</td>
+                    <td>2024-12-30</td>
+                    <td>75%</td>
+                    <td><span class="status status-progress">진행중</span></td>
+                    <td><span class="status" style="background-color: #fee2e2; color: #dc2626;">긴급</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>글로벌 번역 서비스</strong></td>
+                    <td>LG화학</td>
+                    <td>이매니저</td>
+                    <td>번역</td>
+                    <td>2024-11-15</td>
+                    <td>2025-01-15</td>
+                    <td>45%</td>
+                    <td><span class="status status-progress">진행중</span></td>
+                    <td><span class="status" style="background-color: #fef3c7; color: #f59e0b;">높음</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>법무팀 문서 편집</strong></td>
+                    <td>현대자동차</td>
+                    <td>박관리자</td>
+                    <td>편집</td>
+                    <td>2024-12-10</td>
+                    <td>2024-12-25</td>
+                    <td>100%</td>
+                    <td><span class="status status-completed">완료</span></td>
+                    <td><span class="status" style="background-color: #e5e7eb; color: #6b7280;">보통</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>HR 컨설팅 프로젝트</strong></td>
+                    <td>SK텔레콤</td>
+                    <td>정책임자</td>
+                    <td>컨설팅</td>
+                    <td>2024-12-15</td>
+                    <td>2025-02-15</td>
+                    <td>20%</td>
+                    <td><span class="status status-progress">진행중</span></td>
+                    <td><span class="status" style="background-color: #fef3c7; color: #f59e0b;">높음</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>영상 자막 제작</strong></td>
+                    <td>네이버</td>
+                    <td>김프로젝트</td>
+                    <td>전사/녹취</td>
+                    <td>2024-12-08</td>
+                    <td>2024-12-20</td>
+                    <td>95%</td>
+                    <td><span class="status status-progress">검토 중</span></td>
+                    <td><span class="status" style="background-color: #e5e7eb; color: #6b7280;">보통</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>기술 문서 번역</strong></td>
+                    <td>POSCO</td>
+                    <td>이매니저</td>
+                    <td>번역</td>
+                    <td>2024-11-20</td>
+                    <td>2024-12-31</td>
+                    <td>15%</td>
+                    <td><span class="status status-pending">지연</span></td>
+                    <td><span class="status" style="background-color: #fee2e2; color: #dc2626;">긴급</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-secondary btn-sm">긴급처리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>연차보고서 편집</strong></td>
+                    <td>CJ그룹</td>
+                    <td>박관리자</td>
+                    <td>편집</td>
+                    <td>2024-12-18</td>
+                    <td>2025-01-05</td>
+                    <td>10%</td>
+                    <td><span class="status status-progress">기획 단계</span></td>
+                    <td><span class="status" style="background-color: #f3f4f6; color: #9ca3af;">낮음</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td><strong>국제회의 통역</strong></td>
+                    <td>외교부</td>
+                    <td>정책임자</td>
+                    <td>번역</td>
+                    <td>2024-12-05</td>
+                    <td>2024-12-22</td>
+                    <td>80%</td>
+                    <td><span class="status status-progress">진행중</span></td>
+                    <td><span class="status" style="background-color: #fee2e2; color: #dc2626;">긴급</span></td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="btn btn-primary btn-sm">관리</button>
+                            <button class="btn btn-outline btn-sm">상세</button>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">24</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+        </div>
+    </div>
+
+    <script src="../../scripts/common.js"></script>
+</body>
+</html> 

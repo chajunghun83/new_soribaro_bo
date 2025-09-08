@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 서비스 유형 배지 */
+        .service-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .service-korean {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .service-english {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 카테고리 배지 */
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .category-service {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .category-account {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .category-billing {
+            background: #fce7f3;
+            color: #be185d;
+        }
+        
+        .category-notary {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        /* 공개여부 배지 */
+        .visibility-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .visibility-public {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .visibility-private {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* FAQ 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 300px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>❓</span>
+            FAQ 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">제목</div>
+                    <div class="info-value" id="faqTitle">소리바로 서비스 이용 방법</div>
+                    
+                    <div class="info-label">서비스 유형</div>
+                    <div class="info-value">
+                        <span id="serviceBadge" class="service-badge service-korean">한글</span>
+                    </div>
+                    
+                    <div class="info-label">카테고리</div>
+                    <div class="info-value">
+                        <span id="categoryBadge" class="category-badge category-service">서비스 이용</span>
+                    </div>
+                    
+                    <div class="info-label">공개여부</div>
+                    <div class="info-value">
+                        <span id="visibilityBadge" class="visibility-badge visibility-public">공개</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 등록/수정 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">등록/수정 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">등록자</div>
+                    <div class="info-value" id="registeredBy">관리자</div>
+                    
+                    <div class="info-label">등록일시</div>
+                    <div class="info-value" id="registeredDate">2025-08-27 09:00:00</div>
+                    
+                    <div class="info-label">수정자</div>
+                    <div class="info-value" id="modifiedBy">관리자</div>
+                    
+                    <div class="info-label">수정일시</div>
+                    <div class="info-value" id="modifiedDate">2025-08-27 09:00:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- FAQ 질문 섹션 -->
+    <div class="content-section">
+        <div class="section-title">FAQ 질문</div>
+        <div class="info-content">
+            <div class="content-display" id="faqQuestion">소리바로 서비스는 어떻게 이용하나요?</div>
+        </div>
+    </div>
+    
+    <!-- FAQ 답변 섹션 -->
+    <div class="content-section">
+        <div class="section-title">FAQ 답변</div>
+        <div class="info-content">
+            <div class="content-display" id="faqAnswer">소리바로 서비스 이용 방법은 다음과 같습니다.
+
+1. 회원가입
+   - 소리바로 홈페이지에 접속하여 회원가입을 진행합니다.
+   - 이메일 인증을 완료하면 서비스 이용이 가능합니다.
+
+2. 파일 업로드
+   - 로그인 후 '파일 업로드' 버튼을 클릭합니다.
+   - 음성 파일 또는 동영상 파일을 업로드합니다.
+   - 지원 형식: MP3, WAV, MP4, AVI 등
+
+3. 옵션 선택
+   - 작업 유형을 선택합니다 (녹취록, 번역, 자막 등).
+   - 화자 수와 특수 요구사항을 입력합니다.
+   - 작업 완료 희망일을 설정합니다.
+
+4. 결제
+   - 견적을 확인하고 결제를 진행합니다.
+   - 다양한 결제 수단을 지원합니다 (카드, 계좌이체, 포인트).
+
+5. 작업 진행
+   - 작업이 시작되면 실시간으로 진행 상황을 확인할 수 있습니다.
+   - 마이페이지에서 작업 현황을 모니터링할 수 있습니다.
+
+6. 완료 및 다운로드
+   - 작업 완료 시 알림을 받게 됩니다.
+   - 완성된 파일을 다운로드하여 확인할 수 있습니다.
+
+추가 문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.</div>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-action btn-edit" onclick="editFaq()">
+            <span>✏️</span>
+            수정
+        </button>
+        <button class="btn-action btn-delete" onclick="deleteFaq()">
+            <span>🗑️</span>
+            삭제
+        </button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('FAQ 상세 페이지 로드, ID:', itemId);
+            loadFaqDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadFaqDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'FAQ001': {
+                    serviceType: '한글',
+                    serviceClass: 'service-korean',
+                    faqTitle: '소리바로 서비스 이용 방법',
+                    category: '서비스 이용',
+                    categoryClass: 'category-service',
+                    visibility: '공개',
+                    visibilityClass: 'visibility-public',
+                    registeredBy: '관리자',
+                    registeredDate: '2025-08-27 09:00:00',
+                    modifiedBy: '관리자',
+                    modifiedDate: '2025-08-27 09:00:00',
+                    question: `소리바로 서비스는 어떻게 이용하나요?`,
+                    answer: `소리바로 서비스 이용 방법은 다음과 같습니다.
+
+1. 회원가입
+   - 소리바로 홈페이지에 접속하여 회원가입을 진행합니다.
+   - 이메일 인증을 완료하면 서비스 이용이 가능합니다.
+
+2. 파일 업로드
+   - 로그인 후 '파일 업로드' 버튼을 클릭합니다.
+   - 음성 파일 또는 동영상 파일을 업로드합니다.
+   - 지원 형식: MP3, WAV, MP4, AVI 등
+
+3. 옵션 선택
+   - 작업 유형을 선택합니다 (녹취록, 번역, 자막 등).
+   - 화자 수와 특수 요구사항을 입력합니다.
+   - 작업 완료 희망일을 설정합니다.
+
+4. 결제
+   - 견적을 확인하고 결제를 진행합니다.
+   - 다양한 결제 수단을 지원합니다 (카드, 계좌이체, 포인트).
+
+5. 작업 진행
+   - 작업이 시작되면 실시간으로 진행 상황을 확인할 수 있습니다.
+   - 마이페이지에서 작업 현황을 모니터링할 수 있습니다.
+
+6. 완료 및 다운로드
+   - 작업 완료 시 알림을 받게 됩니다.
+   - 완성된 파일을 다운로드하여 확인할 수 있습니다.
+
+추가 문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.`
+                },
+                'FAQ002': {
+                    serviceType: '한글',
+                    serviceClass: 'service-korean',
+                    faqTitle: '회원가입은 어떻게 하나요?',
+                    category: '계정정보',
+                    categoryClass: 'category-account',
+                    visibility: '공개',
+                    visibilityClass: 'visibility-public',
+                    registeredBy: '관리자',
+                    registeredDate: '2025-08-27 10:30:00',
+                    modifiedBy: '관리자',
+                    modifiedDate: '2025-08-27 10:30:00',
+                    question: `회원가입은 어떻게 하나요?`,
+                    answer: `소리바로 회원가입 절차는 다음과 같습니다.
+
+1. 회원가입 페이지 접속
+   - 소리바로 홈페이지 상단의 '회원가입' 버튼을 클릭합니다.
+
+2. 회원 유형 선택
+   - 개인회원 또는 기업회원을 선택합니다.
+   - 각 유형에 따라 입력 항목이 다릅니다.
+
+3. 필수 정보 입력
+   - 이메일 주소 (로그인 ID로 사용)
+   - 비밀번호 (8자리 이상, 영문/숫자/특수문자 조합)
+   - 이름
+   - 휴대폰 번호
+
+4. 이메일 인증
+   - 입력한 이메일로 인증 메일이 발송됩니다.
+   - 인증 링크를 클릭하여 이메일 인증을 완료합니다.
+
+5. 약관 동의
+   - 서비스 이용약관
+   - 개인정보 처리방침
+   - 마케팅 수신 동의 (선택)
+
+6. 가입 완료
+   - 모든 절차 완료 후 즉시 서비스 이용이 가능합니다.
+
+가입 중 문제가 발생하면 고객센터로 문의해 주세요.`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['FAQ001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('serviceBadge').textContent = data.serviceType;
+            document.getElementById('serviceBadge').className = `service-badge ${data.serviceClass}`;
+            document.getElementById('faqTitle').textContent = data.faqTitle;
+            document.getElementById('categoryBadge').textContent = data.category;
+            document.getElementById('categoryBadge').className = `category-badge ${data.categoryClass}`;
+            document.getElementById('visibilityBadge').textContent = data.visibility;
+            document.getElementById('visibilityBadge').className = `visibility-badge ${data.visibilityClass}`;
+            document.getElementById('registeredBy').textContent = data.registeredBy;
+            document.getElementById('registeredDate').textContent = data.registeredDate;
+            document.getElementById('modifiedBy').textContent = data.modifiedBy;
+            document.getElementById('modifiedDate').textContent = data.modifiedDate;
+            document.getElementById('faqQuestion').textContent = data.question;
+            document.getElementById('faqAnswer').textContent = data.answer;
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'faq-management.html';
+        }
+        
+        // 수정 기능
+        function editFaq() {
+            const url = `faq-register.html?id=${itemId}&mode=edit`;
+            window.location.href = url;
+        }
+        
+        // 삭제 기능
+        function deleteFaq() {
+            if (confirm('이 FAQ를 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
+                alert('FAQ가 삭제되었습니다.');
+                // 실제 구현 시 서버 API 호출하여 삭제
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

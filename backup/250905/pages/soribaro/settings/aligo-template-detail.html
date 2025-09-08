@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>알리고 템플릿 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 템플릿코드 배지 */
+        .template-code {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+
+        /* 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 200px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📱</span>
+            알리고 템플릿 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">템플릿코드(알리고)</div>
+                    <div class="info-value">
+                        <span id="templateCode" class="template-code">TL_5927</span>
+                    </div>
+                    
+                    <div class="info-label">제목</div>
+                    <div class="info-value" id="templateTitle">회원가입 인증번호 발송</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SMS 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">SMS 내용</div>
+        <div class="info-content">
+            <div class="content-display" id="smsContent">[소리바로] 회원가입 인증번호는 [123456]입니다.
+
+인증번호를 정확히 입력해 주세요.
+인증번호 유효시간은 5분입니다.
+
+감사합니다.</div>
+        </div>
+    </div>
+    
+    <!-- MMS 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">MMS 내용</div>
+        <div class="info-content">
+            <div class="content-display" id="mmsContent">🎉 [소리바로] 회원가입을 환영합니다! 🎉
+
+인증번호: [123456]
+
+✅ 인증번호를 정확히 입력해 주세요.
+⏰ 인증번호 유효시간은 5분입니다.
+📞 문의사항: 1588-1234
+
+소리바로와 함께 더 나은 서비스를 경험해보세요!
+
+감사합니다.</div>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-action btn-edit" onclick="editTemplate()">
+            <span>✏️</span>
+            수정
+        </button>
+        <button class="btn-action btn-delete" onclick="deleteTemplate()">
+            <span>🗑️</span>
+            삭제
+        </button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('알리고 템플릿 상세 페이지 로드, ID:', itemId);
+            loadTemplateDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadTemplateDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'TEMPLATE001': {
+                    templateCode: 'TL_5927',
+                    templateTitle: '회원가입 인증번호 발송',
+                    smsContent: `[소리바로] 회원가입 인증번호는 [123456]입니다.
+
+인증번호를 정확히 입력해 주세요.
+인증번호 유효시간은 5분입니다.
+
+감사합니다.`,
+                    mmsContent: `🎉 [소리바로] 회원가입을 환영합니다! 🎉
+
+인증번호: [123456]
+
+✅ 인증번호를 정확히 입력해 주세요.
+⏰ 인증번호 유효시간은 5분입니다.
+📞 문의사항: 1588-1234
+
+소리바로와 함께 더 나은 서비스를 경험해보세요!
+
+감사합니다.`
+                },
+                'TEMPLATE002': {
+                    templateCode: 'TL_5928',
+                    templateTitle: '비밀번호 재설정 안내',
+                    smsContent: `[소리바로] 비밀번호 재설정 링크입니다.
+
+아래 링크를 클릭하여 새로운 비밀번호를 설정해 주세요.
+https://soribaro.com/reset/[token]
+
+링크 유효시간은 30분입니다.`,
+                    mmsContent: `🔐 [소리바로] 비밀번호 재설정 안내
+
+안녕하세요, 소리바로입니다.
+
+비밀번호 재설정을 요청하셨습니다.
+아래 링크를 클릭하여 새로운 비밀번호를 설정해 주세요.
+
+🔗 https://soribaro.com/reset/[token]
+
+⚠️ 주의사항:
+- 링크 유효시간: 30분
+- 본인이 요청하지 않은 경우 무시하세요.
+
+문의사항: 1588-1234`
+                },
+                'TEMPLATE003': {
+                    templateCode: 'TL_5929',
+                    templateTitle: '작업 완료 알림',
+                    smsContent: `[소리바로] 작업이 완료되었습니다.
+
+주문번호: [ORDER_NO]
+작업유형: [WORK_TYPE]
+
+마이페이지에서 결과물을 다운로드하세요.
+감사합니다.`,
+                    mmsContent: `✅ [소리바로] 작업 완료 알림
+
+주문번호: [ORDER_NO]
+작업유형: [WORK_TYPE]
+완료일시: [COMPLETE_DATE]
+
+🎉 작업이 성공적으로 완료되었습니다!
+
+📥 결과물 다운로드:
+마이페이지 > 주문내역에서 확인 가능합니다.
+
+📞 문의사항: 1588-1234
+감사합니다.`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['TEMPLATE001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('templateCode').textContent = data.templateCode;
+            document.getElementById('templateTitle').textContent = data.templateTitle;
+            document.getElementById('smsContent').textContent = data.smsContent;
+            document.getElementById('mmsContent').textContent = data.mmsContent;
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'aligo-template-management.html';
+        }
+        
+        // 수정 기능
+        function editTemplate() {
+            const url = `aligo-template-register.html?id=${itemId}&mode=edit`;
+            window.location.href = url;
+        }
+        
+        // 삭제 기능
+        function deleteTemplate() {
+            if (confirm('이 알리고 템플릿을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
+                alert('알리고 템플릿이 삭제되었습니다.');
+                // 실제 구현 시 서버 API 호출하여 삭제
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

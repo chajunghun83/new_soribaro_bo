@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엔터프라이즈 회의록 작업관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 통계 카드 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            text-align: center;
+        }
+        
+        .stat-card h3 {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+        
+        .stat-card .value {
+            font-size: 32px;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+        
+        .search-grid-unified {
+            display: grid;
+            grid-template-columns: 0.8fr 1.5fr 1.5fr 0.6fr 0.6fr 1.8fr;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .date-range-group {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+        }
+        
+        .date-range-group .form-group {
+            flex: 1;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 13px;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .text-search-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .text-search-group select {
+            flex: 0 0 130px;
+        }
+        
+        .text-search-group input {
+            flex: 1;
+        }
+        
+        .search-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+        
+        .btn {
+            height: 35px;
+            padding: 0 14px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-sizing: border-box;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        /* 테이블 */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1350px;
+        }
+        
+        .data-table thead {
+            background: #f8f9fa;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 16px 12px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            font-weight: 600;
+            color: #374151;
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .data-table td {
+            color: #4b5563;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-received {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-inprogress {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .status-draft {
+            background: #e0e7ff;
+            color: #5b21b6;
+        }
+        
+        .status-review {
+            background: #f3e8ff;
+            color: #7c2d12;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        /* 페이징 */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+        }
+        
+        .btn-outline:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .search-grid-unified {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .search-buttons {
+                justify-content: stretch;
+            }
+            
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">
+        <span>📊</span>
+        회의록 작업관리
+    </h1>
+    
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-grid-unified">
+            <div class="form-group">
+                <label for="workspy-filter">웍스파이 중요 프로젝트</label>
+                <select id="workspy-filter" onchange="filterWorkspyImportant()">
+                    <option value="">선택</option>
+                    <option value="all">노출</option>
+                    <option value="important">미노출</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="start-date">시작일</label>
+                <input type="date" id="start-date" value="2025-07-01">
+            </div>
+            <div class="form-group">
+                <label for="end-date">종료일</label>
+                <input type="date" id="end-date" value="2025-07-31">
+            </div>
+            <div class="form-group">
+                <label for="company-select">기업명칭</label>
+                <select id="company-select">
+                    <option value="">전체</option>
+                    <option value="seoul-city">서울특별시청</option>
+                    <option value="busan-city">부산광역시청</option>
+                    <option value="incheon-city">인천광역시청</option>
+                    <option value="ministry-health">보건복지부</option>
+                    <option value="ministry-education">교육부</option>
+                    <option value="ministry-environment">환경부</option>
+                    <option value="national-assembly">국회사무처</option>
+                    <option value="supreme-court">대법원</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="status-select">진행상태</label>
+                <select id="status-select">
+                    <option value="">전체</option>
+                    <option value="received">접수</option>
+                    <option value="inprogress">작업중</option>
+                    <option value="draft">초안완성</option>
+                    <option value="review">검수완료</option>
+                    <option value="completed">작업완료</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>텍스트 검색</label>
+                <div class="text-search-group">
+                    <select id="search-type">
+                        <option value="order">주문번호</option>
+                        <option value="title">제목</option>
+                        <option value="client">의뢰자명</option>
+                        <option value="contact">연락처</option>
+                        <option value="worker">작업자</option>
+                    </select>
+                    <input type="text" id="search-text" placeholder="검색어를 입력하세요">
+                </div>
+            </div>
+        </div>
+        
+        <!-- 버튼 영역 -->
+        <div class="search-buttons">
+            <button class="btn btn-success" onclick="downloadExcel()">
+                <span>📊</span>
+                엑셀 다운로드
+            </button>
+            <button class="btn btn-secondary" onclick="openProjectAddModal()" style="background: #059669; color: white;">
+                <span>➕</span>
+                프로젝트 추가
+            </button>
+            <button class="btn btn-secondary" onclick="openBulkProjectAdd()" style="background: #7c3aed; color: white;">
+                <span>📁</span>
+                다건 프로젝트 추가
+            </button>
+            <button class="btn btn-primary" onclick="searchMeetings()">
+                <span>🔍</span>
+                검색
+            </button>
+        </div>
+        </div>
+    </div>
+    
+    <!-- 테이블 -->
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>주문번호</th>
+                        <th>제목</th>
+                        <th>업체명</th>
+                        <th>의뢰자명</th>
+                        <th>연락처</th>
+                        <th>의뢰일</th>
+                        <th>총 작업시간</th>
+                        <th>작업자</th>
+                        <th>진행상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>10</td>
+                        <td>20250725033445</td>
+                        <td>2025년 제1차 정책위원회 회의록</td>
+                        <td>서울특별시청</td>
+                        <td>차정훈</td>
+                        <td>02-2100-1234</td>
+                        <td>2025-07-25 09:30</td>
+                        <td>02:45:30</td>
+                        <td>이수진</td>
+                        <td><span class="status-badge status-inprogress">작업중</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>9</td>
+                        <td>20250724012345</td>
+                        <td>교육과정 개발 협의회 회의록</td>
+                        <td>교육부</td>
+                        <td>박민수</td>
+                        <td>02-2100-5678</td>
+                        <td>2025-07-24 14:00</td>
+                        <td>01:30:15</td>
+                        <td>김한결</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>8</td>
+                        <td>20250723098765</td>
+                        <td>환경보호 정책 심의회 회의록</td>
+                        <td>환경부</td>
+                        <td>최영희</td>
+                        <td>02-2110-9876</td>
+                        <td>2025-07-23 10:15</td>
+                        <td>03:20:45</td>
+                        <td>정민호</td>
+                        <td><span class="status-badge status-draft">초안완성</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>7</td>
+                        <td>20250722054321</td>
+                        <td>시민참여예산 위원회 회의록</td>
+                        <td>부산광역시청</td>
+                        <td>이재원</td>
+                        <td>051-888-1234</td>
+                        <td>2025-07-22 16:30</td>
+                        <td>02:10:20</td>
+                        <td>황성민</td>
+                        <td><span class="status-badge status-review">검수완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>6</td>
+                        <td>20250721067890</td>
+                        <td>국정감사 준비위원회 회의록</td>
+                        <td>국회사무처</td>
+                        <td>김미영</td>
+                        <td>02-788-5555</td>
+                        <td>2025-07-21 13:45</td>
+                        <td>04:15:30</td>
+                        <td>박철수</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>5</td>
+                        <td>20250720024680</td>
+                        <td>대법원 전원합의체 회의록</td>
+                        <td>대법원</td>
+                        <td>임해영</td>
+                        <td>02-3480-1111</td>
+                        <td>2025-07-20 11:00</td>
+                        <td>05:30:15</td>
+                        <td>조민석</td>
+                        <td><span class="status-badge status-inprogress">작업중</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>4</td>
+                        <td>20250719013579</td>
+                        <td>보건복지부 정책자문위원회 회의록</td>
+                        <td>보건복지부</td>
+                        <td>강수진</td>
+                        <td>044-202-2500</td>
+                        <td>2025-07-19 15:20</td>
+                        <td>01:45:40</td>
+                        <td>이수진</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>3</td>
+                        <td>20250718098321</td>
+                        <td>인천시 도시계획위원회 회의록</td>
+                        <td>인천광역시청</td>
+                        <td>윤정호</td>
+                        <td>032-440-2000</td>
+                        <td>2025-07-18 09:45</td>
+                        <td>02:55:25</td>
+                        <td>김한결</td>
+                        <td><span class="status-badge status-draft">초안완성</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>2</td>
+                        <td>20250717076543</td>
+                        <td>교육부 교육과정심의회 회의록</td>
+                        <td>교육부</td>
+                        <td>송민아</td>
+                        <td>044-203-6000</td>
+                        <td>2025-07-17 14:30</td>
+                        <td>03:40:10</td>
+                        <td>정민호</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                    </tr>
+                    <tr onclick="openMeetingDetail(this)">
+                        <td>1</td>
+                        <td>20250716034567</td>
+                        <td>서울시 시정협의회 정례회의 회의록</td>
+                        <td>서울특별시청</td>
+                        <td>홍길동</td>
+                        <td>02-120</td>
+                        <td>2025-07-16 10:00</td>
+                        <td>01:20:35</td>
+                        <td>황성민</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 페이징 -->
+    <div class="pagination-container">
+        <button class="btn btn-outline btn-sm">첫 페이지</button>
+        <button class="btn btn-outline btn-sm">이전</button>
+        <div style="display: flex; gap: 5px;">
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-outline btn-sm">2</button>
+            <button class="btn btn-outline btn-sm">3</button>
+            <button class="btn btn-outline btn-sm">4</button>
+            <button class="btn btn-outline btn-sm">5</button>
+            <span style="padding: 8px;">...</span>
+            <button class="btn btn-outline btn-sm">15</button>
+        </div>
+        <button class="btn btn-outline btn-sm">다음</button>
+        <button class="btn btn-outline btn-sm">마지막 페이지</button>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchMeetings() {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const company = document.getElementById('company-select').value;
+            const status = document.getElementById('status-select').value;
+            const searchType = document.getElementById('search-type').value;
+            const searchText = document.getElementById('search-text').value;
+            
+            console.log('검색 조건:', {
+                startDate, endDate, company, status, searchType, searchText
+            });
+            
+            alert('검색 기능이 실행되었습니다.');
+        }
+        
+        // 엑셀 다운로드
+        function downloadExcel() {
+            console.log('엑셀 다운로드 시작');
+            alert('엑셀 파일을 다운로드합니다.');
+        }
+        
+        // 상세 페이지 이동
+        function openMeetingDetail(row) {
+            const cells = row.cells;
+            const orderNumber = cells[1].textContent;
+            const title = cells[2].textContent;
+            const companyName = cells[3].textContent;
+            const clientName = cells[4].textContent;
+            const contact = cells[5].textContent;
+            const requestDate = cells[6].textContent;
+            const workTime = cells[7].textContent;
+            const worker = cells[8].textContent;
+            const status = cells[9].querySelector('.status-badge').textContent;
+            
+            // URL 파라미터 생성
+            const params = new URLSearchParams({
+                orderNumber: orderNumber,
+                title: title,
+                company: companyName,
+                client: clientName,
+                contact: contact,
+                requestDate: requestDate,
+                workTime: workTime,
+                worker: worker,
+                status: status
+            });
+            
+            // 페이지 이동
+            try {
+                // iframe 환경에서 실행 중인지 확인
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    const detailUrl = `pages/soribaro/enterprise/meeting-detail.html?${params.toString()}`;
+                    window.parent.loadPage(detailUrl);
+                } else {
+                    const detailUrl = `meeting-detail.html?${params.toString()}`;
+                    window.location.href = detailUrl;
+                }
+            } catch (error) {
+                // 오류 발생 시 기본적인 페이지 이동 시도
+                window.location.href = `meeting-detail.html?${params.toString()}`;
+            }
+        }
+        
+        // 다건 프로젝트 데이터 확인 및 추가
+        function checkForBulkProjects() {
+            const bulkProjectsAdded = localStorage.getItem('bulkProjectsAdded');
+            const bulkProjectsData = localStorage.getItem('bulkProjectsData');
+            
+            if (bulkProjectsAdded === 'true' && bulkProjectsData) {
+                try {
+                    const projectsArray = JSON.parse(bulkProjectsData);
+                    console.log('localStorage에서 다건 프로젝트 데이터 발견:', projectsArray.length);
+                    
+                    // 프로젝트 추가
+                    addBulkProjectsToTable(projectsArray);
+                    
+                    // localStorage 정리
+                    localStorage.removeItem('bulkProjectsAdded');
+                    localStorage.removeItem('bulkProjectsData');
+                    
+                } catch (error) {
+                    console.error('localStorage 데이터 파싱 오류:', error);
+                    localStorage.removeItem('bulkProjectsAdded');
+                    localStorage.removeItem('bulkProjectsData');
+                }
+            }
+        }
+        
+        // 다건 프로젝트 추가 (새창에서 호출)
+        function addBulkProjectsToTable(projectsArray) {
+            const tbody = document.querySelector('.data-table tbody');
+            if (!tbody) {
+                console.error('테이블 tbody를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 현재 최대 번호 확인
+            const currentRows = tbody.querySelectorAll('tr');
+            let maxNo = Math.max(...Array.from(currentRows).map(row => {
+                const noCell = row.querySelector('td:first-child'); // 첫 번째 컬럼이 NO
+                return noCell ? parseInt(noCell.textContent) || 0 : 0;
+            }));
+            
+            // 프로젝트를 작은 번호부터 순서대로 추가
+            projectsArray.forEach((projectData, index) => {
+                const newRowNumber = maxNo + 1 + index;
+                
+                // 새 행 생성
+                const newRow = document.createElement('tr');
+                newRow.style.cursor = 'pointer';
+                newRow.onclick = () => openMeetingDetail(newRow);
+                
+                // 상태에 따른 스타일 설정
+                const statusClass = projectData.status === '접수' ? 'status-received' : 'status-inprogress';
+                
+                // 연락처는 임시로 생성
+                const randomContact = `02-${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}`;
+                
+                newRow.innerHTML = `
+                    <td>${newRowNumber}</td>
+                    <td>${projectData.orderNumber}</td>
+                    <td>${projectData.title}</td>
+                    <td>${projectData.companyName}</td>
+                    <td>${projectData.clientName}</td>
+                    <td>${randomContact}</td>
+                    <td>${projectData.requestDate}</td>
+                    <td>${projectData.workTime}</td>
+                    <td>-</td>
+                    <td><span class="status-badge ${statusClass}">${projectData.status}</span></td>
+                `;
+                
+                // 테이블 맨 위에 삽입 (첫 번째 행으로)
+                tbody.insertBefore(newRow, tbody.firstChild);
+            });
+            
+            console.log(`${projectsArray.length}개의 다건 프로젝트가 추가되었습니다. (NO: ${maxNo + 1} ~ ${maxNo + projectsArray.length})`);
+            
+            // 성공 알림
+            alert(`🎉 다건 프로젝트 등록 완료!\n\n${projectsArray.length}개의 프로젝트가 회의록 작업관리에 추가되었습니다.\n(NO: ${maxNo + 1} ~ ${maxNo + projectsArray.length})`);
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 다건 프로젝트 데이터 확인
+            checkForBulkProjects();
+            
+            // 모든 테이블 행에 클릭 이벤트 추가
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            tableRows.forEach((row) => {
+                row.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    openMeetingDetail(this);
+                });
+                
+                // 커서 포인터 스타일 추가
+                row.style.cursor = 'pointer';
+            });
+        });
+        
+        // 프로젝트 추가 모달 관련 함수들
+        function openProjectAddModal() {
+            document.getElementById('projectAddModal').style.display = 'flex';
+            
+            // 오늘 날짜를 기본값으로 설정
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('recordDate').value = today;
+            
+            // 폼 초기화
+            document.getElementById('projectAddForm').reset();
+            document.getElementById('recordDate').value = today; // reset 후 다시 설정
+            document.querySelector('input[name="sectionType"][value="full"]').checked = true;
+            toggleSectionInputs();
+        }
+        
+        function closeProjectAddModal() {
+            document.getElementById('projectAddModal').style.display = 'none';
+            document.getElementById('projectAddForm').reset();
+            removeNewFile();
+        }
+        
+        function handleNewFileUpload(input) {
+            if (input.files && input.files[0]) {
+                const file = input.files[0];
+                
+                // 파일 크기 체크 (100MB)
+                if (file.size > 100 * 1024 * 1024) {
+                    alert('파일 크기는 100MB를 초과할 수 없습니다.');
+                    input.value = '';
+                    return;
+                }
+                
+                // 파일 정보 표시
+                document.getElementById('newFileName').textContent = file.name;
+                document.getElementById('newFileSize').textContent = (file.size / 1024 / 1024).toFixed(1) + ' MB';
+                
+                // 업로드 영역 숨기고 미리보기 표시
+                document.querySelector('#projectAddModal .file-upload-content').style.display = 'none';
+                document.getElementById('newFilePreview').style.display = 'flex';
+                
+                // 파일명에서 확장자 제거하여 기본 녹음장소로 설정
+                const baseName = file.name.replace(/\.[^/.]+$/, "");
+                document.getElementById('recordLocation').value = baseName + ' 회의실';
+                
+                // 전체 구간 길이 업데이트 (실제로는 파일 메타데이터에서 추출)
+                // 임시로 랜덤한 시간 생성
+                const randomMinutes = Math.floor(Math.random() * 60) + 10; // 10-70분
+                const randomSeconds = Math.floor(Math.random() * 60);
+                const endTime = `${String(Math.floor(randomMinutes / 60)).padStart(2, '0')}:${String(randomMinutes % 60).padStart(2, '0')}:${String(randomSeconds).padStart(2, '0')}`;
+                
+                document.getElementById('fullStartTime').value = '00:00:00';
+                document.getElementById('fullEndTime').value = endTime;
+            }
+        }
+        
+        function removeNewFile() {
+            document.getElementById('newFileInput').value = '';
+            document.getElementById('newFileName').textContent = '';
+            document.getElementById('newFileSize').textContent = '';
+            document.querySelector('#projectAddModal .file-upload-content').style.display = 'flex';
+            document.getElementById('newFilePreview').style.display = 'none';
+        }
+        
+        function toggleSectionInputs() {
+            const sectionInputs = document.getElementById('sectionInputs');
+            const fullSectionDisplay = document.getElementById('fullSectionDisplay');
+            const partialRadio = document.querySelector('input[name="sectionType"][value="partial"]');
+            
+            if (partialRadio.checked) {
+                sectionInputs.style.display = 'block';
+                fullSectionDisplay.style.display = 'none';
+            } else {
+                sectionInputs.style.display = 'none';
+                fullSectionDisplay.style.display = 'block';
+            }
+        }
+        
+        function addSection() {
+            const sectionList = document.getElementById('sectionList');
+            
+            const sectionRow = document.createElement('div');
+            sectionRow.className = 'section-row';
+            sectionRow.style.cssText = 'display: flex; align-items: center; gap: 10px; margin-bottom: 8px;';
+            sectionRow.innerHTML = `
+                <input type="text" placeholder="00:00:00" style="flex: 1; text-align: center;" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
+                <span>~</span>
+                <input type="text" placeholder="00:30:00" style="flex: 1; text-align: center;" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
+                <button type="button" onclick="removeSection(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
+            `;
+            
+            sectionList.appendChild(sectionRow);
+        }
+        
+        function removeSection(button) {
+            const sectionRow = button.parentElement;
+            const sectionList = document.getElementById('sectionList');
+            
+            // 최소 1개는 유지
+            if (sectionList.children.length > 1) {
+                sectionRow.remove();
+            } else {
+                alert('최소 1개의 구간은 필요합니다.');
+            }
+        }
+        
+        function addSpeaker() {
+            const speakerInputs = document.getElementById('speakerInputs');
+            const speakerCount = speakerInputs.children.length + 1;
+            
+            const speakerRow = document.createElement('div');
+            speakerRow.className = 'speaker-row';
+            speakerRow.style.cssText = 'display: flex; gap: 10px; margin-bottom: 8px; align-items: center;';
+            speakerRow.innerHTML = `
+                <input type="text" placeholder="화자${speakerCount} 이름" style="flex: 0.5;">
+                <input type="text" placeholder="목소리 특징" style="flex: 1.5;">
+                <button type="button" onclick="removeSpeaker(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
+            `;
+            
+            speakerInputs.appendChild(speakerRow);
+        }
+        
+        function removeSpeaker(button) {
+            const speakerRow = button.parentElement;
+            const speakerInputs = document.getElementById('speakerInputs');
+            
+            // 최소 1개는 유지
+            if (speakerInputs.children.length > 1) {
+                speakerRow.remove();
+                
+                // 화자 번호 재정렬
+                const rows = speakerInputs.querySelectorAll('.speaker-row');
+                rows.forEach((row, index) => {
+                    const nameInput = row.querySelector('input[type="text"]');
+                    if (nameInput && nameInput.placeholder.includes('화자')) {
+                        nameInput.placeholder = `화자${index + 1} 이름`;
+                    }
+                });
+            } else {
+                alert('최소 1명의 화자는 필요합니다.');
+            }
+        }
+        
+        function addNewProject() {
+            console.log('addNewProject 함수 호출됨');
+            
+            // 입력된 값들 가져오기
+            const inputTitle = document.getElementById('projectTitle').value.trim();
+            const selectedCompany = document.getElementById('companySelect').value;
+            const inputClientName = document.getElementById('clientName').value.trim();
+            
+            console.log('입력된 데이터:', { inputTitle, selectedCompany, inputClientName });
+            
+            // 필수 항목 검증
+            if (!inputTitle) {
+                alert('프로젝트 제목을 입력해주세요.');
+                document.getElementById('projectTitle').focus();
+                return;
+            }
+            
+            if (!selectedCompany) {
+                alert('업체명을 선택해주세요.');
+                document.getElementById('companySelect').focus();
+                return;
+            }
+            
+            if (!inputClientName) {
+                alert('의뢰자명을 입력해주세요.');
+                document.getElementById('clientName').focus();
+                return;
+            }
+            
+            // 시연용 임의 데이터 생성 (재생시간만)
+            const sampleDurations = ['00:25:30', '00:45:15', '01:12:45', '00:38:20', '00:52:10'];
+            const randomIndex = Math.floor(Math.random() * sampleDurations.length);
+            
+            // 사용자 입력 데이터 사용
+            const companyName = selectedCompany;
+            const clientName = inputClientName;
+            const title = inputTitle;
+            const duration = sampleDurations[randomIndex];
+            
+            // 새 주문번호 생성 (기존 형식에 맞춤: YYYYMMDDHHMMSS)
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            const orderNumber = `${year}${month}${day}${hours}${minutes}${seconds}`;
+            
+            // 오늘 날짜와 시간 (기존 형식에 맞춤: YYYY-MM-DD HH:MM)
+            const today = `${year}-${month}-${day} ${hours}:${minutes}`;
+            
+            // 테이블에 새 행 추가
+            console.log('테이블에 추가할 데이터:', {
+                orderNumber: orderNumber,
+                companyName: companyName,
+                title: title,
+                duration: duration,
+                requestDate: today,
+                status: '미배정'
+            });
+            
+            addProjectToTable({
+                orderNumber: orderNumber,
+                companyName: companyName,
+                clientName: clientName,
+                title: title,
+                duration: duration,
+                requestDate: today,
+                status: '미배정'
+            });
+            
+            // 모달 닫기
+            closeProjectAddModal();
+            
+            alert('새 프로젝트가 성공적으로 추가되었습니다.');
+        }
+        
+        // 다건 프로젝트 추가 페이지 열기
+        function openBulkProjectAdd() {
+            try {
+                // 새 창에서 다건 프로젝트 추가 페이지 전체화면으로 열기
+                const bulkAddUrl = 'meeting-bulk-project-add.html';
+                
+                // 화면 크기 가져오기
+                const screenWidth = screen.availWidth;
+                const screenHeight = screen.availHeight;
+                
+                // 전체화면 설정
+                const windowFeatures = `width=${screenWidth},height=${screenHeight},left=0,top=0,scrollbars=yes,resizable=yes,status=yes,toolbar=no,menubar=no,location=no`;
+                const newWindow = window.open(bulkAddUrl, 'bulkProjectAdd', windowFeatures);
+                
+                if (newWindow) {
+                    newWindow.focus();
+                    // 최대화 시도 (브라우저에 따라 지원 여부가 다름)
+                    try {
+                        newWindow.moveTo(0, 0);
+                        newWindow.resizeTo(screenWidth, screenHeight);
+                    } catch (resizeError) {
+                        console.log('창 크기 조정 제한:', resizeError);
+                    }
+                } else {
+                    // 팝업이 차단된 경우 현재 창에서 열기
+                    window.location.href = bulkAddUrl;
+                }
+            } catch (error) {
+                console.error('다건 프로젝트 추가 페이지 열기 실패:', error);
+                // 오류 발생 시 현재 창에서 열기
+                window.location.href = 'meeting-bulk-project-add.html';
+            }
+        }
+        
+        // 페이지 포커스 시에도 확인 (창 전환 시)
+        window.addEventListener('focus', function() {
+            checkForBulkProjects();
+        });
+        
+        // 웍스파이 중요 프로젝트 필터링 기능
+        function filterWorkspyImportant() {
+            const filterValue = document.getElementById('workspy-filter').value;
+            const tableRows = document.querySelectorAll('tbody tr');
+            
+            console.log('웍스파이 중요 프로젝트 필터:', filterValue);
+            
+            if (filterValue === 'important') {
+                // 미노출: 중요 항목만 표시
+                tableRows.forEach((row, index) => {
+                    // 실제 구현 시에는 서버에서 중요 플래그를 받아와야 함
+                    // 임시로 3번째마다 중요 항목으로 처리
+                    const isImportant = (index + 1) % 3 === 1;
+                    
+                    if (isImportant) {
+                        row.style.display = '';
+                        // 중요 항목 시각적 표시 (배경색 변경)
+                        row.style.backgroundColor = '#fef3c7';
+                        row.style.borderLeft = '4px solid #f59e0b';
+                    } else {
+                        row.style.display = 'none';
+                    }
+                });
+                
+                alert('웍스파이 중요 프로젝트만 표시됩니다.');
+            } else {
+                // 선택 또는 노출: 모든 항목 표시
+                tableRows.forEach(row => {
+                    row.style.display = '';
+                    row.style.backgroundColor = '';
+                    row.style.borderLeft = '';
+                });
+                
+                console.log('모든 작업 표시');
+            }
+        }
+        
+        function addProjectToTable(projectData) {
+            const tbody = document.querySelector('.data-table tbody');
+            if (!tbody) {
+                console.error('테이블 tbody를 찾을 수 없습니다.');
+                return;
+            }
+            
+            // 현재 행 수를 확인하여 새 번호 계산 (상단 삽입이므로 기존 최대값 + 1)
+            const currentRows = tbody.querySelectorAll('tr');
+            const maxNo = Math.max(...Array.from(currentRows).map(row => {
+                const noCell = row.querySelector('td:first-child');
+                return noCell ? parseInt(noCell.textContent) || 0 : 0;
+            }));
+            const newRowNumber = maxNo + 1;
+            
+            // 새 행 생성
+            const newRow = document.createElement('tr');
+            newRow.style.cursor = 'pointer';
+            newRow.onclick = () => openMeetingDetail(newRow);
+            
+            // 상태에 따른 스타일 설정
+            const statusClass = projectData.status === '미배정' ? 'status-pending' : 'status-inprogress';
+            
+            newRow.innerHTML = `
+                <td>${newRowNumber}</td>
+                <td>${projectData.orderNumber}</td>
+                <td>${projectData.title}</td>
+                <td>${projectData.companyName}</td>
+                <td>${projectData.clientName}</td>
+                <td>02-${Math.floor(Math.random() * 9000) + 1000}-${Math.floor(Math.random() * 9000) + 1000}</td>
+                <td>${projectData.requestDate}</td>
+                <td>${projectData.duration}</td>
+                <td>-</td>
+                <td><span class="status-badge ${statusClass}">${projectData.status}</span></td>
+            `;
+            
+            // 테이블 맨 위에 삽입 (첫 번째 행으로)
+            tbody.insertBefore(newRow, tbody.firstChild);
+            
+            console.log(`새 프로젝트 추가됨: No.${newRowNumber}, 제목: ${projectData.title}`);
+        }
+    </script>
+
+    <!-- 프로젝트 추가 모달 -->
+    <div id="projectAddModal" class="modal-overlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div class="modal-container" style="background: white; border-radius: 12px; width: 90%; max-width: 600px; max-height: 90vh; overflow-y: auto; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);">
+            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px 24px; border-bottom: 1px solid #e5e7eb;">
+                <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #374151;">📁 프로젝트 추가</h2>
+                <button class="modal-close" onclick="closeProjectAddModal()" style="background: none; border: none; font-size: 24px; cursor: pointer; color: #6b7280; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: all 0.2s;">&times;</button>
+            </div>
+            
+            <form class="modal-form" id="projectAddForm" style="padding: 24px;">
+                <!-- 제목 입력 -->
+                <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start;">
+                    <div class="form-group full-width" style="display: flex; flex-direction: column; flex: 1 1 100%;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">프로젝트 제목 <span style="color: #ef4444;">*</span></label>
+                        <input type="text" id="projectTitle" placeholder="프로젝트 제목을 입력하세요" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; transition: border-color 0.2s;">
+                    </div>
+                </div>
+                
+                <!-- 업체명 및 의뢰자명 -->
+                <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start;">
+                    <div class="form-group" style="display: flex; flex-direction: column; flex: 1;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">업체명 <span style="color: #ef4444;">*</span></label>
+                        <select id="companySelect" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; background: white; cursor: pointer;">
+                            <option value="">업체를 선택하세요</option>
+                            <option value="서울특별시청">서울특별시청</option>
+                            <option value="부산광역시청">부산광역시청</option>
+                            <option value="인천광역시청">인천광역시청</option>
+                            <option value="교육부">교육부</option>
+                            <option value="보건복지부">보건복지부</option>
+                            <option value="환경부">환경부</option>
+                            <option value="국회사무처">국회사무처</option>
+                            <option value="대법원">대법원</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: flex; flex-direction: column; flex: 1;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">의뢰자명 <span style="color: #ef4444;">*</span></label>
+                        <input type="text" id="clientName" placeholder="의뢰자명을 입력하세요" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; transition: border-color 0.2s;">
+                    </div>
+                </div>
+                
+                <!-- 파일 정보 -->
+                <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start;">
+                    <div class="form-group full-width" style="display: flex; flex-direction: column; flex: 1 1 100%;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">파일 업로드</label>
+                        <div class="file-upload-area" style="height: 80px; display: flex; align-items: center; justify-content: center; border: 2px dashed #d1d5db; border-radius: 8px; padding: 20px; text-align: center; transition: border-color 0.2s; background: #f9fafb;">
+                            <div class="file-upload-content" style="text-align: center;">
+                                <div class="file-upload-icon" style="margin-bottom: 8px; font-size: 24px;">🎵</div>
+                                <div class="file-upload-text">
+                                    <p style="margin: 0; color: #374151; font-size: 14px;">파일을 업로드하세요</p>
+                                </div>
+                            </div>
+                            <div class="file-preview" id="newFilePreview" style="display: none;">
+                                <div id="newFileInfo" style="text-align: center;">
+                                    <div style="font-size: 24px; margin-bottom: 8px;">🎵</div>
+                                    <div id="newFileName" style="font-weight: 500; margin-bottom: 4px;">파일명</div>
+                                    <div id="newFileSize" style="font-size: 12px; color: #6b7280;">파일 크기</div>
+                                </div>
+                                <button type="button" class="file-remove-btn" onclick="removeNewFile()" style="position: absolute; top: -8px; right: -8px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 24px; height: 24px; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center;">✕</button>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 10px;">
+                            <button type="button" class="file-upload-btn" onclick="document.getElementById('newFileInput').click()" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 12px; margin-top: 8px; transition: background-color 0.2s;">파일 선택</button>
+                            <input type="file" id="newFileInput" accept="audio/*" style="display: none;" onchange="handleNewFileUpload(this)">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 편집 정보 -->
+                <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start;">
+                    <div class="form-group" style="display: flex; flex-direction: column; flex: 1;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">녹음일 <span style="color: #ef4444;">*</span></label>
+                        <input type="date" id="recordDate" required style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; transition: border-color 0.2s;">
+                    </div>
+                    <div class="form-group" style="display: flex; flex-direction: column; flex: 1;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">녹음장소</label>
+                        <input type="text" id="recordLocation" placeholder="녹음장소를 입력하세요" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; transition: border-color 0.2s;">
+                    </div>
+                </div>
+                
+                <!-- 구간설정 -->
+                <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start;">
+                    <div class="form-group full-width" style="display: flex; flex-direction: column; flex: 1 1 100%;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">구간설정 <span style="color: #ef4444;">*</span></label>
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 10px;">
+                            <label style="display: flex; align-items: center; gap: 8px; margin: 0;">
+                                <input type="radio" name="sectionType" value="full" checked onchange="toggleSectionInputs()">
+                                전체
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 8px; margin: 0;">
+                                <input type="radio" name="sectionType" value="partial" onchange="toggleSectionInputs()">
+                                부분
+                            </label>
+                        </div>
+                        
+                        <!-- 전체 구간 입력 -->
+                        <div id="fullSectionDisplay">
+                            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                <input type="text" id="fullStartTime" value="00:00:00" readonly style="flex: 1; text-align: center; background: #f9fafb; color: #6b7280; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
+                                <span>~</span>
+                                <input type="text" id="fullEndTime" value="01:00:00" readonly style="flex: 1; text-align: center; background: #f9fafb; color: #6b7280; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;">
+                            </div>
+                        </div>
+                        
+                        <!-- 부분 구간 입력 -->
+                        <div id="sectionInputs" style="display: none;">
+                            <div id="sectionList">
+                                <div class="section-row" style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                                    <input type="text" placeholder="00:00:00" style="flex: 1; text-align: center; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
+                                    <span>~</span>
+                                    <input type="text" placeholder="00:30:00" style="flex: 1; text-align: center; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px;" pattern="[0-9]{2}:[0-9]{2}:[0-9]{2}">
+                                    <button type="button" onclick="removeSection(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
+                                </div>
+                            </div>
+                            <div style="text-align: right; margin-top: 10px;">
+                                <button type="button" onclick="addSection()" style="background: none; border: 1px solid #d1d5db; color: #6b7280; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                    + 구간추가
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 화자정보 -->
+                <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start;">
+                    <div class="form-group full-width" style="display: flex; flex-direction: column; flex: 1 1 100%;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">화자정보</label>
+                        <div id="speakerInputs">
+                            <div class="speaker-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+                                <input type="text" placeholder="화자1 이름" style="flex: 0.5; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                                <input type="text" placeholder="목소리 특징" style="flex: 1.5; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                                <button type="button" onclick="removeSpeaker(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
+                            </div>
+                            <div class="speaker-row" style="display: flex; gap: 10px; margin-bottom: 8px; align-items: center;">
+                                <input type="text" placeholder="화자2 이름" style="flex: 0.5; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                                <input type="text" placeholder="목소리 특징" style="flex: 1.5; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                                <button type="button" onclick="removeSpeaker(this)" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 4px 8px; cursor: pointer;">✕</button>
+                            </div>
+                        </div>
+                        <div style="text-align: right; margin-top: 10px;">
+                            <button type="button" onclick="addSpeaker()" style="background: none; border: 1px solid #d1d5db; color: #6b7280; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px;">
+                                + 대화자 추가
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="modal-footer" style="justify-content: flex-end; display: flex; padding: 15px 25px; border-top: 1px solid #e2e8f0; background: white; flex-shrink: 0; gap: 10px;">
+                    <button type="button" class="btn-secondary" onclick="closeProjectAddModal()" style="background: #6b7280; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; transition: background-color 0.2s;">취소</button>
+                    <button type="button" class="btn-save" onclick="addNewProject()" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background-color 0.2s;">추가</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

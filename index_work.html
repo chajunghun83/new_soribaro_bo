@@ -783,7 +783,8 @@
         // 개인정보수정 페이지 열기
         function openProfileEdit() {
             document.getElementById('profileDropdown').classList.remove('active');
-            alert('작업자 개인정보수정 페이지를 열겠습니다.\n\n향후 구현 예정입니다.');
+            // iframe으로 개인정보수정 페이지 로드
+            loadPage('pages/worker/profile-edit.html');
         }
 
         // 비밀번호 변경 모달 열기

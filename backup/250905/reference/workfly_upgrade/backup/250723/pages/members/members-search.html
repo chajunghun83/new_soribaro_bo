@@ -1,0 +1,1312 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원조회</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">👥 회원조회</h1>
+    
+    <!-- 회원 통계 -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <h3>전체 회원 수</h3>
+            <div class="value">2,156</div>
+        </div>
+        <div class="stat-card">
+            <h3>활성 회원 수</h3>
+            <div class="value">1,845</div>
+        </div>
+        <div class="stat-card">
+            <h3>이번 달 신규 가입자</h3>
+            <div class="value">234</div>
+        </div>
+        <div class="stat-card">
+            <h3>탈퇴 회원 수</h3>
+            <div class="value">67</div>
+        </div>
+    </div>
+
+    <!-- 상세 검색 폼 -->
+    <div class="search-section">
+        <div class="search-grid">
+            <!-- 첫 번째 행 -->
+            <div class="form-group">
+                <label>이름</label>
+                <input type="text" placeholder="이름을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>휴대전화</label>
+                <input type="text" placeholder="휴대전화번호를 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>이메일</label>
+                <input type="email" placeholder="이메일을 입력하세요">
+            </div>
+        </div>
+
+        <div class="search-grid">
+            <!-- 두 번째 행 -->
+            <div class="form-group">
+                <label>성별</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="male">남성</option>
+                    <option value="female">여성</option>
+                </select>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>출생년도</label>
+                    <select>
+                        <option value="">시작년도</option>
+                        <option value="2025">2025년</option>
+                        <option value="2024">2024년</option>
+                        <option value="2023">2023년</option>
+                        <option value="2022">2022년</option>
+                        <option value="2021">2021년</option>
+                        <option value="2020">2020년</option>
+                        <option value="2019">2019년</option>
+                        <option value="2018">2018년</option>
+                        <option value="2017">2017년</option>
+                        <option value="2016">2016년</option>
+                        <option value="2015">2015년</option>
+                        <option value="2014">2014년</option>
+                        <option value="2013">2013년</option>
+                        <option value="2012">2012년</option>
+                        <option value="2011">2011년</option>
+                        <option value="2010">2010년</option>
+                        <option value="2009">2009년</option>
+                        <option value="2008">2008년</option>
+                        <option value="2007">2007년</option>
+                        <option value="2006">2006년</option>
+                        <option value="2005">2005년</option>
+                        <option value="2004">2004년</option>
+                        <option value="2003">2003년</option>
+                        <option value="2002">2002년</option>
+                        <option value="2001">2001년</option>
+                        <option value="2000">2000년</option>
+                        <option value="1999">1999년</option>
+                        <option value="1998">1998년</option>
+                        <option value="1997">1997년</option>
+                        <option value="1996">1996년</option>
+                        <option value="1995">1995년</option>
+                        <option value="1994">1994년</option>
+                        <option value="1993">1993년</option>
+                        <option value="1992">1992년</option>
+                        <option value="1991">1991년</option>
+                        <option value="1990">1990년</option>
+                        <option value="1989">1989년</option>
+                        <option value="1988">1988년</option>
+                        <option value="1987">1987년</option>
+                        <option value="1986">1986년</option>
+                        <option value="1985">1985년</option>
+                        <option value="1984">1984년</option>
+                        <option value="1983">1983년</option>
+                        <option value="1982">1982년</option>
+                        <option value="1981">1981년</option>
+                        <option value="1980">1980년</option>
+                        <option value="1979">1979년</option>
+                        <option value="1978">1978년</option>
+                        <option value="1977">1977년</option>
+                        <option value="1976">1976년</option>
+                        <option value="1975">1975년</option>
+                        <option value="1974">1974년</option>
+                        <option value="1973">1973년</option>
+                        <option value="1972">1972년</option>
+                        <option value="1971">1971년</option>
+                        <option value="1970">1970년</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="visibility: hidden;">종료년도</label>
+                    <select>
+                        <option value="">종료년도</option>
+                        <option value="2025">2025년</option>
+                        <option value="2024">2024년</option>
+                        <option value="2023">2023년</option>
+                        <option value="2022">2022년</option>
+                        <option value="2021">2021년</option>
+                        <option value="2020">2020년</option>
+                        <option value="2019">2019년</option>
+                        <option value="2018">2018년</option>
+                        <option value="2017">2017년</option>
+                        <option value="2016">2016년</option>
+                        <option value="2015">2015년</option>
+                        <option value="2014">2014년</option>
+                        <option value="2013">2013년</option>
+                        <option value="2012">2012년</option>
+                        <option value="2011">2011년</option>
+                        <option value="2010">2010년</option>
+                        <option value="2009">2009년</option>
+                        <option value="2008">2008년</option>
+                        <option value="2007">2007년</option>
+                        <option value="2006">2006년</option>
+                        <option value="2005">2005년</option>
+                        <option value="2004">2004년</option>
+                        <option value="2003">2003년</option>
+                        <option value="2002">2002년</option>
+                        <option value="2001">2001년</option>
+                        <option value="2000">2000년</option>
+                        <option value="1999">1999년</option>
+                        <option value="1998">1998년</option>
+                        <option value="1997">1997년</option>
+                        <option value="1996">1996년</option>
+                        <option value="1995">1995년</option>
+                        <option value="1994">1994년</option>
+                        <option value="1993">1993년</option>
+                        <option value="1992">1992년</option>
+                        <option value="1991">1991년</option>
+                        <option value="1990">1990년</option>
+                        <option value="1989">1989년</option>
+                        <option value="1988">1988년</option>
+                        <option value="1987">1987년</option>
+                        <option value="1986">1986년</option>
+                        <option value="1985">1985년</option>
+                        <option value="1984">1984년</option>
+                        <option value="1983">1983년</option>
+                        <option value="1982">1982년</option>
+                        <option value="1981">1981년</option>
+                        <option value="1980">1980년</option>
+                        <option value="1979">1979년</option>
+                        <option value="1978">1978년</option>
+                        <option value="1977">1977년</option>
+                        <option value="1976">1976년</option>
+                        <option value="1975">1975년</option>
+                        <option value="1974">1974년</option>
+                        <option value="1973">1973년</option>
+                        <option value="1972">1972년</option>
+                        <option value="1971">1971년</option>
+                        <option value="1970">1970년</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label>최종학력</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="below_high">고등학교 미만</option>
+                    <option value="high_school">고등학교 졸업</option>
+                    <option value="college_2_3">대학(2,3년) 졸업</option>
+                    <option value="college_4">대학(4년) 졸업</option>
+                    <option value="remote_univ">원격대학교 졸업</option>
+                    <option value="master">대학원 석사</option>
+                    <option value="doctor">대학원 박사</option>
+                    <option value="overseas">해외졸업(예정)</option>
+                    <option value="other">기타</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-grid">
+            <!-- 세 번째 행 -->
+            <div class="form-group">
+                <label>학교명</label>
+                <input type="text" placeholder="학교명을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>전공명</label>
+                <input type="text" placeholder="전공명을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label>사용기종</label>
+                <select>
+                    <option value="">전체</option>
+                    <option value="sorijava">소리자바</option>
+                    <option value="other_stenotype">기타 속기키보드</option>
+                    <option value="normal_keyboard">일반키보드</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="search-grid">
+            <!-- 네 번째 행 -->
+            <div class="form-row-three">
+                <div class="form-group">
+                    <label>한글속기</label>
+                    <select>
+                        <option value="">전체</option>
+                        <option value="grade_1">1급</option>
+                        <option value="grade_2">2급</option>
+                        <option value="grade_3">3급</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>취득년도</label>
+                    <select>
+                        <option value="">전체</option>
+                        <option value="2025">2025년</option>
+                        <option value="2024">2024년</option>
+                        <option value="2023">2023년</option>
+                        <option value="2022">2022년</option>
+                        <option value="2021">2021년</option>
+                        <option value="2020">2020년</option>
+                        <option value="2019">2019년</option>
+                        <option value="2018">2018년</option>
+                        <option value="2017">2017년</option>
+                        <option value="2016">2016년</option>
+                        <option value="2015">2015년</option>
+                        <option value="2014">2014년</option>
+                        <option value="2013">2013년</option>
+                        <option value="2012">2012년</option>
+                        <option value="2011">2011년</option>
+                        <option value="2010">2010년</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>시험회차</label>
+                    <select>
+                        <option value="">전체</option>
+                        <option value="1">1회</option>
+                        <option value="2">2회</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>주소 (시도)</label>
+                    <select id="sido-select" onchange="updateGugun()">
+                        <option value="">전체</option>
+                        <option value="seoul">서울특별시</option>
+                        <option value="busan">부산광역시</option>
+                        <option value="daegu">대구광역시</option>
+                        <option value="incheon">인천광역시</option>
+                        <option value="gwangju">광주광역시</option>
+                        <option value="daejeon">대전광역시</option>
+                        <option value="ulsan">울산광역시</option>
+                        <option value="sejong">세종특별자치시</option>
+                        <option value="gyeonggi">경기도</option>
+                        <option value="gangwon">강원특별자치도</option>
+                        <option value="chungbuk">충청북도</option>
+                        <option value="chungnam">충청남도</option>
+                        <option value="jeonbuk">전북특별자치도</option>
+                        <option value="jeonnam">전라남도</option>
+                        <option value="gyeongbuk">경상북도</option>
+                        <option value="gyeongnam">경상남도</option>
+                        <option value="jeju">제주특별자치도</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>주소 (시군구)</label>
+                    <select id="gugun-select">
+                        <option value="">시도를 먼저 선택하세요</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- 검색 버튼들 -->
+        <div class="search-buttons">
+            <button class="btn btn-outline">초기화</button>
+            <button class="btn btn-secondary" onclick="toggleAdvancedSearch()">상세조건</button>
+            <button class="btn btn-primary">🔍 검색</button>
+        </div>
+
+        <!-- 상세조건 검색 영역 -->
+        <div id="advanced-search" class="advanced-search-section" style="display: none;">
+            <div style="border-top: 2px solid #e5e7eb; padding-top: 20px; margin-top: 20px;">
+                <h3 style="margin-bottom: 25px; color: #2c3e50; font-size: 1.1rem;">🔍 상세 검색 조건</h3>
+                
+                <!-- 희망근무조건 그룹 -->
+                <div style="background-color: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #374151; font-size: 1rem; font-weight: 600;">💼 희망근무조건</h4>
+                    
+                    <!-- 희망근무방법 -->
+                    <div class="search-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>희망근무방법</label>
+                            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                    <input type="checkbox" value="remote"> 재택
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                    <input type="checkbox" value="business_trip"> 출장가능
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                    <input type="checkbox" value="office"> 출근가능
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                <!-- 희망작업장소 -->
+                <div class="search-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>희망작업장소</label>
+                        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="nationwide"> 전국
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="seoul"> 서울특별시
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="busan"> 부산광역시
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="daegu"> 대구광역시
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="incheon"> 인천광역시
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="gwangju"> 광주광역시
+                            </label>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="daejeon"> 대전광역시
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="ulsan"> 울산광역시
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="sejong"> 세종특별자치시
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="gyeonggi"> 경기도
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="gangwon"> 강원도
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="chungbuk"> 충청북도
+                            </label>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="chungnam"> 충청남도
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="jeonbuk"> 전라북도
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="jeonnam"> 전라남도
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="gyeongbuk"> 경상북도
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="gyeongnam"> 경상남도
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="jeju"> 제주특별자치도
+                            </label>
+                        </div>
+                        <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 10px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="overseas"> 해외
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 희망작업기간 -->
+                <div class="search-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>희망작업기간</label>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="period_any"> 기간무관
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="one_day"> 하루(1일)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="one_week"> 일주일 이하
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="under_month"> 1개월 미만
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="over_month"> 1개월 이상
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 희망작업요일 -->
+                <div class="search-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>희망작업요일</label>
+                        <div style="display: grid; grid-template-columns: repeat(8, 1fr); gap: 10px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="day_any"> 요일무관
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="monday"> 월요일
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="tuesday"> 화요일
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="wednesday"> 수요일
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="thursday"> 목요일
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="friday"> 금요일
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="saturday"> 토요일
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="sunday"> 일요일
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 희망작업시간 -->
+                <div class="search-grid">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>희망작업시간</label>
+                        <div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 15px; margin-top: 8px;">
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="time_any"> 시간무관
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="morning_06_12"> 오전(06:00~12:00)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="afternoon_12_18"> 오후(12:00~18:00)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="evening_18_23"> 저녁(18:00~23:00)
+                            </label>
+                            <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                <input type="checkbox" value="night_00_06"> 새벽(00:00~06:00)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                    <!-- 속기사 희망직무, 프리랜서 희망직무 -->
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 0;">
+                        <div class="form-group">
+                            <label>속기사 희망직무</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="stenographer">속기사</option>
+                                <option value="transcriber">전사사</option>
+                                <option value="editor">편집자</option>
+                                <option value="translator">번역사</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>프리랜서 희망직무</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="freelance_stenographer">프리랜서 속기사</option>
+                                <option value="freelance_transcriber">프리랜서 전사사</option>
+                                <option value="freelance_editor">프리랜서 편집자</option>
+                                <option value="freelance_translator">프리랜서 번역사</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 프로젝트 그룹 -->
+                <div style="background-color: #fefcf3; border: 1px solid #fbbf24; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #92400e; font-size: 1rem; font-weight: 600;">📋 프로젝트</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                        <div class="form-group">
+                            <label>프로젝트명</label>
+                            <input type="text" placeholder="프로젝트명을 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>프로젝트 종류</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="transcription_project">녹취 프로젝트</option>
+                                <option value="meeting_project">회의록 프로젝트</option>
+                                <option value="translation_project">번역 프로젝트</option>
+                                <option value="editing_project">편집 프로젝트</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>프로젝트 건수</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="1_3">1-3개</option>
+                                <option value="4_10">4-10개</option>
+                                <option value="11_50">11-50개</option>
+                                <option value="50_plus">50개 이상</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>프로젝트 총 시간</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="under_10">10시간 미만</option>
+                                <option value="10_50">10-50시간</option>
+                                <option value="50_100">50-100시간</option>
+                                <option value="over_100">100시간 이상</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 경력 그룹 -->
+                <div style="background-color: #f0f9ff; border: 1px solid #38bdf8; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #0369a1; font-size: 1rem; font-weight: 600;">💼 경력사항</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 15px;">
+                        <div class="form-group">
+                            <label>[속기경력]근무서</label>
+                            <input type="text" placeholder="[속기경력]근무서를 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>[속기경력]고용형태</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="full_time">정규직</option>
+                                <option value="part_time">계약직</option>
+                                <option value="freelance">프리랜서</option>
+                                <option value="intern">인턴</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>[속기경력]근무기간</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="under_1year">1년 미만</option>
+                                <option value="1_3years">1-3년</option>
+                                <option value="3_5years">3-5년</option>
+                                <option value="over_5years">5년 이상</option>
+                            </select>
+                        </div>
+                        <div></div>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                        <div class="form-group">
+                            <label>[일반경력]근무서</label>
+                            <input type="text" placeholder="[일반경력]근무서를 입력하세요">
+                        </div>
+                        <div class="form-group">
+                            <label>[일반경력]직급</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="junior">주임</option>
+                                <option value="senior">대리</option>
+                                <option value="manager">과장</option>
+                                <option value="director">부장</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>[일반경력]직책</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="team_leader">팀장</option>
+                                <option value="team_member">팀원</option>
+                                <option value="project_manager">프로젝트 매니저</option>
+                                <option value="coordinator">코디네이터</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>봉사 활동 유무</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="yes">있음</option>
+                                <option value="no">없음</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 교육/자격증 그룹 -->
+                <div style="background-color: #fdf4ff; border: 1px solid #c084fc; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #7c3aed; font-size: 1rem; font-weight: 600;">🎓 교육/자격증</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                        <div class="form-group">
+                            <label>교육명</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="basic_training">기초 교육</option>
+                                <option value="advanced_training">심화 교육</option>
+                                <option value="professional_training">전문가 교육</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>[협회]자격증</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="completed">이수완료</option>
+                                <option value="in_progress">진행중</option>
+                                <option value="not_started">미시작</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label style="visibility: hidden;">급수</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="grade_1">1급</option>
+                                <option value="grade_2">2급</option>
+                                <option value="grade_3">3급</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>[일반]자격증</label>
+                            <input type="text" placeholder="[일반]자격증을 입력하세요">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 어학 그룹 -->
+                <div style="background-color: #f0fdfa; border: 1px solid #34d399; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #047857; font-size: 1rem; font-weight: 600;">🌏 어학능력</h4>
+                    
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;">
+                        <div class="form-group">
+                            <label>어학 능력</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="korean">한글</option>
+                                <option value="english">영어</option>
+                                <option value="japanese">일어</option>
+                                <option value="chinese">중국어</option>
+                                <option value="french">프랑스어</option>
+                                <option value="german">독일어</option>
+                                <option value="spanish">스페인어</option>
+                                <option value="russian">러시아어</option>
+                                <option value="other">기타</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>단계</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="high">상</option>
+                                <option value="middle">중</option>
+                                <option value="low">하</option>
+                            </select>
+                        </div>
+                        <div></div>
+                        <div></div>
+                    </div>
+                </div>
+
+                <!-- 기타조건 그룹 -->
+                <div style="background-color: #fef2f2; border: 1px solid #f87171; border-radius: 8px; padding: 20px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 15px; color: #dc2626; font-size: 1rem; font-weight: 600;">⚡ 기타조건</h4>
+                    
+                    <div class="search-grid">
+                        <div class="form-group" style="grid-column: 1 / -1;">
+                            <label>취업우대조건</label>
+                            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-top: 8px;">
+                                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                    <input type="checkbox" value="disability"> 장애
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                    <input type="checkbox" value="veteran"> 보훈대상
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                    <input type="checkbox" value="pregnancy_childcare"> 임신/육아
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 5px; font-weight: normal;">
+                                    <input type="checkbox" value="multicultural"> 다문화가정
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="search-grid" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label>병역</label>
+                            <select>
+                                <option value="">전체</option>
+                                <option value="completed">완료</option>
+                                <option value="exempt">면제</option>
+                                <option value="in_progress">복무중</option>
+                                <option value="not_applicable">해당없음</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 회원 목록 테이블 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>👥 총 2,156건</span>
+                    <select id="columnSelect" style="padding: 5px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+                        <option value="">컬럼선택</option>
+                        <option value="name" class="selected-column">✓ 이름</option>
+                        <option value="gender" class="selected-column">✓ 성별</option>
+                        <option value="email" class="selected-column">✓ 이메일</option>
+                        <option value="phone" class="selected-column">✓ 휴대전화</option>
+                        <option value="birth" class="selected-column">✓ 생년월일</option>
+                        <option value="address" class="selected-column">✓ 주소</option>
+                        <option value="device" class="selected-column">✓ 사용기종</option>
+                        <option value="korean-assoc">한국AI속기사협회</option>
+                        <option value="worker-grade">작업자등급</option>
+                        <option value="unemployment">실업인증부</option>
+                        <option value="reregister">재차등록부</option>
+                        <option value="stenography">속기사등급</option>
+                        <option value="education">최종학력</option>
+                        <option value="additional-info">추가정보작성여부</option>
+                        <option value="marketing">마케팅수신동의여부</option>
+                    </select>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 40px;"><input type="checkbox" id="selectAll"></th>
+                    <th>이름</th>
+                    <th>성별</th>
+                    <th>이메일</th>
+                    <th>휴대전화</th>
+                    <th>생년월일</th>
+                    <th>주소</th>
+                    <th>사용기종</th>
+                    <th style="display: none;">한국AI속기사협회</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>고은</td>
+                    <td>여성</td>
+                    <td>eunoiaxoxoxo@gmail.com</td>
+                    <td>010-9**0-2016</td>
+                    <td>1982.**.05</td>
+                    <td>서울특별시 강남구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>심성경</td>
+                    <td>여성</td>
+                    <td>bible1111@naver.com</td>
+                    <td>010-3**6-5154</td>
+                    <td>1983.**.28</td>
+                    <td>경기도 시흥시</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">비회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>신아인</td>
+                    <td>여성</td>
+                    <td>hevrk@naver.com</td>
+                    <td>010-6**0-0504</td>
+                    <td>1993.**.04</td>
+                    <td>서울특별시 마포구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>김희진</td>
+                    <td>여성</td>
+                    <td>hhhhhhhhhhjjj2929@gmail.com</td>
+                    <td>010-2**4-1732</td>
+                    <td>1994.**.29</td>
+                    <td>강원도 삼척시</td>
+                    <td>일반키보드</td>
+                    <td style="display: none;">비회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>박은정</td>
+                    <td>여성</td>
+                    <td>pej59@naver.com</td>
+                    <td>010-9**5-2452</td>
+                    <td>1996.**.09</td>
+                    <td>서울특별시 송파구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>안도영</td>
+                    <td>여성</td>
+                    <td>ankh0309@naver.com</td>
+                    <td>010-7**6-1198</td>
+                    <td>1988.**.09</td>
+                    <td>서울특별시 금천구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>한진희</td>
+                    <td>여성</td>
+                    <td>jinhee@timbel.net</td>
+                    <td>010-4**8-9319</td>
+                    <td>1998.**.14</td>
+                    <td>인천광역시 서구</td>
+                    <td>일반키보드</td>
+                    <td style="display: none;">비회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>김다미</td>
+                    <td>여성</td>
+                    <td>ekal1228@naver.com</td>
+                    <td>010-7**4-3890</td>
+                    <td>1990.**.28</td>
+                    <td>서울특별시 중구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>윤한배</td>
+                    <td>남성</td>
+                    <td>hydracobra@naver.com</td>
+                    <td>010-6**0-5763</td>
+                    <td>1989.**.22</td>
+                    <td>부산광역시 사하구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">비회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>김경표</td>
+                    <td>여성</td>
+                    <td>kkp0336@naver.com</td>
+                    <td>010-7**1-0336</td>
+                    <td>1990.**.23</td>
+                    <td>서울특별시 성북구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>전상희</td>
+                    <td>여성</td>
+                    <td>episode.hee@gmail.com</td>
+                    <td>010-2**1-6733</td>
+                    <td>1991.**.27</td>
+                    <td>서울특별시 양천구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">비회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>이미래</td>
+                    <td>여성</td>
+                    <td>future2024@naver.com</td>
+                    <td>010-5**7-2341</td>
+                    <td>1987.**.15</td>
+                    <td>경기도 수원시</td>
+                    <td>기타 속기키보드</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>정수민</td>
+                    <td>여성</td>
+                    <td>sumin.jung@gmail.com</td>
+                    <td>010-8**3-4567</td>
+                    <td>1985.**.08</td>
+                    <td>대전광역시 서구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>최준혁</td>
+                    <td>남성</td>
+                    <td>junhyuk.choi@naver.com</td>
+                    <td>010-3**9-1234</td>
+                    <td>1992.**.03</td>
+                    <td>광주광역시 북구</td>
+                    <td>일반키보드</td>
+                    <td style="display: none;">비회원</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox" class="row-checkbox"></td>
+                    <td>강은영</td>
+                    <td>여성</td>
+                    <td>eonyoung.kang@gmail.com</td>
+                    <td>010-1**2-5678</td>
+                    <td>1995.**.12</td>
+                    <td>울산광역시 남구</td>
+                    <td>소리자바</td>
+                    <td style="display: none;">정회원</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">144</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+            <div style="margin-left: 20px; display: flex; align-items: center; gap: 5px;">
+                <span style="font-size: 13px;">페이지당</span>
+                <select style="padding: 3px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+                    <option>15</option>
+                    <option>30</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <span style="font-size: 13px;">개씩 보기</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 회원 상세정보 팝업 -->
+    <div id="memberDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="position: relative; width: 90%; max-width: 1000px; height: 85%; margin: 7.5% auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;">
+            <!-- 팝업 헤더 -->
+            <div style="background: #4f46e5; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb;">
+                <h2 style="margin: 0; font-size: 1.4rem; font-weight: 600;">회원 상세정보</h2>
+                <button onclick="closeMemberDetail()" style="background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">×</button>
+            </div>
+
+            <!-- 팝업 본문 -->
+            <div style="height: calc(100% - 80px); overflow-y: auto; padding: 30px;">
+                <!-- 첫 번째 행: 회원상세 + 기본정보 -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; border-bottom: 1px solid #e5e7eb; padding-bottom: 30px;">
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">회원상세</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">이름</span>
+                            <span id="detail-name" style="color: #374151;">정선영</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">휴대전화</span>
+                            <span id="detail-phone" style="color: #374151;">010-5318-0290</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">주소</span>
+                            <span id="detail-address" style="color: #374151;">서울특별시 강남구</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">사용기종</span>
+                            <span id="detail-device" style="color: #374151;">소리자바</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">협회</span>
+                            <span id="detail-association" style="color: #374151;">정회원</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">쿠폰정보</span>
+                            <span id="detail-coupon" style="color: #374151;">2H30-5H4A-6E7F</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">기본정보</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">성별</span>
+                            <span id="detail-gender" style="color: #374151;">여성</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">생년월일</span>
+                            <span id="detail-birth" style="color: #374151;">1983.01.17</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">이메일</span>
+                            <span id="detail-email" style="color: #374151;">ssun3083@naver.com</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">최종학력</span>
+                            <span id="detail-education" style="color: #374151;">대학(2,3년) 졸업</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">학교명</span>
+                            <span id="detail-school" style="color: #374151;">서울여자대학교</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">전공명</span>
+                            <span id="detail-major" style="color: #374151;">국어국문학과</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">한글속기</span>
+                            <span id="detail-korean-stenography" style="color: #374151;">2급</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">취득년도</span>
+                            <span id="detail-acquisition-year" style="color: #374151;">2020년</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">시험회차</span>
+                            <span id="detail-exam-round" style="color: #374151;">1회</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">마케팅동의</span>
+                            <span id="detail-marketing" style="color: #374151;">Y</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">버디 사용 여부</span>
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <label style="display: flex; align-items: center; gap: 5px; cursor: pointer;">
+                                    <input type="checkbox" id="detail-body-usage" checked style="width: 16px; height: 16px;">
+                                    <span style="color: #374151; font-size: 14px;">Y</span>
+                                </label>
+                                <button onclick="saveBuddyStatus()" style="background: #3b82f6; color: white; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500;">
+                                    상태저장
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 두 번째 행: 희망작업조건 + 교육/자격증 -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; border-bottom: 1px solid #e5e7eb; padding-bottom: 30px;">
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">희망작업조건</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">근무방법</span>
+                            <span id="detail-work-method" style="color: #374151;">재택, 출장가능, 출근가능</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">작업장소</span>
+                            <span id="detail-work-location" style="color: #374151;">전국</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">작업기간</span>
+                            <span id="detail-work-period" style="color: #374151;">기간무관</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">작업요일</span>
+                            <span id="detail-work-days" style="color: #374151;">요일무관</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">작업시간</span>
+                            <span id="detail-work-time" style="color: #374151;">시간무관</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">희망직무</span>
+                            <span id="detail-job" style="color: #374151;">속기사, 프리랜서 속기사</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">교육/자격증</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">교육명</span>
+                            <span id="detail-education-name" style="color: #374151;">기초 교육</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">협회자격증</span>
+                            <span id="detail-association-cert" style="color: #374151;">이수완료</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">급수</span>
+                            <span id="detail-grade" style="color: #374151;">2급</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">일반자격증</span>
+                            <span id="detail-general-cert" style="color: #374151;">컴활 2급</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 세 번째 행: 프로젝트 + 어학능력 -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; border-bottom: 1px solid #e5e7eb; padding-bottom: 30px;">
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">프로젝트</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">프로젝트명</span>
+                            <span id="detail-project-name" style="color: #374151;">-</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">종류</span>
+                            <span id="detail-project-type" style="color: #374151;">녹취 프로젝트</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">건수</span>
+                            <span id="detail-project-count" style="color: #374151;">4-10개</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">총 시간</span>
+                            <span id="detail-project-hours" style="color: #374151;">50-100시간</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">어학능력</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">어학능력</span>
+                            <span id="detail-language" style="color: #374151;">영어</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">단계</span>
+                            <span id="detail-language-level" style="color: #374151;">중</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 네 번째 행: 경력사항 + 기타조건 -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; border-bottom: 1px solid #e5e7eb; padding-bottom: 30px;">
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">경력사항</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">속기근무서</span>
+                            <span id="detail-stenography-workplace" style="color: #374151;">서울지방법원</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">속기고용형태</span>
+                            <span id="detail-stenography-employment" style="color: #374151;">정규직</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">속기근무기간</span>
+                            <span id="detail-stenography-period" style="color: #374151;">3-5년</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">일반근무서</span>
+                            <span id="detail-general-workplace" style="color: #374151;">-</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">일반직급</span>
+                            <span id="detail-general-position" style="color: #374151;">-</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">일반직책</span>
+                            <span id="detail-general-role" style="color: #374151;">-</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">봉사활동</span>
+                            <span id="detail-volunteer" style="color: #374151;">있음</span>
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">기타조건</h3>
+                        <div style="display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center;">
+                            <span style="font-weight: 500; color: #6b7280;">우대조건</span>
+                            <span id="detail-employment-preference" style="color: #374151;">-</span>
+                            
+                            <span style="font-weight: 500; color: #6b7280;">병역</span>
+                            <span id="detail-military" style="color: #374151;">해당없음</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 다섯 번째 행: 기타사항 + 관리자메모 -->
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">기타사항</h3>
+                        <div style="background: #f3f4f6; border: 1px solid #d1d5db; border-radius: 6px; height: 200px; padding: 15px;">
+                            <!-- 기타사항 내용이 들어갈 공간 -->
+                        </div>
+                    </div>
+                    <div>
+                        <h3 style="margin: 0 0 15px 0; color: #1f2937; font-size: 1.1rem; font-weight: 600; padding-bottom: 8px; border-bottom: 2px solid #4f46e5;">관리자메모</h3>
+                        <div style="position: relative;">
+                            <textarea id="admin-memo" placeholder="관리자 메모를 입력하세요..." style="width: 100%; height: 200px; padding: 15px; border: 1px solid #d1d5db; border-radius: 6px; resize: vertical; font-family: inherit; font-size: 14px; line-height: 1.5; box-sizing: border-box;"></textarea>
+                            <button onclick="saveAdminMemo()" style="position: absolute; bottom: 10px; right: 10px; background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                관리자메모 저장
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../scripts/common.js"></script>
+    <script>
+        // 회원 상세정보 팝업 열기
+        function openMemberDetail(memberData) {
+            // 실제 데이터로 팝업 내용 업데이트
+            if (memberData) {
+                document.getElementById('detail-name').textContent = memberData.name || '정선영';
+                document.getElementById('detail-phone').textContent = memberData.phone || '010-5318-0290';
+                document.getElementById('detail-address').textContent = memberData.address || '서울특별시 강남구';
+                document.getElementById('detail-device').textContent = memberData.device || '소리자바';
+                document.getElementById('detail-gender').textContent = memberData.gender || '여성';  
+                document.getElementById('detail-birth').textContent = memberData.birth || '1983.01.17';
+                document.getElementById('detail-email').textContent = memberData.email || 'ssun3083@naver.com';
+                
+                // 버디 사용 체크박스 상태 설정
+                const buddyStatus = memberData.buddyUsage || 'Y';
+                const checkbox = document.getElementById('detail-body-usage');
+                const statusText = checkbox.nextElementSibling;
+                checkbox.checked = buddyStatus === 'Y';
+                statusText.textContent = buddyStatus;
+                
+                // 관리자 메모 로드
+                const adminMemo = memberData.adminMemo || '';
+                document.getElementById('admin-memo').value = adminMemo;
+            }
+            
+            document.getElementById('memberDetailModal').style.display = 'block';
+            document.body.style.overflow = 'hidden'; // 배경 스크롤 방지
+        }
+
+        // 회원 상세정보 팝업 닫기
+        function closeMemberDetail() {
+            document.getElementById('memberDetailModal').style.display = 'none';
+            document.body.style.overflow = 'auto'; // 배경 스크롤 복원
+        }
+
+        // 테이블 행 클릭 시 상세 팝업 열기
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('click', function(e) {
+                    // 체크박스 클릭이 아닌 경우에만 팝업 열기
+                    if (!e.target.matches('input[type="checkbox"]')) {
+                        const cells = this.cells;
+                        const memberData = {
+                            name: cells[1].textContent,
+                            gender: cells[2].textContent,
+                            email: cells[3].textContent,
+                            phone: cells[4].textContent,
+                            birth: cells[5].textContent,
+                            address: cells[6].textContent,
+                            device: cells[7].textContent
+                        };
+                        openMemberDetail(memberData);
+                    }
+                });
+                
+                // 행에 hover 효과 추가
+                row.style.cursor = 'pointer';
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f0f9ff';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+
+        // ESC 키로 팝업 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeMemberDetail();
+            }
+        });
+
+        // 팝업 배경 클릭 시 닫기
+        document.getElementById('memberDetailModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeMemberDetail();
+            }
+        });
+
+        // 버디 사용 상태 저장
+        function saveBuddyStatus() {
+            const checkbox = document.getElementById('detail-body-usage');
+            const status = checkbox.checked ? 'Y' : 'N';
+            const statusText = checkbox.nextElementSibling;
+            
+            // 상태 텍스트 업데이트
+            statusText.textContent = status;
+            
+            // 저장 성공 메시지 (실제로는 서버로 데이터 전송)
+            alert('버디 사용 상태가 저장되었습니다: ' + status);
+            
+            // 실제 구현 시에는 여기서 서버로 AJAX 요청을 보냅니다
+            // fetch('/api/members/update-buddy-status', { method: 'POST', body: JSON.stringify({ status }) })
+        }
+
+        // 관리자 메모 저장
+        function saveAdminMemo() {
+            const textarea = document.getElementById('admin-memo');
+            const memo = textarea.value.trim();
+            
+            if (memo === '') {
+                alert('메모 내용을 입력해주세요.');
+                return;
+            }
+            
+            // 저장 성공 메시지 (실제로는 서버로 데이터 전송)
+            alert('관리자 메모가 저장되었습니다.');
+            
+            // 실제 구현 시에는 여기서 서버로 AJAX 요청을 보냅니다
+            // fetch('/api/members/update-admin-memo', { 
+            //     method: 'POST', 
+            //     headers: { 'Content-Type': 'application/json' },
+            //     body: JSON.stringify({ memo: memo, memberId: currentMemberId }) 
+            // })
+        }
+    </script>
+</body>
+</html> 

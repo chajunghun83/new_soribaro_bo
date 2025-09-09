@@ -562,7 +562,7 @@
             <div class="form-group">
                 <label>웍스파이 중요 프로젝트</label>
                 <select id="workspy-filter" onchange="filterWorkspyImportant()">
-                    <option value="">선택</option>
+                    <option value="">전체</option>
                     <option value="all">노출</option>
                     <option value="important">미노출</option>
                 </select>
@@ -582,7 +582,7 @@
                 <select id="progress-status-select">
                     <option value="">전체</option>
                     <option value="received">접수</option>
-                    <option value="draft">초안</option>
+                    <option value="draft">초안완성</option>
                     <option value="working">작업중</option>
                     <option value="review">검토</option>
                     <option value="completed">완료</option>
@@ -592,10 +592,11 @@
                 <label>선택</label>
                 <div class="text-search-group">
                     <select id="search-type">
+                        <option value="">전체</option>
                         <option value="order">주문번호</option>
                         <option value="title">의뢰명</option>
-                        <option value="client">의뢰자명</option>
-                        <option value="contact">연락처</option>
+                        <option value="subtitle">서브타이틀</option>
+                        <option value="editor">편집자</option>
                     </select>
                     <input type="text" id="search-text" placeholder="검색어를 입력하세요">
                 </div>

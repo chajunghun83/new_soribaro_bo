@@ -3126,11 +3126,11 @@
         }
 
         function handleCustomerFileSelection(checkbox) {
-            const fileName = checkbox.nextElementSibling.textContent;
-            if (checkbox.checked) {
-                // 파일 선택 시 즉시 다운로드
-                downloadCustomerFile(fileName);
-            }
+            // 체크박스 선택만 처리, 다운로드 알림 제거
+            // const fileName = checkbox.nextElementSibling.textContent;
+            // if (checkbox.checked) {
+            //     downloadCustomerFile(fileName);
+            // }
         }
 
         function downloadAllCustomerFiles() {

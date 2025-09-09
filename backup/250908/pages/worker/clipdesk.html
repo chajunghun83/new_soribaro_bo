@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클립데스크 작업 - 소리바로 작업자</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+        
+        .search-grid-unified {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            align-items: end;
+            margin-bottom: 15px;
+        }
+        
+        .date-range-group {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+        }
+        
+        .date-range-group .form-group {
+            flex: 1;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 13px;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .search-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+            align-items: end;
+        }
+        
+        .btn {
+            height: 35px;
+            padding: 0 14px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-sizing: border-box;
+        }
+        
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #219a52;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        /* 테이블 */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1200px;
+        }
+        
+        .data-table thead {
+            background: #f8f9fa;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 16px 12px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            font-weight: 600;
+            color: #374151;
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .data-table td {
+            color: #4b5563;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-received {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-inprogress {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .status-completed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        /* 페이징 */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+        }
+        
+        .btn-outline:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .search-grid-unified {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .search-buttons {
+                justify-content: stretch;
+            }
+            
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">
+        <span>🎬</span>
+        클립데스크 작업
+    </h1>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-grid-unified">
+            <div class="date-range-group">
+                <div class="form-group">
+                    <label for="assign-start-date">배정일 시작일</label>
+                    <input type="date" id="assign-start-date" value="2025-08-01">
+                </div>
+                <div class="form-group">
+                    <label for="assign-end-date">배정일 종료일</label>
+                    <input type="date" id="assign-end-date" value="2025-09-02">
+                </div>
+            </div>
+            <div class="search-buttons">
+                <button class="btn btn-primary" onclick="searchClipdesks()">
+                    <span>🔍</span>
+                    검색
+                </button>
+                <button class="btn btn-success" onclick="downloadExcel()">
+                    <span>📊</span>
+                    엑셀 다운로드
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 테이블 -->
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>배정일</th>
+                        <th>의뢰명</th>
+                        <th>서브타이틀</th>
+                        <th>작업시간</th>
+                        <th>진행상태</th>
+                        <th>제출일</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>8</td>
+                        <td>2025-09-01 18:12:29</td>
+                        <td>기업 홍보영상 제작</td>
+                        <td>2025년 신제품 런칭 홍보영상</td>
+                        <td>04:30:00</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                        <td>2025-09-01 21:30:15</td>
+                    </tr>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>7</td>
+                        <td>2025-09-01 14:25:15</td>
+                        <td>교육 콘텐츠 편집</td>
+                        <td>온라인 강의 영상 편집</td>
+                        <td>02:45:30</td>
+                        <td><span class="status-badge status-inprogress">작업중</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>6</td>
+                        <td>2025-08-31 16:30:45</td>
+                        <td>브랜드 영상 제작</td>
+                        <td>카페 브랜드 스토리 영상</td>
+                        <td>03:15:20</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                        <td>2025-08-31 20:15:30</td>
+                    </tr>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>5</td>
+                        <td>2025-08-31 10:15:30</td>
+                        <td>제품 소개영상</td>
+                        <td>스마트폰 신기능 소개</td>
+                        <td>01:50:15</td>
+                        <td><span class="status-badge status-inprogress">작업중</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>4</td>
+                        <td>2025-08-30 13:45:18</td>
+                        <td>이벤트 영상 편집</td>
+                        <td>여름 세일 이벤트 영상</td>
+                        <td>02:20:40</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                        <td>2025-08-30 18:45:22</td>
+                    </tr>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>3</td>
+                        <td>2025-08-30 09:20:12</td>
+                        <td>유튜브 콘텐츠 편집</td>
+                        <td>브이로그 영상 편집</td>
+                        <td>01:35:30</td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                        <td>-</td>
+                    </tr>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>2</td>
+                        <td>2025-08-29 15:10:25</td>
+                        <td>광고 영상 제작</td>
+                        <td>화장품 광고 영상</td>
+                        <td>03:40:15</td>
+                        <td><span class="status-badge status-completed">완료</span></td>
+                        <td>2025-08-29 17:30:45</td>
+                    </tr>
+                    <tr onclick="openClipDeskDetail(this)">
+                        <td>1</td>
+                        <td>2025-08-29 11:35:08</td>
+                        <td>인터뷰 영상 편집</td>
+                        <td>CEO 인터뷰 영상</td>
+                        <td>02:25:20</td>
+                        <td><span class="status-badge status-inprogress">작업중</span></td>
+                        <td>-</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 페이징 -->
+    <div class="pagination-container">
+        <button class="btn btn-outline btn-sm">첫 페이지</button>
+        <button class="btn btn-outline btn-sm">이전</button>
+        <div style="display: flex; gap: 5px;">
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-outline btn-sm">2</button>
+            <button class="btn btn-outline btn-sm">3</button>
+        </div>
+        <button class="btn btn-outline btn-sm">다음</button>
+        <button class="btn btn-outline btn-sm">마지막 페이지</button>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchClipdesks() {
+            const assignStartDate = document.getElementById('assign-start-date').value;
+            const assignEndDate = document.getElementById('assign-end-date').value;
+            
+            console.log('검색 조건:', {
+                assignStartDate, assignEndDate
+            });
+            
+            alert('클립데스크 작업 검색 기능이 실행되었습니다.\n\n배정일: ' + assignStartDate + ' ~ ' + assignEndDate);
+        }
+        
+        // 엑셀 다운로드 기능
+        function downloadExcel() {
+            const assignStartDate = document.getElementById('assign-start-date').value;
+            const assignEndDate = document.getElementById('assign-end-date').value;
+            
+            console.log('엑셀 다운로드 조건:', {
+                assignStartDate, assignEndDate
+            });
+            
+            alert('클립데스크 작업 목록을 엑셀 파일로 다운로드합니다.\n\n기간: ' + assignStartDate + ' ~ ' + assignEndDate + '\n\n실제 환경에서는 Excel 파일이 다운로드됩니다.');
+        }
+        
+        // 상세 페이지 이동
+        function openClipDeskDetail(row) {
+            const cells = row.cells;
+            const no = cells[0].textContent;
+            const assignDate = cells[1].textContent;
+            const requestTitle = cells[2].textContent;
+            const subTitle = cells[3].textContent;
+            const workTime = cells[4].textContent;
+            const status = cells[5].querySelector('.status-badge').textContent;
+            const submitDate = cells[6].textContent;
+            
+            // URL 파라미터 생성
+            const params = new URLSearchParams({
+                orderNumber: 'CLP-2025-' + no.padStart(3, '0'),
+                requestTitle: requestTitle,
+                subTitle: subTitle,
+                workTime: workTime,
+                status: status,
+                assignDate: assignDate,
+                submitDate: submitDate,
+                clientName: '클립데스크 고객',
+                email: 'customer@clipdesk.com',
+                contact: '010-1234-5678',
+                requestDate: assignDate,
+                totalAmount: '450000'
+            });
+            
+            // 페이지 이동
+            try {
+                // iframe 환경에서 실행 중인지 확인
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    const detailUrl = `pages/worker/clipdesk-detail.html?${params.toString()}`;
+                    window.parent.loadPage(detailUrl);
+                } else {
+                    const detailUrl = `clipdesk-detail.html?${params.toString()}`;
+                    window.location.href = detailUrl;
+                }
+            } catch (error) {
+                // 오류 발생 시 기본적인 페이지 이동 시도
+                window.location.href = `clipdesk-detail.html?${params.toString()}`;
+            }
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모든 테이블 행에 클릭 이벤트 추가
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            tableRows.forEach((row) => {
+                row.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    openClipDeskDetail(this);
+                });
+                
+                // 커서 포인터 스타일 추가
+                row.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>

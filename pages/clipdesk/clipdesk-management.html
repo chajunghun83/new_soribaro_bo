@@ -42,11 +42,11 @@
         }
         
         .search-grid-unified {
-            display: grid;
-            grid-template-columns: 1fr 0.6fr 1fr 0.8fr;
+            display: flex;
             gap: 10px;
             margin-bottom: 15px;
             align-items: end;
+            justify-content: flex-end;
         }
         
         .date-range-group {
@@ -103,7 +103,7 @@
         .search-buttons {
             display: flex;
             gap: 6px;
-            justify-content: flex-start;
+            justify-content: flex-end;
         }
         
         .btn {
@@ -277,6 +277,7 @@
                 <label>선택</label>
                 <div class="text-search-group">
                     <select id="search-type">
+                        <option value="">전체</option>
                         <option value="order">주문번호</option>
                         <option value="title">의뢰명</option>
                         <option value="client">의뢰자명</option>
@@ -311,7 +312,7 @@
                         <th>이메일</th>
                         <th>연락처</th>
                         <th>의뢰일</th>
-                        <th>파일갯수</th>
+                        <th>파일개수</th>
                         <th>금액확정여부</th>
                         <th>진행상태</th>
                     </tr>

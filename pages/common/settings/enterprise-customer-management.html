@@ -55,6 +55,7 @@
             align-items: center;
             gap: 15px;
             flex-wrap: wrap;
+            justify-content: flex-end;
         }
         
         .search-group {
@@ -313,6 +314,7 @@
     <!-- 검색 영역 -->
     <div class="search-section">
         <div class="search-row">
+            <div style="flex: 1;"></div>
             <div class="search-group">
                 <label class="search-label">플랫폼</label>
                 <select id="platformFilter" class="search-select">
@@ -323,12 +325,12 @@
             </div>
             
             <div class="search-group">
-                <label class="search-label">검색 조건</label>
+                <label class="search-label">선택</label>
                 <select id="searchType" class="search-select">
-                    <option value="name">이름</option>
+                    <option value="">전체</option>
                     <option value="id">아이디</option>
-                    <option value="company">기업명칭</option>
-                    <option value="phone">전화번호</option>
+                    <option value="name">이름</option>
+                    <option value="phone">연락처</option>
                 </select>
             </div>
             
@@ -363,12 +365,12 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th width="60">NO.</th>
+                    <th width="60">No.</th>
                     <th width="100">플랫폼</th>
                     <th width="120">아이디</th>
                     <th width="120">이름</th>
                     <th width="200">기업명칭</th>
-                    <th width="150">전화번호</th>
+                    <th width="150">연락처</th>
                     <th width="100">상태</th>
                 </tr>
             </thead>

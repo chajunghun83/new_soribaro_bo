@@ -292,11 +292,12 @@
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">검색 조건</label>
+                <label class="search-label">선택</label>
                 <select id="searchType" class="search-select">
+                    <option value="">전체</option>
                     <option value="userEmail">이메일</option>
                     <option value="userName">이름</option>
-                    <option value="userPhone">전화번호</option>
+                    <option value="userPhone">연락처</option>
                 </select>
                 <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
             </div>
@@ -330,10 +331,10 @@
         <table class="data-table">
             <thead>
                 <tr>
-                    <th width="60">NO.</th>
+                    <th width="60">No.</th>
                     <th width="120">이메일</th>
                     <th width="100">이름</th>
-                    <th width="120">전화번호</th>
+                    <th width="120">연락처</th>
                     <th width="120">포인트구분</th>
                     <th width="120">보유포인트</th>
                     <th width="120">변경포인트</th>
@@ -509,11 +510,12 @@
         
         function getSearchTypeName(searchType) {
             const names = {
+                '': '전체',
                 'userEmail': '이메일',
                 'userName': '이름',
-                'userPhone': '전화번호'
+                'userPhone': '연락처'
             };
-            return names[searchType] || '이메일';
+            return names[searchType] || '전체';
         }
         
         // 상세 페이지 이동

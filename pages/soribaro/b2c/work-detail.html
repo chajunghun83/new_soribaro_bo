@@ -1421,7 +1421,7 @@
                         <span class="info-label">의뢰자명</span>
                         <span id="client-name" class="info-value">황진은</span>
                         
-                        <span class="info-label">전화번호</span>
+                        <span class="info-label">연락처</span>
                         <span id="client-contact" class="info-value">010-4585-3518</span>
                         
                         <span class="info-label">결제타입</span>
@@ -2107,11 +2107,11 @@
 
         // 파일 선택 처리
         function handleFileSelection(checkbox) {
-            const fileName = checkbox.nextElementSibling.textContent;
-            if (checkbox.checked) {
-                // 파일 선택 시 즉시 다운로드
-                downloadFile(fileName);
-            }
+            // 체크박스 선택만 처리, 다운로드 알림 제거
+            // const fileName = checkbox.nextElementSibling.textContent;
+            // if (checkbox.checked) {
+            //     downloadFile(fileName);
+            // }
         }
 
         // 모든 파일 다운로드 기능

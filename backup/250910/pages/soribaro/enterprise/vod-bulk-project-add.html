@@ -504,26 +504,26 @@
             <div>
                 <div class="file-upload-area" onclick="document.getElementById('fileInput').click()" 
                      ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-            <div class="upload-icon">📁</div>
-            <div class="upload-text">파일을 드래그하여 놓거나 클릭하여 선택하세요</div>
-        </div>
-        
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">파일을 드래그하여 놓거나 클릭하여 선택하세요</div>
+                </div>
+                
                 <input type="file" id="fileInput" class="file-input" accept=".xlsx,.xls" onchange="handleFileSelect(event)">
                 
                 <!-- 버튼 영역 -->
                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
                     <button class="file-select-btn" onclick="simulateFileSelect()">
-                <span>📂</span>
-                파일 선택
-            </button>
+                        <span>📂</span>
+                        파일 선택
+                    </button>
                     
                     <button class="register-btn" onclick="simulateRegisterProjects()">
-                <span>✅</span>
-                등록
-            </button>
-        </div>
-    </div>
-    
+                        <span>✅</span>
+                        등록
+                    </button>
+                </div>
+            </div>
+            
             <!-- 오른쪽: 업로드된 파일 리스트 -->
             <div>
                 <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; height: 100%;">
@@ -785,7 +785,7 @@
                             <td class="editable-cell">${project.workEnd}</td>
                             <td class="editable-cell">${project.amount}</td>
                             <td class="editable-cell">${project.content}</td>
-                    </tr>
+                        </tr>
                     `;
                 }).join('');
                 

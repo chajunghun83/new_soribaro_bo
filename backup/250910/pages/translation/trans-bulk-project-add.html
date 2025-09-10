@@ -429,7 +429,7 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📁</span>
-            VOD 다건 프로젝트 추가
+            다건 프로젝트 추가
         </h1>
         <button class="close-button" onclick="closeWindow()">
             <span>✕</span>
@@ -504,26 +504,27 @@
             <div>
                 <div class="file-upload-area" onclick="document.getElementById('fileInput').click()" 
                      ondrop="handleDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
-            <div class="upload-icon">📁</div>
-            <div class="upload-text">파일을 드래그하여 놓거나 클릭하여 선택하세요</div>
-        </div>
-        
+                    <div class="upload-icon">📁</div>
+                    <div class="upload-text">파일을 드래그하여 놓거나 클릭하여 선택하세요</div>
+                </div>
+                
                 <input type="file" id="fileInput" class="file-input" accept=".xlsx,.xls" onchange="handleFileSelect(event)">
+                
                 
                 <!-- 버튼 영역 -->
                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
                     <button class="file-select-btn" onclick="simulateFileSelect()">
-                <span>📂</span>
-                파일 선택
-            </button>
+                        <span>📂</span>
+                        파일 선택
+                    </button>
                     
                     <button class="register-btn" onclick="simulateRegisterProjects()">
-                <span>✅</span>
-                등록
-            </button>
-        </div>
-    </div>
-    
+                        <span>✅</span>
+                        등록
+                    </button>
+                </div>
+            </div>
+            
             <!-- 오른쪽: 업로드된 파일 리스트 -->
             <div>
                 <div style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #e5e7eb; height: 100%;">
@@ -615,26 +616,26 @@
         function simulateFileSelect() {
             // 20개 파일이 선택된 것처럼 시뮬레이션
             const mockFileNames = [
-                'video_001_lecture.mp4',
-                'video_002_seminar.mp4', 
-                'video_003_workshop.mp4',
-                'video_004_conference.mp4',
-                'video_005_presentation.mp4',
-                'video_006_training.mp4',
-                'video_007_meeting.mp4',
-                'video_008_discussion.mp4',
-                'video_009_interview.mp4',
-                'video_010_tutorial.mp4',
-                'video_011_webinar.mp4',
-                'video_012_demonstration.mp4',
-                'video_013_review.mp4',
-                'video_014_analysis.mp4',
-                'video_015_summary.mp4',
-                'video_016_conclusion.mp4',
-                'video_017_overview.mp4',
-                'video_018_introduction.mp4',
-                'video_019_case_study.mp4',
-                'video_020_final_session.mp4'
+                'meeting_001_policy_committee.m4a',
+                'meeting_002_budget_review.m4a', 
+                'meeting_003_urban_planning.m4a',
+                'meeting_004_education_reform.m4a',
+                'meeting_005_health_policy.m4a',
+                'meeting_006_environment_protection.m4a',
+                'meeting_007_transportation.m4a',
+                'meeting_008_welfare_committee.m4a',
+                'meeting_009_economic_development.m4a',
+                'meeting_010_cultural_affairs.m4a',
+                'meeting_011_public_safety.m4a',
+                'meeting_012_housing_policy.m4a',
+                'meeting_013_technology_innovation.m4a',
+                'meeting_014_agriculture_committee.m4a',
+                'meeting_015_tourism_development.m4a',
+                'meeting_016_energy_policy.m4a',
+                'meeting_017_social_welfare.m4a',
+                'meeting_018_labor_relations.m4a',
+                'meeting_019_foreign_affairs.m4a',
+                'meeting_020_legal_affairs.m4a'
             ];
             
             // 드래그 영역 스타일 변경
@@ -650,6 +651,29 @@
             updateUploadedFileList(mockFileNames);
             
             alert(`${mockFileNames.length}개의 파일이 선택되었습니다.`);
+        }
+        
+        // 개별 파일 삭제
+        function removeIndividualFile(index) {
+            if (!window.selectedFileNames || window.selectedFileNames.length === 0) return;
+            
+            // 해당 인덱스 파일 제거
+            window.selectedFileNames.splice(index, 1);
+            
+            // 파일 리스트 업데이트
+            updateUploadedFileList(window.selectedFileNames);
+            
+            // 모든 파일이 삭제되면 드래그 영역 초기화
+            if (window.selectedFileNames.length === 0) {
+                const uploadArea = document.querySelector('.file-upload-area');
+                uploadArea.style.background = '#f9fafb';
+                uploadArea.style.borderColor = '#d1d5db';
+                uploadArea.querySelector('.upload-text').textContent = '파일을 드래그하여 놓거나 클릭하여 선택하세요';
+                
+                // 프로젝트 목록도 초기화
+                uploadedProjects = [];
+                updateProjectList();
+            }
         }
         
         // 업로드된 파일 리스트 업데이트
@@ -731,7 +755,11 @@
             
             // 20개 프로젝트 데이터 생성
             const projects = window.selectedFileNames.map((fileName, index) => {
-                const workTime = window.fileWorkTimes[fileName] || '01:00:00';
+                // 랜덤 작업시간 생성 (10분~180분)
+                const workMinutes = Math.floor(Math.random() * 170) + 10;
+                const workHours = Math.floor(workMinutes / 60);
+                const remainingMinutes = workMinutes % 60;
+                const workTime = `${String(workHours).padStart(2, '0')}:${String(remainingMinutes).padStart(2, '0')}:00`;
                 
                 return {
                     service: '소리바로-VOD',
@@ -755,234 +783,7 @@
             alert(`${projects.length}개의 프로젝트가 생성되었습니다. 이제 엑셀처럼 셀을 편집할 수 있습니다.`);
         }
         
-        // 프로젝트 목록 업데이트
-        function updateProjectList() {
-            const tbody = document.getElementById('projectTableBody');
-            
-            if (uploadedProjects.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="13" style="padding: 40px; color: #6b7280; font-style: italic;">
-                            업로드된 프로젝트가 없습니다.
-                        </td>
-                    </tr>
-                `;
-            } else {
-                tbody.innerHTML = uploadedProjects.map((project, index) => {
-                    const serviceClass = project.service.includes('VOD') ? 'status-ready' : 'status-pending';
-                    return `
-                        <tr>
-                            <td>${index + 1}</td>
-                            <td><span class="status-badge ${serviceClass}">${project.service}</span></td>
-                            <td class="editable-cell">${project.fileName}</td>
-                            <td class="editable-cell">${project.workTime}</td>
-                            <td class="editable-cell">${project.title}</td>
-                            <td class="editable-cell">${project.qualification}</td>
-                            <td class="editable-cell">${project.recruitStart}</td>
-                            <td class="editable-cell">${project.recruitEnd}</td>
-                            <td class="editable-cell">${project.recruitCount}</td>
-                            <td class="editable-cell">${project.workStart}</td>
-                            <td class="editable-cell">${project.workEnd}</td>
-                            <td class="editable-cell">${project.amount}</td>
-                            <td class="editable-cell">${project.content}</td>
-                    </tr>
-                    `;
-                }).join('');
-                
-                // 이벤트 리스너 재등록
-                setTimeout(() => {
-                    document.querySelectorAll('.editable-cell').forEach(cell => {
-                        cell.addEventListener('click', function(e) {
-                            handleCellClick(this, e);
-                        });
-                        cell.addEventListener('dblclick', function(e) {
-                            e.preventDefault();
-                            startEditing(this);
-                        });
-                    });
-                }, 100);
-            }
-            
-            // 프로젝트 개수 업데이트
-            document.getElementById('projectCount').textContent = uploadedProjects.length;
-        }
-        
-        // 웍스파이 프로젝트 등록
-        function registerToWorkspy() {
-            if (uploadedProjects.length === 0) {
-                alert('등록할 프로젝트가 없습니다.');
-                return;
-            }
-            
-            // 기본 정보 검증
-            const projectTitle = document.getElementById('projectTitle').value.trim();
-            const companyName = document.getElementById('companyName').value;
-            const clientName = document.getElementById('clientName').value.trim();
-            
-            if (!projectTitle) {
-                alert('프로젝트 제목을 입력해주세요.');
-                document.getElementById('projectTitle').focus();
-                return;
-            }
-            
-            if (!companyName) {
-                alert('업체명을 선택해주세요.');
-                document.getElementById('companyName').focus();
-                return;
-            }
-            
-            if (!clientName) {
-                alert('의뢰자명을 입력해주세요.');
-                document.getElementById('clientName').focus();
-                return;
-            }
-            
-            // 웍스파이 등록 확인
-            if (confirm(`${uploadedProjects.length}개의 프로젝트를 웍스파이에 등록하시겠습니까?\n\n등록 후에는 웍스파이 플랫폼에서 작업자 모집이 시작됩니다.`)) {
-                // 부모 창에 프로젝트 추가
-                addProjectsToParentPage(projectTitle, companyName, clientName);
-                
-                // 등록 처리
-                setTimeout(() => {
-                    alert(`🎉 성공!\n\n${uploadedProjects.length}개의 프로젝트가 웍스파이에 성공적으로 등록되었습니다.\n\n• 프로젝트 등록 완료\n• 작업자 모집 시작\n• 관리자 페이지에서 진행상황 확인 가능\n• VOD 작업관리 페이지에 항목이 추가되었습니다.`);
-                    
-                    // 등록 완료 후 데이터 초기화
-                    uploadedProjects = [];
-                    updateProjectList();
-                    
-                    // 선택 상태 초기화
-                    currentSelectedCell = null;
-                    selectedRange = [];
-                    
-                    // 기본 정보도 초기화
-                    document.getElementById('projectTitle').value = '';
-                    document.getElementById('companyName').value = '';
-                    document.getElementById('clientName').value = '';
-                    
-                    // 파일 정보도 초기화
-                    removeFile();
-                    
-                    // 창 닫기 옵션
-                    setTimeout(() => {
-                        if (confirm('등록이 완료되었습니다. 창을 닫으시겠습니까?')) {
-                            if (window.opener && !window.opener.closed) {
-                                window.opener.focus();
-                            }
-                            window.close();
-                        }
-                    }, 500);
-                }, 1000);
-            }
-        }
-        
-        // 부모 페이지에 프로젝트 추가
-        function addProjectsToParentPage(projectTitle, companyName, clientName) {
-            try {
-                const projectsToAdd = uploadedProjects.map((project, index) => {
-                    const projectNumber = String(uploadedProjects.length - index).padStart(2, '0');
-                    const generatedTitle = `${projectTitle}_${projectNumber}`;
-                    
-                    const now = new Date();
-                    const year = now.getFullYear();
-                    const month = String(now.getMonth() + 1).padStart(2, '0');
-                    const day = String(now.getDate()).padStart(2, '0');
-                    const hours = String(now.getHours()).padStart(2, '0');
-                    const minutes = String(now.getMinutes()).padStart(2, '0');
-                    const seconds = String(now.getSeconds() + index).padStart(2, '0');
-                    const orderNumber = `${year}${month}${day}${hours}${minutes}${seconds}`;
-                    
-                    const today = `${year}-${month}-${day} ${hours}:${minutes}`;
-                    
-                    return {
-                        orderNumber: orderNumber,
-                        title: generatedTitle,
-                        companyName: companyName,
-                        clientName: clientName,
-                        requestDate: today,
-                        workTime: project.workTime,
-                        status: '접수'
-                    };
-                });
-                
-                localStorage.setItem('bulkProjectsData', JSON.stringify(projectsToAdd));
-                localStorage.setItem('bulkProjectsAdded', 'true');
-                
-                if (window.opener && !window.opener.closed) {
-                    if (typeof window.opener.checkForBulkProjects === 'function') {
-                        window.opener.checkForBulkProjects();
-                    }
-                    window.opener.focus();
-                }
-                
-            } catch (error) {
-                console.error('데이터 전달 실패:', error);
-            }
-        }
-        
-        // 엑셀 다운로드 기능
-        function downloadProjectsAsExcel() {
-            if (uploadedProjects.length === 0) {
-                alert('다운로드할 프로젝트가 없습니다.');
-                return;
-            }
-            alert(`📊 엑셀 다운로드\n\n${uploadedProjects.length}개의 프로젝트 데이터를 엑셀 파일로 다운로드합니다.`);
-        }
-        
-        // 개별 파일 삭제
-        function removeIndividualFile(index) {
-            if (!window.selectedFileNames || window.selectedFileNames.length === 0) return;
-            
-            window.selectedFileNames.splice(index, 1);
-            updateUploadedFileList(window.selectedFileNames);
-            
-            if (window.selectedFileNames.length === 0) {
-                const uploadArea = document.querySelector('.file-upload-area');
-                uploadArea.style.background = '#f9fafb';
-                uploadArea.style.borderColor = '#d1d5db';
-                uploadArea.querySelector('.upload-text').textContent = '파일을 드래그하여 놓거나 클릭하여 선택하세요';
-                
-                uploadedProjects = [];
-                updateProjectList();
-            }
-        }
-        
-        // 전체 파일 제거
-        function removeFile() {
-            document.getElementById('fileInput').value = '';
-            uploadedProjects = [];
-            window.selectedFileNames = [];
-            window.fileWorkTimes = {};
-            
-            const uploadArea = document.querySelector('.file-upload-area');
-            uploadArea.style.background = '#f9fafb';
-            uploadArea.style.borderColor = '#d1d5db';
-            uploadArea.querySelector('.upload-text').textContent = '파일을 드래그하여 놓거나 클릭하여 선택하세요';
-            
-            updateUploadedFileList([]);
-            updateProjectList();
-        }
-        
-        // 드래그 앤 드롭 처리
-        function handleDragOver(event) {
-            event.preventDefault();
-            event.currentTarget.classList.add('dragover');
-        }
-        
-        function handleDragLeave(event) {
-            event.currentTarget.classList.remove('dragover');
-        }
-        
-        function handleDrop(event) {
-            event.preventDefault();
-            event.currentTarget.classList.remove('dragover');
-            simulateFileSelect();
-        }
-        
-        function handleFileSelect(event) {
-            simulateFileSelect();
-        }
-        
-        // 엑셀 스타일 편집 기능들 (trans-bulk-project-add.html과 동일)
+        // 엑셀 스타일 셀 클릭 처리
         function handleCellClick(cell, event) {
             event.preventDefault();
             event.stopPropagation();
@@ -990,201 +791,29 @@
             if (isEditing) return;
             
             if (event.shiftKey && currentSelectedCell) {
+                // Shift + 클릭: 범위 선택
                 selectCellRange(currentSelectedCell, cell);
             } else {
+                // 단일 셀 선택
                 selectSingleCell(cell);
             }
         }
         
+        // 단일 셀 선택
         function selectSingleCell(cell) {
+            // 모든 선택 해제
             document.querySelectorAll('.editable-cell').forEach(c => {
                 c.classList.remove('selected');
             });
             selectedRange = [];
             
+            // 현재 셀 선택
             currentSelectedCell = cell;
             cell.classList.add('selected');
             selectedRange = [cell];
             
+            // 네비게이션 도움말 표시
             showNavigationHelp();
-        }
-        
-        function startEditing(cell) {
-            if (isEditing) return;
-            
-            isEditing = true;
-            cell.classList.add('editing');
-            cell.classList.remove('selected');
-            
-            const originalValue = cell.textContent.trim();
-            const cellIndex = Array.from(cell.closest('tr').children).indexOf(cell);
-            const isContentColumn = cellIndex === 12;
-            
-            const inputElement = isContentColumn ? document.createElement('textarea') : document.createElement('input');
-            
-            if (!isContentColumn) {
-                inputElement.type = 'text';
-            }
-            inputElement.value = originalValue;
-            
-            function finishEditing(save = true) {
-                const newValue = save ? inputElement.value.trim() : originalValue;
-                
-                if (isContentColumn) {
-                    cell.innerHTML = newValue.replace(/\n/g, '<br>') || originalValue;
-                } else {
-                    cell.textContent = newValue || originalValue;
-                }
-                
-                cell.classList.remove('editing');
-                cell.classList.add('selected');
-                isEditing = false;
-                
-                if (save && newValue !== originalValue) {
-                    updateProjectData(cell, newValue || originalValue);
-                }
-            }
-            
-            inputElement.onblur = () => finishEditing(true);
-            inputElement.onkeydown = function(e) {
-                e.stopPropagation();
-                
-                if (e.key === 'Enter') {
-                    if (e.altKey && isContentColumn) {
-                        // Alt + Enter: 줄바꿈 (내용 컬럼만)
-                        const cursorPos = inputElement.selectionStart;
-                        const textBefore = inputElement.value.substring(0, cursorPos);
-                        const textAfter = inputElement.value.substring(cursorPos);
-                        inputElement.value = textBefore + '\n' + textAfter;
-                        inputElement.selectionStart = inputElement.selectionEnd = cursorPos + 1;
-                    } else {
-                        // 일반 Enter: 편집 완료
-                        finishEditing(true);
-                        moveToNextCell(cell, 'down');
-                    }
-                } else if (e.key === 'Escape') {
-                    finishEditing(false);
-                } else if (e.key === 'Tab') {
-                    e.preventDefault();
-                    finishEditing(true);
-                    moveToNextCell(cell, e.shiftKey ? 'left' : 'right');
-                }
-            };
-            
-            cell.innerHTML = '';
-            cell.appendChild(inputElement);
-            inputElement.focus();
-            inputElement.select();
-        }
-        
-        function updateProjectData(cell, newValue) {
-            const row = cell.closest('tr');
-            const rowIndex = Array.from(row.parentElement.children).indexOf(row);
-            const cellIndex = Array.from(row.children).indexOf(cell);
-            
-            if (uploadedProjects[rowIndex]) {
-                const fieldMap = {
-                    2: 'fileName',
-                    3: 'workTime',
-                    4: 'title',
-                    5: 'qualification',
-                    6: 'recruitStart',
-                    7: 'recruitEnd',
-                    8: 'recruitCount',
-                    9: 'workStart',
-                    10: 'workEnd',
-                    11: 'amount',
-                    12: 'content'
-                };
-                
-                const fieldName = fieldMap[cellIndex];
-                if (fieldName) {
-                    uploadedProjects[rowIndex][fieldName] = newValue;
-                    
-                    // 작업시간이 변경되면 제목도 자동 업데이트
-                    if (fieldName === 'workTime') {
-                        // 시:분 형식으로 변환 (HH:MM:SS → HH:MM)
-                        const timeForTitle = newValue.includes(':') ? newValue.substring(0, 5) : newValue;
-                        const newTitle = `VOD_(자막) / 재택 / ${timeForTitle}`;
-                        uploadedProjects[rowIndex]['title'] = newTitle;
-                        
-                        // 제목 셀도 화면에 업데이트
-                        const titleCell = row.children[4];
-                        if (titleCell) {
-                            titleCell.textContent = newTitle;
-                        }
-                    }
-                    
-                    // 첫 번째 행의 특정 컬럼들이 수정되면 해당 컬럼의 모든 행에 같은 값 적용
-                    const autoFillColumns = ['qualification', 'recruitStart', 'recruitEnd', 'recruitCount', 'workStart', 'workEnd', 'amount', 'content'];
-                    
-                    if (rowIndex === 0 && autoFillColumns.includes(fieldName) && newValue.trim() !== '') {
-                        // 첫 번째 행에서 해당 컬럼을 수정한 경우
-                        fillColumnWithValue(cellIndex, fieldName, newValue);
-                        
-                        alert(`"${getColumnName(cellIndex)}" 컬럼의 모든 행이 "${newValue}"로 채워졌습니다.`);
-                    }
-                    
-                    console.log(`업데이트됨: ${fieldName} = ${newValue}`);
-                }
-            }
-        }
-        
-        // 컬럼 전체를 같은 값으로 채우기
-        function fillColumnWithValue(cellIndex, fieldName, value) {
-            // 데이터 업데이트
-            uploadedProjects.forEach((project, index) => {
-                if (index > 0) { // 첫 번째 행은 이미 수정됨
-                    project[fieldName] = value;
-                }
-            });
-            
-            // 화면 업데이트
-            const table = document.querySelector('.project-table');
-            const rows = Array.from(table.querySelectorAll('tbody tr'));
-            
-            rows.forEach((row, index) => {
-                if (index > 0) { // 첫 번째 행은 이미 수정됨
-                    const cell = row.children[cellIndex];
-                    if (cell && cell.classList.contains('editable-cell')) {
-                        if (fieldName === 'content') {
-                            // 내용 컬럼은 줄바꿈 처리
-                            cell.innerHTML = value.replace(/\n/g, '<br>');
-                        } else {
-                            cell.textContent = value;
-                        }
-                    }
-                }
-            });
-        }
-        
-        // 컬럼명 가져오기
-        function getColumnName(cellIndex) {
-            const columnNames = {
-                2: '파일이름',
-                3: '작업시간',
-                4: '제목',
-                5: '지원자격',
-                6: '모집기간 시작',
-                7: '모집기간 종료',
-                8: '모집인원',
-                9: '작업기간 시작',
-                10: '작업기간 종료',
-                11: '금액',
-                12: '내용'
-            };
-            
-            return columnNames[cellIndex] || '알 수 없음';
-        }
-        
-        function showNavigationHelp() {
-            const navigator = document.getElementById('cellNavigator');
-            if (navigator) {
-                navigator.classList.add('show');
-                setTimeout(() => {
-                    navigator.classList.remove('show');
-                }, 5000);
-            }
         }
         
         // 범위 선택
@@ -1220,6 +849,79 @@
             }
             
             currentSelectedCell = endCell;
+        }
+        
+        // 더블클릭으로 편집 모드 진입
+        function startEditing(cell) {
+            if (isEditing) return;
+            
+            isEditing = true;
+            cell.classList.add('editing');
+            cell.classList.remove('selected');
+            
+            const originalValue = cell.textContent.trim();
+            const cellIndex = Array.from(cell.closest('tr').children).indexOf(cell);
+            const isContentColumn = cellIndex === 12; // 내용 컬럼인지 확인
+            
+            // 내용 컬럼은 textarea, 나머지는 input 사용
+            const inputElement = isContentColumn ? document.createElement('textarea') : document.createElement('input');
+            
+            if (!isContentColumn) {
+                inputElement.type = 'text';
+            }
+            inputElement.value = originalValue;
+            
+            // 편집 완료 처리
+            function finishEditing(save = true) {
+                const newValue = save ? inputElement.value.trim() : originalValue;
+                
+                if (isContentColumn) {
+                    // 내용 컬럼은 줄바꿈 유지
+                    cell.innerHTML = newValue.replace(/\n/g, '<br>') || originalValue;
+                } else {
+                    cell.textContent = newValue || originalValue;
+                }
+                
+                cell.classList.remove('editing');
+                cell.classList.add('selected');
+                isEditing = false;
+                
+                if (save && newValue !== originalValue) {
+                    updateProjectData(cell, newValue || originalValue);
+                }
+            }
+            
+            // 이벤트 리스너
+            inputElement.onblur = () => finishEditing(true);
+            inputElement.onkeydown = function(e) {
+                e.stopPropagation();
+                
+                if (e.key === 'Enter') {
+                    if (e.altKey && isContentColumn) {
+                        // Alt + Enter: 줄바꿈 (내용 컬럼만)
+                        const cursorPos = inputElement.selectionStart;
+                        const textBefore = inputElement.value.substring(0, cursorPos);
+                        const textAfter = inputElement.value.substring(cursorPos);
+                        inputElement.value = textBefore + '\n' + textAfter;
+                        inputElement.selectionStart = inputElement.selectionEnd = cursorPos + 1;
+                    } else {
+                        // 일반 Enter: 편집 완료
+                        finishEditing(true);
+                        moveToNextCell(cell, 'down');
+                    }
+                } else if (e.key === 'Escape') {
+                    finishEditing(false);
+                } else if (e.key === 'Tab') {
+                    e.preventDefault();
+                    finishEditing(true);
+                    moveToNextCell(cell, e.shiftKey ? 'left' : 'right');
+                }
+            };
+            
+            cell.innerHTML = '';
+            cell.appendChild(inputElement);
+            inputElement.focus();
+            inputElement.select();
         }
         
         // 셀 이동 (화살표 키)
@@ -1261,6 +963,19 @@
             if (nextCell) {
                 selectSingleCell(nextCell);
                 nextCell.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+        
+        // 네비게이션 도움말 표시
+        function showNavigationHelp() {
+            const navigator = document.getElementById('cellNavigator');
+            if (navigator) {
+                navigator.classList.add('show');
+                
+                // 5초 후 자동 숨김
+                setTimeout(() => {
+                    navigator.classList.remove('show');
+                }, 5000);
             }
         }
         
@@ -1366,8 +1081,367 @@
             alert(`${Math.min(selectedRange.length, clipboardData.length)}개 셀에 데이터가 붙여넣어졌습니다.`);
         }
         
-        // 기존 등록 버튼
+        // 프로젝트 데이터 업데이트
+        function updateProjectData(cell, newValue) {
+            const row = cell.closest('tr');
+            const rowIndex = Array.from(row.parentElement.children).indexOf(row);
+            const cellIndex = Array.from(row.children).indexOf(cell);
+            
+            if (uploadedProjects[rowIndex]) {
+                const fieldMap = {
+                    2: 'fileName',
+                    3: 'workTime',
+                    4: 'title',
+                    5: 'qualification',
+                    6: 'recruitStart',
+                    7: 'recruitEnd',
+                    8: 'recruitCount',
+                    9: 'workStart',
+                    10: 'workEnd',
+                    11: 'amount',
+                    12: 'content'
+                };
+                
+                const fieldName = fieldMap[cellIndex];
+                if (fieldName) {
+                    uploadedProjects[rowIndex][fieldName] = newValue;
+                    
+                    // 작업시간이 변경되면 제목도 자동 업데이트
+                    if (fieldName === 'workTime') {
+                        // 시:분 형식으로 변환 (HH:MM:SS → HH:MM)
+                        const timeForTitle = newValue.includes(':') ? newValue.substring(0, 5) : newValue;
+                        const newTitle = `VOD_(자막) / 재택 / ${timeForTitle}`;
+                        uploadedProjects[rowIndex]['title'] = newTitle;
+                        
+                        // 제목 셀도 화면에 업데이트
+                        const titleCell = row.children[4];
+                        if (titleCell) {
+                            titleCell.textContent = newTitle;
+                        }
+                    }
+                    
+                    // 첫 번째 행의 특정 컬럼들이 수정되면 해당 컬럼의 모든 행에 같은 값 적용
+                    const autoFillColumns = ['qualification', 'recruitStart', 'recruitEnd', 'recruitCount', 'workStart', 'workEnd', 'amount', 'content'];
+                    
+                    if (rowIndex === 0 && autoFillColumns.includes(fieldName) && newValue.trim() !== '') {
+                        // 첫 번째 행에서 해당 컬럼을 수정한 경우
+                        fillColumnWithValue(cellIndex, fieldName, newValue);
+                        
+                        alert(`"${getColumnName(cellIndex)}" 컬럼의 모든 행이 "${newValue}"로 채워졌습니다.`);
+                    }
+                    
+                    console.log(`업데이트됨: ${fieldName} = ${newValue}`);
+                }
+            }
+        }
+        
+        // 컬럼 전체를 같은 값으로 채우기
+        function fillColumnWithValue(cellIndex, fieldName, value) {
+            // 데이터 업데이트
+            uploadedProjects.forEach((project, index) => {
+                if (index > 0) { // 첫 번째 행은 이미 수정됨
+                    project[fieldName] = value;
+                }
+            });
+            
+            // 화면 업데이트
+            const table = document.querySelector('.project-table');
+            const rows = Array.from(table.querySelectorAll('tbody tr'));
+            
+            rows.forEach((row, index) => {
+                if (index > 0) { // 첫 번째 행은 이미 수정됨
+                    const cell = row.children[cellIndex];
+                    if (cell && cell.classList.contains('editable-cell')) {
+                        if (fieldName === 'content') {
+                            // 내용 컬럼은 줄바꿈 처리
+                            cell.innerHTML = value.replace(/\n/g, '<br>');
+                        } else {
+                            cell.textContent = value;
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 컬럼명 가져오기
+        function getColumnName(cellIndex) {
+            const columnNames = {
+                2: '파일이름',
+                3: '작업시간',
+                4: '제목',
+                5: '지원자격',
+                6: '모집기간 시작',
+                7: '모집기간 종료',
+                8: '모집인원',
+                9: '작업기간 시작',
+                10: '작업기간 종료',
+                11: '금액',
+                12: '내용'
+            };
+            
+            return columnNames[cellIndex] || '알 수 없음';
+        }
+        
+        // 드래그 앤 드롭 처리
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+        
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+        
+        function handleDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            simulateFileSelect(); // 시뮬레이션으로 대체
+        }
+        
+        // 실제 파일 선택 처리
+        function handleFileSelect(event) {
+            simulateFileSelect(); // 시뮬레이션으로 대체
+        }
+        
+        // 전체 파일 제거
+        function removeFile() {
+            document.getElementById('fileInput').value = '';
+            uploadedProjects = [];
+            window.selectedFileNames = [];
+            window.fileWorkTimes = {};
+            
+            // 드래그 영역 원복
+            const uploadArea = document.querySelector('.file-upload-area');
+            uploadArea.style.background = '#f9fafb';
+            uploadArea.style.borderColor = '#d1d5db';
+            uploadArea.querySelector('.upload-text').textContent = '파일을 드래그하여 놓거나 클릭하여 선택하세요';
+            
+            // 파일 리스트 초기화
+            updateUploadedFileList([]);
+            
+            updateProjectList();
+        }
+        
+        // 프로젝트 목록 업데이트
+        function updateProjectList() {
+            const tbody = document.getElementById('projectTableBody');
+            
+            if (uploadedProjects.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="12" style="padding: 40px; color: #6b7280; font-style: italic;">
+                            업로드된 프로젝트가 없습니다.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = uploadedProjects.map((project, index) => {
+                    const serviceClass = project.service.includes('VOD') ? 'status-ready' : 'status-pending';
+                    return `
+                        <tr>
+                            <td>${index + 1}</td>
+                            <td><span class="status-badge ${serviceClass}">${project.service}</span></td>
+                            <td class="editable-cell">${project.fileName}</td>
+                            <td class="editable-cell">${project.workTime}</td>
+                            <td class="editable-cell">${project.title}</td>
+                            <td class="editable-cell">${project.qualification}</td>
+                            <td class="editable-cell">${project.recruitStart}</td>
+                            <td class="editable-cell">${project.recruitEnd}</td>
+                            <td class="editable-cell">${project.recruitCount}</td>
+                            <td class="editable-cell">${project.workStart}</td>
+                            <td class="editable-cell">${project.workEnd}</td>
+                            <td class="editable-cell">${project.amount}</td>
+                            <td class="editable-cell">${project.content}</td>
+                        </tr>
+                    `;
+                }).join('');
+                
+                // 이벤트 리스너 재등록
+                setTimeout(() => {
+                    document.querySelectorAll('.editable-cell').forEach(cell => {
+                        cell.addEventListener('click', function(e) {
+                            handleCellClick(this, e);
+                        });
+                        cell.addEventListener('dblclick', function(e) {
+                            e.preventDefault();
+                            startEditing(this);
+                        });
+                    });
+                }, 100);
+            }
+            
+            // 프로젝트 개수 업데이트
+            document.getElementById('projectCount').textContent = uploadedProjects.length;
+        }
+        
+        // 전체 선택/해제 (체크박스 제거로 인해 사용 안함)
+        function toggleAllProjects() {
+            // 체크박스 컬럼이 제거되어 사용하지 않음
+        }
+        
+        // 웍스파이 프로젝트 등록 (새로운 메인 등록 버튼)
+        function registerToWorkspy() {
+            if (uploadedProjects.length === 0) {
+                alert('등록할 프로젝트가 없습니다.');
+                return;
+            }
+            
+            // 기본 정보 검증
+            const projectTitle = document.getElementById('projectTitle').value.trim();
+            const companyName = document.getElementById('companyName').value;
+            const clientName = document.getElementById('clientName').value.trim();
+            
+            if (!projectTitle) {
+                alert('프로젝트 제목을 입력해주세요.');
+                document.getElementById('projectTitle').focus();
+                return;
+            }
+            
+            if (!companyName) {
+                alert('업체명을 선택해주세요.');
+                document.getElementById('companyName').focus();
+                return;
+            }
+            
+            if (!clientName) {
+                alert('의뢰자명을 입력해주세요.');
+                document.getElementById('clientName').focus();
+                return;
+            }
+            
+            // 웍스파이 등록 확인
+            if (confirm(`${uploadedProjects.length}개의 프로젝트를 웍스파이에 등록하시겠습니까?\n\n등록 후에는 웍스파이 플랫폼에서 작업자 모집이 시작됩니다.`)) {
+                // 부모 창(trans-management.html)에 프로젝트 추가
+                addProjectsToParentPage(projectTitle, companyName, clientName);
+                
+                // 등록 처리 (시뮬레이션)
+                setTimeout(() => {
+                    alert(`🎉 성공!\n\n${uploadedProjects.length}개의 프로젝트가 웍스파이에 성공적으로 등록되었습니다.\n\n• 프로젝트 등록 완료\n• 작업자 모집 시작\n• 관리자 페이지에서 진행상황 확인 가능\n• 번역 작업관리 페이지에 항목이 추가되었습니다.`);
+                    
+                    // 등록 완료 후 데이터 초기화
+                    uploadedProjects = [];
+                    updateProjectList();
+                    
+                    // 선택 상태 초기화
+                    currentSelectedCell = null;
+                    selectedRange = [];
+                    
+                    // 기본 정보도 초기화
+                    document.getElementById('projectTitle').value = '';
+                    document.getElementById('companyName').value = '';
+                    document.getElementById('clientName').value = '';
+                    
+                    // 파일 정보도 초기화
+                    removeFile();
+                    
+                    // 창 닫기 옵션 (부모 창 리프레시 후)
+                    setTimeout(() => {
+                        if (confirm('등록이 완료되었습니다. 창을 닫으시겠습니까?')) {
+                            // 부모 창에 최종 포커스
+                            if (window.opener && !window.opener.closed) {
+                                window.opener.focus();
+                            }
+                            window.close();
+                        }
+                    }, 500);
+                }, 1000);
+            }
+        }
+        
+        // 부모 페이지(trans-management.html)에 프로젝트 추가
+        function addProjectsToParentPage(projectTitle, companyName, clientName) {
+            try {
+                // localStorage를 사용하여 데이터 전달 (더 안전한 방법)
+                const projectsToAdd = uploadedProjects.map((project, index) => {
+                    // 제목 형식: "프로젝트제목_NO" (큰 숫자부터)
+                    const projectNumber = String(uploadedProjects.length - index).padStart(2, '0');
+                    const generatedTitle = `${projectTitle}_${projectNumber}`;
+                    
+                    // 새 주문번호 생성
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    const seconds = String(now.getSeconds() + index).padStart(2, '0'); // 각각 다른 초
+                    const orderNumber = `${year}${month}${day}${hours}${minutes}${seconds}`;
+                    
+                    // 오늘 날짜와 시간
+                    const today = `${year}-${month}-${day} ${hours}:${minutes}`;
+                    
+                    return {
+                        orderNumber: orderNumber,
+                        title: generatedTitle,
+                        companyName: companyName,
+                        clientName: clientName,
+                        requestDate: today,
+                        workTime: project.workTime,
+                        status: '접수'
+                    };
+                });
+                
+                // localStorage에 데이터 저장
+                localStorage.setItem('bulkProjectsData', JSON.stringify(projectsToAdd));
+                localStorage.setItem('bulkProjectsAdded', 'true');
+                
+                console.log(`${projectsToAdd.length}개 프로젝트 데이터를 localStorage에 저장했습니다.`);
+                
+                // 부모 창이 존재하는 경우 직접 호출도 시도
+                if (window.opener && !window.opener.closed) {
+                    try {
+                        if (typeof window.opener.addBulkProjectsToTable === 'function') {
+                            window.opener.addBulkProjectsToTable(projectsToAdd);
+                            window.opener.focus();
+                        }
+                        
+                        // 부모 창에 새로고침 신호
+                        if (typeof window.opener.checkForBulkProjects === 'function') {
+                            window.opener.checkForBulkProjects();
+                        }
+                    } catch (e) {
+                        console.log('직접 호출 실패, localStorage 방식 사용:', e);
+                    }
+                }
+                
+            } catch (error) {
+                console.error('부모 페이지에 데이터 전달 실패:', error);
+            }
+        }
+        
+        // 엑셀 다운로드 기능
+        function downloadProjectsAsExcel() {
+            if (uploadedProjects.length === 0) {
+                alert('다운로드할 프로젝트가 없습니다.');
+                return;
+            }
+            
+            // 엑셀 다운로드 시뮬레이션
+            const projectData = uploadedProjects.map((project, index) => ({
+                NO: index + 1,
+                서비스: project.service,
+                파일이름: project.fileName,
+                작업시간: project.workTime,
+                제목: project.title,
+                지원자격: project.qualification,
+                모집기간_시작: project.recruitStart,
+                모집기간_종료: project.recruitEnd,
+                모집인원: project.recruitCount,
+                작업기간_시작: project.workStart,
+                작업기간_종료: project.workEnd,
+                금액: project.amount,
+                내용: project.content
+            }));
+            
+            console.log('엑셀 다운로드 데이터:', projectData);
+            
+            // 실제 구현에서는 엑셀 파일 생성 및 다운로드
+            alert(`📊 엑셀 다운로드\n\n${uploadedProjects.length}개의 프로젝트 데이터를 엑셀 파일로 다운로드합니다.\n\n파일명: 웍스파이_프로젝트_목록_${new Date().toISOString().split('T')[0]}.xlsx`);
+        }
+        
+        // 기존 등록 버튼 (상단)
         function registerProjects() {
+            // 상단 등록 버튼은 하단 메인 버튼으로 리다이렉트
             registerToWorkspy();
         }
         

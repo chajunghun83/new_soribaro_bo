@@ -1,0 +1,1133 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>작업 결과 리포트 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            margin: 0 0 20px 0;
+            color: #374151;
+            font-size: 18px;
+            font-weight: 600;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .basic-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .info-value {
+            color: #374151;
+            font-size: 16px;
+            font-weight: 500;
+            padding: 12px 15px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        /* 작업항목 배지 */
+        .work-type-badge {
+            padding: 6px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .work-type-soribaro-b2c {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .work-type-soribaro-meeting {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .work-type-soribaro-vod {
+            background: #e0e7ff;
+            color: #5b21b6;
+        }
+        
+        .work-type-soribaro-trans {
+            background: #f3e8ff;
+            color: #7c2d12;
+        }
+        
+        .work-type-clipdesk {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        /* 코멘트 섹션 */
+        .comment-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .comment-category {
+            margin-bottom: 0;
+        }
+
+        .category-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 15px;
+            padding: 10px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .comment-categories {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .comment-items {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .comment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .comment-item:hover {
+            background: #f3f4f6;
+            border-color: #d1d5db;
+        }
+
+        .comment-item.selected {
+            background: #dbeafe;
+            border-color: #3b82f6;
+        }
+
+
+
+        .comment-name {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+
+        .comment-count {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 24px;
+            text-align: center;
+        }
+
+        .comment-count.zero {
+            background: #e5e7eb;
+            color: #6b7280;
+        }
+
+        /* 기타 코멘트 섹션 */
+        .other-comment-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .comment-text-input {
+            margin-bottom: 20px;
+        }
+
+        .comment-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            background: white;
+        }
+
+        .comment-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+
+
+        /* 코멘트 상세 모달 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-container {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-content {
+            padding: 24px;
+        }
+
+        .comment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .comment-table th,
+        .comment-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+
+        .comment-table th:first-child,
+        .comment-table th:nth-child(2),
+        .comment-table td:first-child,
+        .comment-table td:nth-child(2) {
+            text-align: center;
+        }
+
+        .comment-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .comment-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .timecode-cell {
+            width: 120px;
+            font-family: 'Courier New', monospace;
+            color: #3b82f6;
+            font-weight: 500;
+        }
+
+        .line-no-cell {
+            width: 120px;
+            text-align: center;
+            font-weight: 600;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+        /* 결과 섹션 */
+        .result-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .result-grade {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .result-grade label {
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .grade-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .grade-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .grade-option:hover {
+            border-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .grade-option input[type="radio"] {
+            margin: 0;
+        }
+
+        .grade-option.selected {
+            border-color: #3b82f6;
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .grade-a { border-color: #10b981; background: #d1fae5; color: #065f46; }
+        .grade-b { border-color: #3b82f6; background: #dbeafe; color: #1e40af; }
+        .grade-c { border-color: #f59e0b; background: #fef3c7; color: #d97706; }
+        .grade-d { border-color: #ef4444; background: #fee2e2; color: #991b1b; }
+        .grade-e { border-color: #6b7280; background: #f3f4f6; color: #374151; }
+
+        /* 파일 다운로드 섹션 */
+        .download-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .download-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .download-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 20px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .download-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .download-btn.secondary {
+            background: #10b981;
+        }
+
+        .download-btn.secondary:hover {
+            background: #059669;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📊</span>
+            작업 결과 리포트 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로 돌아가기
+        </button>
+    </div>
+    
+    <!-- 작업 정보 섹션 -->
+    <div class="info-section">
+        <h2 class="section-title">
+            <span>📋</span>
+            작업 정보
+        </h2>
+        <!-- 첫 번째 행: 작업항목/주문번호 (2컬럼) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+            <div class="info-item">
+                <span class="info-label">작업항목</span>
+                <div class="info-value" id="work-type">소리바로-VOD</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">주문번호</span>
+                <div class="info-value" id="order-number">20250125033445</div>
+            </div>
+        </div>
+        
+        <!-- 두 번째 행: 작업자/파일이름 (2컬럼) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px;">
+            <div class="info-item">
+                <span class="info-label">작업자</span>
+                <div class="info-value" id="worker-name">이수진</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">파일 이름</span>
+                <div class="info-value" id="file-name">경영학과_온라인강의_2025_01.mp4</div>
+            </div>
+        </div>
+        
+        <!-- 세 번째 행: 시간 정보 (3컬럼) -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px;">
+            <div class="info-item">
+                <span class="info-label">총 작업시간</span>
+                <div class="info-value" id="work-time">02:45:30</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">작업 배정일</span>
+                <div class="info-value" id="assign-date">2025-01-25 09:30</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">작업 제출일</span>
+                <div class="info-value" id="submit-date">2025-01-27 14:20</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 코멘트 섹션 -->
+    <div class="comment-section">
+        <h2 class="section-title">
+            <span>💬</span>
+            코멘트
+        </h2>
+        
+        <div class="comment-categories">
+            <!-- 번역 카테고리 -->
+            <div class="comment-category">
+                <div class="category-title">번역</div>
+                <div class="comment-items">
+                    <div class="comment-item" onclick="showCommentDetail('번역', '오역', 3)">
+                        <span class="comment-name">오역</span>
+                        <span class="comment-count">3</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('번역', '직역', 1)">
+                        <span class="comment-name">직역</span>
+                        <span class="comment-count">1</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('번역', '과한 의역', 0)">
+                        <span class="comment-name">과한 의역</span>
+                        <span class="comment-count zero">0</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('번역', '번역 누락', 2)">
+                        <span class="comment-name">번역 누락</span>
+                        <span class="comment-count">2</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('번역', '번역 중복', 0)">
+                        <span class="comment-name">번역 중복</span>
+                        <span class="comment-count zero">0</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('번역', '어색한 문장 구성', 4)">
+                        <span class="comment-name">어색한 문장 구성</span>
+                        <span class="comment-count">4</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('번역', '간결성 부족', 1)">
+                        <span class="comment-name">간결성 부족</span>
+                        <span class="comment-count">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 가이드라인 카테고리 -->
+            <div class="comment-category">
+                <div class="category-title">가이드라인</div>
+                <div class="comment-items">
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '용어집 미반영', 2)">
+                        <span class="comment-name">용어집 미반영</span>
+                        <span class="comment-count">2</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '맞춤법/띄어쓰기/문장부호 오류', 5)">
+                        <span class="comment-name">맞춤법/띄어쓰기/문장부호 오류</span>
+                        <span class="comment-count">5</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '숫자표기 오류', 1)">
+                        <span class="comment-name">숫자표기 오류</span>
+                        <span class="comment-count">1</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '문체 통일성 부족', 3)">
+                        <span class="comment-name">문체 통일성 부족</span>
+                        <span class="comment-count">3</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '용어 통일성 부족', 2)">
+                        <span class="comment-name">용어 통일성 부족</span>
+                        <span class="comment-count">2</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '반/존 혼용', 0)">
+                        <span class="comment-name">반/존 혼용</span>
+                        <span class="comment-count zero">0</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '숫자/단위/날짜/시간 표기 일관성 부족', 1)">
+                        <span class="comment-name">숫자/단위/날짜/시간 표기 일관성 부족</span>
+                        <span class="comment-count">1</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '글자수 제한', 0)">
+                        <span class="comment-name">글자수 제한</span>
+                        <span class="comment-count zero">0</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('가이드라인', '화면자막 누락', 1)">
+                        <span class="comment-name">화면자막 누락</span>
+                        <span class="comment-count">1</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 싱크 카테고리 -->
+            <div class="comment-category">
+                <div class="category-title">싱크</div>
+                <div class="comment-items">
+                    <div class="comment-item" onclick="showCommentDetail('싱크', '최소 TC 값 오류', 2)">
+                        <span class="comment-name">최소 TC 값 오류</span>
+                        <span class="comment-count">2</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('싱크', '최대 TC 값 오류', 1)">
+                        <span class="comment-name">최대 TC 값 오류</span>
+                        <span class="comment-count">1</span>
+                    </div>
+                    <div class="comment-item" onclick="showCommentDetail('싱크', 'TC 오류', 3)">
+                        <span class="comment-name">TC 오류</span>
+                        <span class="comment-count">3</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 기타 카테고리 -->
+            <div class="comment-category">
+                <div class="category-title">기타</div>
+                <div class="comment-items">
+                    <div class="comment-item" onclick="showCommentDetail('기타', '기타', 4)">
+                        <span class="comment-name">기타</span>
+                        <span class="comment-count">4</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 결과 영역 (코멘트 섹션 내) -->
+        <div style="margin-top: 30px; padding-top: 25px; border-top: 2px solid #e5e7eb;">
+            <div class="category-title">결과</div>
+            <div class="result-grade">
+                <label>등급:</label>
+                <div class="grade-options">
+                    <label class="grade-option grade-a">
+                        <input type="radio" name="grade" value="1">
+                        <span>1등급</span>
+                    </label>
+                    <label class="grade-option grade-b selected">
+                        <input type="radio" name="grade" value="2" checked>
+                        <span>2등급</span>
+                    </label>
+                    <label class="grade-option grade-c">
+                        <input type="radio" name="grade" value="3">
+                        <span>3등급</span>
+                    </label>
+                    <label class="grade-option grade-d">
+                        <input type="radio" name="grade" value="4">
+                        <span>4등급</span>
+                    </label>
+                    <label class="grade-option grade-e">
+                        <input type="radio" name="grade" value="5">
+                        <span>5등급</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 기타 코멘트 섹션 -->
+    <div class="other-comment-section">
+        <h2 class="section-title">
+            <span>📝</span>
+            설명
+        </h2>
+        <div class="comment-text-input">
+            <textarea class="comment-textarea" id="other-comment" placeholder="기타 코멘트를 입력하세요...">전반적으로 양호한 품질의 번역이나, 전문용어의 일관성과 문맥 파악에 있어 일부 개선이 필요함. 특히 의학 전문용어의 정확한 번역과 문장 구조의 자연스러움을 높일 필요가 있음.</textarea>
+        </div>
+    </div>
+
+
+
+    <!-- 파일 다운로드 섹션 -->
+    <div class="download-section">
+        <h2 class="section-title">
+            <span>📁</span>
+            비교자료 확인 / 비교자료 다운로드
+        </h2>
+        <div class="download-buttons">
+            <button class="download-btn" onclick="downloadFile('comparison')">
+                <span>🔍</span>
+                비교자료 확인
+            </button>
+            <button class="download-btn secondary" onclick="downloadFile('workfile')">
+                <span>📁</span>
+                비교자료 다운로드
+            </button>
+        </div>
+    </div>
+
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-action btn-save" onclick="saveReport()">
+            <span>💾</span>
+            저장
+        </button>
+    </div>
+
+    <!-- 코멘트 상세 모달 -->
+    <div id="commentDetailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle">
+                    <span>💬</span>
+                    번역 > 오역
+                </h2>
+                <button class="modal-close" onclick="closeCommentModal()">&times;</button>
+            </div>
+            
+            <div class="modal-content">
+                <table class="comment-table">
+                    <thead>
+                        <tr>
+                            <th>라인 NO</th>
+                            <th>타임코드</th>
+                            <th>코멘트</th>
+                        </tr>
+                    </thead>
+                    <tbody id="commentTableBody">
+                        <!-- 동적으로 생성될 코멘트 데이터 -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL 파라미터에서 데이터 추출
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                orderNumber: urlParams.get('orderNumber'),
+                workType: urlParams.get('workType'),
+                fileName: urlParams.get('fileName'),
+                worker: urlParams.get('worker'),
+                workTime: urlParams.get('workTime'),
+                assignDate: urlParams.get('assignDate'),
+                submitDate: urlParams.get('submitDate')
+            };
+        }
+
+        // 페이지 로드 시 데이터 설정
+        document.addEventListener('DOMContentLoaded', function() {
+            const params = getUrlParams();
+            
+            // 작업 정보 설정
+            if (params.orderNumber) {
+                document.getElementById('order-number').textContent = decodeURIComponent(params.orderNumber);
+            }
+            if (params.workType) {
+                const workTypeElement = document.getElementById('work-type');
+                const workTypeText = decodeURIComponent(params.workType);
+                workTypeElement.textContent = workTypeText;
+            }
+
+            if (params.fileName) {
+                document.getElementById('file-name').textContent = decodeURIComponent(params.fileName);
+            }
+            if (params.worker) {
+                document.getElementById('worker-name').textContent = decodeURIComponent(params.worker);
+            }
+            if (params.workTime) {
+                document.getElementById('work-time').textContent = decodeURIComponent(params.workTime);
+            }
+            if (params.assignDate) {
+                document.getElementById('assign-date').textContent = decodeURIComponent(params.assignDate);
+            }
+            if (params.submitDate) {
+                document.getElementById('submit-date').textContent = decodeURIComponent(params.submitDate);
+            }
+
+            // 등급 선택 이벤트 추가
+            const gradeOptions = document.querySelectorAll('.grade-option');
+            gradeOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // 모든 옵션에서 selected 클래스 제거
+                    gradeOptions.forEach(opt => opt.classList.remove('selected'));
+                    // 현재 선택된 옵션에 selected 클래스 추가
+                    this.classList.add('selected');
+                    // 라디오 버튼 체크
+                    this.querySelector('input[type="radio"]').checked = true;
+                });
+            });
+        });
+
+        // 뒤로 가기
+        function goBack() {
+            try {
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    window.parent.loadPage('pages/report/work-report.html');
+                    return;
+                }
+            } catch (e) {
+                console.log('parent.loadPage 실패:', e);
+            }
+            
+            try {
+                if (window.history.length > 1) {
+                    window.history.back();
+                    return;
+                }
+            } catch (e) {
+                console.log('history.back() 실패:', e);
+            }
+            
+            try {
+                window.location.href = 'work-report.html';
+            } catch (e) {
+                console.log('직접 페이지 이동 실패:', e);
+                alert('이전 페이지로 돌아갈 수 없습니다.');
+            }
+        }
+
+        // 파일 다운로드
+        function downloadFile(type) {
+            switch(type) {
+                case 'comparison':
+                    // 비교자료 확인 - 새창으로 비교 화면 열기
+                    try {
+                        const orderNumber = document.getElementById('order-number').textContent;
+                        const fileName = document.getElementById('file-name').textContent;
+                        const worker = document.getElementById('worker-name').textContent;
+                        const workType = document.getElementById('work-type').textContent;
+                        
+                        const params = new URLSearchParams({
+                            orderNumber: orderNumber,
+                            fileName: fileName,
+                            worker: worker
+                        });
+                        
+                        // 작업 항목에 따라 다른 비교 화면 선택
+                        let comparisonFile;
+                        if (workType === '소리바로-번역') {
+                            comparisonFile = 'work-comparison-translation.html';
+                        } else {
+                            comparisonFile = 'work-comparison.html';
+                        }
+                        
+                        // 여러 경로 시도
+                        const urls = [
+                            `${comparisonFile}?${params.toString()}`,
+                            `./${comparisonFile}?${params.toString()}`,
+                            `/pages/report/${comparisonFile}?${params.toString()}`,
+                            `../report/${comparisonFile}?${params.toString()}`
+                        ];
+                        
+                        console.log('현재 페이지 경로:', window.location.href);
+                        console.log('시도할 URL들:', urls);
+                        
+                        let success = false;
+                        for (let i = 0; i < urls.length; i++) {
+                            const url = urls[i];
+                            console.log(`URL ${i+1} 시도:`, url);
+                            
+                            // 전체화면 크기로 새창 열기
+                            const screenWidth = window.screen.availWidth;
+                            const screenHeight = window.screen.availHeight;
+                            const windowFeatures = `width=${screenWidth},height=${screenHeight},left=0,top=0,scrollbars=yes,resizable=yes,menubar=no,toolbar=no,location=no,status=no`;
+                            
+                            const newWindow = window.open(url, '_blank', windowFeatures);
+                            
+                            if (newWindow && !newWindow.closed) {
+                                success = true;
+                                console.log('성공한 URL:', url);
+                                break;
+                            } else {
+                                console.log('실패한 URL:', url);
+                                if (newWindow) newWindow.close();
+                            }
+                        }
+                        
+                        if (!success) {
+                            alert('비교 페이지를 열 수 없습니다.\n\n가능한 원인:\n1. 팝업이 차단됨\n2. 파일 경로 문제\n\n콘솔(F12)에서 자세한 정보를 확인하세요.');
+                        }
+                        
+                    } catch (error) {
+                        console.error('비교 페이지 열기 오류:', error);
+                        alert('오류가 발생했습니다: ' + error.message);
+                    }
+                    break;
+                    
+                case 'workfile':
+                    // 작업 항목에 따라 다른 알림 메시지
+                    const workType = document.getElementById('work-type').textContent;
+                    if (workType === '소리바로-번역') {
+                        alert('출발어, 작업본, 검수본을 다운로드합니다.');
+                    } else {
+                        alert('작업본, 검수본을 다운로드합니다.');
+                    }
+                    break;
+                    
+                default:
+                    alert('파일을 다운로드합니다.');
+                    break;
+            }
+        }
+
+        // 코멘트 상세 내용 표시 (모달)
+        function showCommentDetail(category, commentType, count) {
+            // 모든 선택된 항목에서 selected 클래스 제거
+            document.querySelectorAll('.comment-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // 현재 클릭된 항목에 selected 클래스 추가
+            const clickedItem = event.target.closest('.comment-item');
+            if (clickedItem) {
+                clickedItem.classList.add('selected');
+            }
+            
+            // 코멘트 상세 데이터 (라인 NO, 타임코드별)
+            const commentData = {
+                '번역': {
+                    '오역': [
+                        { lineNo: 60, timecode: '01:20:33', comment: '이건 자연스럽게 나오도록 수정해주세요.' },
+                        { lineNo: 125, timecode: '02:15:45', comment: '"postponed"를 "취소"로 번역했는데 "연기"가 맞습니다.' },
+                        { lineNo: 180, timecode: '03:42:18', comment: '문맥상 "완료"보다는 "진행"이 적절합니다.' }
+                    ],
+                    '직역': [
+                        { lineNo: 95, timecode: '01:55:22', comment: '"It goes without saying"을 직역하지 말고 자연스럽게 번역해주세요.' }
+                    ],
+                    '과한 의역': [],
+                    '번역 누락': [
+                        { lineNo: 245, timecode: '14:32:10', comment: '이 부분의 원문이 번역에서 누락되었습니다.' },
+                        { lineNo: 420, timecode: '28:15:30', comment: '중요한 설명 부분이 번역되지 않았습니다.' }
+                    ],
+                    '번역 중복': [],
+                    '어색한 문장 구성': [
+                        { lineNo: 85, timecode: '05:12:45', comment: '"그것은 매우 중요한 것입니다" → "이것은 매우 중요합니다"로 수정' },
+                        { lineNo: 155, timecode: '12:33:22', comment: '문장 구조를 더 자연스럽게 다듬어주세요.' },
+                        { lineNo: 280, timecode: '18:44:15', comment: '한국어 어순에 맞게 재구성이 필요합니다.' },
+                        { lineNo: 365, timecode: '25:18:33', comment: '의미는 맞지만 표현이 어색합니다.' }
+                    ],
+                    '간결성 부족': [
+                        { lineNo: 320, timecode: '22:10:15', comment: '불필요한 수식어를 제거하여 간결하게 표현해주세요.' }
+                    ]
+                },
+                '가이드라인': {
+                    '용어집 미반영': [
+                        { lineNo: 110, timecode: '08:30:45', comment: '"인공지능" → "AI"로 용어집에 맞게 수정해주세요.' },
+                        { lineNo: 275, timecode: '16:22:18', comment: '"데이터베이스" → "DB"로 표준 용어를 사용해주세요.' }
+                    ],
+                    '맞춤법/띄어쓰기/문장부호 오류': [
+                        { lineNo: 45, timecode: '03:15:30', comment: '"됬습니다" → "되었습니다" (맞춤법 오류)' },
+                        { lineNo: 98, timecode: '07:42:15', comment: '띄어쓰기를 정확히 해주세요.' },
+                        { lineNo: 142, timecode: '11:28:45', comment: '문장부호 사용이 잘못되었습니다.' },
+                        { lineNo: 295, timecode: '19:33:12', comment: '"안녕 하세요" → "안녕하세요" (띄어쓰기)' },
+                        { lineNo: 350, timecode: '24:16:33', comment: '쉼표와 마침표 사용을 확인해주세요.' }
+                    ],
+                    '숫자표기 오류': [
+                        { lineNo: 205, timecode: '13:45:22', comment: '숫자 표기 규칙에 맞게 수정해주세요.' }
+                    ],
+                    '문체 통일성 부족': [
+                        { lineNo: 78, timecode: '06:18:30', comment: '존댓말로 통일해주세요.' },
+                        { lineNo: 225, timecode: '14:55:18', comment: '문체가 일관되지 않습니다.' },
+                        { lineNo: 315, timecode: '21:12:45', comment: '반말과 존댓말이 혼재되어 있습니다.' }
+                    ],
+                    '용어 통일성 부족': [
+                        { lineNo: 115, timecode: '09:33:15', comment: '같은 개념은 동일한 용어로 표현해주세요.' },
+                        { lineNo: 260, timecode: '17:28:44', comment: '용어 사용의 일관성을 유지해주세요.' }
+                    ],
+                    '반/존 혼용': [],
+                    '숫자/단위/날짜/시간 표기 일관성 부족': [
+                        { lineNo: 305, timecode: '20:45:12', comment: '날짜 표기 형식을 통일해주세요.' }
+                    ],
+                    '글자수 제한': [],
+                    '화면자막 누락': [
+                        { lineNo: 385, timecode: '26:33:18', comment: '화면에 표시된 텍스트가 자막에 누락되었습니다.' }
+                    ]
+                },
+                '싱크': {
+                    '최소 TC 값 오류': [
+                        { lineNo: 1, timecode: '00:00:00', comment: '타임코드가 음수값을 가질 수 없습니다.' },
+                        { lineNo: 5, timecode: '00:00:00', comment: '최소 타임코드 값이 잘못 설정되었습니다.' }
+                    ],
+                    '최대 TC 값 오류': [
+                        { lineNo: 450, timecode: '99:99:99', comment: '최대 타임코드 값이 유효하지 않습니다.' }
+                    ],
+                    'TC 오류': [
+                        { lineNo: 75, timecode: '12:34:00', comment: '타임코드 형식이 잘못되었습니다.' },
+                        { lineNo: 210, timecode: '15:30:00', comment: '종료시간이 시작시간보다 빠릅니다.' },
+                        { lineNo: 380, timecode: '25:67:00', comment: '존재하지 않는 시간입니다 (67분은 불가능).' }
+                    ]
+                },
+                '기타': {
+                    '기타': [
+                        { lineNo: 55, timecode: '04:25:15', comment: '화자 구분이 명확하지 않습니다.' },
+                        { lineNo: 165, timecode: '12:45:30', comment: '배경음이 너무 큰 구간입니다.' },
+                        { lineNo: 290, timecode: '19:15:45', comment: '음성 품질이 좋지 않아 재확인이 필요합니다.' },
+                        { lineNo: 375, timecode: '25:30:20', comment: '전문용어에 대한 추가 설명이 필요합니다.' }
+                    ]
+                }
+            };
+            
+            // 모달 제목 설정
+            const modalTitle = document.getElementById('modalTitle');
+            modalTitle.innerHTML = `<span>💬</span> ${category} > ${commentType} (${count}건)`;
+            
+            // 테이블 데이터 생성
+            const tableBody = document.getElementById('commentTableBody');
+            let data = commentData[category] && commentData[category][commentType] ? commentData[category][commentType] : [];
+            
+            // 라인 NO 순으로 정렬 (작은 번호가 위로)
+            data = data.sort((a, b) => a.lineNo - b.lineNo);
+            
+            if (data.length === 0) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" style="text-align: center; color: #6b7280; padding: 40px;">
+                            해당 항목에 대한 코멘트가 없습니다.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tableBody.innerHTML = data.map(item => `
+                    <tr>
+                        <td class="line-no-cell">${item.lineNo}</td>
+                        <td class="timecode-cell">${item.timecode}</td>
+                        <td>${item.comment}</td>
+                    </tr>
+                `).join('');
+            }
+            
+            // 모달 표시
+            document.getElementById('commentDetailModal').style.display = 'flex';
+        }
+
+        // 코멘트 모달 닫기
+        function closeCommentModal() {
+            document.getElementById('commentDetailModal').style.display = 'none';
+            
+            // 모든 선택된 항목에서 selected 클래스 제거
+            document.querySelectorAll('.comment-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+        }
+
+
+
+        // 리포트 저장
+        function saveReport() {
+            const selectedGrade = document.querySelector('input[name="grade"]:checked');
+            if (!selectedGrade) {
+                alert('등급을 선택해주세요.');
+                return;
+            }
+            
+            const grade = selectedGrade.value;
+            const orderNumber = document.getElementById('order-number').textContent;
+            
+            if (confirm(`작업 결과를 저장하시겠습니까?\n\n주문번호: ${orderNumber}\n등급: ${grade}등급`)) {
+                alert('작업 결과 리포트가 저장되었습니다.');
+                goBack();
+            }
+        }
+    </script>
+
+</body>
+</html>

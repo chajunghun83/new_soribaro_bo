@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다건 프로젝트 추가 - VOD 작업관리</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .close-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .close-button:hover {
+            background: #4b5563;
+        }
+        
+        .basic-info-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .basic-info-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .basic-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 30px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            margin-bottom: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .form-group input, .form-group select {
+            padding: 15px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .required {
+            color: #ef4444;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+        
+        .upload-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .upload-header {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 40px;
+            text-align: center;
+            background: #f9fafb;
+            transition: all 0.2s;
+            cursor: pointer;
+            margin-bottom: 15px;
+        }
+        
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+        
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            color: #6b7280;
+        }
+        
+        .upload-text {
+            font-size: 16px;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .btn {
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .project-list-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .list-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .list-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .project-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .project-table th,
+        .project-table td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        
+        .project-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📁</span>
+            VOD 다건 프로젝트 추가
+        </h1>
+        <button class="close-button" onclick="closeWindow()">
+            <span>✕</span>
+            닫기
+        </button>
+    </div>
+    
+    <div class="basic-info-section">
+        <div class="basic-info-header">
+            <span>📋</span>
+            기본 정보
+        </div>
+        
+        <div class="basic-info-grid">
+            <div class="form-group">
+                <label for="projectTitle">프로젝트 제목 <span class="required">*</span></label>
+                <input type="text" id="projectTitle" placeholder="프로젝트 제목을 입력하세요" required>
+            </div>
+            <div class="form-group">
+                <label for="companyName">업체명 <span class="required">*</span></label>
+                <select id="companyName" required>
+                    <option value="">업체를 선택하세요</option>
+                    <option value="서울대학교">서울대학교</option>
+                    <option value="연세대학교">연세대학교</option>
+                    <option value="고려대학교">고려대학교</option>
+                    <option value="성균관대학교">성균관대학교</option>
+                    <option value="한양대학교">한양대학교</option>
+                    <option value="중앙대학교">중앙대학교</option>
+                    <option value="경희대학교">경희대학교</option>
+                    <option value="이화여자대학교">이화여자대학교</option>
+                    <option value="서강대학교">서강대학교</option>
+                    <option value="동국대학교">동국대학교</option>
+                    <option value="홍익대학교">홍익대학교</option>
+                    <option value="건국대학교">건국대학교</option>
+                    <option value="국민대학교">국민대학교</option>
+                    <option value="세종대학교">세종대학교</option>
+                    <option value="단국대학교">단국대학교</option>
+                    <option value="카이스트">카이스트</option>
+                    <option value="포스텍">포스텍</option>
+                    <option value="GIST">GIST</option>
+                    <option value="UNIST">UNIST</option>
+                    <option value="DGIST">DGIST</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="clientName">의뢰자명 <span class="required">*</span></label>
+                <input type="text" id="clientName" placeholder="의뢰자명을 입력하세요" required>
+            </div>
+        </div>
+    </div>
+    
+    <div class="upload-section">
+        <div class="upload-header">
+            <span>📤</span>
+            파일 업로드
+        </div>
+        
+        <div class="file-upload-area" onclick="simulateFileSelect()">
+            <div class="upload-icon">📁</div>
+            <div class="upload-text">파일을 드래그하여 놓거나 클릭하여 선택하세요</div>
+        </div>
+        
+        <div style="display: flex; justify-content: flex-end; gap: 10px;">
+            <button class="btn btn-primary" onclick="simulateFileSelect()">
+                <span>📂</span>
+                파일 선택
+            </button>
+            <button class="btn btn-success" onclick="registerProjects()">
+                <span>✅</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <div class="project-list-section">
+        <div class="list-header">
+            <h2 class="list-title">프로젝트 목록</h2>
+            <div>총 <span id="projectCount">0</span>건</div>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table class="project-table">
+                <thead>
+                    <tr>
+                        <th>NO</th>
+                        <th>서비스</th>
+                        <th>파일이름</th>
+                        <th>작업시간</th>
+                        <th>제목</th>
+                        <th>상태</th>
+                    </tr>
+                </thead>
+                <tbody id="projectTableBody">
+                    <tr>
+                        <td colspan="6" style="padding: 40px; color: #6b7280; font-style: italic;">
+                            업로드된 프로젝트가 없습니다.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div style="padding: 20px 25px; border-top: 1px solid #e5e7eb; background: #f8f9fa; display: flex; justify-content: flex-end; gap: 15px;">
+            <button class="btn btn-success" onclick="downloadProjectsAsExcel()">
+                <span>📊</span>
+                엑셀 다운로드
+            </button>
+            <button class="btn btn-primary" onclick="registerToWorkspy()">
+                <span>🚀</span>
+                웍스파이 프로젝트 등록
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let uploadedProjects = [];
+        
+        function closeWindow() {
+            if (confirm('창을 닫으시겠습니까?')) {
+                window.close();
+            }
+        }
+        
+        function simulateFileSelect() {
+            const mockFiles = [
+                'video_001.mp4',
+                'video_002.mp4', 
+                'video_003.mp4',
+                'video_004.mp4',
+                'video_005.mp4',
+                'video_006.mp4',
+                'video_007.mp4',
+                'video_008.mp4',
+                'video_009.mp4',
+                'video_010.mp4',
+                'video_011.mp4',
+                'video_012.mp4',
+                'video_013.mp4',
+                'video_014.mp4',
+                'video_015.mp4',
+                'video_016.mp4',
+                'video_017.mp4',
+                'video_018.mp4',
+                'video_019.mp4',
+                'video_020.mp4'
+            ];
+            
+            uploadedProjects = mockFiles.map((fileName, index) => ({
+                no: index + 1,
+                service: '소리바로-VOD',
+                fileName: fileName,
+                workTime: `${String(Math.floor(Math.random() * 2) + 1).padStart(2, '0')}:${String(Math.floor(Math.random() * 59) + 1).padStart(2, '0')}:00`,
+                title: `VOD_(자막) / 재택 / ${fileName}`,
+                status: '대기'
+            }));
+            
+            updateProjectList();
+            
+            // 드래그 영역 스타일 변경
+            const uploadArea = document.querySelector('.file-upload-area');
+            uploadArea.style.background = '#dcfce7';
+            uploadArea.style.borderColor = '#10b981';
+            uploadArea.querySelector('.upload-text').textContent = `${mockFiles.length}개의 파일이 선택되었습니다`;
+            
+            alert(`${mockFiles.length}개의 파일이 선택되었습니다.`);
+        }
+        
+        function updateProjectList() {
+            const tbody = document.getElementById('projectTableBody');
+            
+            if (uploadedProjects.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" style="padding: 40px; color: #6b7280; font-style: italic;">
+                            업로드된 프로젝트가 없습니다.
+                        </td>
+                    </tr>
+                `;
+            } else {
+                tbody.innerHTML = uploadedProjects.map(project => `
+                    <tr>
+                        <td>${project.no}</td>
+                        <td><span style="background: #dbeafe; color: #1e40af; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">${project.service}</span></td>
+                        <td>${project.fileName}</td>
+                        <td>${project.workTime}</td>
+                        <td>${project.title}</td>
+                        <td><span style="background: #fef3c7; color: #92400e; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">${project.status}</span></td>
+                    </tr>
+                `).join('');
+            }
+            
+            document.getElementById('projectCount').textContent = uploadedProjects.length;
+        }
+        
+        function registerProjects() {
+            const projectTitle = document.getElementById('projectTitle').value.trim();
+            const companyName = document.getElementById('companyName').value;
+            const clientName = document.getElementById('clientName').value.trim();
+            
+            if (!projectTitle) {
+                alert('프로젝트 제목을 입력해주세요.');
+                return;
+            }
+            
+            if (!companyName) {
+                alert('업체명을 선택해주세요.');
+                return;
+            }
+            
+            if (!clientName) {
+                alert('의뢰자명을 입력해주세요.');
+                return;
+            }
+            
+            if (uploadedProjects.length === 0) {
+                alert('등록할 프로젝트가 없습니다.');
+                return;
+            }
+            
+            // 부모 창에 데이터 전달
+            try {
+                const projectsToAdd = uploadedProjects.map((project, index) => {
+                    const now = new Date();
+                    const year = now.getFullYear();
+                    const month = String(now.getMonth() + 1).padStart(2, '0');
+                    const day = String(now.getDate()).padStart(2, '0');
+                    const hours = String(now.getHours()).padStart(2, '0');
+                    const minutes = String(now.getMinutes()).padStart(2, '0');
+                    const seconds = String(now.getSeconds() + index).padStart(2, '0');
+                    const orderNumber = `${year}${month}${day}${hours}${minutes}${seconds}`;
+                    
+                    return {
+                        orderNumber: orderNumber,
+                        title: `${projectTitle}_${String(uploadedProjects.length - index).padStart(2, '0')}`,
+                        companyName: companyName,
+                        clientName: clientName,
+                        requestDate: `${year}-${month}-${day} ${hours}:${minutes}`,
+                        workTime: project.workTime,
+                        status: '접수'
+                    };
+                });
+                
+                localStorage.setItem('bulkProjectsData', JSON.stringify(projectsToAdd));
+                localStorage.setItem('bulkProjectsAdded', 'true');
+                
+                if (window.opener && !window.opener.closed) {
+                    if (typeof window.opener.checkForBulkProjects === 'function') {
+                        window.opener.checkForBulkProjects();
+                    }
+                    window.opener.focus();
+                }
+                
+                alert(`🎉 성공!\n\n${uploadedProjects.length}개의 프로젝트가 웍스파이에 성공적으로 등록되었습니다.\n\nVOD 작업관리 페이지에 항목이 추가되었습니다.`);
+                
+                setTimeout(() => {
+                    if (confirm('등록이 완료되었습니다. 창을 닫으시겠습니까?')) {
+                        window.close();
+                    }
+                }, 1000);
+                
+            } catch (error) {
+                console.error('데이터 전달 실패:', error);
+                alert('등록 중 오류가 발생했습니다.');
+            }
+        }
+        
+        function registerToWorkspy() {
+            registerProjects();
+        }
+        
+        function downloadProjectsAsExcel() {
+            if (uploadedProjects.length === 0) {
+                alert('다운로드할 프로젝트가 없습니다.');
+                return;
+            }
+            alert(`📊 엑셀 다운로드\n\n${uploadedProjects.length}개의 프로젝트 데이터를 엑셀 파일로 다운로드합니다.`);
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProjectList();
+        });
+    </script>
+</body>
+</html>

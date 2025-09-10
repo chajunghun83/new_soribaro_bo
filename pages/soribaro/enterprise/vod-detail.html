@@ -1291,23 +1291,31 @@
             </div>
         </div>
         
-        <div style="overflow-x: auto;">
-            <table style="width: 100%; min-width: 1100px; border-collapse: collapse;">
-                <thead>
-                    <tr style="background: #f8f9fa;">
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">파일이름</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">재생시간</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">전사툴</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">산출물</th>
-                        <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자 상태</th>
-                    </tr>
-                </thead>
-                <tbody id="work-management-table-body">
-                    <!-- 동적으로 생성될 작업 데이터 -->
-                </tbody>
-            </table>
-        </div>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; min-width: 1100px; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background: #f8f9fa;">
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">파일이름</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">재생시간</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">전사툴</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">산출물</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자 상태</th>
+                            </tr>
+                        </thead>
+                        <tbody id="work-management-table-body">
+                            <!-- 동적으로 생성될 작업 데이터 -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- 작업자 배정 버튼 (오른쪽 하단) -->
+                <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+                    <button class="btn btn-secondary" onclick="openVodWorkerAssignModal()" style="background: #8b5cf6; color: white; font-size: 12px; padding: 8px 16px;">
+                        <span>👤</span>
+                        새 작업자 배정
+                    </button>
+                </div>
     </div>
 
     <!-- 세부 요청사항 & 파일공유 섹션 -->
@@ -3726,6 +3734,110 @@
                 }
             }
         }
+
+        // VOD 작업자 배정 모달 관련 함수들
+        function openVodWorkerAssignModal() {
+            document.getElementById('vodWorkerAssignModal').style.display = 'flex';
+            // 라디오 버튼 초기화
+            document.querySelectorAll('input[name="vodAssignWorker"]').forEach(radio => radio.checked = false);
+            // 검색 결과 초기화
+            document.getElementById('vod-worker-search-results').innerHTML = '<div style="text-align: center; color: #6b7280; padding: 20px;">검색어를 입력하고 검색 버튼을 눌러주세요.</div>';
+            document.getElementById('vod-worker-search').value = '';
+        }
+        
+        function closeVodWorkerAssignModal() {
+            document.getElementById('vodWorkerAssignModal').style.display = 'none';
+        }
+        
+        function searchVodWorkers() {
+            const searchKeyword = document.getElementById('vod-worker-search').value.trim();
+            const searchType = document.getElementById('vod-worker-search-type').value;
+            const resultsContainer = document.getElementById('vod-worker-search-results');
+            
+            if (!searchKeyword) {
+                alert('검색어를 입력하세요.');
+                return;
+            }
+
+            // 더미 검색 결과 데이터 - 김철수 검색 시나리오
+            const allWorkers = [
+                { id: 'v101', name: '김철수', gender: '남성', phone: '010-1234-5678', birth: '1990.05.15', address: '서울특별시 강남구', grade: '1급', email: 'kimcs@email.com' },
+                { id: 'v102', name: '김영희', gender: '여성', phone: '010-2345-6789', birth: '1988.03.22', address: '경기도 수원시', grade: '2급', email: 'kimyh@email.com' },
+                { id: 'v103', name: '이철수', gender: '남성', phone: '010-3456-7890', birth: '1992.07.08', address: '부산광역시', grade: '1급', email: 'leecs@email.com' }
+            ];
+
+            // 검색 조건에 따른 필터링
+            const filteredWorkers = allWorkers.filter(worker => {
+                switch(searchType) {
+                    case 'name':
+                        return worker.name.includes(searchKeyword);
+                    case 'email':
+                        return worker.email.includes(searchKeyword);
+                    case 'phone':
+                        return worker.phone.includes(searchKeyword);
+                    default:
+                        return worker.name.includes(searchKeyword);
+                }
+            });
+
+            if (filteredWorkers.length === 0) {
+                resultsContainer.innerHTML = '<div style="text-align: center; color: #6b7280; padding: 20px;">검색 결과가 없습니다.</div>';
+                return;
+            }
+
+            let html = `<div style="margin-bottom: 10px; color: #374151; font-weight: 600;">검색 결과 ${filteredWorkers.length}명</div>`;
+            
+            filteredWorkers.forEach(worker => {
+                html += `
+                    <div style="display: flex; align-items: center; gap: 15px; padding: 8px 12px; background: #f9fafb; border-radius: 6px; margin-bottom: 6px; border: 1px solid #e5e7eb;">
+                        <input type="radio" name="vodAssignWorker" value="${worker.id}" id="vod-search-${worker.id}">
+                        <label for="vod-search-${worker.id}" style="flex: 1; cursor: pointer; display: flex; align-items: center; gap: 20px;">
+                            <div style="font-weight: 600; color: #1f2937; font-size: 15px; min-width: 80px;">${worker.name}</div>
+                            <div style="font-size: 14px; color: #6b7280;">${worker.gender} | ${worker.phone} | ${worker.birth} | ${worker.address} | ${worker.grade}</div>
+                        </label>
+                    </div>
+                `;
+            });
+
+            resultsContainer.innerHTML = html;
+        }
+        
+        function assignVodWorker() {
+            const selectedRadio = document.querySelector('input[name="vodAssignWorker"]:checked');
+            
+            if (!selectedRadio) {
+                alert('배정할 작업자를 선택하세요.');
+                return;
+            }
+
+            // 선택된 작업자 정보 가져오기
+            const workerLabel = selectedRadio.nextElementSibling;
+            const workerName = workerLabel.querySelector('div').textContent;
+            
+            if (confirm(`${workerName} 작업자를 배정하시겠습니까?`)) {
+                // 작업관리 테이블의 작업자 컬럼 업데이트
+                updateVodWorkerInTable(workerName);
+                
+                alert(`${workerName} 작업자가 배정되었습니다.`);
+                closeVodWorkerAssignModal();
+            }
+        }
+        
+        function updateVodWorkerInTable(workerName) {
+            const tableBody = document.getElementById('work-management-table-body');
+            if (!tableBody) return;
+            
+            // 모든 행의 작업자 컬럼 업데이트
+            const rows = tableBody.querySelectorAll('tr');
+            rows.forEach(row => {
+                const workerCell = row.querySelector('td:nth-child(3)'); // 작업자 컬럼
+                if (workerCell) {
+                    workerCell.textContent = workerName;
+                    workerCell.style.color = '#059669';
+                    workerCell.style.fontWeight = '500';
+                }
+            });
+        }
     </script>
 
     <!-- 웍스파이 프로젝트 등록 모달 -->
@@ -3982,7 +4094,7 @@
                                             <th><input type="checkbox" id="selectAllWorkers" onchange="toggleAllWorkers(this)"></th>
                                             <th>이름</th>
                                             <th>성별</th>
-                                            <th>휴대전화</th>
+                                            <th>연락처</th>
                                             <th>생년월일</th>
                                             <th>주소</th>
                                             <th>한글속기자격증</th>
@@ -4322,6 +4434,74 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VOD 작업자 배정 모달 -->
+    <div id="vodWorkerAssignModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container" style="max-width: 900px;">
+            <div class="modal-header">
+                <h2>👤 VOD 작업자 배정</h2>
+                <button class="modal-close" onclick="closeVodWorkerAssignModal()">&times;</button>
+            </div>
+            
+            <div class="modal-form">
+                <!-- 배정 작업자 섹션 -->
+                <div style="margin-bottom: 25px;">
+                    <h3 style="margin: 0 0 15px 0; font-size: 16px; font-weight: 600; color: #374151; border-bottom: 2px solid #3b82f6; padding-bottom: 8px;">배정 작업자</h3>
+                    
+                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; background: #f9fafb;">
+                        <div id="vod-assigned-worker-list">
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 8px 12px; background: white; border-radius: 6px; margin-bottom: 6px;">
+                                <input type="radio" name="vodAssignWorker" value="w001" id="vod-assign-worker-1">
+                                <label for="vod-assign-worker-1" style="flex: 1; cursor: pointer; display: flex; align-items: center; gap: 20px;">
+                                    <div style="font-weight: 600; color: #1f2937; font-size: 15px; min-width: 80px;">김영상</div>
+                                    <div style="font-size: 14px; color: #6b7280;">여성 | 010-1**2-3456 | 1990.**.** | 서울특별시 강남구 | 1급</div>
+                                </label>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 8px 12px; background: white; border-radius: 6px; margin-bottom: 6px;">
+                                <input type="radio" name="vodAssignWorker" value="w002" id="vod-assign-worker-2">
+                                <label for="vod-assign-worker-2" style="flex: 1; cursor: pointer; display: flex; align-items: center; gap: 20px;">
+                                    <div style="font-weight: 600; color: #1f2937; font-size: 15px; min-width: 80px;">박동영</div>
+                                    <div style="font-size: 14px; color: #6b7280;">남성 | 010-2**3-4567 | 1988.**.** | 경기도 안양시 | 2급</div>
+                                </label>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 15px; padding: 8px 12px; background: white; border-radius: 6px; margin-bottom: 6px;">
+                                <input type="radio" name="vodAssignWorker" value="w003" id="vod-assign-worker-3">
+                                <label for="vod-assign-worker-3" style="flex: 1; cursor: pointer; display: flex; align-items: center; gap: 20px;">
+                                    <div style="font-weight: 600; color: #1f2937; font-size: 15px; min-width: 80px;">이비디오</div>
+                                    <div style="font-size: 14px; color: #6b7280;">여성 | 010-3**4-5678 | 1985.**.** | 부산광역시 해운대구 | 1급</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 작업자 검색 섹션 -->
+                <div style="margin-bottom: 25px;">
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <select id="vod-worker-search-type" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; min-width: 100px;">
+                            <option value="name">이름</option>
+                            <option value="email">이메일</option>
+                            <option value="phone">연락처</option>
+                        </select>
+                        <input type="text" id="vod-worker-search" placeholder="검색어를 입력하세요..." style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;" onkeypress="if(event.key==='Enter') searchVodWorkers()">
+                        <button class="btn btn-primary" onclick="searchVodWorkers()" style="padding: 8px 16px; font-size: 14px;">
+                            🔍 작업자 검색
+                        </button>
+                    </div>
+                    <div id="vod-worker-search-results" style="margin-top: 15px; min-height: 50px; max-height: 200px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px; background: white;">
+                        <div style="text-align: center; color: #6b7280; padding: 20px;">
+                            검색어를 입력하고 검색 버튼을 눌러주세요.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button type="button" class="btn-secondary" onclick="closeVodWorkerAssignModal()">닫기</button>
+                <button type="button" class="btn-save" onclick="assignVodWorker()">배정</button>
             </div>
         </div>
     </div>

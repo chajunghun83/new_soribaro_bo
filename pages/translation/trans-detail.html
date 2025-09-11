@@ -1224,6 +1224,17 @@
                 <div class="info-value" id="client-name">김민수</div>
             </div>
         </div>
+
+        <div class="basic-info-grid" style="grid-template-columns: 1fr 1fr;">
+            <div class="info-item">
+                <span class="info-label">원본 언어</span>
+                <div class="info-value" id="source-language">한글</div>
+            </div>
+            <div class="info-item">
+                <span class="info-label">도착 언어</span>
+                <div class="info-value" id="target-languages">일본어, 중국어, 칸나다어</div>
+            </div>
+        </div>
     </div>
 
     <!-- 메인 콘텐츠 영역 -->
@@ -1454,6 +1465,7 @@
             <table style="width: 100%; min-width: 1300px; border-collapse: collapse;">
                 <thead>
                     <tr style="background: #f8f9fa;">
+                        <th style="width: 50px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;"><input type="checkbox" id="selectAllTranslator" onchange="toggleAllTranslatorRows(this)"></th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">파일이름</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업시간</th>
                         <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자(상태)</th>
@@ -1472,7 +1484,7 @@
         
         <!-- 작업자 배정 버튼 (오른쪽 하단) -->
         <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
-            <button class="btn btn-secondary" onclick="openTranslatorWorkerAssignModal()" style="background: #8b5cf6; color: white; font-size: 12px; padding: 8px 16px;">
+            <button class="btn btn-secondary" onclick="handleOpenTranslatorWorkerAssignModal()" style="background: #8b5cf6; color: white; font-size: 12px; padding: 8px 16px;">
                 <span>👤</span>
                 새 작업자 배정
             </button>
@@ -2735,39 +2747,42 @@
             };
             
             let tableHTML = '';
+            const targetLanguages = ['일본어', '중국어', '칸나다어'];
             project.selectedFiles.forEach(fileId => {
                 const file = fileData[fileId];
                 if (file) {
-                    const workerName = ''; // 번역가 영역 초기에는 작업자 없음
-                    
-                    // 번역가 영역 작업자(상태) 표시
+                    const workerName = '';
                     const translatorWorkerStatus = workerName ? `${workerName}(작업중)` : '-';
-                    
-                    tableHTML += `
-                        <tr style="border-bottom: 1px solid #e5e7eb;">
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.name}</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.duration}</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${translatorWorkerStatus}</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">영어</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">칸나다어</td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
-                                <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
-                                    <button class="tool-btn" style="padding: 6px 12px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="launchTranslatorTranscriptionTool()">
-                                        🚀 전사툴 실행
-                                    </button>
-                                    <button class="tool-btn" style="padding: 6px 12px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="launchTranslatorReviewTool()">
-                                        ✅ 검수툴 실행
-                                    </button>
-                                </div>
-                            </td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; min-width: 150px;">
-                                <span style="color: #9ca3af; font-size: 11px;">산출물 없음</span>
-                            </td>
-                            <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
-                                <span class="status-badge status-inprogress">작업중</span>
-                            </td>
-                        </tr>
-                    `;
+
+                    // 도착어가 여러 개인 경우 각 언어별로 동일 정보의 행을 생성
+                    targetLanguages.forEach(lang => {
+                        tableHTML += `
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb;"><input type="checkbox" class="translator-row-checkbox"></td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.name}</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${file.duration}</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${translatorWorkerStatus}</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">영어</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${lang}</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
+                                    <div style="display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;">
+                                        <button class="tool-btn" style="padding: 6px 12px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="launchTranslatorTranscriptionTool()">
+                                            🚀 전사툴 실행
+                                        </button>
+                                        <button class="tool-btn" style="padding: 6px 12px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 6px; cursor: pointer;" onclick="launchTranslatorReviewTool()">
+                                            ✅ 검수툴 실행
+                                        </button>
+                                    </div>
+                                </td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; min-width: 150px;">
+                                    <span style="color: #9ca3af; font-size: 11px;">산출물 없음</span>
+                                </td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
+                                    <span class="status-badge status-inprogress">작업중</span>
+                                </td>
+                            </tr>
+                        `;
+                    });
                 }
             });
             
@@ -4384,6 +4399,22 @@
                     }
                 });
             });
+        }
+
+        // 번역가 영역: 선택 검증 후 모달 열기
+        function handleOpenTranslatorWorkerAssignModal() {
+            const checked = document.querySelectorAll('#work-management-translator-table-body .translator-row-checkbox:checked');
+            if (!checked || checked.length === 0) {
+                alert('작업자를 배정할 행을 선택하세요.');
+                return;
+            }
+            openTranslatorWorkerAssignModal();
+        }
+
+        // 번역가 영역: 전체 선택 토글
+        function toggleAllTranslatorRows(master) {
+            const rows = document.querySelectorAll('#work-management-translator-table-body .translator-row-checkbox');
+            rows.forEach(cb => { cb.checked = master.checked; });
         }
 
         function closeTranslatorWorkerAssignModal() {

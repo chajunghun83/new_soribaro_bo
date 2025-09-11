@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서비스 약관 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 사용자구분 배지 */
+        .user-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .user-system {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .user-general {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .user-admin {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .user-stenographer {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .user-enterprise {
+            background: #fce7f3;
+            color: #be185d;
+        }
+        
+        .user-reviewer {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        
+        .user-clipdesk {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        /* 사용 여부 배지 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* 약관 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 300px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📋</span>
+            서비스 약관 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">제목</div>
+                    <div class="info-value" id="termsTitle">소리바로 서비스 이용약관</div>
+                    
+                    <div class="info-label">사용자구분</div>
+                    <div class="info-value">
+                        <span id="userBadge" class="user-badge user-system">시스템관리자</span>
+                    </div>
+                    
+                    <div class="info-label">사용여부</div>
+                    <div class="info-value">
+                        <span id="statusBadge" class="status-badge status-active">Y</span>
+                    </div>
+                    
+                    <div class="info-label">순서</div>
+                    <div class="info-value" id="sortOrder">1</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 기간 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기간 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">시작일</div>
+                    <div class="info-value" id="startDate">2025-01-01</div>
+                    
+                    <div class="info-label">종료일</div>
+                    <div class="info-value" id="endDate">2025-12-31</div>
+                    
+                    <div class="info-label">등록자</div>
+                    <div class="info-value" id="registeredBy">관리자</div>
+                    
+                    <div class="info-label">등록일시</div>
+                    <div class="info-value" id="registeredDate">2025-08-27 09:00:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 약관 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">약관 내용</div>
+        <div class="info-content">
+            <div class="content-display" id="termsContent">제1조 (목적)
+이 약관은 소리바로(이하 "회사"라 합니다)가 제공하는 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
+
+제2조 (정의)
+이 약관에서 사용하는 용어의 정의는 다음과 같습니다.
+1. "서비스"라 함은 회사가 제공하는 모든 서비스를 의미합니다.
+2. "이용자"라 함은 이 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.
+3. "회원"이라 함은 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 정보를 지속적으로 제공받으며, 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를 말합니다.
+
+제3조 (약관의 효력 및 변경)
+1. 이 약관은 서비스 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력을 발생합니다.
+2. 회사는 필요하다고 인정되는 경우 이 약관을 변경할 수 있으며, 변경된 약관은 제1항과 같은 방법으로 공지 또는 통지함으로써 효력을 발생합니다.
+
+제4조 (서비스의 제공 및 변경)
+1. 회사는 다음과 같은 업무를 수행합니다.
+   - 음성 파일의 텍스트 변환 서비스
+   - 회의록 작성 서비스
+   - 번역 서비스
+   - 기타 회사가 정하는 업무
+
+제5조 (서비스 이용시간)
+1. 서비스 이용은 회사의 업무상 또는 기술상 특별한 지장이 없는 한 연중무휴, 1일 24시간 운영을 원칙으로 합니다.
+2. 회사는 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신두절 또는 운영상 상당한 이유가 있는 경우 서비스의 제공을 일시적으로 중단할 수 있습니다.
+
+제6조 (회원가입)
+1. 이용자는 회사가 정한 가입 양식에 따라 회원정보를 기입한 후 이 약관에 동의한다는 의사표시를 함으로서 회원가입을 신청합니다.
+2. 회사는 제1항과 같이 회원으로 가입할 것을 신청한 이용자 중 다음 각 호에 해당하지 않는 한 회원으로 등록합니다.</div>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-action btn-edit" onclick="editTerms()">
+            <span>✏️</span>
+            수정
+        </button>
+        <button class="btn-action btn-delete" onclick="deleteTerms()">
+            <span>🗑️</span>
+            삭제
+        </button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('서비스 약관 상세 페이지 로드, ID:', itemId);
+            loadTermsDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadTermsDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'TERMS001': {
+                    userType: '시스템관리자',
+                    userClass: 'user-system',
+                    termsTitle: '소리바로 서비스 이용약관',
+                    isActive: 'Y',
+                    statusClass: 'status-active',
+                    sortOrder: '1',
+                    startDate: '2025-01-01',
+                    endDate: '2025-12-31',
+                    registeredBy: '관리자',
+                    registeredDate: '2025-08-27 09:00:00',
+                    content: `제1조 (목적)
+이 약관은 소리바로(이하 "회사"라 합니다)가 제공하는 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
+
+제2조 (정의)
+이 약관에서 사용하는 용어의 정의는 다음과 같습니다.
+1. "서비스"라 함은 회사가 제공하는 모든 서비스를 의미합니다.
+2. "이용자"라 함은 이 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.
+3. "회원"이라 함은 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 정보를 지속적으로 제공받으며, 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를 말합니다.
+
+제3조 (약관의 효력 및 변경)
+1. 이 약관은 서비스 화면에 게시하거나 기타의 방법으로 이용자에게 공지함으로써 효력을 발생합니다.
+2. 회사는 필요하다고 인정되는 경우 이 약관을 변경할 수 있으며, 변경된 약관은 제1항과 같은 방법으로 공지 또는 통지함으로써 효력을 발생합니다.
+
+제4조 (서비스의 제공 및 변경)
+1. 회사는 다음과 같은 업무를 수행합니다.
+   - 음성 파일의 텍스트 변환 서비스
+   - 회의록 작성 서비스
+   - 번역 서비스
+   - 기타 회사가 정하는 업무
+
+제5조 (서비스 이용시간)
+1. 서비스 이용은 회사의 업무상 또는 기술상 특별한 지장이 없는 한 연중무휴, 1일 24시간 운영을 원칙으로 합니다.
+2. 회사는 컴퓨터 등 정보통신설비의 보수점검, 교체 및 고장, 통신두절 또는 운영상 상당한 이유가 있는 경우 서비스의 제공을 일시적으로 중단할 수 있습니다.
+
+제6조 (회원가입)
+1. 이용자는 회사가 정한 가입 양식에 따라 회원정보를 기입한 후 이 약관에 동의한다는 의사표시를 함으로서 회원가입을 신청합니다.
+2. 회사는 제1항과 같이 회원으로 가입할 것을 신청한 이용자 중 다음 각 호에 해당하지 않는 한 회원으로 등록합니다.`
+                },
+                'TERMS002': {
+                    userType: '사용자',
+                    userClass: 'user-general',
+                    termsTitle: '개인정보 처리방침',
+                    isActive: 'Y',
+                    statusClass: 'status-active',
+                    sortOrder: '2',
+                    startDate: '2025-01-01',
+                    endDate: '2025-12-31',
+                    registeredBy: '관리자',
+                    registeredDate: '2025-08-27 10:30:00',
+                    content: `제1조 (개인정보의 처리 목적)
+소리바로는 다음의 목적을 위하여 개인정보를 처리합니다.
+
+1. 회원 가입 및 관리
+   - 회원 가입의사 확인, 회원제 서비스 제공에 따른 본인 식별·인증
+   - 회원자격 유지·관리, 서비스 부정이용 방지
+
+2. 서비스 제공
+   - 음성인식 서비스 제공, 콘텐츠 제공
+   - 맞춤서비스 제공, 본인인증, 연령인증
+
+3. 고충처리
+   - 민원인의 신원 확인, 민원사항 확인, 사실조사를 위한 연락·통지
+   - 처리결과 통보
+
+제2조 (개인정보의 처리 및 보유 기간)
+① 소리바로는 법령에 따른 개인정보 보유·이용기간 또는 정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용기간 내에서 개인정보를 처리·보유합니다.
+
+② 각각의 개인정보 처리 및 보유 기간은 다음과 같습니다.
+   - 회원 가입 및 관리: 회원 탈퇴시까지
+   - 서비스 제공: 서비스 종료시까지`
+                },
+                'TERMS003': {
+                    userType: '관리자',
+                    userClass: 'user-admin',
+                    termsTitle: '관리자 운영 가이드라인',
+                    isActive: 'Y',
+                    statusClass: 'status-active',
+                    sortOrder: '3',
+                    startDate: '2025-02-01',
+                    endDate: '2025-12-31',
+                    registeredBy: '관리자',
+                    registeredDate: '2025-08-26 11:15:00',
+                    content: `제1조 (목적 및 적용범위)
+이 가이드라인은 소리바로 관리자가 시스템 운영 및 관리 업무를 수행함에 있어 준수해야 할 기본 원칙과 절차를 정함을 목적으로 합니다.
+
+제2조 (관리자의 역할 및 책임)
+1. 시스템 안정성 유지 및 모니터링
+2. 사용자 계정 관리 및 권한 부여
+3. 데이터 백업 및 보안 관리
+4. 서비스 품질 관리 및 개선
+
+제3조 (보안 관리)
+1. 관리자 계정은 정기적으로 비밀번호를 변경해야 합니다.
+2. 관리자 권한은 업무상 필요한 최소한의 범위로 제한합니다.
+3. 시스템 접근 시 모든 활동은 로그로 기록됩니다.
+
+제4조 (데이터 관리)
+1. 고객 데이터는 개인정보보호법에 따라 엄격히 관리합니다.
+2. 데이터 백업은 매일 정기적으로 수행합니다.
+3. 데이터 복구 절차를 숙지하고 비상시 대응합니다.`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['TERMS001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('userBadge').textContent = data.userType;
+            document.getElementById('userBadge').className = `user-badge ${data.userClass}`;
+            document.getElementById('termsTitle').textContent = data.termsTitle;
+            document.getElementById('statusBadge').textContent = data.isActive;
+            document.getElementById('statusBadge').className = `status-badge ${data.statusClass}`;
+            document.getElementById('sortOrder').textContent = data.sortOrder;
+            document.getElementById('startDate').textContent = data.startDate;
+            document.getElementById('endDate').textContent = data.endDate;
+            document.getElementById('registeredBy').textContent = data.registeredBy;
+            document.getElementById('registeredDate').textContent = data.registeredDate;
+            document.getElementById('termsContent').textContent = data.content;
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'terms-management.html';
+        }
+        
+        // 수정 기능
+        function editTerms() {
+            const url = `terms-register.html?id=${itemId}&mode=edit`;
+            window.location.href = url;
+        }
+        
+        // 삭제 기능
+        function deleteTerms() {
+            if (confirm('이 약관을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
+                alert('약관이 삭제되었습니다.');
+                // 실제 구현 시 서버 API 호출하여 삭제
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

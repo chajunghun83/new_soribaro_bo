@@ -79,15 +79,26 @@
         .basic-info-grid {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            gap: 30px;
+            gap: 25px;
+            margin-bottom: 25px;
         }
         
-        .basic-info-grid .form-group {
+        .language-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+        
+        .basic-info-grid .form-group,
+        .language-info-grid .form-group {
             display: flex;
             flex-direction: column;
         }
         
-        .basic-info-grid .form-group input {
+        .basic-info-grid .form-group input,
+        .basic-info-grid .form-group select,
+        .language-info-grid .form-group input,
+        .language-info-grid .form-group select {
             padding: 15px 20px;
             border: 1px solid #d1d5db;
             border-radius: 10px;
@@ -96,16 +107,21 @@
             transition: all 0.2s;
             width: 100%;
             box-sizing: border-box;
+            cursor: pointer;
         }
         
-        .basic-info-grid .form-group input:focus {
+        .basic-info-grid .form-group input:focus,
+        .basic-info-grid .form-group select:focus,
+        .language-info-grid .form-group input:focus,
+        .language-info-grid .form-group select:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
             transform: translateY(-1px);
         }
         
-        .basic-info-grid .form-group label {
+        .basic-info-grid .form-group label,
+        .language-info-grid .form-group label {
             margin-bottom: 12px;
             font-size: 16px;
             font-weight: 600;
@@ -117,6 +133,149 @@
             color: #ef4444;
             font-weight: 700;
             margin-left: 4px;
+        }
+        
+        /* 도착 언어 다중 선택 */
+        .language-multi-select {
+            position: relative;
+            width: 100%;
+        }
+        
+        .language-select-trigger {
+            padding: 15px 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 16px;
+            background: white;
+            transition: all 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 54px;
+        }
+        
+        .language-select-trigger:focus,
+        .language-select-trigger.open {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+            transform: translateY(-1px);
+        }
+        
+        .language-select-trigger .selected-count {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .language-select-trigger .arrow {
+            transition: transform 0.2s;
+        }
+        
+        .language-select-trigger.open .arrow {
+            transform: rotate(180deg);
+        }
+        
+        .language-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 5px;
+        }
+        
+        .language-dropdown.show {
+            display: block;
+        }
+        
+        .language-group {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .language-group:last-child {
+            border-bottom: none;
+        }
+        
+        .language-group-title {
+            padding: 12px 20px;
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .language-option {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 15px;
+        }
+        
+        .language-option:hover {
+            background: #f3f4f6;
+        }
+        
+        .language-option.selected {
+            background: #dbeafe;
+            color: #1e40af;
+            font-weight: 500;
+        }
+        
+        .language-option .checkmark {
+            opacity: 0;
+            color: #10b981;
+            font-weight: bold;
+            transition: opacity 0.2s;
+        }
+        
+        .language-option.selected .checkmark {
+            opacity: 1;
+        }
+        
+        .selected-languages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+            max-height: 60px;
+            overflow-y: auto;
+        }
+        
+        .selected-language-tag {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .selected-language-tag .remove {
+            cursor: pointer;
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 10px;
+        }
+        
+        .selected-language-tag .remove:hover {
+            color: #dc2626;
         }
         
         /* 파일 업로드 영역 */
@@ -444,6 +603,7 @@
             기본 정보
         </div>
         
+        <!-- 첫 번째 행: 프로젝트 제목 | 업체명 | 의뢰자명 -->
         <div class="basic-info-grid">
             <div class="form-group">
                 <label for="projectTitle">프로젝트 제목 <span class="required">*</span></label>
@@ -451,43 +611,285 @@
             </div>
             <div class="form-group">
                 <label for="companyName">업체명 <span class="required">*</span></label>
-                <select id="companyName" required style="padding: 15px 20px; border: 1px solid #d1d5db; border-radius: 10px; font-size: 16px; background: white; transition: all 0.2s; width: 100%; box-sizing: border-box; cursor: pointer;">
+                <select id="companyName" required>
                     <option value="">업체를 선택하세요</option>
-                    <option value="서울대학교">서울대학교</option>
-                    <option value="연세대학교">연세대학교</option>
-                    <option value="고려대학교">고려대학교</option>
-                    <option value="성균관대학교">성균관대학교</option>
-                    <option value="한양대학교">한양대학교</option>
-                    <option value="중앙대학교">중앙대학교</option>
-                    <option value="경희대학교">경희대학교</option>
-                    <option value="이화여자대학교">이화여자대학교</option>
-                    <option value="서강대학교">서강대학교</option>
-                    <option value="동국대학교">동국대학교</option>
-                    <option value="홍익대학교">홍익대학교</option>
+                    <option value="가천대학교">가천대학교</option>
+                    <option value="강원대학교">강원대학교</option>
                     <option value="건국대학교">건국대학교</option>
+                    <option value="경북대학교">경북대학교</option>
+                    <option value="경희대학교">경희대학교</option>
+                    <option value="고려대학교">고려대학교</option>
                     <option value="국민대학교">국민대학교</option>
-                    <option value="세종대학교">세종대학교</option>
                     <option value="단국대학교">단국대학교</option>
+                    <option value="동국대학교">동국대학교</option>
+                    <option value="부산대학교">부산대학교</option>
+                    <option value="서강대학교">서강대학교</option>
+                    <option value="서울대학교">서울대학교</option>
+                    <option value="성균관대학교">성균관대학교</option>
+                    <option value="세종대학교">세종대학교</option>
+                    <option value="아주대학교">아주대학교</option>
+                    <option value="연세대학교">연세대학교</option>
+                    <option value="이화여자대학교">이화여자대학교</option>
+                    <option value="인하대학교">인하대학교</option>
+                    <option value="전남대학교">전남대학교</option>
+                    <option value="전북대학교">전북대학교</option>
+                    <option value="제주대학교">제주대학교</option>
+                    <option value="중앙대학교">중앙대학교</option>
+                    <option value="충남대학교">충남대학교</option>
                     <option value="카이스트">카이스트</option>
                     <option value="포스텍">포스텍</option>
+                    <option value="한양대학교">한양대학교</option>
+                    <option value="홍익대학교">홍익대학교</option>
+                    <option value="DGIST">DGIST</option>
                     <option value="GIST">GIST</option>
                     <option value="UNIST">UNIST</option>
-                    <option value="DGIST">DGIST</option>
-                    <option value="부산대학교">부산대학교</option>
-                    <option value="전남대학교">전남대학교</option>
-                    <option value="경북대학교">경북대학교</option>
-                    <option value="충남대학교">충남대학교</option>
-                    <option value="전북대학교">전북대학교</option>
-                    <option value="강원대학교">강원대학교</option>
-                    <option value="제주대학교">제주대학교</option>
-                    <option value="인하대학교">인하대학교</option>
-                    <option value="아주대학교">아주대학교</option>
-                    <option value="가천대학교">가천대학교</option>
                 </select>
             </div>
             <div class="form-group">
                 <label for="clientName">의뢰자명 <span class="required">*</span></label>
                 <input type="text" id="clientName" placeholder="의뢰자명을 입력하세요" required>
+            </div>
+        </div>
+        
+        <!-- 두 번째 행: 원본 언어 | 도착 언어 -->
+        <div class="language-info-grid">
+            <div class="form-group">
+                <label for="sourceLanguage">원본 언어 <span class="required">*</span></label>
+                <select id="sourceLanguage" required>
+                    <option value="">원본 언어를 선택하세요</option>
+                    <optgroup label="아시아/아프리카">
+                        <option value="네팔어">네팔어</option>
+                        <option value="말레이어">말레이어</option>
+                        <option value="말라얄람어">말라얄람어</option>
+                        <option value="마라티어">마라티어</option>
+                        <option value="몽골어">몽골어</option>
+                        <option value="벵골어">벵골어</option>
+                        <option value="아랍어">아랍어</option>
+                        <option value="우르두어">우르두어</option>
+                        <option value="우즈벡어">우즈벡어</option>
+                        <option value="인도네시아어">인도네시아어</option>
+                        <option value="일본어">일본어</option>
+                        <option value="중국어(간체)">중국어(간체)</option>
+                        <option value="중국어(번체)">중국어(번체)</option>
+                        <option value="카자흐어">카자흐어</option>
+                        <option value="칸나다어">칸나다어</option>
+                        <option value="크메르어">크메르어</option>
+                        <option value="타밀어">타밀어</option>
+                        <option value="태국어">태국어</option>
+                        <option value="텔루구어">텔루구어</option>
+                        <option value="터키어">터키어</option>
+                        <option value="펀자브어">펀자브어</option>
+                        <option value="필리핀어">필리핀어</option>
+                        <option value="한글">한글</option>
+                        <option value="힌디어">힌디어</option>
+                        <option value="베트남어">베트남어</option>
+                        <option value="구자라트어">구자라트어</option>
+                    </optgroup>
+                    <optgroup label="유럽/아프리카">
+                        <option value="과라니어">과라니어</option>
+                        <option value="그리스어">그리스어</option>
+                        <option value="네덜란드어">네덜란드어</option>
+                        <option value="덴마크어">덴마크어</option>
+                        <option value="독일어">독일어</option>
+                        <option value="러시아어">러시아어</option>
+                        <option value="스웨덴어">스웨덴어</option>
+                        <option value="스페인어">스페인어</option>
+                        <option value="영어">영어</option>
+                        <option value="이탈리아어">이탈리아어</option>
+                        <option value="체코어">체코어</option>
+                        <option value="폴란드어">폴란드어</option>
+                        <option value="포르투갈어">포르투갈어</option>
+                        <option value="프랑스어">프랑스어</option>
+                        <option value="핀란드어">핀란드어</option>
+                        <option value="헝가리어">헝가리어</option>
+                    </optgroup>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="targetLanguage">도착 언어 <span class="required">*</span></label>
+                <div class="language-multi-select">
+                    <div class="language-select-trigger" id="targetLanguageTrigger" tabindex="0">
+                        <span class="placeholder">도착 언어를 선택하세요</span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="language-dropdown" id="targetLanguageDropdown">
+                        <div class="language-group">
+                            <div class="language-group-title">아시아/아프리카</div>
+                            <div class="language-option" data-value="네팔어">
+                                <span>네팔어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="말레이어">
+                                <span>말레이어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="말라얄람어">
+                                <span>말라얄람어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="마라티어">
+                                <span>마라티어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="몽골어">
+                                <span>몽골어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="벵골어">
+                                <span>벵골어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="아랍어">
+                                <span>아랍어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="우르두어">
+                                <span>우르두어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="우즈벡어">
+                                <span>우즈벡어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="인도네시아어">
+                                <span>인도네시아어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="일본어">
+                                <span>일본어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="중국어(간체)">
+                                <span>중국어(간체)</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="중국어(번체)">
+                                <span>중국어(번체)</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="카자흐어">
+                                <span>카자흐어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="칸나다어">
+                                <span>칸나다어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="크메르어">
+                                <span>크메르어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="타밀어">
+                                <span>타밀어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="태국어">
+                                <span>태국어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="텔루구어">
+                                <span>텔루구어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="터키어">
+                                <span>터키어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="펀자브어">
+                                <span>펀자브어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="필리핀어">
+                                <span>필리핀어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="한글">
+                                <span>한글</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="힌디어">
+                                <span>힌디어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="베트남어">
+                                <span>베트남어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="구자라트어">
+                                <span>구자라트어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                        </div>
+                        <div class="language-group">
+                            <div class="language-group-title">유럽/아프리카</div>
+                            <div class="language-option" data-value="과라니어">
+                                <span>과라니어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="그리스어">
+                                <span>그리스어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="네덜란드어">
+                                <span>네덜란드어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="덴마크어">
+                                <span>덴마크어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="독일어">
+                                <span>독일어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="러시아어">
+                                <span>러시아어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="스웨덴어">
+                                <span>스웨덴어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="스페인어">
+                                <span>스페인어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="영어">
+                                <span>영어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="이탈리아어">
+                                <span>이탈리아어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="체코어">
+                                <span>체코어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="폴란드어">
+                                <span>폴란드어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="포르투갈어">
+                                <span>포르투갈어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="프랑스어">
+                                <span>프랑스어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="핀란드어">
+                                <span>핀란드어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                            <div class="language-option" data-value="헝가리어">
+                                <span>헝가리어</span>
+                                <span class="checkmark">✓</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="selected-languages" id="selectedLanguages"></div>
+                </div>
             </div>
         </div>
     </div>
@@ -604,12 +1006,136 @@
         let currentSelectedCell = null;
         let isEditing = false;
         let selectedRange = [];
+        let selectedTargetLanguages = [];
         
         // 창 닫기
         function closeWindow() {
             if (confirm('창을 닫으시겠습니까?')) {
                 window.close();
             }
+        }
+        
+        // 도착 언어 다중 선택 초기화
+        function initializeTargetLanguageSelector() {
+            const trigger = document.getElementById('targetLanguageTrigger');
+            const dropdown = document.getElementById('targetLanguageDropdown');
+            const options = dropdown.querySelectorAll('.language-option');
+            
+            // 트리거 클릭 이벤트
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleDropdown();
+            });
+            
+            // 키보드 이벤트 (스페이스바, 엔터)
+            trigger.addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    toggleDropdown();
+                }
+            });
+            
+            // 옵션 클릭 이벤트
+            options.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleLanguageSelection(this);
+                });
+            });
+            
+            // 외부 클릭 시 드롭다운 닫기
+            document.addEventListener('click', function(e) {
+                if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+                    closeDropdown();
+                }
+            });
+        }
+        
+        // 드롭다운 토글
+        function toggleDropdown() {
+            const trigger = document.getElementById('targetLanguageTrigger');
+            const dropdown = document.getElementById('targetLanguageDropdown');
+            
+            if (dropdown.classList.contains('show')) {
+                closeDropdown();
+            } else {
+                openDropdown();
+            }
+        }
+        
+        // 드롭다운 열기
+        function openDropdown() {
+            const trigger = document.getElementById('targetLanguageTrigger');
+            const dropdown = document.getElementById('targetLanguageDropdown');
+            
+            trigger.classList.add('open');
+            dropdown.classList.add('show');
+        }
+        
+        // 드롭다운 닫기
+        function closeDropdown() {
+            const trigger = document.getElementById('targetLanguageTrigger');
+            const dropdown = document.getElementById('targetLanguageDropdown');
+            
+            trigger.classList.remove('open');
+            dropdown.classList.remove('show');
+        }
+        
+        // 언어 선택/해제
+        function toggleLanguageSelection(option) {
+            const language = option.dataset.value;
+            
+            if (option.classList.contains('selected')) {
+                // 선택 해제
+                option.classList.remove('selected');
+                selectedTargetLanguages = selectedTargetLanguages.filter(lang => lang !== language);
+            } else {
+                // 선택 추가
+                option.classList.add('selected');
+                selectedTargetLanguages.push(language);
+            }
+            
+            updateSelectedLanguagesDisplay();
+        }
+        
+        // 선택된 언어 표시 업데이트
+        function updateSelectedLanguagesDisplay() {
+            const trigger = document.getElementById('targetLanguageTrigger');
+            const selectedContainer = document.getElementById('selectedLanguages');
+            const placeholder = trigger.querySelector('.placeholder');
+            
+            if (selectedTargetLanguages.length === 0) {
+                placeholder.textContent = '도착 언어를 선택하세요';
+                placeholder.style.color = '#6b7280';
+                selectedContainer.innerHTML = '';
+            } else {
+                placeholder.textContent = `${selectedTargetLanguages.length}개 언어 선택됨`;
+                placeholder.style.color = '#374151';
+                
+                // 선택된 언어 태그들 생성
+                const tagsHTML = selectedTargetLanguages.map(language => `
+                    <div class="selected-language-tag">
+                        <span>${language}</span>
+                        <span class="remove" onclick="removeSelectedLanguage('${language}')">✕</span>
+                    </div>
+                `).join('');
+                
+                selectedContainer.innerHTML = tagsHTML;
+            }
+        }
+        
+        // 선택된 언어 제거
+        function removeSelectedLanguage(language) {
+            // 배열에서 제거
+            selectedTargetLanguages = selectedTargetLanguages.filter(lang => lang !== language);
+            
+            // 드롭다운 옵션에서 선택 해제
+            const option = document.querySelector(`.language-option[data-value="${language}"]`);
+            if (option) {
+                option.classList.remove('selected');
+            }
+            
+            updateSelectedLanguagesDisplay();
         }
         
         // 파일 선택 시뮬레이션 (기획용)
@@ -1290,6 +1816,7 @@
             const projectTitle = document.getElementById('projectTitle').value.trim();
             const companyName = document.getElementById('companyName').value;
             const clientName = document.getElementById('clientName').value.trim();
+            const sourceLanguage = document.getElementById('sourceLanguage').value;
             
             if (!projectTitle) {
                 alert('프로젝트 제목을 입력해주세요.');
@@ -1306,6 +1833,18 @@
             if (!clientName) {
                 alert('의뢰자명을 입력해주세요.');
                 document.getElementById('clientName').focus();
+                return;
+            }
+            
+            if (!sourceLanguage) {
+                alert('원본 언어를 선택해주세요.');
+                document.getElementById('sourceLanguage').focus();
+                return;
+            }
+            
+            if (selectedTargetLanguages.length === 0) {
+                alert('도착 언어를 최소 1개 이상 선택해주세요.');
+                document.getElementById('targetLanguageTrigger').focus();
                 return;
             }
             
@@ -1330,6 +1869,14 @@
                     document.getElementById('projectTitle').value = '';
                     document.getElementById('companyName').value = '';
                     document.getElementById('clientName').value = '';
+                    document.getElementById('sourceLanguage').value = '';
+                    
+                    // 도착 언어 초기화
+                    selectedTargetLanguages = [];
+                    document.querySelectorAll('.language-option.selected').forEach(option => {
+                        option.classList.remove('selected');
+                    });
+                    updateSelectedLanguagesDisplay();
                     
                     // 파일 정보도 초기화
                     removeFile();
@@ -1448,6 +1995,9 @@
         // 페이지 로드 시 초기화
         document.addEventListener('DOMContentLoaded', function() {
             updateProjectList();
+            
+            // 도착 언어 다중 선택 초기화
+            initializeTargetLanguageSelector();
             
             // 키보드 이벤트 리스너 추가
             document.addEventListener('keydown', handleKeyboardNavigation);

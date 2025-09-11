@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>고객 포인트 지급 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .info-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+        }
+        
+        .info-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* 고객 검색 버튼 */
+        .search-customer-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: 8px;
+        }
+        
+        .search-customer-btn:hover {
+            background: #2563eb;
+        }
+
+        /* 설명 영역 */
+        .description-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .description-textarea {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .description-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+
+        .required {
+            color: #dc2626;
+            margin-left: 4px;
+        }
+        
+        .customer-info-display {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 8px 12px;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* 검색 팝업 스타일 */
+        .search-popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .search-popup {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            width: 600px;
+            max-height: 80vh;
+            overflow: hidden;
+        }
+
+        .popup-header {
+            background: #f8f9fa;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .popup-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .popup-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .popup-close:hover {
+            background: #f3f4f6;
+        }
+
+        .popup-content {
+            padding: 24px;
+        }
+
+        .popup-search-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 20px;
+            align-items: end;
+        }
+
+        .popup-search-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .popup-search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .popup-search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 120px;
+        }
+
+        .popup-search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+
+        .popup-search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            height: fit-content;
+        }
+
+        .popup-search-btn:hover {
+            background: #2563eb;
+        }
+
+        .search-results {
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+        }
+
+        .search-results table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .search-results th,
+        .search-results td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+
+        .search-results th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .search-results tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+
+        .search-results tbody tr.selected {
+            background: #dbeafe;
+        }
+
+        .no-results {
+            padding: 40px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .popup-actions {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: #4b5563;
+        }
+
+        .btn-select {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-select:hover {
+            background: #059669;
+        }
+
+        .btn-select:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>💰</span>
+            고객 포인트 지급
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 고객 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">고객 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">고객 검색<span class="required">*</span></div>
+                    <div style="display: flex; align-items: center;">
+                        <button class="search-customer-btn" onclick="openSearchPopup()">고객 검색</button>
+                    </div>
+                    
+                    <div class="info-label">이메일</div>
+                    <div class="customer-info-display" id="selectedUserEmail">고객을 검색해주세요</div>
+                    
+                    <div class="info-label">이름</div>
+                    <div class="customer-info-display" id="selectedUserName">-</div>
+                    
+                    <div class="info-label">연락처</div>
+                    <div class="customer-info-display" id="selectedUserPhone">-</div>
+                    
+                    <div class="info-label">보유포인트</div>
+                    <div class="customer-info-display" id="currentPoints">-</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 포인트 지급 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">포인트 지급 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">포인트 구분<span class="required">*</span></div>
+                    <select id="pointTypeSelect" class="info-select">
+                        <option value="">선택하세요</option>
+                        <option value="웰컴적립">웰컴적립</option>
+                        <option value="접수">접수</option>
+                        <option value="포인트 지급">포인트 지급</option>
+                    </select>
+                    
+                    <div class="info-label">지급 포인트<span class="required">*</span></div>
+                    <input type="number" id="pointAmount" class="info-input" placeholder="0" min="0">
+                    
+                    <div class="info-label">포인트합계</div>
+                    <div class="customer-info-display" id="afterPoints">-</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 지급 사유 섹션 -->
+    <div class="description-section">
+        <div class="section-title">지급 사유<span class="required">*</span></div>
+        <div class="info-content">
+            <textarea class="description-textarea" id="giveReason" placeholder="포인트 지급 사유를 상세히 입력하세요..."></textarea>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-register" onclick="giveCustomerPoint()">
+            <span>💰</span>
+            포인트 지급
+        </button>
+    </div>
+
+    <!-- 고객 검색 팝업 -->
+    <div class="search-popup-overlay" id="searchPopupOverlay">
+        <div class="search-popup">
+            <div class="popup-header">
+                <h3 class="popup-title">고객 검색</h3>
+                <button class="popup-close" onclick="closeSearchPopup()">&times;</button>
+            </div>
+            <div class="popup-content">
+                <div class="popup-search-row">
+                    <div class="popup-search-group">
+                        <label class="popup-search-label">검색 조건</label>
+                        <select id="popupSearchType" class="popup-search-select">
+                            <option value="userName">이름</option>
+                            <option value="userEmail">이메일</option>
+                            <option value="userPhone">연락처</option>
+                        </select>
+                    </div>
+                    <div class="popup-search-group">
+                        <label class="popup-search-label">검색어</label>
+                        <input type="text" id="popupSearchKeyword" class="popup-search-input" placeholder="검색어를 입력하세요">
+                    </div>
+                    <button class="popup-search-btn" onclick="searchInPopup()">검색</button>
+                </div>
+                <div class="search-results" id="searchResults">
+                    <div class="no-results">검색어를 입력하고 검색 버튼을 클릭하세요.</div>
+                </div>
+            </div>
+            <div class="popup-actions">
+                <button class="btn-cancel" onclick="closeSearchPopup()">취소</button>
+                <button class="btn-select" id="selectCustomerBtn" onclick="selectCustomer()" disabled>선택</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let selectedCustomer = null;
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('고객 포인트 지급 페이지 로드');
+            
+            // 포인트 금액 변경 시 지급 후 포인트 계산
+            document.getElementById('pointAmount').addEventListener('input', function() {
+                calculateAfterPoints();
+            });
+            
+            // 팝업 검색어 입력 시 Enter 키로 검색
+            document.getElementById('popupSearchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchInPopup();
+                }
+            });
+            
+            // 팝업 오버레이 클릭 시 닫기
+            document.getElementById('searchPopupOverlay').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeSearchPopup();
+                }
+            });
+        });
+        
+        let selectedPopupCustomer = null;
+        
+        // 검색 팝업 열기
+        function openSearchPopup() {
+            document.getElementById('searchPopupOverlay').style.display = 'block';
+            document.getElementById('popupSearchKeyword').focus();
+        }
+        
+        // 검색 팝업 닫기
+        function closeSearchPopup() {
+            document.getElementById('searchPopupOverlay').style.display = 'none';
+            document.getElementById('searchResults').innerHTML = '<div class="no-results">검색어를 입력하고 검색 버튼을 클릭하세요.</div>';
+            document.getElementById('selectCustomerBtn').disabled = true;
+            selectedPopupCustomer = null;
+        }
+        
+        // 팝업에서 검색 실행
+        function searchInPopup() {
+            const searchType = document.getElementById('popupSearchType').value;
+            const searchKeyword = document.getElementById('popupSearchKeyword').value.trim();
+            
+            if (!searchKeyword) {
+                alert('검색어를 입력해주세요.');
+                return;
+            }
+            
+            // 시연용 Mock 데이터
+            const mockCustomers = [
+                { userEmail: 'kim.cs@email.com', userName: '김철수', userPhone: '010-1234-5678', region: '서울특별시 강남구', currentPoints: 2500 },
+                { userEmail: 'lee.yh@email.com', userName: '이영희', userPhone: '010-2345-6789', region: '부산광역시 해운대구', currentPoints: 1800 },
+                { userEmail: 'cha.jh@email.com', userName: '차정훈', userPhone: '010-3456-7890', region: '대구광역시 수성구', currentPoints: 3200 },
+                { userEmail: 'park.ms@email.com', userName: '박민수', userPhone: '010-4567-8901', region: '인천광역시 연수구', currentPoints: 1500 },
+                { userEmail: 'jung.sj@email.com', userName: '정수진', userPhone: '010-5678-9012', region: '광주광역시 서구', currentPoints: 2800 }
+            ];
+            
+            // 검색 조건에 따라 필터링
+            const filteredCustomers = mockCustomers.filter(customer => {
+                const searchValue = customer[searchType];
+                return searchValue && searchValue.toLowerCase().includes(searchKeyword.toLowerCase());
+            });
+            
+            displaySearchResults(filteredCustomers);
+        }
+        
+        // 검색 결과 표시
+        function displaySearchResults(customers) {
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (customers.length === 0) {
+                resultsContainer.innerHTML = '<div class="no-results">검색 결과가 없습니다.</div>';
+                return;
+            }
+            
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>이름</th>
+                            <th>이메일</th>
+                            <th>연락처</th>
+                            <th>지역</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+            
+            customers.forEach((customer, index) => {
+                html += `
+                    <tr onclick="selectSearchResult(${index})" data-index="${index}">
+                        <td>${customer.userName}</td>
+                        <td>${customer.userEmail}</td>
+                        <td>${customer.userPhone}</td>
+                        <td>${customer.region}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            resultsContainer.innerHTML = html;
+            
+            // 검색 결과를 전역 변수에 저장
+            window.searchResultsData = customers;
+        }
+        
+        // 검색 결과 선택
+        function selectSearchResult(index) {
+            // 기존 선택 해제
+            const previousSelected = document.querySelector('.search-results tbody tr.selected');
+            if (previousSelected) {
+                previousSelected.classList.remove('selected');
+            }
+            
+            // 새로운 선택
+            const selectedRow = document.querySelector(`[data-index="${index}"]`);
+            selectedRow.classList.add('selected');
+            
+            selectedPopupCustomer = window.searchResultsData[index];
+            document.getElementById('selectCustomerBtn').disabled = false;
+        }
+        
+        // 고객 선택 완료
+        function selectCustomer() {
+            if (selectedPopupCustomer) {
+                selectedCustomer = selectedPopupCustomer;
+                updateCustomerInfo(selectedCustomer);
+                closeSearchPopup();
+            }
+        }
+        
+        // 고객 정보 업데이트
+        function updateCustomerInfo(customer) {
+            document.getElementById('selectedUserEmail').textContent = customer.userEmail;
+            document.getElementById('selectedUserName').textContent = customer.userName;
+            document.getElementById('selectedUserPhone').textContent = customer.userPhone;
+            document.getElementById('currentPoints').textContent = customer.currentPoints.toLocaleString() + '포인트';
+            
+            calculateAfterPoints();
+        }
+        
+        // 고객 정보 초기화
+        function clearCustomerInfo() {
+            selectedCustomer = null;
+            document.getElementById('selectedUserEmail').textContent = '고객을 검색해주세요';
+            document.getElementById('selectedUserName').textContent = '-';
+            document.getElementById('selectedUserPhone').textContent = '-';
+            document.getElementById('currentPoints').textContent = '-';
+            document.getElementById('afterPoints').textContent = '-';
+        }
+        
+        // 지급 후 포인트 계산
+        function calculateAfterPoints() {
+            if (!selectedCustomer) {
+                document.getElementById('afterPoints').textContent = '-';
+                return;
+            }
+            
+            const pointAmount = parseInt(document.getElementById('pointAmount').value) || 0;
+            const afterPoints = selectedCustomer.currentPoints + pointAmount;
+            
+            document.getElementById('afterPoints').textContent = afterPoints.toLocaleString() + '포인트';
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'customer-point-management.html';
+        }
+        
+        // 포인트 지급 기능
+        function giveCustomerPoint() {
+            // 필수 항목 검증
+            if (!selectedCustomer) {
+                alert('고객을 검색하여 선택해주세요.');
+                document.getElementById('customerSearch').focus();
+                return;
+            }
+            
+            const pointType = document.getElementById('pointTypeSelect').value;
+            const pointAmount = document.getElementById('pointAmount').value;
+            const giveReason = document.getElementById('giveReason').value.trim();
+            
+            if (!pointType) {
+                alert('포인트 구분을 선택해주세요.');
+                document.getElementById('pointTypeSelect').focus();
+                return;
+            }
+            
+            if (!pointAmount || pointAmount <= 0) {
+                alert('지급 포인트를 입력해주세요.');
+                document.getElementById('pointAmount').focus();
+                return;
+            }
+            
+            if (!giveReason) {
+                alert('지급 사유를 입력해주세요.');
+                document.getElementById('giveReason').focus();
+                return;
+            }
+            
+            // 지급 확인
+            if (confirm(`${selectedCustomer.userName}(${selectedCustomer.userEmail})님에게 ${parseInt(pointAmount).toLocaleString()}포인트를 지급하시겠습니까?`)) {
+                // 웰컴적립인 경우 등록자를 고객 이름으로 설정
+                const registeredBy = pointType === '웰컴적립' ? selectedCustomer.userName : '관리자';
+                
+                // 실제 구현 시 서버 API 호출
+                const formData = {
+                    customerEmail: selectedCustomer.userEmail,
+                    customerName: selectedCustomer.userName,
+                    customerPhone: selectedCustomer.userPhone,
+                    pointType: pointType,
+                    pointAmount: parseInt(pointAmount),
+                    beforePoints: selectedCustomer.currentPoints,
+                    afterPoints: selectedCustomer.currentPoints + parseInt(pointAmount),
+                    giveReason: giveReason,
+                    registeredBy: registeredBy,
+                    changedDate: new Date().toISOString().slice(0, 19).replace('T', ' ')
+                };
+                
+                console.log('포인트 지급 데이터:', formData);
+                alert('포인트 지급이 완료되었습니다.');
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -182,13 +182,16 @@ new_soribaro_bo/
     │       → 검색: 날짜, 진행상태, 텍스트 검색 (주문번호, 제목, 업체명, 의뢰자명, 작업자)
     │       → 테이블: NO, 주문번호, 제목, 방식, 업체명, 의뢰자명, 의뢰일, 총 작업시간, 진행상태
     │       → 진행상태: 접수, 작업중, 초안완성, 검수완료, 작업완료
-    │       ├── 번역 작업 상세정보 ✅ 완전 기능 구현
+    │       ├── 번역 작업 상세정보 ✅ 완전 기능 구현 (프로세스 테스트)
     │       │   → pages/translation/trans-detail.html
     │       │   → 기능: 번역 파일 리스트/상세, 웍스파이 프로젝트 등록/상세, 3단계 작업관리 시스템
-    │       │   → 🔥 신규 기능: 3개 영역별 작업자 배정 시스템 (출발어/중간어/번역가)
-    │       │   → 🔥 신규 기능: 중간어 영역 건너뛰기 기능
-    │       │   → 🔥 신규 기능: 고급 작업자 검색 (엔터키 검색, 상호 배타적 선택)
-    │       │   → 🔥 신규 기능: 프롬프트 관리 (개별 표시, 일괄 변경)
+    │       │   → 🔥 신규 기능: 파일별 독립적인 프로젝트 관리 (배경색 선택 + 체크박스 선택)
+    │       │   → 🔥 신규 기능: 파일 행 클릭으로 선택 (체크박스와 독립적인 배경색 선택)
+    │       │   → 🔥 신규 기능: 작업자 일괄 배정 (선택된 파일의 모든 영역에 일괄 배정)
+    │       │   → 🔥 신규 기능: 다중 파일 각각 별도 프로젝트 생성 (한 번의 모달로 처리)
+    │       │   → 🔥 신규 기능: 프롬프트 관리 (개별 표시, 일괄 변경, 배지 스타일)
+    │       │   → 🔥 신규 기능: 분할된 파일 그룹 선택 (원본+분할 파일 통합 선택)
+    │       │   → 🔥 신규 기능: 웍스파이 프로젝트 영역 건너뛰기 (바로 출발어 영역 생성)
     │       └── 번역 다건 프로젝트 추가 🆕 신규 구현
     │           → pages/translation/trans-bulk-project-add.html
     │           → 기능: Excel 스타일 대량 번역 프로젝트 추가, 파일 업로드, 셀 편집, 웍스파이 등록
@@ -500,7 +503,7 @@ new_soribaro_bo/
 - pages/soribaro/pricing/customer-point-detail.html (고객 포인트 변경 상세정보)
 - pages/soribaro/pricing/customer-point-register.html (고객 포인트 지급)
 - pages/translation/trans-management.html (번역 작업관리)
-- pages/translation/trans-detail.html (번역 작업 상세정보)
+- pages/translation/trans-detail.html (번역 작업 상세정보 - 프로세스 테스트)
 - pages/translation/trans-bulk-project-add.html (번역 다건 프로젝트 추가)
 - pages/clipdesk/clip_work-management.html (클립데스크 작업현황관리)
 - pages/clipdesk/clip_work-detail.html (클립데스크 작업현황 상세정보)

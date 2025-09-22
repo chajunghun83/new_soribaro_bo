@@ -513,7 +513,28 @@
                     <div class="info-label">업체명</div>
                     <div>
                         <div class="info-value" id="companyName">삼성전자</div>
-                        <input type="text" class="info-input" id="companyNameInput" value="삼성전자">
+                        <select class="info-select" id="companyNameSelect">
+                            <option value="삼성전자">삼성전자</option>
+                            <option value="LG전자">LG전자</option>
+                            <option value="SK텔레콤">SK텔레콤</option>
+                            <option value="KT">KT</option>
+                            <option value="네이버">네이버</option>
+                            <option value="카카오">카카오</option>
+                            <option value="현대자동차">현대자동차</option>
+                            <option value="기아자동차">기아자동차</option>
+                            <option value="포스코">포스코</option>
+                            <option value="한국전력공사">한국전력공사</option>
+                            <option value="신한은행">신한은행</option>
+                            <option value="KB국민은행">KB국민은행</option>
+                            <option value="하나은행">하나은행</option>
+                            <option value="우리은행">우리은행</option>
+                            <option value="롯데그룹">롯데그룹</option>
+                            <option value="CJ그룹">CJ그룹</option>
+                            <option value="GS그룹">GS그룹</option>
+                            <option value="한화그룹">한화그룹</option>
+                            <option value="두산그룹">두산그룹</option>
+                            <option value="기타">기타</option>
+                        </select>
                     </div>
                     
                     <div class="info-label">회원상태</div>
@@ -784,7 +805,7 @@
             document.getElementById('managerNameInput').value = data.managerName;
             document.getElementById('userIdInput').value = data.userId;
             document.getElementById('phoneNumberInput').value = data.phoneNumber;
-            document.getElementById('companyNameInput').value = data.companyName;
+            document.getElementById('companyNameSelect').value = data.companyName;
             document.getElementById('platformSelect').value = data.platform;
             document.getElementById('statusSelect').value = data.status;
             document.getElementById('emailInput').value = data.email;
@@ -846,7 +867,7 @@
             const managerName = document.getElementById('managerNameInput').value.trim();
             const userId = document.getElementById('userIdInput').value.trim();
             const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
-            const companyName = document.getElementById('companyNameInput').value.trim();
+            const companyName = document.getElementById('companyNameSelect').value;
             const platform = document.getElementById('platformSelect').value;
             const status = document.getElementById('statusSelect').value;
             const email = document.getElementById('emailInput').value.trim();
@@ -872,8 +893,8 @@
             }
             
             if (!companyName) {
-                alert('업체명을 입력해주세요.');
-                document.getElementById('companyNameInput').focus();
+                alert('업체명을 선택해주세요.');
+                document.getElementById('companyNameSelect').focus();
                 return;
             }
             

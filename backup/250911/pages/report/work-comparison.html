@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>작업물 비교 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 2px solid #e5e7eb;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 100;
+            position: relative;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .download-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .download-btn:hover {
+            background: #059669;
+        }
+        
+        .close-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .close-btn:hover {
+            background: #dc2626;
+        }
+        
+        .comparison-container {
+            display: flex;
+            height: calc(100vh - 70px);
+            position: relative;
+        }
+        
+        .comparison-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-right: 2px solid #e5e7eb;
+        }
+        
+        .comparison-panel:last-child {
+            border-right: none;
+        }
+        
+        .panel-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            position: relative;
+        }
+        
+        .text-item {
+            border-bottom: 1px solid #f3f4f6;
+            padding: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        .text-item:hover {
+            background: #f9fafb;
+        }
+        
+        .text-item.changed {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .item-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        
+        .line-no {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .timecode {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .text-content {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 60px;
+        }
+        
+        .text-content.changed {
+            background: #fff7ed;
+            border-color: #f59e0b;
+        }
+        
+        .diff-highlight {
+            background: #fde047;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .comment-section {
+            margin-top: 12px;
+            padding: 12px;
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #92400e;
+        }
+        
+        .comment-label {
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        /* 코멘트 카테고리 태그 */
+        .comment-category-tag {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+        }
+        
+        .comment-category-tag.translation {
+            background: #3b82f6;
+        }
+        
+        .comment-category-tag.guideline {
+            background: #f59e0b;
+        }
+        
+        .comment-category-tag.sync {
+            background: #8b5cf6;
+        }
+        
+        .comment-category-tag.other {
+            background: #6b7280;
+        }
+        
+        /* 코멘트 서브카테고리 태그 */
+        .comment-subcategory-tag {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 500;
+            background: #e5e7eb;
+            color: #374151;
+            display: inline-block;
+        }
+        
+        /* 답글 스타일 */
+        .comment-reply {
+            margin-top: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 3px solid #3b82f6;
+            border-radius: 6px;
+        }
+        
+        .reply-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        
+        .reply-author {
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        .reply-time {
+            color: #6b7280;
+            font-size: 11px;
+        }
+        
+        .reply-content {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.4;
+        }
+        
+        /* Overview Ruler */
+        .overview-ruler {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 12px;
+            height: 100%;
+            background: #f3f4f6;
+            border-left: 1px solid #e5e7eb;
+        }
+        
+        .ruler-marker {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: #f59e0b;
+            cursor: pointer;
+        }
+        
+        .ruler-marker:hover {
+            background: #d97706;
+        }
+        
+        /* 스크롤바 스타일링 */
+        .panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .panel-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="header-title">
+            <span>🔍</span>
+            작업물 비교 - 주문번호: 20250125033445 | 파일: 경영학과_온라인강의_2025_01.mp4
+        </h1>
+        <div class="header-buttons">
+            <button class="download-btn" onclick="downloadComparison()">
+                <span>📁</span>
+                파일 다운로드
+            </button>
+            <button class="close-btn" onclick="window.close()">창 닫기</button>
+        </div>
+    </div>
+    
+    <div class="comparison-container">
+        <!-- 작업본 영역 -->
+        <div class="comparison-panel">
+            <div class="panel-header">
+                <span>📝</span>
+                작업본
+            </div>
+            <div class="panel-content" id="original-panel">
+                <!-- 30개 작업본 데이터가 JavaScript로 생성됩니다 -->
+            </div>
+        </div>
+        
+        <!-- 검수본 영역 -->
+        <div class="comparison-panel">
+            <div class="panel-header">
+                <span>✅</span>
+                검수본
+            </div>
+            <div class="panel-content" id="reviewed-panel">
+                <!-- 30개 검수본 데이터가 JavaScript로 생성됩니다 -->
+            </div>
+            
+            <!-- Overview Ruler -->
+            <div class="overview-ruler" id="overview-ruler">
+                <!-- 마커들이 JavaScript로 생성됩니다 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 30개 데이터 생성
+        const originalData = [
+            { lineNo: 1, timecode: "00:00:10 - 00:00:15", text: "안녕하세요. 오늘은 인공지능에 대해서 알아보겠습니다." },
+            { lineNo: 2, timecode: "00:00:16 - 00:00:25", text: "인공지능은 컴퓨터가 인간의 지능을 모방하여 학습하고 추론하는 기술입니다." },
+            { lineNo: 3, timecode: "00:00:26 - 00:00:35", text: "머신러닝과 딥러닝은 인공지능의 핵심 기술이라고 할 수 있습니다." },
+            { lineNo: 4, timecode: "00:00:36 - 00:00:45", text: "이러한 기술들은 다양한 분야에서 활용되고 있으며, 미래 사회에 큰 변화를 가져올 것으로 예상됩니다." },
+            { lineNo: 5, timecode: "00:00:46 - 00:00:55", text: "특히 자연어 처리, 컴퓨터 비전, 음성인식 등의 분야에서 눈에 띄는 발전을 보이고 있습니다." },
+            { lineNo: 6, timecode: "00:00:56 - 00:01:05", text: "그럼 이제 각 기술에 대해 자세히 살펴보도록 하겠습니다." },
+            { lineNo: 7, timecode: "00:01:06 - 00:01:15", text: "머신러닝은 데이터를 통해 패턴을 학습하는 알고리즘입니다." },
+            { lineNo: 8, timecode: "00:01:16 - 00:01:25", text: "지도학습, 비지도학습, 강화학습으로 분류할 수 있습니다." },
+            { lineNo: 9, timecode: "00:01:26 - 00:01:35", text: "딥러닝은 인공신경망을 기반으로 한 기계학습 방법론입니다." },
+            { lineNo: 10, timecode: "00:01:36 - 00:01:45", text: "CNN, RNN, 트랜스포머 등 다양한 아키텍처가 존재합니다." },
+            { lineNo: 11, timecode: "00:01:46 - 00:01:55", text: "자연어 처리는 컴퓨터가 인간의 언어를 이해하고 생성하는 기술입니다." },
+            { lineNo: 12, timecode: "00:01:56 - 00:02:05", text: "토큰화, 형태소 분석, 구문 분석 등의 과정을 거칩니다." },
+            { lineNo: 13, timecode: "00:02:06 - 00:02:15", text: "최근에는 BERT, GPT와 같은 대규모 언어모델이 주목받고 있습니다." },
+            { lineNo: 14, timecode: "00:02:16 - 00:02:25", text: "컴퓨터 비전은 이미지와 영상을 분석하고 이해하는 기술입니다." },
+            { lineNo: 15, timecode: "00:02:26 - 00:02:35", text: "객체 탐지, 이미지 분류, 세그멘테이션 등의 작업을 수행합니다." },
+            { lineNo: 16, timecode: "00:02:36 - 00:02:45", text: "음성인식은 사람의 음성을 텍스트로 변환하는 기술입니다." },
+            { lineNo: 17, timecode: "00:02:46 - 00:02:55", text: "음향 모델과 언어 모델을 결합하여 정확도를 높입니다." },
+            { lineNo: 18, timecode: "00:02:56 - 00:03:05", text: "인공지능의 윤리적 이슈도 중요한 고려사항입니다." },
+            { lineNo: 19, timecode: "00:03:06 - 00:03:15", text: "편향성, 투명성, 책임성 등의 문제를 해결해야 합니다." },
+            { lineNo: 20, timecode: "00:03:16 - 00:03:25", text: "또한 개인정보 보호와 데이터 보안도 중요합니다." },
+            { lineNo: 21, timecode: "00:03:26 - 00:03:35", text: "인공지능은 의료, 금융, 교육 등 다양한 분야에 적용되고 있습니다." },
+            { lineNo: 22, timecode: "00:03:36 - 00:03:45", text: "의료 분야에서는 진단 보조, 신약 개발 등에 활용됩니다." },
+            { lineNo: 23, timecode: "00:03:46 - 00:03:55", text: "금융 분야에서는 리스크 관리, 알고리즘 트레이딩에 사용됩니다." },
+            { lineNo: 24, timecode: "00:03:56 - 00:04:05", text: "교육 분야에서는 개인화된 학습, 자동 채점 시스템을 제공합니다." },
+            { lineNo: 25, timecode: "00:04:06 - 00:04:15", text: "자율주행차는 인공지능의 대표적인 응용 사례입니다." },
+            { lineNo: 26, timecode: "00:04:16 - 00:04:25", text: "센서 데이터를 실시간으로 처리하여 안전한 주행을 가능하게 합니다." },
+            { lineNo: 27, timecode: "00:04:26 - 00:04:35", text: "스마트 시티 구축에도 인공지능 기술이 핵심적인 역할을 합니다." },
+            { lineNo: 28, timecode: "00:04:36 - 00:04:45", text: "교통 최적화, 에너지 효율성 향상 등에 기여합니다." },
+            { lineNo: 29, timecode: "00:04:46 - 00:04:55", text: "앞으로 인공지능은 더욱 발전하여 우리 생활에 깊숙이 스며들 것입니다." },
+            { lineNo: 30, timecode: "00:04:56 - 00:05:05", text: "지속적인 연구와 개발을 통해 인류에게 도움이 되는 방향으로 발전시켜야 합니다." }
+        ];
+
+        const reviewedData = [
+            { lineNo: 1, changed: false, text: "안녕하세요. 오늘은 인공지능에 대해서 알아보겠습니다.", comment: null },
+            { 
+                lineNo: 2, 
+                changed: true, 
+                text: "<span class='diff-highlight'>AI</span>는 컴퓨터가 인간의 지능을 모방하여 학습하고 추론하는 기술입니다.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"인공지능" → "AI"로 용어집에 맞게 수정해주세요.',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 3, 
+                changed: true, 
+                text: "<span class='diff-highlight'>머신 러닝</span>과 딥러닝은 <span class='diff-highlight'>AI</span>의 핵심 기술이라고 할 수 있습니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '1. "머신러닝" → "머신 러닝" (띄어쓰기 수정)<br>2. "인공지능" → "AI" (용어 통일)',
+                    reply: null
+                }
+            },
+            { lineNo: 4, changed: false, text: "이러한 기술들은 다양한 분야에서 활용되고 있으며, 미래 사회에 큰 변화를 가져올 것으로 예상됩니다.", comment: null },
+            { 
+                lineNo: 5, 
+                changed: true, 
+                text: "특히 <span class='diff-highlight'>자연어처리</span>, 컴퓨터 비전, 음성인식 등의 분야에서 눈에 띄는 발전을 보이고 있습니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '"자연어 처리" → "자연어처리" (띄어쓰기 수정)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 6, 
+                changed: true, 
+                text: "<span class='diff-highlight'>이제</span> 각 기술에 대해 자세히 살펴보도록 하겠습니다.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "간결성 부족",
+                    content: '"그럼 이제" → "이제" (불필요한 접속어 제거로 간결성 향상)',
+                    reply: {
+                        author: "검수자",
+                        time: "2025-01-28 10:15",
+                        content: "수정 완료했습니다. 더 간결하고 자연스러워졌네요."
+                    }
+                }
+            },
+            { 
+                lineNo: 7, 
+                changed: true, 
+                text: "<span class='diff-highlight'>머신 러닝</span>은 데이터를 통해 패턴을 학습하는 알고리즘입니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '"머신러닝" → "머신 러닝" (띄어쓰기 수정)',
+                    reply: null
+                }
+            },
+            { lineNo: 8, changed: false, text: "지도학습, 비지도학습, 강화학습으로 분류할 수 있습니다.", comment: null },
+            { 
+                lineNo: 9, 
+                changed: true, 
+                text: "딥러닝은 <span class='diff-highlight'>인공 신경망</span>을 기반으로 한 기계학습 방법론입니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '"인공신경망" → "인공 신경망" (띄어쓰기 수정)',
+                    reply: null
+                }
+            },
+            { lineNo: 10, changed: false, text: "CNN, RNN, 트랜스포머 등 다양한 아키텍처가 존재합니다.", comment: null },
+            { 
+                lineNo: 11, 
+                changed: true, 
+                text: "<span class='diff-highlight'>자연어처리</span>는 컴퓨터가 인간의 언어를 이해하고 생성하는 기술입니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "용어 통일성 부족",
+                    content: '"자연어 처리" → "자연어처리" (용어 통일)',
+                    reply: {
+                        author: "작업자",
+                        time: "2025-01-28 11:20",
+                        content: "네, 앞으로 자연어처리로 통일하여 사용하겠습니다."
+                    }
+                }
+            },
+            { 
+                lineNo: 12, 
+                changed: true, 
+                text: "<span class='diff-highlight'>토큰화, 형태소분석, 구문분석</span> 등의 과정을 거칩니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '복합어 띄어쓰기 통일: "형태소 분석" → "형태소분석", "구문 분석" → "구문분석"',
+                    reply: null
+                }
+            },
+            { lineNo: 13, changed: false, text: "최근에는 BERT, GPT와 같은 대규모 언어모델이 주목받고 있습니다.", comment: null },
+            { 
+                lineNo: 14, 
+                changed: true, 
+                text: "<span class='diff-highlight'>컴퓨터비전</span>은 이미지와 영상을 분석하고 이해하는 기술입니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "용어 통일성 부족",
+                    content: '"컴퓨터 비전" → "컴퓨터비전" (용어 통일)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 15, 
+                changed: true, 
+                text: "<span class='diff-highlight'>객체탐지</span>, 이미지 분류, <span class='diff-highlight'>세그먼테이션</span> 등의 작업을 수행합니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "용어집 미반영",
+                    content: '1. "객체 탐지" → "객체탐지" (용어집 반영)<br>2. "세그멘테이션" → "세그먼테이션" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { lineNo: 16, changed: false, text: "음성인식은 사람의 음성을 텍스트로 변환하는 기술입니다.", comment: null },
+            { 
+                lineNo: 17, 
+                changed: true, 
+                text: "<span class='diff-highlight'>음향모델</span>과 <span class='diff-highlight'>언어모델</span>을 결합하여 정확도를 높입니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '복합어 띄어쓰기: "음향 모델" → "음향모델", "언어 모델" → "언어모델"',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 18, 
+                changed: true, 
+                text: "<span class='diff-highlight'>AI</span>의 윤리적 이슈도 중요한 고려사항입니다.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"인공지능" → "AI" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { lineNo: 19, changed: false, text: "편향성, 투명성, 책임성 등의 문제를 해결해야 합니다.", comment: null },
+            { 
+                lineNo: 20, 
+                changed: true, 
+                text: "또한 <span class='diff-highlight'>개인정보보호</span>와 데이터 보안도 중요합니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '"개인정보 보호" → "개인정보보호" (띄어쓰기 수정)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 21, 
+                changed: true, 
+                text: "<span class='diff-highlight'>AI</span>는 의료, 금융, 교육 등 다양한 분야에 적용되고 있습니다.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"인공지능" → "AI" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 22, 
+                changed: true, 
+                text: "의료 분야에서는 <span class='diff-highlight'>진단보조</span>, <span class='diff-highlight'>신약개발</span> 등에 활용됩니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '복합어 띄어쓰기: "진단 보조" → "진단보조", "신약 개발" → "신약개발"',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 23, 
+                changed: true, 
+                text: "금융 분야에서는 <span class='diff-highlight'>리스크관리</span>, <span class='diff-highlight'>알고리즘트레이딩</span>에 사용됩니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '복합어 띄어쓰기: "리스크 관리" → "리스크관리", "알고리즘 트레이딩" → "알고리즘트레이딩"',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 24, 
+                changed: true, 
+                text: "교육 분야에서는 개인화된 학습, <span class='diff-highlight'>자동채점시스템</span>을 제공합니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '"자동 채점 시스템" → "자동채점시스템" (복합어 띄어쓰기)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 25, 
+                changed: true, 
+                text: "<span class='diff-highlight'>자율주행차</span>는 <span class='diff-highlight'>AI</span>의 대표적인 응용 사례입니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "용어 통일성 부족",
+                    content: '1. "자율주행차" → "자율주행차" (띄어쓰기 통일)<br>2. "인공지능" → "AI" (용어 통일)',
+                    reply: null
+                }
+            },
+            { lineNo: 26, changed: false, text: "센서 데이터를 실시간으로 처리하여 안전한 주행을 가능하게 합니다.", comment: null },
+            { 
+                lineNo: 27, 
+                changed: true, 
+                text: "<span class='diff-highlight'>스마트시티</span> 구축에도 <span class='diff-highlight'>AI</span> 기술이 핵심적인 역할을 합니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "용어 통일성 부족",
+                    content: '1. "스마트 시티" → "스마트시티" (용어 통일)<br>2. "인공지능" → "AI" (용어 통일)',
+                    reply: {
+                        author: "검수자",
+                        time: "2025-01-28 14:30",
+                        content: "용어 통일 작업이 잘 되었습니다."
+                    }
+                }
+            },
+            { 
+                lineNo: 28, 
+                changed: true, 
+                text: "<span class='diff-highlight'>교통최적화</span>, <span class='diff-highlight'>에너지효율성</span> 향상 등에 기여합니다.", 
+                comment: {
+                    category: "guideline",
+                    subcategory: "맞춤법/띄어쓰기/문장부호 오류",
+                    content: '복합어 띄어쓰기: "교통 최적화" → "교통최적화", "에너지 효율성" → "에너지효율성"',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 29, 
+                changed: true, 
+                text: "앞으로 <span class='diff-highlight'>AI</span>는 더욱 발전하여 우리 생활에 깊숙이 스며들 것입니다.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"인공지능" → "AI" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 30, 
+                changed: true, 
+                text: "지속적인 연구와 개발을 통해 <span class='diff-highlight'>인류에게 도움이 되는 방향으로</span> 발전시켜야 합니다.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "어색한 문장 구성",
+                    content: '문장 구조 개선: "인류에게 도움이 되는 방향으로" → 더 자연스러운 표현으로 수정',
+                    reply: {
+                        author: "작업자",
+                        time: "2025-01-28 15:45",
+                        content: "좀 더 자연스러운 표현으로 수정하겠습니다. 감사합니다."
+                    }
+                }
+            }
+        ];
+
+        // 데이터 렌더링 함수
+        function renderData() {
+            const originalPanel = document.getElementById('original-panel');
+            const reviewedPanel = document.getElementById('reviewed-panel');
+            const overviewRuler = document.getElementById('overview-ruler');
+
+            // 작업본 데이터 렌더링
+            originalPanel.innerHTML = originalData.map(item => `
+                <div class="text-item">
+                    <div class="item-header">
+                        <span class="line-no">${item.lineNo}</span>
+                        <span class="timecode">${item.timecode}</span>
+                    </div>
+                    <div class="text-content">
+                        ${item.text}
+                    </div>
+                </div>
+            `).join('');
+
+            // 검수본 데이터 렌더링
+            reviewedPanel.innerHTML = reviewedData.map(item => `
+                <div class="text-item${item.changed ? ' changed' : ''}">
+                    <div class="item-header">
+                        <span class="line-no">${item.lineNo}</span>
+                        <span class="timecode">${originalData[item.lineNo - 1].timecode}</span>
+                    </div>
+                    <div class="text-content${item.changed ? ' changed' : ''}">
+                        ${item.text}
+                    </div>
+                    ${item.comment ? `
+                        <div class="comment-section">
+                            <div class="comment-label">
+                                <span>💬</span>
+                                코멘트
+                                <span class="comment-category-tag ${item.comment.category}">${getCategoryName(item.comment.category)}</span>
+                                <span class="comment-subcategory-tag">${item.comment.subcategory}</span>
+                            </div>
+                            ${item.comment.content}
+                            ${item.comment.reply ? `
+                                <div class="comment-reply">
+                                    <div class="reply-header">
+                                        <span>↳</span>
+                                        <span class="reply-author">${item.comment.reply.author}</span>
+                                        <span class="reply-time">${item.comment.reply.time}</span>
+                                    </div>
+                                    <div class="reply-content">
+                                        ${item.comment.reply.content}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            // Overview Ruler 마커 생성
+            const changedItems = reviewedData.filter(item => item.changed);
+            overviewRuler.innerHTML = changedItems.map((item, index) => {
+                const position = (item.lineNo / 30) * 100;
+                return `<div class="ruler-marker" style="top: ${position}%;" title="라인 ${item.lineNo}: ${getCategoryName(item.comment.category)} > ${item.comment.subcategory}" onclick="scrollToLine(${item.lineNo})"></div>`;
+            }).join('');
+        }
+
+        // 카테고리 이름 변환
+        function getCategoryName(category) {
+            const names = {
+                'translation': '번역',
+                'guideline': '가이드라인',
+                'sync': '싱크',
+                'other': '기타'
+            };
+            return names[category] || category;
+        }
+
+        // 파일 다운로드 함수
+        function downloadComparison() {
+            alert('작업본, 검수본을 다운로드합니다.');
+        }
+
+        // Overview Ruler 클릭 시 해당 라인으로 스크롤
+        function scrollToLine(lineNo) {
+            const reviewedPanel = document.getElementById('reviewed-panel');
+            const targetItem = reviewedPanel.querySelector(`.text-item:nth-child(${lineNo})`);
+            
+            if (targetItem) {
+                targetItem.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+                // 임시 하이라이트 효과
+                targetItem.style.backgroundColor = '#fbbf24';
+                setTimeout(() => {
+                    targetItem.style.backgroundColor = '';
+                }, 1000);
+            }
+        }
+
+        // 패널 동기화 스크롤
+        let isScrolling = false;
+        
+        document.getElementById('original-panel').addEventListener('scroll', function() {
+            if (!isScrolling) {
+                isScrolling = true;
+                const scrollPercent = this.scrollTop / (this.scrollHeight - this.clientHeight);
+                const reviewedPanel = document.getElementById('reviewed-panel');
+                reviewedPanel.scrollTop = scrollPercent * (reviewedPanel.scrollHeight - reviewedPanel.clientHeight);
+                setTimeout(() => isScrolling = false, 100);
+            }
+        });
+        
+        document.getElementById('reviewed-panel').addEventListener('scroll', function() {
+            if (!isScrolling) {
+                isScrolling = true;
+                const scrollPercent = this.scrollTop / (this.scrollHeight - this.clientHeight);
+                const originalPanel = document.getElementById('original-panel');
+                originalPanel.scrollTop = scrollPercent * (originalPanel.scrollHeight - originalPanel.clientHeight);
+                setTimeout(() => isScrolling = false, 100);
+            }
+        });
+
+        // URL 파라미터에서 정보 가져오기
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderNumber = urlParams.get('orderNumber');
+            const fileName = urlParams.get('fileName');
+            
+            if (orderNumber || fileName) {
+                let titleText = '작업물 비교';
+                
+                if (orderNumber) {
+                    titleText += ` - 주문번호: ${decodeURIComponent(orderNumber)}`;
+                }
+                
+                if (fileName) {
+                    titleText += ` | 파일: ${decodeURIComponent(fileName)}`;
+                }
+                
+                document.querySelector('.header-title').innerHTML = `
+                    <span>🔍</span>
+                    ${titleText}
+                `;
+            }
+            
+            // 창 최대화 시도
+            try {
+                if (window.outerHeight < screen.availHeight || window.outerWidth < screen.availWidth) {
+                    window.moveTo(0, 0);
+                    window.resizeTo(screen.availWidth, screen.availHeight);
+                }
+            } catch (e) {
+                console.log('창 크기 조정 권한이 없습니다:', e);
+            }
+
+            // 데이터 렌더링
+            renderData();
+        });
+    </script>
+</body>
+</html>

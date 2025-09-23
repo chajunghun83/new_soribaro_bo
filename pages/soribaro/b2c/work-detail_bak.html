@@ -1591,6 +1591,10 @@
                         <div style="color: #374151; font-weight: 600; font-size: 14px;" class="project-count">
                             총 <span style="color: #3b82f6;" class="total-count">0</span>개의 웍스파이 프로젝트
                         </div>
+                        <button id="new-project-btn" class="btn btn-primary" onclick="openWorksbyProjectModal()" style="padding: 8px 16px; font-size: 13px;">
+                            <span>➕</span>
+                            새 프로젝트 등록
+                        </button>
                     </div>
                     <div style="overflow-x: auto;">
                         <table id="workspy-table" style="width: 100%; border-collapse: collapse; table-layout: fixed;">
@@ -1645,7 +1649,7 @@
                             <tr style="border-bottom: 1px solid #e5e7eb;">
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">선교월령01.m4a</td>
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">00:03:30</td>
-                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;" id="assigned-worker-cell">-</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;" id="assigned-worker-cell">차정훈</td>
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
                                     <button class="btn" onclick="openWorkerAssignmentModal('선교월령01.m4a')" 
                                             style="padding: 6px 12px; font-size: 11px; background: #8b5cf6; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 0 auto; display: inline-block;">
@@ -1656,10 +1660,10 @@
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
                                     <div style="display: flex; justify-content: center; gap: 6px; flex-wrap: nowrap;">
                                         <button class="tool-btn" style="padding: 6px 10px; font-size: 11px; white-space: nowrap; background: #3b82f6; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="launchTranscriptionTool()">
-                                            🚀 전사툴 실행
+                                            🚀 전사툴
                                         </button>
                                         <button class="tool-btn" style="padding: 6px 10px; font-size: 11px; white-space: nowrap; background: #f59e0b; color: white; border: none; border-radius: 4px; cursor: pointer;" onclick="launchReviewTool()">
-                                            ✅ 검수툴 실행
+                                            ✅ 검수툴
                                         </button>
                                     </div>
                                 </td>
@@ -2159,7 +2163,6 @@
 
         // 웍스파이 프로젝트 등록 관련 변수
         let worksbyProjectData = null;
-        let currentProjectData = null;
 
         // 웍스파이 프로젝트 등록 모달 열기
         function openWorksbyProjectModal() {
@@ -2214,6 +2217,8 @@
 
         // 웍스파이 프로젝트 제출 처리
         function handleWorksbyProjectSubmit() {
+            alert('웍스파이 프로젝트 저장 시작!'); // 디버깅용
+            console.log('웍스파이 프로젝트 저장 시작!'); // 디버깅용
             
             // 필수 필드 검증
             const service = document.getElementById('worksbyServiceSelect').value;
@@ -2273,11 +2278,14 @@
                 isImportant: document.getElementById('worksbyImportantProject').checked
             };
             
+            console.log('수집된 폼 데이터:', formData); // 디버깅용
             saveWorksbyProject(formData);
         }
 
         // 웍스파이 프로젝트 저장
         function saveWorksbyProject(formData) {
+            alert('saveWorksbyProject 함수 시작!'); // 디버깅용
+            console.log('saveWorksbyProject 함수 시작!', formData); // 디버깅용
             
             // 프로젝트 번호 생성
             const projectNo = 'PJ' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
@@ -2308,9 +2316,6 @@
                 thumbnailText: thumbnailText,
                 regDate: new Date().toISOString().slice(0, 16).replace('T', ' ')
             };
-            
-            // currentProjectData에도 동일한 데이터 저장
-            currentProjectData = worksbyProjectData;
 
             // 테이블에 프로젝트 추가
             addWorksbyProjectToTable(worksbyProjectData);
@@ -2319,20 +2324,34 @@
             const emptyState = document.getElementById('workspy-empty-state');
             const projectTable = document.getElementById('workspy-project-table');
             
+            console.log('UI 요소 확인:', { emptyState, projectTable });
+            
             if (emptyState && projectTable) {
                 emptyState.style.display = 'none';
                 projectTable.style.display = 'block';
+                console.log('웍스파이 프로젝트 테이블 표시 완료');
                 
                 // 프로젝트 생성 후 즉시 작업관리 테이블 노출
                 const workMgmt = document.getElementById('work-management-table-section');
+                console.log('작업관리 테이블 섹션 찾기:', workMgmt);
+                
                 if (workMgmt) {
                     workMgmt.style.display = 'block';
+                    alert('작업관리 테이블 표시 완료!'); // 디버깅용
+                    console.log('작업관리 테이블 표시 완료');
                     
                     // 작업관리 섹션으로 스크롤
                     setTimeout(() => {
+                        alert('작업관리 섹션으로 스크롤 시작!'); // 디버깅용
+                        console.log('작업관리 섹션으로 스크롤 시작');
                         workMgmt.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 500);
+                } else {
+                    alert('❌ 작업관리 테이블 섹션을 찾을 수 없습니다!'); // 디버깅용
+                    console.error('작업관리 테이블 섹션을 찾을 수 없습니다!');
                 }
+            } else {
+                console.error('웍스파이 UI 요소를 찾을 수 없습니다:', { emptyState, projectTable });
             }
             
             // 모달 닫기

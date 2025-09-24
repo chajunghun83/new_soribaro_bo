@@ -1552,68 +1552,48 @@
 
         <!-- 작업관리 탭 -->
         <div id="management-tab" class="tab-content">
-            <!-- 기본 파일 정보 -->
+            <!-- 파일 리스트 -->
             <div class="work-management-section">
                 <h2 class="section-title">
                     <span>📁</span>
-                    파일 정보
-                </h2>
-                    <div class="info-grid">
-                        <span class="info-label">파일이름</span>
-                        <span id="mgmt-file-name" class="info-value">제목없는1.2 북터키스 아이키.m4a</span>
-                        
-                        <span class="info-label">재생시간</span>
-                        <span id="mgmt-work-time" class="info-value">00:01:54</span>
-                </div>
-            </div>
-
-            <!-- 웍스파이 프로젝트 등록 -->
-            <div class="work-management-section">
-                <h2 class="section-title">
-                    <span>🚀</span>
-                    웍스파이 프로젝트 등록
+                    파일 리스트
                 </h2>
                 
-                <!-- 초기 상태: 버튼만 표시 -->
-                <div id="workspy-empty-state" style="display: block; text-align: center; padding: 40px 20px; background: #f9fafb; border-radius: 8px; border: 2px dashed #d1d5db;">
-                    <div style="color: #6b7280; margin-bottom: 15px; font-size: 32px;">📋</div>
-                    <p style="color: #374151; font-size: 16px; font-weight: 500; margin-bottom: 10px;">등록된 프로젝트가 없습니다</p>
-                    <p style="color: #6b7280; font-size: 14px; margin-bottom: 20px;">웍스파이에 새 프로젝트를 등록하여 작업자를 모집해보세요</p>
-                    <button class="btn btn-primary" onclick="openWorksbyProjectModal()">
-                        <span>➕</span>
-                        새 프로젝트 등록
-                    </button>
-                </div>
-                
-                <!-- 프로젝트 생성 후 상태: 테이블 표시 -->
-                <div id="workspy-project-table" style="display: none;">
-                    <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
-                        <div style="color: #374151; font-weight: 600; font-size: 14px;" class="project-count">
-                            총 <span style="color: #3b82f6;" class="total-count">0</span>개의 웍스파이 프로젝트
-                        </div>
-                    </div>
                     <div style="overflow-x: auto;">
-                        <table id="workspy-table" style="width: 100%; border-collapse: collapse; table-layout: fixed;">
+                    <table style="width: 100%; border-collapse: collapse; background: white; border: 1px solid #e5e7eb; border-radius: 8px;">
                             <thead>
                                 <tr style="background: #f8f9fa;">
-                                    <th style="width: 40px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">NO</th>
-                                    <th style="width: 60px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">썸네일</th>
-                                    <th style="width: 277px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">프로젝트명</th>
-                                    <th style="width: 70px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">서비스</th>
-                                    <th style="width: 70px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자</th>
-                                    <th style="width: 264px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">모집기간</th>
-                                    <th style="width: 93px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">모집상태</th>
-                                    <th style="width: 264px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업기간</th>
-                                    <th style="width: 80px; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업상태</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 40%;">파일 이름</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 15%;">파일 길이</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 20%;">작업자</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 25%;">진행상태</th>
                                 </tr>
                             </thead>
-                            <tbody id="worksby-table-body">
-                                <!-- 동적으로 생성될 프로젝트 데이터 -->
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #e5e7eb;">
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">선교월령01.m4a</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">00:03:30</td>
+                                <td id="file-list-worker-cell" style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">-</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
+                                    <span id="file-list-status-badge" class="status-badge status-waiting">대기중</span>
+                                </td>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
+                
+                <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 15px;">
+                    <button onclick="openWorksbyProjectModal()" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                        <span>🚀</span>
+                        웍스파이 프로젝트 등록
+                    </button>
+                    <button onclick="downloadFile()" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                        <span>📁</span>
+                        파일 다운로드
+                    </button>
                 </div>
             </div>
+
 
             <!-- 작업관리 테이블 -->
             <div id="work-management-table-section" class="work-management-section" style="display: none;">
@@ -1632,12 +1612,13 @@
                     <table style="width: 100%; min-width: 1200px; border-collapse: collapse;">
                         <thead>
                             <tr style="background: #f8f9fa;">
-                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 25%;">파일이름</th>
-                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 10%;">재생시간</th>
-                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 10%;">작업자</th>
-                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 12%;">작업자 배정</th>
-                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 13%;">전사툴</th>
-                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 18%;">산출물 업로드</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 22%;">파일이름</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 8%;">재생시간</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 12%;">웍스파이 등록</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 8%;">작업자</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 10%;">작업자 배정</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 12%;">전사툴</th>
+                                <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 16%;">산출물 업로드</th>
                                 <th style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; width: 12%;">작업자 상태</th>
                             </tr>
                         </thead>
@@ -1645,6 +1626,13 @@
                             <tr style="border-bottom: 1px solid #e5e7eb;">
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">선교월령01.m4a</td>
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">00:03:30</td>
+                                <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
+                                    <button id="workspy-check-btn" onclick="checkWorksbyProject()" 
+                                            style="padding: 6px 12px; font-size: 11px; background: #10b981; color: white; border: none; border-radius: 4px; cursor: pointer; margin: 0 auto; display: inline-block;">
+                                        <span>🔍</span>
+                                        등록 확인
+                                    </button>
+                                </td>
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;" id="assigned-worker-cell">-</td>
                                 <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
                                     <button class="btn" onclick="openWorkerAssignmentModal('선교월령01.m4a')" 
@@ -2062,6 +2050,127 @@
             }, 500);
         }
 
+        // 파일 다운로드 기능
+        function downloadFile() {
+            alert('파일을 다운로드합니다.\n\n실제 환경에서는 선택된 파일이 다운로드됩니다.');
+            // 실제로는 파일 다운로드 API 호출
+            // const fileName = 'selected_file.m4a';
+            // window.open(`/api/download/${fileName}`, '_blank');
+        }
+
+        // 웍스파이 프로젝트 등록 확인 기능
+        function checkWorksbyProject() {
+            // 웍스파이 프로젝트가 등록되어 있는지 확인
+            if (currentProjectData) {
+                // 프로젝트 상세정보 모달 열기
+                openWorksbyDetailModal(currentProjectData);
+            } else {
+                // 프로젝트가 등록되지 않았으면 등록 안내
+                if (confirm('웍스파이 프로젝트가 등록되지 않았습니다.\n\n새 프로젝트를 등록하시겠습니까?')) {
+                    openWorksbyProjectModal();
+                }
+            }
+        }
+
+        // 웍스파이 프로젝트 상세보기 모달 열기
+        function openWorksbyDetailModal(data) {
+            // 모달 데이터 설정
+            if (data) {
+                document.getElementById('detailNo').textContent = data.projectNo || '';
+                document.getElementById('detailService').textContent = data.service || '';
+                document.getElementById('detailRegDate').textContent = data.regDate || '';
+                document.getElementById('detailTitle').textContent = data.title || '';
+                
+                // 날짜 포맷팅
+                const formatDateTime = (dateStr) => {
+                    if (!dateStr) return '';
+                    const date = new Date(dateStr);
+                    if (isNaN(date.getTime())) return dateStr;
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    const hours = String(date.getHours()).padStart(2, '0');
+                    const minutes = String(date.getMinutes()).padStart(2, '0');
+                    return `${year}.${month}.${day} ${hours}:${minutes}`;
+                };
+                
+                const formatDateOnly = (dateStr) => {
+                    if (!dateStr) return '';
+                    const date = new Date(dateStr);
+                    if (isNaN(date.getTime())) return dateStr;
+                    const year = date.getFullYear();
+                    const month = String(date.getMonth() + 1).padStart(2, '0');
+                    const day = String(date.getDate()).padStart(2, '0');
+                    return `${year}.${month}.${day}`;
+                };
+                
+                // 모집기간 설정
+                const startFormatted = formatDateTime(data.startDate);
+                const endFormatted = formatDateTime(data.endDate);
+                document.getElementById('detailProjectPeriod').textContent = `${startFormatted} ~ ${endFormatted}`;
+                
+                // 작업기간 설정
+                const workStartFormatted = formatDateOnly(data.workStartDate);
+                const workEndFormatted = formatDateOnly(data.workEndDate);
+                document.getElementById('detailWorkPeriod').textContent = `${workStartFormatted} ~ ${workEndFormatted}`;
+                
+                // 작업자 수, 금액, 지원자격 설정
+                document.getElementById('detailWorkerCount').textContent = `0 / ${data.workerCount || '5'}명`;
+                document.getElementById('detailBudget').textContent = data.budget ? data.budget + '원' : '500000원';
+                
+                const qualificationMap = { 'anyone': '누구나', 'stenographer': '속기사' };
+                document.getElementById('detailQualification').textContent = qualificationMap[data.qualification] || '누구나';
+                
+                // 프로젝트 설명 설정
+                document.getElementById('detailContent').innerHTML = data.description || '프로젝트 설명이 없습니다.';
+            }
+            
+            // 모달 표시
+            document.getElementById('detailModal').style.display = 'flex';
+        }
+
+        // 웍스파이 프로젝트 상세보기 모달 닫기
+        function closeDetailModal() {
+            document.getElementById('detailModal').style.display = 'none';
+        }
+
+        // 프로젝트 수정 기능
+        function editProject() {
+            alert('프로젝트 수정 기능입니다.\n\n실제 환경에서는 프로젝트 정보를 수정할 수 있습니다.');
+        }
+
+        // 프로젝트 마감 기능
+        function closeProjectPermanently() {
+            if (confirm('프로젝트를 마감하시겠습니까?\n\n마감 후에는 더 이상 작업자 모집이 진행되지 않습니다.')) {
+                alert('프로젝트가 마감되었습니다.');
+                closeDetailModal();
+            }
+        }
+
+        // 프로젝트 삭제 기능
+        function deleteProject() {
+            if (confirm('프로젝트를 삭제하시겠습니까?\n\n삭제된 프로젝트는 복구할 수 없습니다.')) {
+                // 프로젝트 데이터 초기화
+                currentProjectData = null;
+                
+                // 작업관리 테이블 숨기기
+                const workMgmt = document.getElementById('work-management-table-section');
+                if (workMgmt) {
+                    workMgmt.style.display = 'none';
+                }
+                
+                // 웍스파이 등록 확인 버튼을 원래 상태로 되돌리기
+                const worksbyCheckBtn = document.getElementById('workspy-check-btn');
+                if (worksbyCheckBtn) {
+                    worksbyCheckBtn.style.background = '#10b981';
+                    worksbyCheckBtn.innerHTML = '<span>🔍</span> 등록 확인';
+                }
+                
+                alert('프로젝트가 삭제되었습니다.');
+                closeDetailModal();
+            }
+        }
+
         // 왼쪽 내용을 오른쪽으로 복사
         function copyToShareBox() {
             const originalText = document.getElementById('customer-request-original').value;
@@ -2174,17 +2283,36 @@
             const twoWeeksLater = new Date();
             twoWeeksLater.setDate(today.getDate() + 14);
             
+            // 작업기간: 오늘부터 1주일 후
+            const oneWeekLater = new Date();
+            oneWeekLater.setDate(today.getDate() + 7);
+            
             const formatDate = (date) => {
                 return date.toISOString().split('T')[0];
+            };
+            
+            const formatDateTime = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
             };
             
             // 폼 필드에 더미 데이터 입력
             document.getElementById('worksbyServiceSelect').value = '소리바로';
             document.getElementById('worksbyProjectTitle').value = fileName + ' 전사 프로젝트';
-            document.getElementById('worksbyProjectStartDate').value = formatDate(today);
-            document.getElementById('worksbyProjectEndDate').value = formatDate(twoWeeksLater);
+            
+            // 모집기간: 오늘 현재 시간부터 2주 후 같은 시간까지
+            document.getElementById('worksbyProjectStartDate').value = formatDateTime(today);
+            document.getElementById('worksbyProjectEndDate').value = formatDateTime(twoWeeksLater);
+            
+            // 작업기간: 오늘부터 1주일 후까지
+            document.getElementById('worksbyWorkStartDate').value = formatDate(today);
+            document.getElementById('worksbyWorkEndDate').value = formatDate(oneWeekLater);
+            
             document.getElementById('worksbyWorkerCount').value = '5';
-
             document.getElementById('worksbyBudgetAmount').value = '500000';
 
             
@@ -2311,28 +2439,23 @@
             
             // currentProjectData에도 동일한 데이터 저장
             currentProjectData = worksbyProjectData;
-
-            // 테이블에 프로젝트 추가
-            addWorksbyProjectToTable(worksbyProjectData);
-            
-            // 빈 상태 숨기고 테이블 표시
-            const emptyState = document.getElementById('workspy-empty-state');
-            const projectTable = document.getElementById('workspy-project-table');
-            
-            if (emptyState && projectTable) {
-                emptyState.style.display = 'none';
-                projectTable.style.display = 'block';
                 
                 // 프로젝트 생성 후 즉시 작업관리 테이블 노출
                 const workMgmt = document.getElementById('work-management-table-section');
                 if (workMgmt) {
                     workMgmt.style.display = 'block';
+                
+                // 웍스파이 등록 확인 버튼 스타일 변경 (등록완료 상태)
+                const worksbyCheckBtn = document.getElementById('workspy-check-btn');
+                if (worksbyCheckBtn) {
+                    worksbyCheckBtn.style.background = '#10b981';
+                    worksbyCheckBtn.innerHTML = '<span>✅</span> 등록 확인';
+                }
                     
                     // 작업관리 섹션으로 스크롤
                     setTimeout(() => {
                         workMgmt.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }, 500);
-                }
             }
             
             // 모달 닫기
@@ -2341,101 +2464,6 @@
             alert('웍스파이 프로젝트가 등록되었습니다!\n\n프로젝트가 웍스파이에 등록되어 작업자 모집이 시작됩니다.');
         }
 
-        // 테이블에 프로젝트 행 추가
-        function addWorksbyProjectToTable(data) {
-            const tbody = document.getElementById('worksby-table-body');
-            
-            if (!tbody) {
-                console.error('테이블 body를 찾을 수 없습니다!'); // 디버깅용
-                return;
-            }
-            console.log('테이블 body 발견:', tbody); // 디버깅용
-            
-            // 현재 테이블 행 수를 확인하여 새 번호 계산
-            const currentRows = tbody.querySelectorAll('tr').length;
-            const newRowNumber = currentRows + 1;
-            
-            const thumbnailColor = getRandomThumbnailColor();
-            
-            const row = document.createElement('tr');
-            row.style.cursor = 'pointer';
-            row.style.transition = 'background-color 0.2s';
-            row.onclick = () => openDetailModal(data);
-            
-            // 호버 효과 추가
-            row.onmouseenter = function() { this.style.backgroundColor = '#f9fafb'; };
-            row.onmouseleave = function() { this.style.backgroundColor = ''; };
-            
-            // 작업자 현황
-            const workerStatus = `0 / ${data.workerCount || '0'}`;
-            
-            // 모집/작업 상태 배지 스타일 (meeting-detail과 통일된 파란 배지)
-            const badgeBlue = 'display:inline-block; background: #3b82f6; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;';
-            
-            // 날짜 포맷 함수
-            const toDate = (s) => {
-                if (!s) return '';
-                const d = new Date(s);
-                if (Number.isNaN(d.getTime())) return s;
-                return d.toISOString();
-            };
-            const formatDateOnly = (iso) => iso ? iso.slice(0,10).replace(/-/g,'.') : '';
-            const formatDateTime = (iso) => {
-                if (!iso) return '';
-                // 입력이 yyyy.MM.dd 또는 yyyy-MM-dd일 수도 있어 그대로 표시 보존
-                if (/^\d{4}\.\d{2}\.\d{2}/.test(iso)) return iso;
-                const d = new Date(iso);
-                if (Number.isNaN(d.getTime())) return iso;
-                const yyyy = d.getFullYear();
-                const mm = String(d.getMonth()+1).padStart(2,'0');
-                const dd = String(d.getDate()).padStart(2,'0');
-                const hh = String(d.getHours()).padStart(2,'0');
-                const mi = String(d.getMinutes()).padStart(2,'0');
-                return `${yyyy}.${mm}.${dd} ${hh}:${mi}`;
-            };
-            
-            row.innerHTML = `
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${newRowNumber}</td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
-                    <div style="width: 40px; height: 40px; background: ${thumbnailColor}; color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 10px; font-weight: 600;">
-                        ${data.thumbnailText}
-                    </div>
-                </td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.title}</td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${data.service}</td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${workerStatus}</td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${formatDateTime(toDate(data.startDate))} ~ ${formatDateTime(toDate(data.endDate))}</td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;"><span style="${badgeBlue}">진행중</span></td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.workStartDate && data.workEndDate ? `${formatDateOnly(toDate(data.workStartDate))} ~ ${formatDateOnly(toDate(data.workEndDate))}` : ''}</td>
-                <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;"><span style="${badgeBlue}">진행중</span></td>
-            `;
-            
-            // 호버 효과 추가
-            row.addEventListener('mouseenter', function() {
-                this.style.backgroundColor = '#f9fafb';
-            });
-            row.addEventListener('mouseleave', function() {
-                this.style.backgroundColor = '';
-            });
-            
-            tbody.appendChild(row);
-            console.log('테이블에 행 추가 완료!', row); // 디버깅용
-            
-            // 프로젝트 카운트 업데이트
-            updateWorksbyProjectCount();
-        }
-
-        // 웍스파이 프로젝트 카운트 업데이트
-        function updateWorksbyProjectCount() {
-            const tbody = document.getElementById('worksby-table-body');
-            const countElement = document.querySelector('#workspy-project-table .total-count');
-            
-            if (tbody && countElement) {
-                const totalCount = tbody.querySelectorAll('tr').length;
-                countElement.textContent = totalCount;
-                console.log(`프로젝트 카운트 업데이트: ${totalCount}개`); // 디버깅용
-            }
-        }
 
         // 랜덤 썸네일 색상 생성
         function getRandomThumbnailColor() {
@@ -2508,287 +2536,7 @@
             });
         });
 
-        // 웍스파이 상세보기 모달 열기
-        function openWorksbyDetailModal(data) {
-            console.log('=== 웍스파이 상세보기 모달 열기 시작 ==='); 
-            console.log('전달받은 데이터:', data); // 디버깅용
-            
-            const modal = document.getElementById('worksbyDetailModal');
-            if (!modal) {
-                console.error('worksbyDetailModal을 찾을 수 없습니다!'); // 디버깅용
-                return;
-            }
-            
-            modal.style.display = 'flex';
-            console.log('모달 표시됨'); // 디버깅용
-            
-            // 데이터 설정
-            const elements = {
-                'worksbyDetailNo': data.projectNo,
-                'worksbyDetailService': data.service,
-                'worksbyDetailRegDate': data.regDate,
-                'worksbyDetailTitle': data.title,
-                'worksbyDetailWorkerCount': `0 / ${data.workerCount || '0'}명`,
-                'worksbyDetailBudget': data.budget || '미정'
-            };
-            
-            // 각 요소에 데이터 설정
-            Object.entries(elements).forEach(([id, value]) => {
-                const element = document.getElementById(id);
-                if (element) {
-                    element.textContent = value;
-                    console.log(`✅ ${id} 설정됨:`, value); // 디버깅용
-                    console.log(`   실제 표시된 값:`, element.textContent); // 확인용
-                    console.log(`   요소 정보:`, element); // 요소 자체 확인
-                } else {
-                    console.error(`❌ ${id} 요소를 찾을 수 없습니다!`); // 디버깅용
-                }
-            });
-            
-            // 상태 설정 (색상 포함)
-            const statusElement = document.getElementById('worksbyDetailStatus');
-            if (statusElement) {
-                statusElement.textContent = '기획';
-                statusElement.style.color = '#6b7280';
-                statusElement.style.fontWeight = '500';
-                console.log('상태 설정됨: 기획'); // 디버깅용
-            }
-            
-            // 날짜 범위 설정
-            const startDateFormatted = data.startDate ? data.startDate.replace('T', ' ').slice(0, 16) : '-';
-            const endDateFormatted = data.endDate ? data.endDate.replace('T', ' ').slice(0, 16) : '-';
-            const periodElement = document.getElementById('worksbyDetailProjectPeriod');
-            if (periodElement) {
-                periodElement.textContent = `${startDateFormatted} ~ ${endDateFormatted}`;
-                console.log('진행기간 설정됨:', `${startDateFormatted} ~ ${endDateFormatted}`); // 디버깅용
-            }
-            
-            // 설명 설정
-            const contentElement = document.getElementById('worksbyDetailContent');
-            if (contentElement) {
-                contentElement.innerHTML = data.description || '프로젝트 설명이 없습니다.';
-                console.log('설명 설정됨:', data.description); // 디버깅용
-            }
-            
-            // 기본적으로 프로젝트 정보 탭 활성화
-            console.log('프로젝트 정보 탭 활성화 시도'); // 디버깅용
-            showWorksbyTab('info');
-            
-            // 최종 상태 확인
-            setTimeout(() => {
-                console.log('=== 최종 상태 확인 ===');
-                console.log('모달 표시 상태:', modal.style.display);
-                console.log('프로젝트명:', document.getElementById('worksbyDetailTitle')?.textContent || '없음');
-                console.log('프로젝트번호:', document.getElementById('worksbyDetailNo')?.textContent || '없음');
-                console.log('서비스:', document.getElementById('worksbyDetailService')?.textContent || '없음');
-                console.log('활성 탭:', document.querySelector('#worksby-tab-info.active') ? '프로젝트 정보' : '없음');
-                console.log('=== 웍스파이 상세보기 모달 열기 완료 ===');
-            }, 100);
-            
-            console.log('openWorksbyDetailModal 함수 실행 완료!'); // 디버깅용
-        }
 
-        // 웍스파이 상세보기 모달 닫기
-        function closeWorksbyDetailModal() {
-            document.getElementById('worksbyDetailModal').style.display = 'none';
-        }
-
-        // 웍스파이 상세보기 탭 전환
-        function showWorksbyTab(tabName, clickedButton = null) {
-            console.log('showWorksbyTab 호출됨:', tabName); // 디버깅용
-            
-            // 모든 탭 패널 숨기기
-            const infoTab = document.getElementById('worksby-tab-info');
-            const workersTab = document.getElementById('worksby-tab-workers');
-            
-            if (infoTab) infoTab.classList.remove('active');
-            if (workersTab) workersTab.classList.remove('active');
-            
-            // 선택된 탭 보이기
-            const targetTab = document.getElementById('worksby-tab-' + tabName);
-            if (targetTab) {
-                targetTab.classList.add('active');
-                console.log('✅ 탭 활성화됨:', tabName); // 디버깅용
-                console.log('   탭 요소:', targetTab);
-                console.log('   탭 클래스:', targetTab.className);
-                console.log('   탭 스타일:', targetTab.style.display);
-            } else {
-                console.error('❌ 탭을 찾을 수 없습니다:', 'worksby-tab-' + tabName); // 디버깅용
-                // 모든 탭 요소 확인
-                console.log('사용 가능한 탭들:');
-                document.querySelectorAll('[id^="worksby-tab-"]').forEach(tab => {
-                    console.log('  -', tab.id, tab);
-                });
-            }
-            
-            // 탭 버튼 스타일 변경
-            const tabButtons = document.querySelectorAll('#worksbyDetailModal .tab-btn');
-            tabButtons.forEach(btn => {
-                btn.classList.remove('active');
-                btn.style.background = '#f8fafc';
-                btn.style.color = '#6b7280';
-                btn.style.borderBottom = '3px solid transparent';
-            });
-            
-            // 활성 탭 버튼 찾기 및 스타일 적용
-            let activeButton = clickedButton;
-            if (!activeButton) {
-                // 클릭된 버튼이 없으면 탭명으로 찾기
-                tabButtons.forEach(btn => {
-                    const onclick = btn.getAttribute('onclick');
-                    if (onclick && onclick.includes(`'${tabName}'`)) {
-                        activeButton = btn;
-                    }  
-                });
-            }
-            
-            if (activeButton) {
-                activeButton.classList.add('active');
-                activeButton.style.background = 'white';
-                activeButton.style.color = '#3b82f6';
-                activeButton.style.borderBottom = '3px solid #3b82f6';
-            }
-            
-            // 탭에 따라 하단 버튼 변경
-            const actionBtn = document.getElementById('worksbyModalActionBtn');
-            if (actionBtn) {
-                if (tabName === 'info') {
-                    actionBtn.textContent = '수정';
-                    actionBtn.onclick = editWorksbyProject;
-                    actionBtn.className = 'btn-edit';
-                    actionBtn.style.background = '';
-                    actionBtn.onmouseover = null;
-                    actionBtn.onmouseout = null;
-                } else if (tabName === 'workers') {
-                    actionBtn.textContent = '확정';
-                    actionBtn.onclick = confirmWorksbyWorkers;
-                    actionBtn.className = 'btn-edit';
-                    actionBtn.style.background = '#f59e0b';
-                    actionBtn.onmouseover = () => actionBtn.style.background = '#d97706';
-                    actionBtn.onmouseout = () => actionBtn.style.background = '#f59e0b';
-                }
-            }
-        }
-
-        // 웍스파이 프로젝트 수정
-        function editWorksbyProject() {
-            alert('프로젝트 수정 기능입니다.\n\n실제 환경에서는 프로젝트 정보를 수정할 수 있습니다.');
-        }
-
-        // 웍스파이 작업자 확정
-        function confirmWorksbyWorkers() {
-            alert('작업자 확정 처리가 완료되었습니다.\n\n선택된 작업자들에게 알림이 발송됩니다.');
-        }
-
-        // 웍스파이 작업자 체크박스 관리
-        function toggleAllWorksbyWorkers(selectAllCheckbox) {
-            const checkboxes = document.querySelectorAll('input[name="worksbyWorkerSelect"]');
-            checkboxes.forEach(checkbox => {
-                checkbox.checked = selectAllCheckbox.checked;
-            });
-            updateWorksbySelectedWorkerCount();
-        }
-
-        // 웍스파이 선택된 작업자 수 업데이트
-        function updateWorksbySelectedWorkerCount() {
-            const checkedBoxes = document.querySelectorAll('input[name="worksbyWorkerSelect"]:checked');
-            const countElement = document.getElementById('worksbySelectedWorkerCount');
-            if (countElement) {
-                countElement.textContent = checkedBoxes.length + '명';
-            }
-        }
-
-        // 웍스파이 작업자 상태 일괄 업데이트
-        function batchUpdateWorksbyWorkerStatus(status) {
-            const checkedBoxes = document.querySelectorAll('input[name="worksbyWorkerSelect"]:checked');
-            if (checkedBoxes.length === 0) {
-                alert('선택된 작업자가 없습니다.');
-                return;
-            }
-            
-            const statusText = status === 'assigned' ? '배정' : '미배정';
-            const confirmMessage = `선택된 ${checkedBoxes.length}명의 작업자를 ${statusText}하시겠습니까?`;
-            
-            if (confirm(confirmMessage)) {
-                checkedBoxes.forEach(checkbox => {
-                    const row = checkbox.closest('tr');
-                    // 상태 컬럼은 9번째, 배정일은 8번째
-                    const statusCell = row.querySelector('td:nth-child(9)');
-                    const statusSpan = statusCell ? statusCell.querySelector('.applicant-status') : null;
-                   
-                   if (status === 'assigned') {
-                       statusSpan.textContent = '배정';
-                       statusSpan.className = 'applicant-status status-approved';
-                       // 배정일 업데이트
-                       const assignmentDateCell = row.querySelector('td:nth-child(9)');
-                       assignmentDateCell.textContent = new Date().toISOString().slice(0, 10).replace(/-/g, '.');
-                   } else if (status === 'unassigned') {
-                       statusSpan.textContent = '미배정';
-                       statusSpan.className = 'applicant-status status-cancelled';
-                   }
-                   
-                   // 체크박스 해제
-                   checkbox.checked = false;
-                });
-                
-                // 전체 선택 체크박스도 해제
-                const selectAllCheckbox = document.getElementById('worksbySelectAllWorkers');
-                if (selectAllCheckbox) {
-                    selectAllCheckbox.checked = false;
-                }
-                
-                updateWorksbySelectedWorkerCount();
-                
-                // 테이블 정렬 (배정 상단, 미배정 하단)
-                sortWorksbyWorkerTable();
-                
-                alert(`${checkedBoxes.length}명의 작업자가 ${statusText}되었습니다.`);
-                
-                // 통계 업데이트
-                updateWorksbyWorkerStats();
-            }
-        }
-        
-        // 웍스파이 작업자 테이블 정렬 (배정 상단, 미배정 하단)
-        function sortWorksbyWorkerTable() {
-            const table = document.querySelector('#worksby-tab-workers .applicants-table tbody');
-            if (!table) return;
-            
-            const rows = Array.from(table.querySelectorAll('tr'));
-            
-            // 상태에 따라 정렬 (배정=0, 미배정=1)
-            rows.sort((a, b) => {
-                const statusA = a.querySelector('.applicant-status').textContent.trim();
-                const statusB = b.querySelector('.applicant-status').textContent.trim();
-                
-                const priorityA = statusA === '배정' ? 0 : 1;
-                const priorityB = statusB === '배정' ? 0 : 1;
-                
-                return priorityA - priorityB;
-            });
-            
-            // 테이블에 정렬된 행들 다시 삽입
-            rows.forEach(row => table.appendChild(row));
-        }
-
-        // 웍스파이 작업자 통계 업데이트
-        function updateWorksbyWorkerStats() {
-            const allWorkers = document.querySelectorAll('#worksbyWorkersList tr');
-            let assigned = 0, unassigned = 0;
-            
-            allWorkers.forEach(row => {
-                const statusSpan = row.querySelector('.applicant-status');
-                if (statusSpan) {
-                    const status = statusSpan.textContent;
-                    if (status === '배정') assigned++;
-                    else if (status === '미배정') unassigned++;
-                }
-            });
-            
-            document.getElementById('worksbyTotalWorkers').textContent = allWorkers.length;
-            document.getElementById('worksbyAssignedCount').textContent = assigned;
-            document.getElementById('worksbyExcludedCount').textContent = unassigned;
-        }
 
         // 파일 업로드 관련 함수들
         function handleWorksbyThumbnailUpload(input) {
@@ -3016,49 +2764,6 @@
             document.getElementById('detailModal').style.display = 'none';
         }
         
-        // 등록 모달 열기/닫기
-        function addNewProject() {
-            // 더미 데이터로 프로젝트 등록 폼 미리 채우기
-            const params = getUrlParams();
-            const fileName = params.fileName ? decodeURIComponent(params.fileName).replace(/\.[^/.]+$/, "") : "음성파일";
-            const today = new Date();
-            const twoWeeksLater = new Date();
-            twoWeeksLater.setDate(today.getDate() + 14);
-            const formatDate = (date) => { return date.toISOString().split('T')[0]; };
-            
-            document.getElementById('serviceSelect').value = '소리바로';
-            document.getElementById('projectTitle').value = fileName + ' 전사 프로젝트';
-            document.getElementById('projectStartDate').value = formatDate(today);
-            document.getElementById('projectEndDate').value = formatDate(twoWeeksLater);
-            // 작업기간 기본값은 비워두되, 필요하면 오늘~2주 후로 채울 수 있습니다
-            const workStart = document.getElementById('projectWorkStartDate');
-            const workEnd = document.getElementById('projectWorkEndDate');
-            if (workStart && workEnd) {
-                workStart.value = '';
-                workEnd.value = '';
-            }
-            document.getElementById('workerCount').value = '5';
-
-            document.getElementById('budgetAmount').value = '500000';
-
-            
-            const contentEditor = document.getElementById('contentEditor');
-            if (contentEditor) {
-                contentEditor.innerHTML = `
-                    사람을 구합니다.<br>
-                    테스트합니다.<br>
-                    하나둘하나둘
-                `.trim();
-            }
-            document.getElementById('activeToggle').checked = true;
-            document.getElementById('importantProject').checked = false;
-            
-            document.getElementById('projectModal').style.display = 'flex';
-        }
-        
-        function closeProjectModal() {
-            document.getElementById('projectModal').style.display = 'none';
-        }
         
         // 간단한 기능들
         function updateWorkerStatus(workerNo, status) {
@@ -3068,9 +2773,6 @@
             }
         }
         
-        function editProject() {
-            alert('프로젝트 수정 기능');
-        }
         
         // 프로젝트 종료 (기획용)
         function closeProjectPermanently() {
@@ -3223,138 +2925,7 @@
         
         // 중복된 함수 정의 제거 - 위에 정의된 openWorksbyProjectModal() 사용
         
-        // 프로젝트 저장 처리
-        function saveProject(formData) {
-            console.log('saveProject 함수 호출됨!', formData); // 디버깅용
-            
-            // 프로젝트 번호 생성
-            const projectNo = 'PJ' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-            console.log('생성된 프로젝트 번호:', projectNo); // 디버깅용
-            
-            // 썸네일 텍스트 생성
-            const thumbnailText = formData.service === '웍스파이' ? 'WORKSPY' : 
-                                formData.service === '소리바로' ? 'SORIBARO' :
-                                formData.service === '팀벨' ? 'TEAMBELL' :
-                                formData.service === '엔튜브' ? 'NTUBE' :
-                                formData.service === '더 데이터' ? 'DATA' :
-                                formData.service === '텍스타' ? 'TEXTA' : 'PROJECT';
-
-            // 날짜 형식 변환 함수
-            const formatDisplayDate = (dateStr) => {
-                if (!dateStr) return '';
-                return dateStr.replace(/-/g, '.');
-            };
-            
-            // 금액 형식 변환 함수
-            const formatBudget = (amount) => {
-                if (!amount) return '0';
-                return parseInt(amount).toLocaleString();
-            };
-
-            // 프로젝트 데이터 생성
-            const worksbyProjectData = {
-                projectNo: projectNo,
-                title: formData.title,
-                service: formData.service,
-                startDate: formData.startDate,
-                endDate: formData.endDate,
-                workStartDate: formData.workStartDate,
-                workEndDate: formData.workEndDate,
-                qualification: formData.qualification,
-                workerCount: formData.workerCount || '0',
-                budget: formatBudget(formData.budget),
-                description: formData.description,
-                isActive: formData.isActive,
-                isImportant: formData.isImportant,
-                thumbnailText: thumbnailText,
-                regDate: new Date().toISOString().slice(0, 16).replace('T', ' ').replace(/-/g, '.')
-            };
-
-            // 테이블에 프로젝트 추가
-            console.log('테이블에 프로젝트 추가 중...'); // 디버깅용
-            addWorksbyProjectToTable(worksbyProjectData);
-            
-            // 빈 상태 숨기고 테이블 표시
-            console.log('UI 상태 변경 중...'); // 디버깅용
-            const emptyState = document.getElementById('workspy-empty-state');
-            const projectTable = document.getElementById('workspy-project-table');
-            
-            if (emptyState && projectTable) {
-                emptyState.style.display = 'none';
-                projectTable.style.display = 'block';
-                
-                // 프로젝트가 생성되면 새 프로젝트 등록 버튼 숨기기
-                const newProjectBtn = document.getElementById('new-project-btn');
-                if (newProjectBtn) {
-                    newProjectBtn.style.display = 'none';
-                    console.log('새 프로젝트 등록 버튼 숨김 처리 완료!'); // 디버깅용
-                }
-                
-                console.log('UI 상태 변경 완료!'); // 디버깅용
-            } else {
-                console.error('UI 요소를 찾을 수 없습니다:', { emptyState, projectTable }); // 디버깅용
-            }
-            
-            // 모달 닫기
-            console.log('모달 닫기 중...'); // 디버깅용
-            closeProjectModal();
-            
-            alert('웍스파이 프로젝트가 등록되었습니다!\n\n프로젝트가 웍스파이에 등록되어 작업자 모집이 시작됩니다.');
-        }
         
-        // DOMContentLoaded 이벤트 리스너
-        document.addEventListener('DOMContentLoaded', function() {
-            // 프로젝트 등록 폼 제출 이벤트
-            const projectForm = document.getElementById('projectForm');
-            if (projectForm) {
-                projectForm.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    
-                    // 폼 데이터 수집
-                    const formData = {
-                        service: document.getElementById('serviceSelect').value,
-                        title: document.getElementById('projectTitle').value,
-                        startDate: document.getElementById('projectStartDate').value,
-                        endDate: document.getElementById('projectEndDate').value,
-                        workStartDate: document.getElementById('projectWorkStartDate').value,
-                        workEndDate: document.getElementById('projectWorkEndDate').value,
-                        qualification: document.getElementById('projectQualification').value,
-                        workerCount: document.getElementById('workerCount').value,
-
-                        budget: document.getElementById('budgetAmount').value,
-
-                        description: document.getElementById('contentEditor').innerHTML,
-                        isActive: document.getElementById('activeToggle').checked,
-                        isImportant: document.getElementById('importantProject').checked
-                    };
-                    
-                    // 간단한 유효성 검사
-                    if (!formData.service) {
-                        alert('서비스를 선택해주세요.');
-                        return;
-                    }
-                    if (!formData.title.trim()) {
-                        alert('프로젝트명을 입력해주세요.');
-                        return;
-                    }
-                    if (!formData.startDate || !formData.endDate) {
-                        alert('모집기간을 입력해주세요.');
-                        return;
-                    }
-                    
-                    saveProject(formData);
-                });
-            }
-            
-            // 작업자 체크박스 이벤트 리스너
-            const workerCheckboxes = document.querySelectorAll('input[name="workerSelect"]');
-            workerCheckboxes.forEach(checkbox => {
-                checkbox.addEventListener('change', updateSelectedWorkerCount);
-            });
-
-            // 작업자 테이블 행 클릭 이벤트 추가
-            addWorkerRowClickEvents();
-        });
 
         // 작업자 테이블 행 클릭 이벤트 추가 함수
         function addWorkerRowClickEvents() {
@@ -3585,11 +3156,27 @@
         
         // 작업관리 테이블의 작업자 컬럼 업데이트
         function updateWorkerInManagementTable(workerName) {
+            // 작업관리 테이블 업데이트
             const workerCell = document.getElementById('assigned-worker-cell');
             if (workerCell) {
                 workerCell.textContent = workerName;
                 workerCell.style.color = '#059669';
                 workerCell.style.fontWeight = '500';
+            }
+            
+            // 파일리스트 테이블의 작업자 컬럼도 업데이트
+            const fileListWorkerCell = document.getElementById('file-list-worker-cell');
+            if (fileListWorkerCell) {
+                fileListWorkerCell.textContent = workerName;
+                fileListWorkerCell.style.color = '#059669';
+                fileListWorkerCell.style.fontWeight = '500';
+            }
+            
+            // 파일리스트 테이블의 진행상태도 '배정완료'로 업데이트
+            const fileListStatusBadge = document.getElementById('file-list-status-badge');
+            if (fileListStatusBadge) {
+                fileListStatusBadge.textContent = '배정완료';
+                fileListStatusBadge.className = 'status-badge status-inprogress';
             }
         }
 
@@ -4198,419 +3785,7 @@
         </div>
     </div>
 
-    <!-- 웍스파이 프로젝트 상세보기 팝업 -->
-    <div id="worksbyDetailModal" class="modal-overlay" style="display: none;">
-        <div class="modal-container detail-modal">
-            <div class="modal-header">
-                <h2>📋 웍스파이 프로젝트 상세정보</h2>
-                <button class="modal-close" onclick="closeWorksbyDetailModal()">&times;</button>
-            </div>
-            
-            <div class="detail-content">
-                <!-- 탭 네비게이션 -->
-                <div class="tab-navigation">
-                    <button class="tab-btn active" onclick="showWorksbyTab('info', this)" style="background: white; color: #3b82f6; border-bottom: 3px solid #3b82f6;">📄 프로젝트 정보</button>
-                    <button class="tab-btn" onclick="showWorksbyTab('workers', this)" style="background: #f8fafc; color: #6b7280;">👥 작업자 관리</button>
-                </div>
-                
-                <!-- 탭 콘텐츠 -->
-                <div class="tab-content">
-                    <!-- 프로젝트 정보 탭 -->
-                    <div id="worksby-tab-info" class="tab-panel active">
-                        <div class="detail-section">
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <label>프로젝트번호</label>
-                                    <span id="worksbyDetailNo"></span>
-                                </div>
-                                <div class="info-item">
-                                    <label>서비스</label>
-                                    <span id="worksbyDetailService"></span>
-                                </div>
-                                <div class="info-item">
-                                    <label>프로젝트 상태</label>
-                                    <span id="worksbyDetailStatus"></span>
-                                </div>
-                                <div class="info-item">
-                                    <label>등록일</label>
-                                    <span id="worksbyDetailRegDate"></span>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item full-width" style="margin-bottom: 25px;">
-                                <label>프로젝트명</label>
-                                <h3 id="worksbyDetailTitle"></h3>
-                            </div>
-                            
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <label>진행기간</label>
-                                    <span id="worksbyDetailProjectPeriod"></span>
-                                </div>
-                                <div class="info-item">
-                                    <label>작업자 수</label>
-                                    <span id="worksbyDetailWorkerCount"></span>
-                                </div>
-                                <div class="info-item">
-                                    <label>금액</label>
-                                    <span id="worksbyDetailBudget"></span>
-                                </div>
-                            </div>
 
-                            <div class="info-item full-width" style="margin-bottom: 25px;">
-                                <label>프로젝트 설명</label>
-                                <div id="worksbyDetailContent" class="content-box"></div>
-                            </div>
-                            
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <label>썸네일</label>
-                                    <div id="worksbyDetailThumbnail" class="thumbnail-preview">이미지 없음</div>
-                                </div>
-                                <div class="info-item">
-                                    <label>첨부파일</label>
-                                    <div id="worksbyDetailAttachments" class="attachments-list">파일 없음</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- 작업자 관리 탭 -->
-                    <div id="worksby-tab-workers" class="tab-panel">
-                        <div class="detail-section">
-                            <div class="section-header">
-                                <h3 class="section-title">👥 작업자 관리</h3>
-                                <div class="applicant-stats">
-                                    <span class="stat-item">총 <strong id="worksbyTotalWorkers">0</strong>명</span>
-                                    <span class="stat-item">배정 <strong id="worksbyAssignedCount">0</strong>명</span>
-                                    <span class="stat-item">미배정 <strong id="worksbyExcludedCount">0</strong>명</span>
-                                </div>
-                            </div>
-                            
-                            <div class="applicants-table-wrapper">
-                                <table class="applicants-table">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" id="worksbySelectAllWorkers" onchange="toggleAllWorksbyWorkers(this)"></th>
-                                            <th>이름</th>
-                                            <th>성별</th>
-                                            <th>연락처</th>
-                                            <th>생년월일</th>
-                                            <th>주소</th>
-                                            <th>한글속기자격증</th>
-                                            <th>배정일</th>
-                                            <th>상태</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="worksbyWorkersList">
-                                        <!-- 샘플 작업자 데이터 -->
-                                        <tr>
-                                            <td style="text-align: center;"><input type="checkbox" name="worksbyWorkerSelect" value="1"></td>
-                                            <td style="text-align: center;">김민영</td>
-                                            <td style="text-align: center;">여성</td>
-                                            <td style="text-align: center;">010-1**2-3456</td>
-                                            <td style="text-align: center;">1990.**.**</td>
-                                            <td style="text-align: center;">경기도 안양시</td>
-                                            <td style="text-align: center;">1급</td>
-                                            <td style="text-align: center;">-</td>
-                                            <td style="text-align: center;"><span class="applicant-status status-cancelled">미배정</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: center;"><input type="checkbox" name="worksbyWorkerSelect" value="2"></td>
-                                            <td style="text-align: center;">박준호</td>
-                                            <td style="text-align: center;">남성</td>
-                                            <td style="text-align: center;">010-2**3-4567</td>
-                                            <td style="text-align: center;">1988.**.**</td>
-                                            <td style="text-align: center;">서울특별시 용산구</td>
-                                            <td style="text-align: center;">2급</td>
-                                            <td style="text-align: center;">-</td>
-                                            <td style="text-align: center;"><span class="applicant-status status-cancelled">미배정</span></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                            
-                            <!-- 배정/미배정 버튼 -->
-                            <div class="batch-actions" style="display: flex; gap: 10px; align-items: center; margin-top: 15px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
-                                <div style="display: flex; align-items: center; gap: 8px; color: #6b7280; font-size: 14px;">
-                                    <span>선택된 작업자:</span>
-                                    <span id="worksbySelectedWorkerCount" style="font-weight: 600; color: #374151;">0명</span>
-                                </div>
-                                <div style="margin-left: auto; display: flex; gap: 8px;">
-                                    <button class="batch-btn btn-approve" onclick="batchUpdateWorksbyWorkerStatus('assigned')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; transition: background-color 0.2s;">
-                                        ✓ 배정
-                                    </button>
-                                    <button class="batch-btn btn-reject" onclick="batchUpdateWorksbyWorkerStatus('unassigned')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; transition: background-color 0.2s;">
-                                        ✗ 미배정
-                                    </button>
-                                    <button class="batch-btn btn-manual" onclick="openManualAssignModal()" style="background: #8b5cf6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; transition: background-color 0.2s;">
-                                        👤 작업자 수동 배정
-                                    </button>
-                                </div>
-                            </div>
-                            
-                            <!-- 수동 배정된 작업자 목록 -->
-                            <div id="manuallyAssignedWorkersSection" style="display: none; margin-top: 20px; padding: 15px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
-                                <h4 style="margin: 0 0 15px 0; color: #4f46e5; font-size: 14px; font-weight: 600;">
-                                    🎯 수동 배정된 작업자 (<span id="manualAssignedCount">0</span>명)
-                                </h4>
-                                <div id="manuallyAssignedWorkersList"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn-secondary" onclick="closeWorksbyDetailModal()">닫기</button>
-                <button type="button" class="btn-edit" id="worksbyModalActionBtn" onclick="editWorksbyProject()">수정</button>
-            </div>
-        </div>
-    </div>
-    <!-- projects.html에서 가져온 프로젝트 등록 팝업 -->
-    <div id="projectModal" class="modal-overlay" style="display: none;">
-        <div class="modal-container">
-            <div class="modal-header">
-                <h2>프로젝트 등록</h2>
-                <button class="modal-close" onclick="closeProjectModal()">&times;</button>
-            </div>
-            
-            <form class="modal-form" id="projectForm">
-                <div class="form-row" style="display: flex; align-items: flex-end; gap: 20px;">
-                    <div class="form-group required" style="flex: 1;">
-                        <label>서비스 <span class="required-mark">*</span></label>
-                        <input type="text" id="serviceSelect" value="소리바로" readonly style="background-color: #f9fafb; color: #6b7280; cursor: not-allowed;">
-                    </div>
-                    
-                    <div style="display: flex; align-items: center; gap: 30px; margin-bottom: 8px;">
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <label style="margin: 0; font-size: 14px; font-weight: 500; color: #374151;">신청버튼</label>
-                            <div class="toggle-switch">
-                                <input type="checkbox" id="activeToggle" class="toggle-input" checked>
-                                <label for="activeToggle" class="toggle-label"></label>
-                            </div>
-                        </div>
-                        <div style="display: flex; align-items: center; gap: 8px;">
-                            <input type="checkbox" id="importantProject">
-                            <label for="importantProject" style="margin: 0; font-size: 14px; font-weight: 500; color: #374151;">중요</label>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group required full-width">
-                        <label>프로젝트명 <span class="required-mark">*</span></label>
-                        <input type="text" id="projectTitle" required placeholder="프로젝트명을 입력하세요">
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group required">
-                        <label>모집기간 <span class="required-mark">*</span></label>
-                        <div class="date-range">
-                            <input type="datetime-local" id="projectStartDate" required>
-                            <span>~</span>
-                            <input type="datetime-local" id="projectEndDate" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>작업자 수</label>
-                        <input type="number" id="workerCount" placeholder="0" style="width: 80px;">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>금액</label>
-                        <input type="text" id="budgetAmount" placeholder="금액을 입력하세요" style="width: 120px;">
-                    </div>
-
-                </div>
-                
-                <!-- 작업기간 / 지원자격 -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>작업기간</label>
-                        <div class="date-range">
-                            <input type="date" id="projectWorkStartDate" style="width: 217px; flex: none;">
-                            <span>~</span>
-                            <input type="date" id="projectWorkEndDate" style="width: 217px; flex: none;">
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>지원자격</label>
-                        <select id="projectQualification" style="min-width: 140px; height: 36px; border: 1px solid #d1d5db; border-radius: 6px; padding: 0 10px; font-size: 14px;">
-                            <option value="anyone">누구나</option>
-                            <option value="stenographer">속기사</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="form-row">
-                    <div class="form-group full-width">
-                        <label>프로젝트 설명</label>
-                        <div class="simple-editor-toolbar">
-                            <button type="button" class="simple-editor-btn" onclick="formatText('bold')" title="굵게"><strong>B</strong></button>
-                            <button type="button" class="simple-editor-btn" onclick="formatText('underline')" title="밑줄"><u>U</u></button>
-                            <button type="button" class="simple-editor-btn" onclick="formatText('insertUnorderedList')" title="목록">•</button>
-                            <button type="button" class="simple-editor-btn" onclick="formatText('createLink')" title="링크">🔗</button>
-                        </div>
-                        <div id="contentEditor" contenteditable="true" class="simple-content-editor" 
-                             placeholder="프로젝트 상세설명을 입력하세요..."></div>
-                    </div>
-                </div>
-                
-                <!-- 파일 업로드 섹션 -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>썸네일</label>
-                        <div class="file-upload-area" id="thumbnailUpload">
-                            <div class="file-upload-content">
-                                <div class="file-upload-icon">🖼️</div>
-                                <div class="file-upload-text">
-                                    <p>썸네일 이미지를 업로드하세요</p>
-                                    <p class="file-upload-subtext">JPG, PNG, GIF (최대 5MB)</p>
-                                </div>
-                                <button type="button" class="file-upload-btn" onclick="document.getElementById('thumbnailInput').click()">파일 선택</button>
-                                <input type="file" id="thumbnailInput" accept="image/*" style="display: none;" onchange="handleThumbnailUpload(this)">
-                            </div>
-                            <div class="file-preview" id="thumbnailPreview" style="display: none;">
-                                <img id="thumbnailImage" src="" alt="썸네일 미리보기">
-                                <button type="button" class="file-remove-btn" onclick="removeThumbnail()">✕</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>첨부파일</label>
-                        <div class="file-upload-area" id="attachmentUpload">
-                            <div class="file-upload-content">
-                                <div class="file-upload-icon">📎</div>
-                                <div class="file-upload-text">
-                                    <p>첨부파일을 업로드하세요</p>
-                                    <p class="file-upload-subtext">모든 파일 형식 (최대 10MB)</p>
-                                </div>
-                                <button type="button" class="file-upload-btn" onclick="document.getElementById('attachmentInput').click()">파일 선택</button>
-                                <input type="file" id="attachmentInput" multiple style="display: none;" onchange="handleAttachmentUpload(this)">
-                            </div>
-                            <div class="file-list" id="attachmentList"></div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="modal-footer">
-                    <button type="submit" class="btn-save">저장</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- projects.html에서 가져온 프로젝트 상세보기 팝업 -->
-    <div id="detailModal" class="modal-overlay" style="display: none;">
-        <div class="modal-container detail-modal">
-            <div class="modal-header">
-                <h2>📋 프로젝트 상세정보</h2>
-                <button class="modal-close" onclick="closeDetailModal()">&times;</button>
-            </div>
-            
-            <div class="detail-content">
-                <!-- 탭 네비게이션 제거 - 프로젝트 정보만 표시 -->
-                <div style="background: #f8fafc; padding: 15px 20px; border-bottom: 1px solid #e5e7eb;">
-                    <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #3b82f6; display: flex; align-items: center; gap: 10px;">
-                        📄 프로젝트 정보
-                    </h2>
-                </div>
-                
-                <!-- 탭 콘텐츠 -->
-                <div class="tab-content">
-                    <!-- 프로젝트 정보 탭 -->
-                    <div id="tab-info" class="tab-panel active">
-                        <div class="detail-section">
-                            <div class="info-grid" style="grid-template-columns: repeat(3, 1fr); align-items: end;">
-                                <div class="info-item">
-                                    <label>프로젝트번호</label>
-                                    <span id="detailNo">PJ202507160057</span>
-                                </div>
-                                <div class="info-item">
-                                    <label>서비스</label>
-                                    <span id="detailService">웍스파이</span>
-                                </div>
-                                <div class="info-item">
-                                    <label>등록일</label>
-                                    <span id="detailRegDate">2025.07.16 09:00</span>
-                                </div>
-                            </div>
-                            
-                            <div class="info-item full-width" style="margin-bottom: 25px;">
-                                <label>프로젝트명</label>
-                                <h3 id="detailTitle">팀벨 글로벌 속기 시스템 구축 프로젝트</h3>
-                            </div>
-                            
-                            
-                            
-                            <div class="project-summary-row" style="display: grid; grid-template-columns: 2fr 1fr 2fr 1fr; gap: 16px; align-items: stretch; position: relative; z-index: 0; margin-bottom: 20px;">
-                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
-                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">모집기간</label>
-                                    <div id="detailProjectPeriod" style="font-size: 14px; font-weight: 600; color: #111827; white-space: nowrap;">2025.08.06 11:00 ~ 2025.08.20 11:00</div>
-                                </div>
-                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center;">
-                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">모집상태</label>
-                                    <div><span id="recruitStatusBadge" style="display:inline-block; background: #3b82f6; color: white; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; min-width: 86px; text-align: center;">진행중</span></div>
-                                </div>
-                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
-                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">작업기간</label>
-                                    <div id="detailWorkPeriod" style="font-size: 14px; font-weight: 600; color: #111827; white-space: nowrap;">2025.08.21 ~ 2025.09.02</div>
-                                </div>
-                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center;">
-                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">작업상태</label>
-                                    <div><span id="workStatusBadge" style="display:inline-block; background: #3b82f6; color: white; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; min-width: 86px; text-align: center;">진행중</span></div>
-                                </div>
-                            </div>
-                            <div class="project-summary-row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch;">
-                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
-                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">작업자 수</label>
-                                    <div id="detailWorkerCount" style="font-size: 14px; font-weight: 600; color: #111827;">0 / 5명</div>
-                                </div>
-                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
-                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">금액</label>
-                                    <div id="detailBudget" style="font-size: 14px; font-weight: 600; color: #111827;">500,000원</div>
-                                </div>
-                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
-                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">지원자격</label>
-                                    <div id="detailQualification" style="font-size: 14px; font-weight: 600; color: #111827;">누구나</div>
-                                </div>
-                            </div>
-
-                            <div class="info-item full-width" style="margin-bottom: 25px;">
-                                <label>프로젝트 설명</label>
-                                <div id="detailContent" class="content-box">팀벨 글로벌 속기 시스템 구축을 위한 통합 프로젝트입니다.<br>최신 AI 기술을 활용한 실시간 속기 솔루션을 개발합니다.</div>
-                            </div>
-                            
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <label>썸네일</label>
-                                    <div id="detailThumbnail" class="thumbnail-preview">이미지 없음</div>
-                                </div>
-                                <div class="info-item">
-                                    <label>첨부파일</label>
-                                    <div id="detailAttachments" class="attachments-list">파일 없음</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="modal-footer">
-                <button type="button" class="btn-cancel" id="modalCloseProjectBtn" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer;" onclick="closeProjectPermanently()">프로젝트 마감</button>
-                <div style="margin-left: auto; display: flex; gap: 10px;">
-                    <button type="button" class="btn-secondary" onclick="closeDetailModal()">닫기</button>
-                    <button type="button" class="btn-edit" id="modalActionBtn" onclick="editProject()">수정</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- 작업자 상세정보 팝업 -->
     <div id="workerDetailModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
@@ -5031,6 +4206,124 @@
                 <button type="button" id="assignSelectedWorkerBtn" onclick="assignSelectedWorker()" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; transition: background-color 0.2s;" disabled>
                     선택한 작업자 배정
                 </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 웍스파이 프로젝트 상세보기 모달 -->
+    <div id="detailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container detail-modal">
+            <div class="modal-header">
+                <h2>📋 프로젝트 상세정보</h2>
+                <button class="modal-close" onclick="closeDetailModal()">×</button>
+            </div>
+            
+            <div class="detail-content">
+                <!-- 탭 네비게이션 제거 - 프로젝트 정보만 표시 -->
+                <div style="background: #f8fafc; padding: 15px 20px; border-bottom: 1px solid #e5e7eb;">
+                    <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #3b82f6; display: flex; align-items: center; gap: 10px;">
+                        📄 프로젝트 정보
+                    </h2>
+                </div>
+                
+                <!-- 탭 콘텐츠 -->
+                <div class="tab-content">
+                    <!-- 프로젝트 정보 탭 -->
+                    <div id="tab-info" class="tab-panel active">
+                        <div class="detail-section">
+                            <div class="info-grid" style="grid-template-columns: repeat(3, 1fr); align-items: end;">
+                                <div class="info-item">
+                                    <label>프로젝트번호</label>
+                                    <span id="detailNo">PJ20250924231</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>서비스</label>
+                                    <span id="detailService">소리바로</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>등록일</label>
+                                    <span id="detailRegDate">2025-09-24 02:21</span>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item full-width" style="margin-bottom: 25px;">
+                                <label>프로젝트명</label>
+                                <h3 id="detailTitle">음성파일 전사 프로젝트</h3>
+                            </div>
+                            
+                            <div class="project-summary-row" style="display: grid; grid-template-columns: 2fr 1fr 2fr 1fr; gap: 16px; align-items: stretch; position: relative; z-index: 0; margin-bottom: 20px;">
+                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">모집기간</label>
+                                    <div id="detailProjectPeriod" style="font-size: 14px; font-weight: 600; color: #111827; white-space: nowrap;">2025.09.24 11:21 ~ 2025.09.25 11:21</div>
+                                </div>
+                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center;">
+                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">모집상태</label>
+                                    <div><span id="recruitStatusBadge" style="display:inline-block; background: #3b82f6; color: white; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; min-width: 86px; text-align: center;">진행중</span></div>
+                                </div>
+                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">작업기간</label>
+                                    <div id="detailWorkPeriod" style="font-size: 14px; font-weight: 600; color: #111827; white-space: nowrap;">2025.09.24 ~ 2025.09.25</div>
+                                </div>
+                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03); display: flex; flex-direction: column; justify-content: center;">
+                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 8px;">작업상태</label>
+                                    <div><span id="workStatusBadge" style="display:inline-block; background: #3b82f6; color: white; padding: 6px 12px; border-radius: 999px; font-size: 12px; font-weight: 800; min-width: 86px; text-align: center;">진행중</span></div>
+                                </div>
+                            </div>
+                            <div class="project-summary-row" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; align-items: stretch;">
+                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">작업자 수</label>
+                                    <div id="detailWorkerCount" style="font-size: 14px; font-weight: 600; color: #111827;">0 / 5명</div>
+                                </div>
+                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">금액</label>
+                                    <div id="detailBudget" style="font-size: 14px; font-weight: 600; color: #111827;">500000원</div>
+                                </div>
+                                <div class="summary-item" style="min-height: 92px; padding: 14px 16px; background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.03);">
+                                    <label style="font-size: 12px; font-weight: 700; color: #6b7280; margin-bottom: 6px; display: block;">지원자격</label>
+                                    <div id="detailQualification" style="font-size: 14px; font-weight: 600; color: #111827;">누구나</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item full-width" style="margin-bottom: 25px;">
+                                <label>프로젝트 설명</label>
+                                <div id="detailContent" class="content-box">
+                    사람 구합니다.<br>
+                    사람 구합니다.<br>
+                    사람 구합니다.
+                </div>
+                            </div>
+                            
+                            <div class="info-grid">
+                                <div class="info-item">
+                                    <label>썸네일</label>
+                                    <div id="detailThumbnail" class="thumbnail-preview">이미지 없음</div>
+                                </div>
+                                <div class="info-item">
+                                    <label>첨부파일</label>
+                                    <div id="detailAttachments" class="attachments-list">파일 없음</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn-cancel" id="modalCloseProjectBtn" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="closeProjectPermanently()">
+                        <span>✅</span>
+                        프로젝트 마감
+                    </button>
+                    <button type="button" class="btn-delete" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; display: flex; align-items: center; gap: 6px;" onclick="deleteProject()">
+                        <span>🗑️</span>
+                        프로젝트 삭제
+                    </button>
+                </div>
+                <div style="margin-left: auto; display: flex; gap: 10px;">
+                    <button type="button" class="btn-secondary" onclick="closeDetailModal()">닫기</button>
+                    <button type="button" class="btn-edit" id="modalActionBtn" onclick="editProject()">수정</button>
+                </div>
             </div>
         </div>
     </div>

@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>블로그 관리 - 클립데스크 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 120px;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 카테고리 배지 */
+        .category-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .category-notice {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .category-faq {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .category-blog {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 600px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background-color 0.2s;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .form-row {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-label.required::after {
+            content: ' *';
+            color: #ef4444;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-help {
+            font-size: 12px;
+            color: #6b7280;
+            margin-top: 4px;
+        }
+
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 30px 20px;
+            text-align: center;
+            background: #f9fafb;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .file-upload-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .file-upload-area.dragover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .file-upload-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-btn:hover {
+            background: #2563eb;
+        }
+
+        .file-info {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .selected-file {
+            margin-top: 10px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            font-size: 14px;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .file-remove {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+
+        .file-remove:hover {
+            background: #dc2626;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background: #4b5563;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .btn-modify {
+            background: #f59e0b;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        .btn-modify:hover {
+            background: #d97706;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📝</span>
+            블로그 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div class="search-group">
+                <select id="category" class="search-select">
+                    <option value="">카테고리</option>
+                    <option value="notice">공지사항</option>
+                    <option value="faq">FAQ</option>
+                    <option value="blog">블로그</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <select id="status" class="search-select">
+                    <option value="">상태</option>
+                    <option value="active">사용</option>
+                    <option value="inactive">미사용</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <select id="searchType" class="search-select">
+                    <option value="">전체</option>
+                    <option value="title">메인 타이틀</option>
+                    <option value="subtitle">서브 문구</option>
+                </select>
+            </div>
+            
+            <div class="search-group">
+                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchBlogData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterModal()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">블로그 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">No.</th>
+                    <th width="250">메인 타이틀</th>
+                    <th width="250">서브 문구</th>
+                    <th width="120">카테고리</th>
+                    <th width="100">등록자</th>
+                    <th width="150">등록일시</th>
+                    <th width="80">상태</th>
+                </tr>
+            </thead>
+            <tbody id="blogTableBody">
+                <tr onclick="goToDetail('BLOG001')">
+                    <td>10</td>
+                    <td>클립데스크 서비스 소개</td>
+                    <td>영상 제작의 새로운 패러다임</td>
+                    <td><span class="category-badge category-blog">블로그</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-27 09:00:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG002')">
+                    <td>9</td>
+                    <td>영상 편집 가이드</td>
+                    <td>초보자를 위한 편집 팁</td>
+                    <td><span class="category-badge category-blog">블로그</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-27 10:30:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG003')">
+                    <td>8</td>
+                    <td>자주 묻는 질문</td>
+                    <td>서비스 이용 관련 FAQ</td>
+                    <td><span class="category-badge category-faq">FAQ</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-26 11:15:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG004')">
+                    <td>7</td>
+                    <td>서비스 업데이트</td>
+                    <td>새로운 기능 추가 안내</td>
+                    <td><span class="category-badge category-notice">공지사항</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-26 14:00:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG005')">
+                    <td>6</td>
+                    <td>영상 마케팅 전략</td>
+                    <td>효과적인 영상 마케팅 방법</td>
+                    <td><span class="category-badge category-blog">블로그</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-25 15:30:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG006')">
+                    <td>5</td>
+                    <td>가격 정책 안내</td>
+                    <td>서비스 요금제 상세 정보</td>
+                    <td><span class="category-badge category-notice">공지사항</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-25 16:45:00</td>
+                    <td><span class="status-badge status-inactive">미사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG007')">
+                    <td>4</td>
+                    <td>콘텐츠 제작 노하우</td>
+                    <td>전문가가 알려주는 제작 팁</td>
+                    <td><span class="category-badge category-blog">블로그</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-24 08:00:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG008')">
+                    <td>3</td>
+                    <td>결제 관련 문의</td>
+                    <td>결제 및 환불 관련 안내</td>
+                    <td><span class="category-badge category-faq">FAQ</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-24 09:30:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG009')">
+                    <td>2</td>
+                    <td>트렌드 분석 리포트</td>
+                    <td>2025 영상 트렌드 분석</td>
+                    <td><span class="category-badge category-blog">블로그</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-23 10:15:00</td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                </tr>
+                <tr onclick="goToDetail('BLOG010')">
+                    <td>1</td>
+                    <td>서비스 점검 안내</td>
+                    <td>정기 점검 일정 공지</td>
+                    <td><span class="category-badge category-notice">공지사항</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-23 11:00:00</td>
+                    <td><span class="status-badge status-inactive">미사용</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+
+    <!-- 블로그 등록/수정 모달 -->
+    <div class="modal-overlay" id="blogModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">블로그 등록</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-row">
+                    <label class="form-label required">메인 타이틀</label>
+                    <input type="text" id="modalMainTitle" class="form-input" placeholder="메인 타이틀을 입력하세요" maxlength="22">
+                    <div class="form-help">44Byte까지 입력 가능합니다.</div>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label required">서브 문구</label>
+                    <input type="text" id="modalSubTitle" class="form-input" placeholder="서브 문구를 입력하세요" maxlength="22">
+                    <div class="form-help">44Byte까지 입력 가능합니다.</div>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label">카테고리</label>
+                    <select id="modalCategory" class="form-select">
+                        <option value="notice">공지사항</option>
+                        <option value="faq">FAQ</option>
+                        <option value="blog">블로그</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label">상태</label>
+                    <select id="modalStatus" class="form-select">
+                        <option value="active">사용</option>
+                        <option value="inactive">미사용</option>
+                    </select>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label required">파일</label>
+                    <div class="file-upload-area" onclick="document.getElementById('modalFileInput').click()" 
+                         ondrop="handleFileDrop(event)" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)">
+                        <button type="button" class="file-upload-btn">파일 선택</button>
+                        <div class="file-info">또는 파일을 여기에 드래그하세요</div>
+                    </div>
+                    <input type="file" id="modalFileInput" accept="image/*,video/*,.pdf,.doc,.docx" style="display: none;" onchange="handleFileSelect(this)">
+                    <div id="selectedFileInfo"></div>
+                </div>
+                
+                <div class="form-row">
+                    <label class="form-label required">노션 URL</label>
+                    <input type="url" id="modalNotionUrl" class="form-input" placeholder="https://notion.so/...">
+                    <div class="form-help">노션 페이지 URL을 입력하세요.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeModal()">닫기</button>
+                <button class="btn-save" id="modalSaveBtn" onclick="saveBlog()">저장</button>
+                <button class="btn-modify" id="modalModifyBtn" onclick="modifyBlog()" style="display: none;">수정</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 현재 편집 중인 블로그 ID
+        let currentBlogId = null;
+
+        // 검색 기능
+        function searchBlogData() {
+            const category = document.getElementById('category').value;
+            const status = document.getElementById('status').value;
+            const searchType = document.getElementById('searchType').value;
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            
+            console.log('검색 조건:', {
+                category: category || '카테고리',
+                status: status || '상태',
+                searchType: searchType || '전체',
+                keyword: searchKeyword || '전체'
+            });
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n' +
+                  '카테고리: ' + (category || '카테고리') + '\n' +
+                  '상태: ' + (status || '상태') + '\n' +
+                  '검색범위: ' + (searchType || '전체') + '\n' +
+                  '검색어: ' + (searchKeyword || '전체'));
+        }
+
+        // 상세 페이지 이동 (모달로 변경)
+        function goToDetail(id) {
+            currentBlogId = id;
+            
+            // 샘플 데이터 (실제로는 서버에서 가져옴)
+            const sampleData = {
+                'BLOG001': { mainTitle: '클립데스크 서비스 소개', subTitle: '영상 제작의 새로운 패러다임', category: 'blog', status: 'active', notionUrl: 'https://notion.so/sample1' },
+                'BLOG002': { mainTitle: '영상 편집 가이드', subTitle: '초보자를 위한 편집 팁', category: 'blog', status: 'active', notionUrl: 'https://notion.so/sample2' },
+                'BLOG003': { mainTitle: '자주 묻는 질문', subTitle: '서비스 이용 관련 FAQ', category: 'faq', status: 'active', notionUrl: 'https://notion.so/sample3' }
+            };
+            
+            const data = sampleData[id] || {};
+            
+            // 모달 제목 변경
+            document.getElementById('modalTitle').textContent = '블로그 상세';
+            
+            // 폼 데이터 채우기
+            document.getElementById('modalMainTitle').value = data.mainTitle || '';
+            document.getElementById('modalSubTitle').value = data.subTitle || '';
+            document.getElementById('modalCategory').value = data.category || 'blog';
+            document.getElementById('modalStatus').value = data.status || 'active';
+            document.getElementById('modalNotionUrl').value = data.notionUrl || '';
+            
+            // 파일 정보 초기화
+            document.getElementById('selectedFileInfo').innerHTML = '';
+            
+            // 버튼 상태 변경
+            document.getElementById('modalSaveBtn').style.display = 'none';
+            document.getElementById('modalModifyBtn').style.display = 'inline-block';
+            
+            // 모달 표시
+            document.getElementById('blogModal').classList.add('show');
+        }
+        
+        // 등록 모달 열기
+        function openRegisterModal() {
+            currentBlogId = null;
+            
+            // 모달 제목 변경
+            document.getElementById('modalTitle').textContent = '블로그 등록';
+            
+            // 폼 초기화
+            document.getElementById('modalMainTitle').value = '';
+            document.getElementById('modalSubTitle').value = '';
+            document.getElementById('modalCategory').value = 'blog';
+            document.getElementById('modalStatus').value = 'active';
+            document.getElementById('modalNotionUrl').value = '';
+            
+            // 파일 정보 초기화
+            document.getElementById('selectedFileInfo').innerHTML = '';
+            
+            // 버튼 상태 변경
+            document.getElementById('modalSaveBtn').style.display = 'inline-block';
+            document.getElementById('modalModifyBtn').style.display = 'none';
+            
+            // 모달 표시
+            document.getElementById('blogModal').classList.add('show');
+        }
+        
+        // 모달 닫기
+        function closeModal() {
+            document.getElementById('blogModal').classList.remove('show');
+            currentBlogId = null;
+        }
+        
+        // 블로그 저장
+        function saveBlog() {
+            const mainTitle = document.getElementById('modalMainTitle').value.trim();
+            const subTitle = document.getElementById('modalSubTitle').value.trim();
+            const category = document.getElementById('modalCategory').value;
+            const status = document.getElementById('modalStatus').value;
+            const notionUrl = document.getElementById('modalNotionUrl').value.trim();
+            const fileInput = document.getElementById('modalFileInput');
+            
+            // 필수 항목 검증
+            if (!mainTitle) {
+                alert('메인 타이틀을 입력해주세요.');
+                document.getElementById('modalMainTitle').focus();
+                return;
+            }
+            
+            if (!subTitle) {
+                alert('서브 문구를 입력해주세요.');
+                document.getElementById('modalSubTitle').focus();
+                return;
+            }
+            
+            if (!notionUrl) {
+                alert('노션 URL을 입력해주세요.');
+                document.getElementById('modalNotionUrl').focus();
+                return;
+            }
+            
+            if (!fileInput.files || fileInput.files.length === 0) {
+                alert('파일을 선택해주세요.');
+                return;
+            }
+            
+            // 실제 구현 시 서버로 데이터 전송
+            const formData = {
+                mainTitle,
+                subTitle,
+                category,
+                status,
+                notionUrl,
+                file: fileInput.files[0]
+            };
+            
+            console.log('블로그 저장:', formData);
+            alert('블로그가 등록되었습니다.');
+            closeModal();
+            
+            // 실제 구현 시 목록 새로고침
+            loadBlogData();
+        }
+        
+        // 블로그 수정
+        function modifyBlog() {
+            if (!currentBlogId) {
+                alert('수정할 블로그가 선택되지 않았습니다.');
+                return;
+            }
+            
+            const mainTitle = document.getElementById('modalMainTitle').value.trim();
+            const subTitle = document.getElementById('modalSubTitle').value.trim();
+            const category = document.getElementById('modalCategory').value;
+            const status = document.getElementById('modalStatus').value;
+            const notionUrl = document.getElementById('modalNotionUrl').value.trim();
+            
+            // 필수 항목 검증 (파일은 수정 시 선택사항)
+            if (!mainTitle) {
+                alert('메인 타이틀을 입력해주세요.');
+                document.getElementById('modalMainTitle').focus();
+                return;
+            }
+            
+            if (!subTitle) {
+                alert('서브 문구를 입력해주세요.');
+                document.getElementById('modalSubTitle').focus();
+                return;
+            }
+            
+            if (!notionUrl) {
+                alert('노션 URL을 입력해주세요.');
+                document.getElementById('modalNotionUrl').focus();
+                return;
+            }
+            
+            // 실제 구현 시 서버로 데이터 전송
+            const formData = {
+                id: currentBlogId,
+                mainTitle,
+                subTitle,
+                category,
+                status,
+                notionUrl
+            };
+            
+            const fileInput = document.getElementById('modalFileInput');
+            if (fileInput.files && fileInput.files.length > 0) {
+                formData.file = fileInput.files[0];
+            }
+            
+            console.log('블로그 수정:', formData);
+            alert('블로그가 수정되었습니다.');
+            closeModal();
+            
+            // 실제 구현 시 목록 새로고침
+            loadBlogData();
+        }
+        
+        // 파일 선택 처리
+        function handleFileSelect(input) {
+            const file = input.files[0];
+            if (file) {
+                displaySelectedFile(file);
+            }
+        }
+        
+        // 드래그 앤 드롭 처리
+        function handleDragOver(event) {
+            event.preventDefault();
+            event.currentTarget.classList.add('dragover');
+        }
+        
+        function handleDragLeave(event) {
+            event.currentTarget.classList.remove('dragover');
+        }
+        
+        function handleFileDrop(event) {
+            event.preventDefault();
+            event.currentTarget.classList.remove('dragover');
+            
+            const files = event.dataTransfer.files;
+            if (files.length > 0) {
+                const file = files[0];
+                document.getElementById('modalFileInput').files = files;
+                displaySelectedFile(file);
+            }
+        }
+        
+        // 선택된 파일 표시
+        function displaySelectedFile(file) {
+            const maxSize = 50 * 1024 * 1024; // 50MB
+            
+            if (file.size > maxSize) {
+                alert('파일 크기는 50MB를 초과할 수 없습니다.');
+                document.getElementById('modalFileInput').value = '';
+                return;
+            }
+            
+            const fileInfo = document.getElementById('selectedFileInfo');
+            const fileSize = (file.size / (1024 * 1024)).toFixed(2);
+            const fileIcon = getFileIcon(file.type);
+            
+            fileInfo.innerHTML = `
+                <div class="selected-file">
+                    <span>${fileIcon} ${file.name} (${fileSize}MB)</span>
+                    <button type="button" class="file-remove" onclick="removeSelectedFile()">제거</button>
+                </div>
+            `;
+        }
+        
+        // 파일 타입별 아이콘
+        function getFileIcon(fileType) {
+            if (fileType.startsWith('image/')) return '🖼️';
+            if (fileType.startsWith('video/')) return '🎬';
+            if (fileType.includes('pdf')) return '📄';
+            if (fileType.includes('word') || fileType.includes('document')) return '📝';
+            return '📁';
+        }
+        
+        // 선택된 파일 제거
+        function removeSelectedFile() {
+            document.getElementById('modalFileInput').value = '';
+            document.getElementById('selectedFileInfo').innerHTML = '';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('블로그 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchBlogData();
+                }
+            });
+            
+            // 셀렉트 박스 변경 시 자동 검색 (선택사항)
+            document.getElementById('category').addEventListener('change', function() {
+                // searchBlogData(); // 자동 검색을 원할 경우 주석 해제
+            });
+            
+            document.getElementById('status').addEventListener('change', function() {
+                // searchBlogData(); // 자동 검색을 원할 경우 주석 해제
+            });
+            
+            document.getElementById('searchType').addEventListener('change', function() {
+                // searchBlogData(); // 자동 검색을 원할 경우 주석 해제
+            });
+            
+            // 모달 외부 클릭 시 닫기
+            document.getElementById('blogModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeModal();
+                }
+            });
+            
+            // ESC 키로 모달 닫기
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeModal();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadBlogData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadBlogData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('블로그 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

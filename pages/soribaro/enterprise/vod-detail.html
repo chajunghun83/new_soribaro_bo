@@ -2090,11 +2090,26 @@
                 return `${year}-${month}-${day}T${hours}:${minutes}`;
             };
             
+            // 작업기간 날짜 포맷 함수 (날짜만)
+            const formatDateOnly = (date) => {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            // 작업기간 설정 (오늘부터 1주일 후까지)
+            const workStartDate = new Date();
+            const workEndDate = new Date();
+            workEndDate.setDate(workStartDate.getDate() + 7);
+            
             // 폼 필드 설정
             document.getElementById('worksbyServiceSelect').value = '소리바로';
             document.getElementById('worksbyProjectTitle').value = baseProjectName + ' VOD 전사 프로젝트';
             document.getElementById('worksbyProjectStartDate').value = formatDate(today);
             document.getElementById('worksbyProjectEndDate').value = formatDate(twoWeeksLater);
+            document.getElementById('worksbyWorkStartDate').value = formatDateOnly(workStartDate);
+            document.getElementById('worksbyWorkEndDate').value = formatDateOnly(workEndDate);
             document.getElementById('worksbyWorkerCount').value = '5';
             document.getElementById('worksbyBudgetAmount').value = '500000';
             

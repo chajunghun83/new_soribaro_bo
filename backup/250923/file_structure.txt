@@ -1,0 +1,757 @@
+소리바로 BO 관리자 페이지 - 파일 구조 및 기능 목록
+
+================================================================================
+
+📁 실제 파일 구조
+================================================================================
+
+new_soribaro_bo/
+├── index.html                                         → 메인 진입점 (사이드바 메뉴 + iframe 콘텐츠 로딩)
+├── file_structure.txt                                  → 파일 구조 목록 (현재 파일)
+├── soribaro_bo_prd.md                                  → 기획서 (PRD)
+    └── pages/
+    ├── dashboard.html                                  → 대시보드 (통합 현황, 차트, 통계)
+    ├── _template.html                                  → 공통 템플릿 (개발 예정 페이지용)
+    ├── user/
+    │   ├── worker-management.html                      → 작업자 관리 (웍스파이 연동)
+    │   ├── b2c-member-management.html                  → B2C 회원 관리
+    │   └── b2c-member-detail.html                      → B2C 회원 상세정보
+    ├── soribaro/
+    │   ├── b2c/
+    │   │   ├── request-management.html                 → B2C 의뢰현황관리
+    │   │   ├── request-detail.html                     → B2C 의뢰 상세정보 (의뢰현황관리에서 연결)
+    │   │   ├── work-management.html                    → B2C 작업현황관리 (웍스파이 모집 기능)
+    │   │   └── work-detail.html                        → B2C 작업 상세정보 (작업현황관리에서 연결)
+    │   ├── enterprise/
+    │   │   ├── meeting-management.html                 → 엔터프라이즈 회의록 작업관리
+    │   │   ├── meeting-detail.html                     → 엔터프라이즈 회의록 작업 상세정보
+    │   │   ├── meeting-bulk-project-add.html           → 엔터프라이즈 회의록 다건 프로젝트 추가
+    │   │   ├── vod-management.html                     → 엔터프라이즈 VOD 작업관리
+    │   │   ├── vod-detail.html                         → 엔터프라이즈 VOD 작업 상세정보
+    │   │   └── vod-bulk-project-add.html               → 엔터프라이즈 VOD 다건 프로젝트 추가
+    │   ├── pricing/
+    │   │   ├── notary-management.html                  → 공증신청/기록완본 관리
+    │   │   ├── notary-detail.html                      → 공증신청/기록완본 상세정보
+    │   │   ├── notary-register.html                    → 공증신청/기록완본 등록
+    │   │   ├── record-management.html                  → 다기록/통화기록 관리
+    │   │   ├── record-detail.html                      → 다기록/통화기록 상세정보
+    │   │   ├── record-register.html                    → 다기록/통화기록 등록
+    │   │   ├── point-management.html                   → 포인트 정책 관리
+    │   │   ├── point-detail.html                       → 포인트 정책 상세정보
+    │   │   ├── point-register.html                     → 포인트 정책 등록
+    │   │   ├── customer-point-management.html          → 고객 포인트 변경 내역 관리
+    │   │   ├── customer-point-detail.html              → 고객 포인트 변경 상세정보
+    │   │   └── customer-point-register.html            → 고객 포인트 지급
+    │   └── settings/
+    │       ├── faq-management.html                     → FAQ 관리
+    │       ├── faq-detail.html                         → FAQ 상세정보
+    │       ├── faq-register.html                       → FAQ 등록
+    │       ├── notice-management.html                  → 공지사항 관리
+    │       ├── notice-detail.html                      → 공지사항 상세정보
+    │       ├── notice-register.html                    → 공지사항 등록
+    │       ├── popup-management.html                   → 팝업 이벤트 관리
+    │       ├── popup-detail.html                       → 팝업 이벤트 상세정보
+    │       ├── popup-register.html                     → 팝업 이벤트 등록
+    │       ├── aligo-template-management.html          → 알리고 템플릿 관리
+    │       ├── aligo-template-detail.html              → 알리고 템플릿 상세정보
+    │       └── aligo-template-register.html            → 알리고 템플릿 등록
+    ├── common/
+    │   └── settings/
+    │       ├── terms-management.html                   → 서비스 약관 관리
+    │       ├── terms-detail.html                       → 서비스 약관 상세정보
+    │       ├── terms-register.html                     → 서비스 약관 등록
+    │       ├── enterprise-company-management.html      → 엔터프라이즈 업체 관리
+    │       ├── enterprise-company-detail.html          → 엔터프라이즈 업체 상세정보
+    │       ├── enterprise-company-register.html        → 엔터프라이즈 업체 등록
+    │       ├── enterprise-customer-management.html     → 엔터프라이즈 고객 관리
+    │       ├── enterprise-customer-detail.html         → 엔터프라이즈 고객 상세정보
+    │       ├── enterprise-customer-register.html       → 엔터프라이즈 고객 등록
+    │       └── property-management.html                → 프로퍼티 관리
+    ├── translation/
+    │   ├── trans-management.html                       → 번역 작업관리
+    │   ├── trans-detail.html                           → 번역 작업 상세정보 (번역 작업관리에서 연결)
+    │   └── trans-bulk-project-add.html                 → 번역 다건 프로젝트 추가 (번역 작업관리에서 연결)
+    ├── clipdesk/
+    │   ├── clip_work-management.html                   → 클립데스크 작업현황관리
+    │   ├── clip_work-detail.html                       → 클립데스크 작업현황 상세정보
+    │   ├── clipdesk-management.html                    → 클립데스크 관리 (추가 파일)
+    │   ├── clipdesk-detail.html                        → 클립데스크 상세정보 (추가 파일)
+    │   └── settings/
+    │       ├── request-items-management.html           → 고객 의뢰 항목 관리
+    │       ├── portfolio-management.html               → 포트폴리오 관리
+    │       ├── blog-management.html                    → 블로그 관리
+    │       ├── review-management.html                  → 리뷰 관리
+    │       ├── mail-template-management.html           → 메일 템플릿 관리
+    │       ├── mail-template-detail.html               → 메일 템플릿 상세정보
+    │       ├── mail-template-register.html             → 메일 템플릿 등록
+    │       └── notification-mail-check.html            → 알림 메일 확인
+    ├── report/
+    │   ├── work-report.html                            → 작업 결과 리포트
+    │   ├── work-report-detail.html                     → 작업 결과 리포트 상세정보
+    │   ├── work-comparison.html                        → 작업물 비교 (일반)
+    │   ├── work-comparison-translation.html            → 작업물 비교 (번역 전용)
+    │   └── work-status.html                            → 작업자 작업현황
+    ├── worker/
+    │   ├── notice.html                                 → 작업자 공지사항
+    │   ├── profile-edit.html                           → 작업자 개인정보수정
+    │   ├── transcription.html                          → 작업자 녹취록 작업 목록
+    │   ├── transcription-detail.html                   → 작업자 녹취록 작업 상세
+    │   ├── meeting.html                                → 작업자 회의록 작업 목록
+    │   ├── meeting-detail.html                         → 작업자 회의록 작업 상세
+    │   ├── vod.html                                    → 작업자 VOD 작업 목록
+    │   ├── vod-detail.html                             → 작업자 VOD 작업 상세
+    │   ├── translation.html                            → 작업자 번역 작업 목록
+    │   ├── translation-detail.html                     → 작업자 번역 작업 상세
+    │   ├── clipdesk.html                               → 작업자 클립데스크 작업 목록
+    │   └── clipdesk-detail.html                        → 작업자 클립데스크 작업 상세
+    └── system/
+        ├── admin-account-management.html               → 관리자 계정 관리
+        ├── admin-account-detail.html                   → 관리자 계정 상세정보
+        ├── admin-account-register.html                 → 관리자 계정 등록
+        └── common-code-management.html                 → 공통코드 관리
+
+================================================================================
+
+🗂️ 메뉴 구조와 파일 매핑 (2025.09.02 업데이트)
+================================================================================
+
+🚀 ~~웍스파이 프로젝트 관리~~ (개발 중단)
+    → pages/dashboard.html
+    → 기능: 웍스파이 프로젝트 목록 조회, 프로젝트 상세정보, 작업자 관리
+    → 검색: 모집기간 범위, 작업항목(소리바로-B2C/회의록/VOD/번역, 클립데스크), 텍스트 검색(주문번호/프로젝트명)
+    → 테이블: NO, 주문번호, 작업항목, 프로젝트명, 작업자, 모집기간, 모집상태, 작업기간, 작업상태
+    → 상세 모달: 프로젝트 정보 탭, 작업자 관리 탭 (배정/미배정 기능 포함)
+
+👥 사용자 관리
+    ├── 작업자 관리 (웍스파이 연동) ✨ 기본 페이지
+    │   → pages/user/worker-management.html
+    │   → 기능: 작업자 프로필 관리, 웍스파이 연동 상태, 작업자 배정 관리
+    └── B2C 회원 관리 🆕 신규 추가
+        → pages/user/b2c-member-management.html (목록 페이지)
+        → 기능: B2C 회원 정보 관리, 플랫폼별 관리 (소리바로/클립데스크), 가입유형별 관리
+        → 검색: 플랫폼별 필터링, 검색 조건 (아이디/이름/전화번호)
+        → 테이블: NO, 플랫폼, 아이디, 이름, 전화번호, 가입유형, 상태
+        → 가입유형: 소리바로(자체가입), 클립데스크(카카오/네이버/구글)
+        └── B2C 회원 상세정보 🆕 신규 추가
+            → pages/user/b2c-member-detail.html
+            → 기능: 개별 회원 상세 조회, 기본정보/연락처정보, 프로필사진/QR코드 표시, 설명 표시, 수정/삭제
+
+🔊 소리바로 서비스
+    ├── 녹취록 (B2C)
+    │   ├── 의뢰현황관리
+    │   │   → pages/soribaro/b2c/request-management.html
+    │   │   → 기능: 의뢰 접수 확인, 고객 요구사항 확인, 작업 비용 검수
+    │   │   └── 의뢰 상세정보
+    │   │       → pages/soribaro/b2c/request-detail.html
+    │   │       → 기능: 개별 의뢰 상세 정보 조회, 고객 정보/결제 정보/파일 정보, 의뢰 취소 관리
+    │   └── 작업현황관리
+    │       → pages/soribaro/b2c/work-management.html
+    │       → 기능: 작업 진행 상황 추적, 웍스파이 모집 등록, 작업자 선발/배정
+    │       └── 작업 상세정보
+    │           → pages/soribaro/b2c/work-detail.html
+    │           → 기능: 개별 작업 상세 정보 조회, 고객/파일/결제/작업자 정보, 작업 관리 액션
+    │
+    ├── 엔터프라이즈 (B2B)
+    │   ├── 회의록 작업관리
+    │   │   → pages/soribaro/enterprise/meeting-management.html
+    │   │   → 기능: 회의록 작업 현황 조회, 기업별 작업 관리, 진행상태 추적, 프로젝트 추가, 다건 프로젝트 추가
+    │   │   → 검색: 날짜, 기업명칭, 진행상태, 텍스트 검색 (주문번호, 제목, 의뢰자명, 연락처, 작업자)
+    │   │   → 테이블: NO, 주문번호, 제목, 업체명, 의뢰자명, 연락처, 의뢰일, 총 작업시간, 작업자, 진행상태
+    │   │   → 진행상태: 접수, 작업중, 초안완성, 완료
+    │   │   └── 회의록 다건 프로젝트 추가 🆕 신규 구현
+    │   │       → pages/soribaro/enterprise/meeting-bulk-project-add.html
+    │   │       → 기능: Excel 스타일 대량 회의록 프로젝트 추가, 기본정보(녹음일/녹음장소/구간설정/화자정보), 웍스파이 등록
+    │   │       → 특징: 3행 기본정보 레이아웃 (프로젝트제목/업체명/의뢰자명 → 녹음일/녹음장소 → 구간설정/화자정보)
+    │   │       → 시스템: localStorage 기반 창 간 통신, meeting-management.html 연동, 20개 프로젝트 시뮬레이션
+    │   └── VOD 작업관리
+    │       → pages/soribaro/enterprise/vod-management.html
+    │       → 기능: VOD 작업 현황 조회, 기업별 작업 관리, 진행상태 추적, 프로젝트 추가, 다건 프로젝트 추가
+    │       ├── VOD 작업 상세정보
+    │       │   → pages/soribaro/enterprise/vod-detail.html
+    │       │   → 기능: 파일 리스트/상세, 오디오 플레이어, 구간표, 화자정보, 웍스파이 프로젝트 등록/상세, 작업관리(전사/검수 툴 실행), 파일공유, 작업 특이사항, 초안완성 시연
+    │       └── VOD 다건 프로젝트 추가 🆕 신규 구현
+    │           → pages/soribaro/enterprise/vod-bulk-project-add.html
+    │           → 기능: Excel 스타일 대량 프로젝트 추가, 파일 업로드, 셀 편집, 웍스파이 등록
+    │           → 특징: 2분할 레이아웃 (드래그 영역 | 파일 목록), Excel 스타일 편집 (셀 선택/키보드 네비게이션/복사 붙여넣기)
+    │           → 시스템: localStorage 기반 창 간 통신, vod-management.html 연동, 20개 프로젝트 시뮬레이션
+    │
+    ├── 번역 서비스 ✅ 완전 구현 완료
+    │   └── 번역 작업관리
+    │       → pages/translation/trans-management.html
+    │       → 기능: 번역 작업 현황 조회, 기업별 번역 작업 관리, 진행상태 추적, 산출물 다운로드, 다건 프로젝트 추가
+    │       → 검색: 날짜, 진행상태, 텍스트 검색 (주문번호, 제목, 업체명, 의뢰자명, 작업자)
+    │       → 테이블: NO, 주문번호, 제목, 방식, 업체명, 의뢰자명, 의뢰일, 총 작업시간, 진행상태
+    │       → 진행상태: 접수, 작업중, 초안완성, 검수완료, 작업완료
+    │       ├── 번역 작업 상세정보 ✅ 완전 기능 구현 (프로세스 테스트)
+    │       │   → pages/translation/trans-detail.html
+    │       │   → 기능: 번역 파일 리스트/상세, 웍스파이 프로젝트 등록/상세, 3단계 작업관리 시스템
+    │       │   → 🔥 신규 기능: 파일별 독립적인 프로젝트 관리 (배경색 선택 + 체크박스 선택)
+    │       │   → 🔥 신규 기능: 파일 행 클릭으로 선택 (체크박스와 독립적인 배경색 선택)
+    │       │   → 🔥 신규 기능: 작업자 일괄 배정 (선택된 파일의 모든 영역에 일괄 배정)
+    │       │   → 🔥 신규 기능: 다중 파일 각각 별도 프로젝트 생성 (한 번의 모달로 처리)
+    │       │   → 🔥 신규 기능: 프롬프트 관리 (개별 표시, 일괄 변경, 배지 스타일)
+    │       │   → 🔥 신규 기능: 분할된 파일 그룹 선택 (원본+분할 파일 통합 선택)
+    │       │   → 🔥 신규 기능: 웍스파이 프로젝트 영역 건너뛰기 (바로 출발어 영역 생성)
+    │       └── 번역 다건 프로젝트 추가 🆕 신규 구현
+    │           → pages/translation/trans-bulk-project-add.html
+    │           → 기능: Excel 스타일 대량 번역 프로젝트 추가, 파일 업로드, 셀 편집, 웍스파이 등록
+    │           → 특징: 2분할 레이아웃 (드래그 영역 | 파일 목록), Excel 스타일 편집 (셀 선택/키보드 네비게이션/복사 붙여넣기)
+    │           → 시스템: localStorage 기반 창 간 통신, trans-management.html 연동, 20개 프로젝트 시뮬레이션
+    │
+    ├── 가격 정책
+    │   ├── 공증신청/기록완본 ✅ 구현 완료
+    │   │   → pages/soribaro/pricing/notary-management.html (리스트 페이지)
+    │   │   → 기능: 공증/기록 서비스 요금 관리, 할인률 설정, 기간별 요금 정책
+    │   │   → 검색: 구분(공증/기록) 필터링
+    │   │   → 테이블: NO, 구분, 분류명, 시작일, 종료일, 현재요금, 할인률(%), 등록자, 등록일
+    │   │   ├── 공증신청/기록완본 상세정보 ✅ 구현 완료
+    │   │   │   → pages/soribaro/pricing/notary-detail.html
+    │   │   │   → 기능: 개별 요금 정책 상세 조회, 기본정보/기간정보, 가격 계산, 진행률 표시, 수정/삭제
+    │   │   └── 공증신청/기록완본 등록 ✅ 구현 완료
+    │   │       → pages/soribaro/pricing/notary-register.html
+    │   │       → 기능: 신규 가격 정책 등록, 실시간 가격 계산, 입력 검증, 필수항목 체크
+    │   ├── 다기록/통화기록 ✅ 구현 완료
+    │   │   → pages/soribaro/pricing/record-management.html (리스트 페이지)
+    │   │   → 기능: 통화기록/다기록/Transaction/Caption 서비스 요금 관리, 기본요금/추가요금(분) 설정
+    │   │   → 검색: 구분(통화기록/다기록/Transaction/Caption) 필터링
+    │   │   → 테이블: NO, 구분, 분류명, 시작일, 종료일, 기본요금, 추가요금(분), 등록자, 등록일
+    │   │   ├── 다기록/통화기록 상세정보 ✅ 구현 완료
+    │   │   │   → pages/soribaro/pricing/record-detail.html
+    │   │   │   → 기능: 개별 요금 정책 상세 조회, 기본정보/요금정보, 상세 설명
+    │   │   └── 다기록/통화기록 등록 ✅ 구현 완료
+    │   │       → pages/soribaro/pricing/record-register.html
+    │   │       → 기능: 신규 요금 정책 등록, 기본요금/추가요금 설정, 입력 검증
+    │   ├── 포인트 정책 ✅ 구현 완료
+    │   │   → pages/soribaro/pricing/point-management.html
+    │   │   → 기능: 포인트 정책 목록 조회, 검색 필터링 (웰컴적립/접수/포인트 지급)
+    │   │   → 테이블: NO, 포인트 구분, 시작일, 종료일, 지급포인트, 단위, 만료기간(일), 등록자, 등록일
+    │   │   ├── 포인트 정책 상세정보 ✅ 구현 완료
+    │   │   │   → pages/soribaro/pricing/point-detail.html
+    │   │   │   → 기능: 개별 포인트 정책 상세 조회, 기본정보/포인트정보, 상세 설명
+    │   │   └── 포인트 정책 등록 ✅ 구현 완료
+    │   │       → pages/soribaro/pricing/point-register.html
+    │   │       → 기능: 신규 포인트 정책 등록, 지급포인트/만료기간 설정, 입력 검증
+    │   └── 고객 포인트 변경 내역 ✅ 구현 완료
+    │       → pages/soribaro/pricing/customer-point-management.html
+    │       → 기능: 고객 포인트 변경 내역 조회, 검색 필터링 (아이디/이름/전화번호), 날짜 조회
+    │       → 테이블: NO, 아이디, 이름, 전화번호, 포인트구분, 변경포인트, 시점보유포인트, 등록자, 등록일
+    │       ├── 고객 포인트 변경 상세정보 ✅ 구현 완료
+    │       │   → pages/soribaro/pricing/customer-point-detail.html
+    │       │   → 기능: 개별 포인트 변경 상세 조회, 고객정보/변경정보, 변경 사유
+    │       └── 고객 포인트 지급 ✅ 구현 완료
+    │           → pages/soribaro/pricing/customer-point-register.html
+    │           → 기능: 고객 검색 및 포인트 지급, 지급 사유 입력, 실시간 포인트 계산
+    │
+    ├── 고객 응대 ✅ 구현 완료
+    │   └── Contact US
+    │       → pages/soribaro/customer/contact-management.html
+    │       → 기능: 고객 문의 접수 및 관리, 이름 검색, 처리 상태 관리
+    │       → 검색: 이름 검색
+    │       → 테이블: NO, 이름, 연락처, 이메일, 등록일시
+    │       └── Contact US 상세정보 ✅ 구현 완료
+    │           → pages/soribaro/customer/contact-detail.html
+    │           → 기능: 개별 문의 상세 조회, 고객정보/문의정보, 답변/처리완료 기능
+    │
+    └── 소리바로 서비스 관리 🔄 메뉴 순서 변경
+        ├── 공지사항 관리 ✅ 구현 완료
+        │   → pages/soribaro/settings/notice-management.html (리스트 페이지)
+        │   → 기능: 공지사항 작성/편집, 게시장소별 관리, 상단고정 설정, 조회수 추적
+        │   → 검색: 제목 검색
+        │   → 테이블: NO, 제목, 서비스유형, 게시장소, 유형, 상단고정, 등록자, 등록일시, 수정자, 수정일시, 조회수
+        │   ├── 공지사항 상세정보 ✅ 구현 완료
+        │   │   → pages/soribaro/settings/notice-detail.html
+        │   │   → 기능: 개별 공지사항 상세 조회, 기본정보/등록수정정보, 공지사항 내용 표시, 수정/삭제
+        │   └── 공지사항 등록 ✅ 구현 완료
+        │       → pages/soribaro/settings/notice-register.html
+        │       → 기능: 신규 공지사항 등록/수정, 게시장소별/서비스유형별 공지사항 관리, 입력 검증
+        ├── FAQ ✅ 구현 완료
+        │   → pages/soribaro/settings/faq-management.html (리스트 페이지)
+        │   → 기능: FAQ 작성/편집, 카테고리 관리, 서비스 유형별 관리
+        │   → 검색: 제목 검색
+        │   → 테이블: NO, 제목, 서비스 유형, 카테고리, 공개여부, 등록자, 등록일시, 수정자, 수정일시
+        │   ├── FAQ 상세정보 ✅ 구현 완료
+        │   │   → pages/soribaro/settings/faq-detail.html
+        │   │   → 기능: 개별 FAQ 상세 조회, 기본정보/등록수정정보, FAQ 내용 표시, 수정/삭제
+        │   └── FAQ 등록 ✅ 구현 완료
+        │       → pages/soribaro/settings/faq-register.html
+        │       → 기능: 신규 FAQ 등록/수정, 서비스 유형별/카테고리별 FAQ 관리, 입력 검증
+        ├── 팝업 이벤트 관리 ✅ 구현 완료
+        │   → pages/soribaro/settings/popup-management.html (리스트 페이지)
+        │   → 기능: 팝업 이벤트 작성/편집, 타겟별 관리, 기간 설정, 사용여부 관리
+        │   → 검색: 제목 검색
+        │   → 테이블: NO, 제목, 서비스유형, 시작일, 종료일, 타겟, 사용여부, 등록자, 등록일시, 수정자, 수정일시
+        │   ├── 팝업 이벤트 상세정보 ✅ 구현 완료
+        │   │   → pages/soribaro/settings/popup-detail.html
+        │   │   → 기능: 개별 팝업 이벤트 상세 조회, 기본정보/기간정보, 팝업 내용 표시, 수정/삭제
+        │   └── 팝업 이벤트 등록 ✅ 구현 완료
+        │       → pages/soribaro/settings/popup-register.html
+        │       → 기능: 신규 팝업 이벤트 등록/수정, 타겟별/서비스유형별 팝업 관리, 입력 검증
+        └── 알리고 템플릿 관리 ✅ 구현 완료
+            → pages/soribaro/settings/aligo-template-management.html (리스트 페이지)
+            → 기능: 알리고 SMS/MMS 템플릿 관리, 템플릿코드별 관리, 메시지 내용 편집
+            → 검색: 제목 검색
+            → 테이블: NO, 제목, 템플릿코드, 등록일시
+            ├── 알리고 템플릿 상세정보 ✅ 구현 완료
+            │   → pages/soribaro/settings/aligo-template-detail.html
+            │   → 기능: 개별 알리고 템플릿 상세 조회, 기본정보, SMS/MMS 내용 표시, 수정/삭제
+            └── 알리고 템플릿 등록 ✅ 구현 완료
+                → pages/soribaro/settings/aligo-template-register.html
+                → 기능: 신규 알리고 템플릿 등록/수정, SMS/MMS 내용 관리, 입력 검증
+
+🔧 통합 서비스 관리 🆕 신규 추가
+    ├── 서비스 약관 관리 ✅ 구현 완료 (소리바로 서비스 관리에서 이동)
+    │   → pages/common/settings/terms-management.html (리스트 페이지)
+    │   → 기능: 서비스 이용약관, 개인정보처리방침 관리, 사용자구분별 약관 관리
+    │   → 검색: 사용자구분, 제목 검색
+    │   → 테이블: NO, 사용자구분, 약관제목, 사용여부, 순서, 시작일, 종료일, 등록자, 등록일시
+    │   ├── 서비스 약관 상세정보 ✅ 구현 완료
+    │   │   → pages/common/settings/terms-detail.html
+    │   │   → 기능: 개별 약관 상세 조회, 기본정보/기간정보, 약관 내용 표시, 수정/삭제
+    │   └── 서비스 약관 등록 ✅ 구현 완료
+    │       → pages/common/settings/terms-register.html
+    │       → 기능: 신규 약관 등록/수정, 사용자구분별 약관 관리, 입력 검증
+    ├── 엔터프라이즈 업체 관리 ✅ 구현 완료 (소리바로 서비스 관리에서 이동)
+    │   → pages/common/settings/enterprise-company-management.html (리스트 페이지)
+    │   → 기능: 엔터프라이즈 업체 정보 관리, 의뢰구분별 관리, 사용여부 관리, CI 이미지 관리
+    │   → 검색: 업체명 검색
+    │   → 테이블: NO, 기업코드, 기업명칭, 기업도메인, 의뢰구분, 사용여부, 등록자, 등록일시, 수정자, 수정일시
+    │   ├── 엔터프라이즈 업체 상세정보 ✅ 구현 완료
+    │   │   → pages/common/settings/enterprise-company-detail.html
+    │   │   → 기능: 개별 업체 상세 조회, 기본정보/등록수정정보, CI 이미지 표시, 설명 표시, 수정/삭제
+    │   └── 엔터프라이즈 업체 등록 ✅ 구현 완료
+    │       → pages/common/settings/enterprise-company-register.html
+    │       → 기능: 신규 업체 등록/수정, CI 이미지 업로드, 의뢰구분별 업체 관리, 입력 검증
+    ├── 엔터프라이즈 고객 관리 ✅ 구현 완료 (소리바로 서비스 관리에서 이동)
+    │   → pages/common/settings/enterprise-customer-management.html (리스트 페이지)
+    │   → 기능: 엔터프라이즈 고객 정보 관리, 플랫폼별 관리, 템플릿 일괄 등록, 회원상태 관리
+    │   → 검색: 플랫폼별 필터링, 전체 검색 (이름/아이디/기업명칭/전화번호)
+    │   → 테이블: NO, 플랫폼, 아이디, 이름, 기업명칭, 전화번호, 상태
+    │   ├── 엔터프라이즈 고객 상세정보 ✅ 구현 완료
+    │   │   → pages/common/settings/enterprise-customer-detail.html
+    │   │   → 기능: 개별 고객 상세 조회, 기본정보/연락처정보, 프로필사진/QR코드 표시, 설명 표시, 수정/삭제
+    │   └── 엔터프라이즈 고객 등록 ✅ 구현 완료
+    │       → pages/common/settings/enterprise-customer-register.html
+    │       → 기능: 신규 고객 등록/수정, 플랫폼별 고객 관리, Excel 템플릿 다운로드/업로드, 일괄 등록
+    └── 프로퍼티 관리 ✅ 구현 완료 (소리바로 서비스 관리에서 이동)
+        → pages/common/settings/property-management.html (리스트 페이지)
+        → 기능: 시스템 프로퍼티 설정 관리, 코드별 검색, 설정값 조회
+        → 검색: 코드 검색
+        → 테이블: NO, 코드, 값, 설명, 등록일시
+
+🎬 클립데스크 서비스
+    ├── 영상작업관리
+    │   ├── 의뢰현황관리 - 개발 예정
+    │   └── 작업현황관리 ✅ 구현 완료
+    │       → pages/clipdesk/clip_work-management.html (리스트 페이지)
+    │       → pages/clipdesk/clip_work-detail.html (상세 페이지)
+    │       → 기능: 클립데스크 작업현황 관리, 웍스파이 프로젝트 통합, 가편집/본편집 워크플로우
+    │
+    └── 클립데스크 서비스 관리 🔄 메뉴 정리 및 순서 변경
+        ├── 고객 의뢰 항목 관리 ✅ 구현 완료
+        │   → pages/clipdesk/settings/request-items-management.html
+        │   → 기능: 클립데스크 고객 의뢰 항목 관리, 편집 분야(4개)/제작 콘텐츠 관리(6개) 설정
+        │   → 특징: 항목별 번호 선택, 텍스트 입력, 상세보기 영역, 이미지 업로드, 사용여부 설정
+        ├── 포트폴리오 관리 ✅ 구현 완료
+        │   → pages/clipdesk/settings/portfolio-management.html
+        │   → 기능: 클립데스크 포트폴리오 관리, 영상종류별(롱폼/숏폼) 분류, 상태 관리
+        │   → 검색: 영상종류, 상태, 전체 텍스트 검색 (항목, 상세)
+        │   → 테이블: NO, 항목, 상세, 영상종류, 등록자, 등록일시, 상태
+        ├── 블로그 관리 ✅ 구현 완료
+        │   → pages/clipdesk/settings/blog-management.html
+        │   → 기능: 클립데스크 블로그 관리, 카테고리별 분류(공지사항/FAQ/블로그), 상태 관리
+        │   → 검색: 카테고리, 상태, 전체 텍스트 검색 (메인 타이틀, 서브 문구)
+        │   → 테이블: NO, 메인 타이틀, 서브 문구, 카테고리, 등록자, 등록일시, 상태
+        │   → 모달: 메인 타이틀(44Byte), 서브 문구(44Byte), 카테고리, 상태, 파일 업로드, 노션 URL
+        ├── 리뷰 관리 ✅ 구현 완료
+        │   → pages/clipdesk/settings/review-management.html
+        │   → 기능: 클립데스크 리뷰 관리, 고객 리뷰 조회 및 관리
+        │   → 검색: 전체 텍스트 검색 (의뢰명, 등록자, 이메일, 별점, 내용)
+        │   → 테이블: NO, 의뢰명, 등록자, 이메일, 등록일시, 별점(1-5), 내용
+        │   → 특징: 별점 시각화, 내용 미리보기, 조회 전용
+        ├── 메일 템플릿 관리 ✅ 구현 완료
+        │   → pages/clipdesk/settings/mail-template-management.html (목록 페이지)
+        │   → 기능: 클립데스크 메일 템플릿 관리, 12가지 템플릿 타입 분류
+        │   → 검색: 제목 검색
+        │   → 테이블: NO, 제목, 템플릿타입, 등록일시, 이메일 제목 코드, 이메일 코드
+        │   ├── 메일 템플릿 상세정보 ✅ 구현 완료
+        │   │   → pages/clipdesk/settings/mail-template-detail.html
+        │   │   → 기능: 개별 메일 템플릿 상세 조회, 기본정보, 메일 내용 표시, 수정/삭제
+        │   └── 메일 템플릿 등록 ✅ 구현 완료
+        │       → pages/clipdesk/settings/mail-template-register.html
+        │       → 기능: 신규 메일 템플릿 등록/수정, 템플릿 타입별 관리, 코드 형식 검증
+        └── 알림 메일 확인 ✅ 구현 완료
+            → pages/clipdesk/settings/notification-mail-check.html
+            → 기능: 클립데스크 알림 메일 전송 현황 확인, 실시간 조회
+            → 검색: 조회 버튼을 통한 데이터 리프레시
+            → 테이블: NO, 전송일시, 템플릿 이름, 전송 이메일, 전송여부(정상/비정상)
+            → 특징: 50개 항목 표시, 조회 전용, 로딩 스피너
+
+📊 Report 🆕 신규 추가 (시스템 관리 상단 배치)
+    ├── 작업 결과 리포트 ✅ 구현 완료
+    │   → pages/report/work-report.html (목록 페이지)
+    │   → 기능: 서비스별 작업 통계, 작업자별 성과 분석, 기간별 리포트
+    │   → 검색: 날짜 범위, 작업항목(소리바로-B2C/회의록/VOD/번역, 클립데스크), 선택(전체/주문번호/파일이름/작업자)
+    │   → 테이블: NO, 작업항목, 주문번호, 파일 이름, 작업자, 작업 등급, 작업 배정일, 작업 제출일
+    │   → 특징: 체크박스 다중 선택, 소리바로-B2C 제목은 "-" 표시
+    │   └── 작업 결과 리포트 상세정보 ✅ 구현 완료
+    │       → pages/report/work-report-detail.html
+    │       → 기능: 개별 작업 결과 상세 조회, 작업정보/코멘트/결과 등급/비교자료 확인/다운로드
+    │       → 코멘트 시스템: 번역(7항목), 가이드라인(9항목), 싱크(3항목), 기타(1항목)
+    │       → 모달 시스템: 라인 NO, 타임코드, 코멘트 테이블
+    │       → 결과 등급: 1등급/2등급/3등급/4등급/5등급 선택
+    │       → 비교자료 시스템: 작업 항목별 자동 분기 시스템
+    │       → 비교자료 확인: 전체화면 새창, Overview Ruler, 답글 시스템
+    │       → 비교자료 다운로드: 작업 항목별 맞춤 메시지 (번역: 출발어+작업본+검수본, 기타: 작업본+검수본)
+    ├── 작업자 작업 현황 ✅ 구현 완료
+    │   → pages/report/work-status.html
+    │   → 기능: 작업자별 서비스 현황 조회, 등급별 작업시간 통계, 금액 계산
+    │   → 검색: 날짜 범위, 전체 검색(이름/전화번호)
+    │   → 테이블: NO, 이름, 전화번호, 소리바로-B2C, 소리바로-회의록, 소리바로-VOD, 소리바로-번역, 현장속기, 클립데스크, 금액(원)
+    │   → 등급 시스템: 20개 세부 등급 (ROOKIE/ELITE/PRO/MASTER 각 1~5단계)
+    │   → 표시 형태: "PRO-2 / 110" (등급-레벨 / 작업시간)
+    │   → 정렬: 이름순/금액순 오름차순/내림차순
+    │   → 금액 계산: 분당 500원 기준 자동 계산 (총 작업시간 × 500원)
+    ├── 작업물 비교 (일반) ✅ 구현 완료
+    │   → pages/report/work-comparison.html
+    │   → 기능: 작업본과 검수본 비교, 2영역 레이아웃, 코멘트 시스템, 답글 시스템
+    │   → 대상: 소리바로-B2C/회의록/VOD, 클립데스크
+    │   → 특징: 30개 라인, 코멘트 태그, Overview Ruler, 동기화 스크롤
+    └── 작업물 비교 (번역 전용) ✅ 구현 완료
+        → pages/report/work-comparison-translation.html
+        → 기능: 출발어, 작업본, 검수본 비교, 3영역 레이아웃, 코멘트 시스템
+        → 대상: 소리바로-번역
+        → 특징: 한→영 번역 30개 라인, 의료 전문용어, 3패널 동기화 스크롤
+    ├── 작업자 작업 현황 ✅ 구현 완료
+    │   → pages/report/work-status.html
+    │   → 기능: 작업자별 서비스 현황 조회, 등급별 작업시간 통계, 금액 계산
+    │   → 검색: 날짜 범위, 전체 검색(이름/전화번호)
+    │   → 테이블: NO, 이름, 전화번호, 소리바로-B2C, 소리바로-회의록, 소리바로-VOD, 소리바로-번역, 현장속기, 클립데스크, 금액(원)
+    │   → 등급 시스템: 20개 세부 등급 (ROOKIE/ELITE/PRO/MASTER 각 1~5단계)
+    │   → 표시 형태: "PRO-2 / 110" (등급-레벨 / 작업시간)
+    │   → 정렬: 이름순/금액순 오름차순/내림차순
+    │   → 금액 계산: 분당 500원 기준 자동 계산 (총 작업시간 × 500원)
+    ├── 작업물 비교 (일반) ✅ 구현 완료
+    │   → pages/report/work-comparison.html
+    │   → 기능: 작업본과 검수본 비교, 2영역 레이아웃, 코멘트 시스템, 답글 시스템
+    │   → 대상: 소리바로-B2C/회의록/VOD, 클립데스크
+    │   → 특징: 30개 라인, 코멘트 태그, Overview Ruler, 동기화 스크롤
+    └── 작업물 비교 (번역 전용) ✅ 구현 완료
+        → pages/report/work-comparison-translation.html
+        → 기능: 출발어, 작업본, 검수본 비교, 3영역 레이아웃, 코멘트 시스템
+        → 대상: 소리바로-번역
+        → 특징: 한→영 번역 30개 라인, 의료 전문용어, 3패널 동기화 스크롤
+
+⚙️ 시스템 관리 🔄 구조 개편 (단일 메뉴 → 서브메뉴 구조)
+    ├── 관리자 관리 ✅ 구현 완료
+    │   → pages/system/admin-account-management.html (목록 페이지)
+    │   → 기능: 관리자 계정 생성/수정, 복수 권한 관리, 템플릿 일괄 등록
+    │   → 검색: 플랫폼, 검색 조건 (이름, 아이디, 전화번호)
+    │   → 테이블: NO, 아이디, 이름, 유형(관리자), 관리자 권한(복수 선택), 전화번호, 상태
+    │   → 권한 옵션: 소리바로-B2C, 소리바로-회의록, 소리바로-VOD, 소리바로-번역, 클립데스크, Report
+    │   ├── 관리자 상세정보 ✅ 구현 완료
+    │   │   → pages/system/admin-account-detail.html
+    │   │   → 기능: 개별 계정 상세 조회, 기본정보/연락처정보, 프로필사진/QR코드, 설명, 인라인 편집
+    │   │   → 특징: enterprise-customer-detail.html과 동일한 구조, 복수 권한 체크박스 선택
+    │   └── 관리자 등록 ✅ 구현 완료
+    │       → pages/system/admin-account-register.html
+    │       → 기능: 템플릿 기반 일괄 등록, Excel 다운로드/업로드, 플랫폼별 관리
+    │       → 특징: enterprise-customer-register.html과 동일한 구조
+    ├── 공통코드 관리 ✅ 구현 완료
+    │   → pages/system/common-code-management.html (목록 페이지)
+    │   → 기능: 시스템 공통코드 관리, 코드그룹별 분류, 사용여부 관리
+    │   → 검색: 코드 그룹, 사용여부, 검색 조건 (코드, 코드명, 코드값)
+    │   → 테이블: NO, 코드 그룹, 코드, 코드명, 코드값, 정렬순서, 사용여부, 등록자, 등록일시
+    │   → 코드 그룹: SYSTEM(시스템), USER(사용자), SERVICE(서비스), PAYMENT(결제)
+    └── 로그아웃
+        → JavaScript 함수로 구현
+        → 기능: 안전한 세션 종료, 로그인 이력 기록
+
+================================================================================
+
+📊 개발 현황 통계
+================================================================================
+
+구현완료 파일: 100개
+- index.html (메인 진입점)
+- file_structure.txt (파일 구조 다이어그램)
+- pages/dashboard.html (웍스파이 프로젝트 관리)
+- pages/_template.html (공통 템플릿)
+- pages/user/worker-management.html (작업자 관리)
+- pages/user/b2c-member-management.html (B2C 회원 관리)
+- pages/user/b2c-member-detail.html (B2C 회원 상세정보)
+- pages/soribaro/b2c/request-management.html (B2C 의뢰현황)
+- pages/soribaro/b2c/request-detail.html (B2C 의뢰 상세정보)
+- pages/soribaro/b2c/work-management.html (B2C 작업현황)
+- pages/soribaro/b2c/work-detail.html (B2C 작업 상세정보)
+- pages/soribaro/enterprise/meeting-management.html (엔터프라이즈 회의록 작업관리)
+- pages/soribaro/enterprise/meeting-detail.html (엔터프라이즈 회의록 작업 상세정보)
+- pages/soribaro/enterprise/meeting-bulk-project-add.html (엔터프라이즈 회의록 다건 프로젝트 추가)
+- pages/soribaro/enterprise/vod-management.html (엔터프라이즈 VOD 작업관리)
+- pages/soribaro/enterprise/vod-detail.html (엔터프라이즈 VOD 작업 상세정보)
+- pages/soribaro/enterprise/vod-bulk-project-add.html (엔터프라이즈 VOD 다건 프로젝트 추가)
+- pages/soribaro/settings/faq-management.html (FAQ 관리)
+- pages/soribaro/pricing/notary-management.html (공증신청/기록완본 관리)
+- pages/soribaro/pricing/notary-detail.html (공증신청/기록완본 상세정보)
+- pages/soribaro/pricing/notary-register.html (공증신청/기록완본 등록)
+- pages/soribaro/pricing/record-management.html (다기록/통화기록 관리)
+- pages/soribaro/pricing/record-detail.html (다기록/통화기록 상세정보)
+- pages/soribaro/pricing/record-register.html (다기록/통화기록 등록)
+- pages/soribaro/pricing/point-management.html (포인트 정책 관리)
+- pages/soribaro/pricing/point-detail.html (포인트 정책 상세정보)
+- pages/soribaro/pricing/point-register.html (포인트 정책 등록)
+- pages/soribaro/pricing/customer-point-management.html (고객 포인트 변경 내역 관리)
+- pages/soribaro/pricing/customer-point-detail.html (고객 포인트 변경 상세정보)
+- pages/soribaro/pricing/customer-point-register.html (고객 포인트 지급)
+- pages/translation/trans-management.html (번역 작업관리)
+- pages/translation/trans-detail.html (번역 작업 상세정보 - 프로세스 테스트)
+- pages/translation/trans-bulk-project-add.html (번역 다건 프로젝트 추가)
+- pages/clipdesk/clip_work-management.html (클립데스크 작업현황관리)
+- pages/clipdesk/clip_work-detail.html (클립데스크 작업현황 상세정보)
+- pages/soribaro/customer/contact-management.html (Contact US 관리)
+- pages/soribaro/customer/contact-detail.html (Contact US 상세정보)
+- pages/common/settings/terms-management.html (서비스 약관 관리)
+- pages/common/settings/terms-detail.html (서비스 약관 상세정보)
+- pages/common/settings/terms-register.html (서비스 약관 등록)
+- pages/soribaro/settings/faq-management.html (FAQ 관리)
+- pages/soribaro/settings/faq-detail.html (FAQ 상세정보)
+- pages/soribaro/settings/faq-register.html (FAQ 등록)
+- pages/soribaro/settings/notice-management.html (공지사항 관리)
+- pages/soribaro/settings/notice-detail.html (공지사항 상세정보)
+- pages/soribaro/settings/notice-register.html (공지사항 등록)
+- pages/soribaro/settings/popup-management.html (팝업 이벤트 관리)
+- pages/soribaro/settings/popup-detail.html (팝업 이벤트 상세정보)
+- pages/soribaro/settings/popup-register.html (팝업 이벤트 등록)
+- pages/soribaro/settings/aligo-template-management.html (알리고 템플릿 관리)
+- pages/soribaro/settings/aligo-template-detail.html (알리고 템플릿 상세정보)
+- pages/soribaro/settings/aligo-template-register.html (알리고 템플릿 등록)
+- pages/common/settings/enterprise-company-management.html (엔터프라이즈 업체 관리)
+- pages/common/settings/enterprise-company-detail.html (엔터프라이즈 업체 상세정보)
+- pages/common/settings/enterprise-company-register.html (엔터프라이즈 업체 등록)
+- pages/common/settings/enterprise-customer-management.html (엔터프라이즈 고객 관리)
+- pages/common/settings/enterprise-customer-detail.html (엔터프라이즈 고객 상세정보)
+- pages/common/settings/enterprise-customer-register.html (엔터프라이즈 고객 등록)
+- pages/common/settings/property-management.html (프로퍼티 관리)
+- pages/clipdesk/settings/request-items-management.html (고객 의뢰 항목 관리)
+- pages/clipdesk/settings/portfolio-management.html (포트폴리오 관리)
+- pages/clipdesk/settings/blog-management.html (블로그 관리)
+- pages/clipdesk/settings/review-management.html (리뷰 관리)
+- pages/clipdesk/settings/mail-template-management.html (메일 템플릿 관리)
+- pages/clipdesk/settings/mail-template-detail.html (메일 템플릿 상세정보)
+- pages/clipdesk/settings/mail-template-register.html (메일 템플릿 등록)
+- pages/clipdesk/settings/notification-mail-check.html (알림 메일 확인)
+- pages/system/admin-account-management.html (관리자 관리)
+- pages/system/admin-account-detail.html (관리자 상세정보)
+- pages/system/admin-account-register.html (관리자 등록)
+- pages/system/common-code-management.html (공통코드 관리)
+- pages/report/work-report.html (작업 결과 리포트)
+- pages/report/work-report-detail.html (작업 결과 리포트 상세정보)
+- pages/report/work-comparison.html (작업물 비교 - 일반)
+- pages/report/work-comparison-translation.html (작업물 비교 - 번역 전용)
+- pages/report/work-status.html (작업자 작업현황)
+- index_work.html (작업자 메인 페이지)
+- pages/worker/notice.html (작업자 공지사항)
+- pages/worker/profile-edit.html (작업자 개인정보수정)
+- pages/worker/transcription.html (작업자 녹취록 작업 목록)
+- pages/worker/transcription-detail.html (작업자 녹취록 작업 상세)
+- pages/worker/meeting.html (작업자 회의록 작업 목록)
+- pages/worker/meeting-detail.html (작업자 회의록 작업 상세)
+- pages/worker/vod.html (작업자 VOD 작업 목록)
+- pages/worker/vod-detail.html (작업자 VOD 작업 상세)
+- pages/worker/translation.html (작업자 번역 작업 목록)
+- pages/worker/translation-detail.html (작업자 번역 작업 상세)
+- pages/worker/clipdesk.html (작업자 클립데스크 작업 목록)
+- pages/worker/clipdesk-detail.html (작업자 클립데스크 작업 상세)
+- pages/clipdesk/clipdesk-management.html (클립데스크 관리)
+- pages/clipdesk/clipdesk-detail.html (클립데스크 상세정보)
+
+개발 예정 메뉴: 23+ 개
+주요 서비스 영역: 4개 (대시보드, 소리바로, 클립데스크, 시스템관리)
+
+================================================================================
+
+🔧 주요 기술적 특징
+================================================================================
+
+아키텍처:
+- index.html: 메인 진입점, 다크 테마 사이드바 메뉴, 액티브 메뉴 상태 관리
+- iframe 기반 콘텐츠 로딩으로 모듈화
+- JavaScript 메뉴 제어 (toggleSubmenu, loadPage, setActiveMenu 함수)
+- pages/ 디렉토리: 서비스별 디렉토리 분리
+- URL 파라미터 기반 페이지 간 데이터 전달
+
+상세 페이지 시스템:
+- 테이블 → 상세 페이지 네비게이션 구조
+- work-detail.html: 개별 작업 상세정보 표시
+- URL 파라미터로 동적 데이터 로딩
+- 뒤로가기 기능 및 액션 버튼 시스템
+
+웍스파이 연동:
+- 실시간 지원자 현황 조회
+- 프로젝트 모집 등록 팝업
+- 작업자 배정 시스템 준비
+
+디자인 컨셉:
+- 전문적인 관리자 페이지 디자인
+- 다크 사이드바 + 밝은 콘텐츠 영역
+- 일관된 색상 체계 (#3b82f6)
+- 부드러운 애니메이션 효과
+- 심플하고 깔끔한 정보 표시
+
+================================================================================
+
+📝 다음 개발 우선순위
+================================================================================
+
+1. ✅ request-management.html용 상세 페이지 (request-detail.html) 구현 완료
+2. ✅ 엔터프라이즈 회의록 작업관리 페이지 구현 완료 (meeting-management.html)
+3. ✅ 엔터프라이즈 VOD 작업관리 페이지 구현 완료 (vod-management.html, vod-detail.html)
+4. ✅ 번역 서비스 작업관리 페이지 구현 완료 (trans-management.html, trans-detail.html)
+5. 엔터프라이즈 회의록 작업 상세정보 페이지 구현 (meeting-detail.html)
+6. 고객 응대 관련 페이지들 구현
+7. 가격 정책 관리 페이지들 구현
+8. 클립데스크 고객응대/설정 페이지들 구현
+9. 웍스파이 실제 API 연동 구현
+10. 작업 관리 액션 버튼 기능 구현 (승인, 재작업 요청 등)
+
+================================================================================
+
+📋 메뉴 구조 (2025.09.02 최종)
+================================================================================
+
+🚀 ~~웍스파이 프로젝트 관리~~ (개발 중단)
+
+👥 사용자 관리
+    ├── 작업자 관리 (웍스파이 연동)
+    └── B2C 회원 관리
+
+🔊 소리바로 서비스
+    ├── 녹취록 (B2C)
+    │   ├── 의뢰현황관리
+    │   └── 작업현황관리
+    ├── 엔터프라이즈 (B2B)
+    │   ├── 회의록 작업관리
+    │   └── VOD 작업관리
+    ├── 번역 서비스
+    │   └── 번역 작업관리
+    ├── 가격 정책
+    │   ├── 공증신청/기록완본
+    │   ├── 다기록/통화기록
+    │   ├── 포인트 정책
+    │   └── 고객 포인트 변경 내역
+    ├── 고객 응대
+    │   └── Contact US
+    └── 소리바로 서비스 관리
+        ├── 공지사항 관리
+        ├── FAQ
+        ├── 팝업 이벤트 관리
+        └── 알리고 템플릿 관리
+
+🎬 클립데스크 서비스
+    ├── 영상작업관리
+    │   ├── 의뢰현황관리
+    │   └── 작업현황관리
+    └── 클립데스크 서비스 관리
+        ├── 고객 의뢰 항목 관리
+        ├── 포트폴리오 관리
+        ├── 블로그 관리
+        ├── 리뷰 관리
+        ├── 메일 템플릿 관리
+        └── 알림 메일 확인
+
+📊 Report
+    ├── 작업 결과 리포트
+    ├── 작업자 작업 현황
+    ├── 작업물 비교 (일반)
+    └── 작업물 비교 (번역 전용)
+
+🔧 통합 서비스 관리
+    ├── 서비스 약관 관리
+    ├── 엔터프라이즈 업체 관리
+    ├── 엔터프라이즈 고객 관리
+    └── 프로퍼티 관리
+
+⚙️ 시스템 관리
+    ├── 관리자 관리
+    └── 공통코드 관리
+
+👤 작업자 페이지 🆕 신규 추가
+    ├── 공지사항 ✅ 구현 완료
+    │   → pages/worker/notice.html
+    │   → 기능: 작업자 전용 공지사항, 환영 메시지, 공지사항 토글 확인
+    ├── 개인정보수정 ✅ 구현 완료 🆕 신규 추가
+    │   → pages/worker/profile-edit.html
+    │   → 기능: 작업자 개인정보 관리, 기본정보/프로필사진 수정
+    │   → 기본정보: 아이디(읽기전용), 이름, 전화번호, 주소, 등록일(읽기전용)
+    │   → 수정 가능 항목: 이름, 전화번호, 주소, 프로필사진
+    │   → 특징: 주소 검색 기능, 프로필사진 업로드(5MB 제한), 입력 검증
+    └── 작업현황관리
+        ├── 녹취록 ✅ 구현 완료
+        │   → pages/worker/transcription.html (목록 페이지)
+        │   → 기능: 배정된 녹취록 작업 목록, 배정일 기간 검색
+        │   → 검색: 배정일 범위 (시작일~종료일)
+        │   → 테이블: NO, 배정일, 서비스 구분, 파일명, 재생시간, 작업상태, 제출일
+        │   → 서비스 구분: 통화기록(파란색), 다기록(주황색)
+        │   → 작업상태: 접수(파란색), 작업중(주황색), 완료(녹색)
+        │   └── 녹취록 작업 상세 ✅ 구현 완료
+        │       → pages/worker/transcription-detail.html
+        │       → 기능: 개별 녹취록 작업 상세 정보, 음성 플레이어, 구간/화자 정보, 파일 공유
+        │       → 작업 정보: 파일명, 서비스 구분, 배정일, 작업상태, 재생시간, 제출일
+        │       → 음성 플레이어: 재생/다운로드, 녹음일/장소 정보
+        │       → 구간 정보: 시간 테이블, 화자설정 (상담원/고객)
+        │       → 파일 공유: 가이드라인, 템플릿, 보안 안내 파일
+        │       → 액션 버튼: 작업 시작 → 작업 제출 → 결과 다운로드 (상태별 변경)
+        ├── 회의록 ✅ 구현 완료
+        │   → pages/worker/meeting.html (목록 페이지)
+        │   → 기능: 배정된 회의록 작업 목록, 배정일 기간 검색
+        │   → 검색: 배정일 범위 (시작일~종료일)
+        │   → 테이블: NO, 배정일, 제목, 파일명, 재생시간, 작업상태, 제출일
+        │   → 작업상태: 접수(파란색), 작업중(주황색), 완료(녹색)
+        │   └── 회의록 작업 상세 ✅ 구현 완료
+        │       → pages/worker/meeting-detail.html
+        │       → 기능: 개별 회의록 작업 상세 정보, 구간/화자 정보, 파일 공유, 전사툴 실행
+        │       → 작업 정보: 제목, 파일명, 배정일, 녹음일, 녹음장소, 재생시간, 작업상태
+        │       → 구간 정보: 시간 테이블, 화자설정 (위원장/부위원장/서기/참석자)
+        │       → 고객 관리: 세부 요청사항, 첨부파일 다운로드 (회의록 양식, 참석자 명단, 안건 자료)
+        │       → 파일 공유: 작성 가이드라인, HWP 템플릿, 발언자 구분 예시
+        ├── VOD ✅ 구현 완료
+        │   → pages/worker/vod.html (목록 페이지)
+        │   → 기능: 배정된 VOD 작업 목록, 배정일 기간 검색
+        │   → 검색: 배정일 범위 (시작일~종료일)
+        │   → 테이블: NO, 배정일, 제목, 파일명, 재생시간, 작업상태, 제출일
+        │   → 작업상태: 접수(파란색), 작업중(주황색), 완료(녹색)
+        │   └── VOD 작업 상세 ✅ 구현 완료
+        │       → pages/worker/vod-detail.html
+        │       → 기능: 개별 VOD 작업 상세 정보, 작업정보 통합, 파일 공유, 전사툴 실행
+        │       → 작업정보: 제목|파일명|재생시간, 촬영일|촬영장소|배정일|작업상태, 화자정보 (내레이터/CEO/팀장/인터뷰)
+        │       → 고객 관리: 세부 요청사항, 첨부파일 다운로드 (브랜드 가이드라인, 스토리보드, 자막 스타일 가이드)
+        │       → 파일 공유: VOD 자막 가이드라인, SRT 템플릿, 화자 구분 예시
+        ├── 번역 ✅ 구현 완료
+        │   → pages/worker/translation.html (목록 페이지)
+        │   → 기능: 배정된 번역 작업 목록, 배정일 기간 검색
+        │   → 검색: 배정일 범위 (시작일~종료일)
+        │   → 테이블: NO, 배정일, 서비스 구분(영상/음성), 작업 구분(출발어/번역어), 제목, 파일명, 재생시간, 작업상태, 제출일
+        │   → 서비스 구분: 영상(주황색), 음성(파란색)
+        │   → 작업 구분: 출발어(보라색), 번역어(녹색)
+        │   → 작업상태: 접수(파란색), 작업중(주황색), 완료(녹색)
+        │   └── 번역 작업 상세 ✅ 구현 완료
+        │       → pages/worker/translation-detail.html
+        │       → 기능: 개별 번역 작업 상세 정보, 작업정보 통합, 파일 공유, 전사툴 실행
+        │       → 작업정보: 제목|파일명|작업구분, 출발어|작업언어|재생시간|작업상태, 화자정보 (의료진/환자/간병인)
+        │       → 동적 언어 설정: 출발어 작업시 '한국어', 번역어 작업시 서비스별 언어 (영상-영어, 음성-중국어)
+        │       → 고객 관리: 세부 요청사항, 첨부파일 다운로드 (의학용어 사전, 번역 스타일 가이드, 참고자료)
+        │       → 파일 공유: 번역 작업 가이드라인, 번역 템플릿, 전문용어 가이드
+        └── 클립데스크 ✅ 구현 완료 🆕 신규 추가
+            → pages/worker/clipdesk.html (목록 페이지)
+            → 기능: 배정된 클립데스크 작업 목록, 배정일 기간 검색
+            → 검색: 배정일 범위 (시작일~종료일)
+            → 테이블: NO, 배정일, 의뢰명, 서브타이틀, 작업시간, 진행상태, 제출일
+            → 진행상태: 접수(파란색), 작업중(주황색), 완료(녹색)
+            └── 클립데스크 작업 상세 ✅ 구현 완료
+                → pages/worker/clipdesk-detail.html
+                → 기능: 개별 클립데스크 작업 상세 정보, 의뢰정보 통합, 작업관리 시스템, 파일 리스트, URL 공유
+                → 의뢰정보: 의뢰명|서브타이틀|편집분야, 제작콘텐츠|원본러닝타임|카메라대수, 편집등급|인트로/아웃트로|채널로고, 썸네일종류|최종본예상시간, 참고영상링크, 고객요청사항
+                → 작업관리: 가편집/본편집 산출물 관리, 상태 변경, 업로드/뷰어/삭제 액션
+                → 파일 관리: 파일 리스트, 개별/전체 다운로드, URL 클립보드 복사
+                → 액션 버튼: 목록으로 돌아가기 (우측 정렬)
+
+🚪 로그아웃

@@ -57,6 +57,25 @@
             background: #4b5563;
         }
         
+        .cancel-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cancel-button:hover {
+            background: #b91c1c;
+        }
+        
         /* 정보 섹션 */
         .info-section {
             background: white;
@@ -1240,10 +1259,16 @@
             <span>🏢</span>
             엔터프라이즈 회의록 작업 상세정보
         </h1>
-        <button class="back-button" onclick="goBack()">
-            <span>←</span>
-            목록으로 돌아가기
-        </button>
+        <div style="display: flex; gap: 10px;">
+            <button class="cancel-button" onclick="cancelWork()">
+                <span>✕</span>
+                작업취소
+            </button>
+            <button class="back-button" onclick="goBack()">
+                <span>←</span>
+                목록으로 돌아가기
+            </button>
+        </div>
     </div>
     
     <!-- 기본 정보 섹션 -->
@@ -5440,43 +5465,6 @@
                     </div>
                 </div>
                 
-                <!-- 파일 업로드 섹션 -->
-                <div class="form-row">
-                    <div class="form-group">
-                        <label>썸네일</label>
-                        <div class="file-upload-area" id="worksbyThumbnailUpload">
-                            <div class="file-upload-content">
-                                <div class="file-upload-icon">🖼️</div>
-                                <div class="file-upload-text">
-                                    <p>썸네일 이미지를 업로드하세요</p>
-                                    <p class="file-upload-subtext">JPG, PNG, GIF (최대 5MB)</p>
-                                </div>
-                                <button type="button" class="file-upload-btn" onclick="document.getElementById('worksbyThumbnailInput').click()">파일 선택</button>
-                                <input type="file" id="worksbyThumbnailInput" accept="image/*" style="display: none;" onchange="handleWorksbyThumbnailUpload(this)">
-                            </div>
-                            <div class="file-preview" id="worksbyThumbnailPreview" style="display: none;">
-                                <img id="worksbyThumbnailImage" src="" alt="썸네일 미리보기">
-                                <button type="button" class="file-remove-btn" onclick="removeWorksbyThumbnail()">✕</button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>첨부파일</label>
-                        <div class="file-upload-area" id="worksbyAttachmentUpload">
-                            <div class="file-upload-content">
-                                <div class="file-upload-icon">📎</div>
-                                <div class="file-upload-text">
-                                    <p>첨부파일을 업로드하세요</p>
-                                    <p class="file-upload-subtext">모든 파일 형식 (최대 10MB)</p>
-                                </div>
-                                <button type="button" class="file-upload-btn" onclick="document.getElementById('worksbyAttachmentInput').click()">파일 선택</button>
-                                <input type="file" id="worksbyAttachmentInput" multiple style="display: none;" onchange="handleWorksbyAttachmentUpload(this)">
-                            </div>
-                            <div class="file-list" id="worksbyAttachmentList"></div>
-                        </div>
-                    </div>
-                </div>
                 
                 <div class="modal-footer">
                     <button type="submit" class="btn-save" onclick="handleWorksbyProjectSubmit(event)">저장</button>
@@ -5572,16 +5560,6 @@
                                 <div id="detailContent" class="content-box">사람 구함<br>열심히 합시다.<br>구합니다. 구합니다.</div>
                             </div>
                             
-                            <div class="info-grid">
-                                <div class="info-item">
-                                    <label>썸네일</label>
-                                    <div id="detailThumbnail" class="thumbnail-preview">이미지 없음</div>
-                                </div>
-                                <div class="info-item">
-                                    <label>첨부파일</label>
-                                    <div id="detailAttachments" class="attachments-list">파일 없음</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     

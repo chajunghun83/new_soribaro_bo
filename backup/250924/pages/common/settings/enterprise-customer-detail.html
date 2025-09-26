@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>엔터프라이즈 고객 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            width: 100%;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .info-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            width: 100%;
+            cursor: pointer;
+        }
+        
+        .info-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .edit-mode .info-value {
+            display: none;
+        }
+        
+        .edit-mode .info-input,
+        .edit-mode .info-select {
+            display: block;
+        }
+        
+        .info-input,
+        .info-select {
+            display: none;
+        }
+        
+        /* 주소 검색 관련 스타일 */
+        .address-edit-container {
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .edit-mode .address-edit-container {
+            display: flex;
+        }
+        
+        .address-search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .address-search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 프로필사진 업로드 관련 스타일 */
+        .profile-upload {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+        
+        .edit-mode .profile-upload {
+            display: block;
+        }
+        
+        .profile-input {
+            display: none;
+        }
+        
+        .profile-upload-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 auto 10px;
+        }
+        
+        .profile-upload-btn:hover {
+            background: #059669;
+        }
+        
+        .profile-info {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        /* 설명 텍스트박스 관련 스타일 */
+        .description-textarea {
+            display: none;
+            width: 100%;
+            min-height: 200px;
+            padding: 20px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            line-height: 1.8;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .description-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .edit-mode .description-display {
+            display: none;
+        }
+        
+        .edit-mode .description-textarea {
+            display: block;
+        }
+        
+        /* 미디어 컨테이너 (프로필사진 + QR 코드) */
+        .media-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        /* 플랫폼 배지 */
+        .platform-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .platform-soribaro {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .platform-clipdesk {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 회원상태 배지 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-dormant {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        /* 프로필사진 영역 */
+        .profile-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .profile-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-image {
+            max-width: 150px;
+            max-height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .no-profile {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* QR 코드 영역 */
+        .qr-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .qr-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .qr-image {
+            max-width: 150px;
+            max-height: 150px;
+            object-fit: contain;
+        }
+
+        /* 설명 영역 */
+        .description-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .description-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 200px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        #editModeButtons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 100px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(107, 114, 128, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>👥</span>
+            엔터프라이즈 고객 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid" id="basicInfoGrid">
+                    <div class="info-label">담당자 이름</div>
+                    <div>
+                        <div class="info-value" id="managerName">김철수</div>
+                        <input type="text" class="info-input" id="managerNameInput" value="김철수">
+                    </div>
+                    
+                    <div class="info-label">아이디</div>
+                    <div>
+                        <div class="info-value" id="userId">samsung_admin</div>
+                        <input type="text" class="info-input" id="userIdInput" value="samsung_admin">
+                    </div>
+                    
+                    <div class="info-label">연락처</div>
+                    <div>
+                        <div class="info-value" id="phoneNumber">02-2255-0114</div>
+                        <input type="text" class="info-input" id="phoneNumberInput" value="02-2255-0114">
+                    </div>
+                    
+                    <div class="info-label">플랫폼</div>
+                    <div>
+                        <div class="info-value">
+                            <span id="platformBadge" class="platform-badge platform-soribaro">소리바로</span>
+                        </div>
+                        <select class="info-select" id="platformSelect">
+                            <option value="소리바로">소리바로</option>
+                            <option value="클립데스크">클립데스크</option>
+                        </select>
+                    </div>
+                    
+                    <div class="info-label">업체명</div>
+                    <div>
+                        <div class="info-value" id="companyName">삼성전자</div>
+                        <select class="info-select" id="companyNameSelect">
+                            <option value="삼성전자">삼성전자</option>
+                            <option value="LG전자">LG전자</option>
+                            <option value="SK텔레콤">SK텔레콤</option>
+                            <option value="KT">KT</option>
+                            <option value="네이버">네이버</option>
+                            <option value="카카오">카카오</option>
+                            <option value="현대자동차">현대자동차</option>
+                            <option value="기아자동차">기아자동차</option>
+                            <option value="포스코">포스코</option>
+                            <option value="한국전력공사">한국전력공사</option>
+                            <option value="신한은행">신한은행</option>
+                            <option value="KB국민은행">KB국민은행</option>
+                            <option value="하나은행">하나은행</option>
+                            <option value="우리은행">우리은행</option>
+                            <option value="롯데그룹">롯데그룹</option>
+                            <option value="CJ그룹">CJ그룹</option>
+                            <option value="GS그룹">GS그룹</option>
+                            <option value="한화그룹">한화그룹</option>
+                            <option value="두산그룹">두산그룹</option>
+                            <option value="기타">기타</option>
+                        </select>
+                    </div>
+                    
+                    <div class="info-label">회원상태</div>
+                    <div>
+                        <div class="info-value">
+                            <span id="statusBadge" class="status-badge status-active">정상</span>
+                        </div>
+                        <select class="info-select" id="statusSelect">
+                            <option value="대기">대기</option>
+                            <option value="정상">정상</option>
+                            <option value="휴면">휴면</option>
+                            <option value="탈퇴">탈퇴</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 연락처/주소 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">연락처/주소 정보</div>
+            <div class="info-content">
+                <div class="info-grid" id="contactInfoGrid">
+                    <div class="info-label">이메일</div>
+                    <div>
+                        <div class="info-value" id="email">admin@samsung.com</div>
+                        <input type="email" class="info-input" id="emailInput" value="admin@samsung.com">
+                    </div>
+                    
+                    <div class="info-label">주소</div>
+                    <div>
+                        <div class="info-value" id="address">서울특별시 서초구 서초대로74길 11</div>
+                        <div class="address-edit-container">
+                            <input type="text" class="info-input" id="addressInput" value="서울특별시 서초구 서초대로74길 11" readonly>
+                            <button type="button" class="address-search-btn" id="addressSearchBtn" onclick="searchAddress()">
+                                <span>📍</span>
+                                주소검색
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="info-label">회원가입일</div>
+                    <div class="info-value" id="joinDate">2025-01-15</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 프로필사진 & QR 코드 컨테이너 -->
+    <div class="media-container">
+        <!-- 프로필사진 섹션 -->
+        <div class="profile-section" id="profileSection">
+            <div class="section-title">프로필사진</div>
+            <div class="info-content">
+                <div class="profile-display" id="profileDisplay">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNzUiIHI9Ijc1IiBmaWxsPSIjRTVFN0VCIi8+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNjAiIHI9IjI1IiBmaWxsPSIjOUI5Q0EwIi8+CjxwYXRoIGQ9Ik0zMCAxMjBDMzAgMTA0LjUgNTEuNSA5MCA3NSA5MEM5OC41IDkwIDEyMCAxMDQuNSAxMjAgMTIwVjEzMEgzMFYxMjBaIiBmaWxsPSIjOUI5Q0EwIi8+Cjwvc3ZnPg==" 
+                         alt="프로필사진" class="profile-image" id="profileImage">
+                </div>
+                <div class="profile-upload" id="profileUpload">
+                    <input type="file" id="profileInput" class="profile-input" accept="image/*" onchange="handleProfileUpload(event)">
+                    <button type="button" class="profile-upload-btn" onclick="document.getElementById('profileInput').click()">
+                        <span>📷</span>
+                        프로필사진 변경
+                    </button>
+                    <div class="profile-info">* 이미지 파일만 업로드 가능합니다. (최대 5MB)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- QR 코드 섹션 -->
+        <div class="qr-section">
+            <div class="section-title">QR Code</div>
+            <div class="info-content">
+                <div class="qr-display" id="qrDisplay">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSJ3aGl0ZSIvPgo8IS0tIFFSIENvZGUgUGF0dGVybiAtLT4KPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSIxMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSI1MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjkwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjExMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K" 
+                         alt="QR Code" class="qr-image" id="qrImage">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 설명 섹션 -->
+    <div class="description-section" id="descriptionSection">
+        <div class="section-title">설명</div>
+        <div class="info-content">
+            <div class="description-display" id="customerDescription">삼성전자 기업 고객으로, 주로 임원진 회의록 작성 및 VOD 제작 서비스를 이용하고 있습니다.
+
+담당자: 김철수 부장
+부서: 디지털미디어사업부
+주요 이용 서비스:
+- 회의록 작성 서비스 (월 평균 20건)
+- VOD 제작 서비스 (월 평균 5건)
+- 번역 서비스 (분기별 10건)
+
+특이사항:
+- VIP 고객으로 우선 처리 대상
+- 24시간 내 작업 완료 요청 多
+- 보안 수준 높음 (기업 기밀 포함)</div>
+            <textarea class="description-textarea" id="descriptionTextarea" rows="10" placeholder="고객에 대한 상세 설명을 입력하세요...">삼성전자 기업 고객으로, 주로 임원진 회의록 작성 및 VOD 제작 서비스를 이용하고 있습니다.
+
+담당자: 김철수 부장
+부서: 디지털미디어사업부
+주요 이용 서비스:
+- 회의록 작성 서비스 (월 평균 20건)
+- VOD 제작 서비스 (월 평균 5건)
+- 번역 서비스 (분기별 10건)
+
+특이사항:
+- VIP 고객으로 우선 처리 대상
+- 24시간 내 작업 완료 요청 多
+- 보안 수준 높음 (기업 기밀 포함)</textarea>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <div id="viewModeButtons">
+            <button class="btn-action btn-edit" onclick="toggleEditMode()">
+                <span>✏️</span>
+                수정
+            </button>
+        </div>
+        <div id="editModeButtons" style="display: none;">
+            <button class="btn-action btn-save" onclick="saveCustomer()">
+                <span>💾</span>
+                저장
+            </button>
+            <button class="btn-action btn-cancel" onclick="cancelEdit()">
+                <span>❌</span>
+                취소
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        let isEditMode = false;
+        let originalData = null;
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('엔터프라이즈 고객 상세 페이지 로드, ID:', itemId);
+            loadCustomerDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadCustomerDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'CUSTOMER001': {
+                    platform: '소리바로',
+                    platformClass: 'platform-soribaro',
+                    status: '정상',
+                    statusClass: 'status-active',
+                    companyName: '삼성전자',
+                    userId: 'samsung_admin',
+                    managerName: '김철수',
+                    phoneNumber: '02-2255-0114',
+                    email: 'admin@samsung.com',
+                    address: '서울특별시 서초구 서초대로74길 11',
+                    joinDate: '2025-01-15',
+                    profileImage: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNzUiIHI9Ijc1IiBmaWxsPSIjRTVFN0VCIi8+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNjAiIHI9IjI1IiBmaWxsPSIjOUI5Q0EwIi8+CjxwYXRoIGQ9Ik0zMCAxMjBDMzAgMTA0LjUgNTEuNSA5MCA3NSA5MEM5OC41IDkwIDEyMCAxMDQuNSAxMjAgMTIwVjEzMEgzMFYxMjBaIiBmaWxsPSIjOUI5Q0EwIi8+Cjwvc3ZnPg==',
+                    qrCode: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSJ3aGl0ZSIvPgo8IS0tIFFSIENvZGUgUGF0dGVybiAtLT4KPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSIxMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSI1MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjkwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjExMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K',
+                    description: `삼성전자 기업 고객으로, 주로 임원진 회의록 작성 및 VOD 제작 서비스를 이용하고 있습니다.
+
+담당자: 김철수 부장
+부서: 디지털미디어사업부
+주요 이용 서비스:
+- 회의록 작성 서비스 (월 평균 20건)
+- VOD 제작 서비스 (월 평균 5건)
+- 번역 서비스 (분기별 10건)
+
+특이사항:
+- VIP 고객으로 우선 처리 대상
+- 24시간 내 작업 완료 요청 多
+- 보안 수준 높음 (기업 기밀 포함)`
+                },
+                'CUSTOMER002': {
+                    platform: '소리바로',
+                    platformClass: 'platform-soribaro',
+                    status: '정상',
+                    statusClass: 'status-active',
+                    companyName: 'LG전자',
+                    userId: 'lg_manager',
+                    managerName: '박영희',
+                    phoneNumber: '02-3777-1114',
+                    email: 'manager@lge.com',
+                    address: '서울특별시 영등포구 여의대로 128',
+                    joinDate: '2025-01-20',
+                    profileImage: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNzUiIHI9Ijc1IiBmaWxsPSIjRkVGM0M3Ii8+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNjAiIHI9IjI1IiBmaWxsPSIjOTI0MDBFIi8+CjxwYXRoIGQ9Ik0zMCAxMjBDMzAgMTA0LjUgNTEuNSA5MCA3NSA5MEM5OC41IDkwIDEyMCAxMDQuNSAxMjAgMTIwVjEzMEgzMFYxMjBaIiBmaWxsPSIjOTI0MDBFIi8+Cjwvc3ZnPg==',
+                    qrCode: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSJ3aGl0ZSIvPgo8IS0tIFFSIENvZGUgUGF0dGVybiAtLT4KPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSIxMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSI1MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjkwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjExMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K',
+                    description: `LG전자 기업 고객으로, 가전제품 관련 VOD 및 매뉴얼 번역 서비스를 주로 이용합니다.
+
+담당자: 박영희 과장
+부서: 글로벌마케팅팀
+주요 이용 서비스:
+- 제품 소개 VOD 제작 (월 평균 15건)
+- 매뉴얼 번역 서비스 (월 평균 30건)
+- 기술 문서 번역 (월 평균 10건)
+
+특이사항:
+- 다국어 번역 요청 多 (영어, 중국어, 일본어)
+- 제품 출시 시즌 집중 이용 (3월, 9월)
+- 품질 만족도 높음`
+                },
+                'CUSTOMER006': {
+                    platform: '클립데스크',
+                    platformClass: 'platform-clipdesk',
+                    status: '정상',
+                    statusClass: 'status-active',
+                    companyName: '카카오',
+                    userId: 'kakao_media',
+                    managerName: '김영수',
+                    phoneNumber: '02-6969-0000',
+                    email: 'media@kakao.com',
+                    address: '제주특별자치도 제주시 첨단로 242',
+                    joinDate: '2024-12-10',
+                    profileImage: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNzUiIHI9Ijc1IiBmaWxsPSIjRkVGM0M3Ii8+CjxjaXJjbGUgY3g9Ijc1IiBjeT0iNjAiIHI9IjI1IiBmaWxsPSIjOTI0MDBFIi8+CjxwYXRoIGQ9Ik0zMCAxMjBDMzAgMTA0LjUgNTEuNSA5MCA3NSA5MEM5OC41IDkwIDEyMCAxMDQuNSAxMjAgMTIwVjEzMEgzMFYxMjBaIiBmaWxsPSIjOTI0MDBFIi8+Cjwvc3ZnPg==',
+                    qrCode: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjE1MCIgdmlld0JveD0iMCAwIDE1MCAxNTAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTUwIiBmaWxsPSJ3aGl0ZSIvPgo8IS0tIFFSIENvZGUgUGF0dGVybiAtLT4KPHJlY3QgeD0iMTAiIHk9IjEwIiB3aWR0aD0iMzAiIGhlaWdodD0iMzAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSIxMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI3MCIgeT0iMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSIxMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjUwIiB5PSI1MCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI5MCIgeT0iNTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTEwIiB5PSI1MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMzAiIHk9IjUwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iNzAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjkwIiB5PSI3MCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjcwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjEzMCIgeT0iNzAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSI1MCIgeT0iMTEwIiB3aWR0aD0iMTAiIGhlaWdodD0iMTAiIGZpbGw9ImJsYWNrIi8+CjxyZWN0IHg9IjcwIiB5PSIxMTAiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgZmlsbD0iYmxhY2siLz4KPHJlY3QgeD0iOTAiIHk9IjExMCIgd2lkdGg9IjEwIiBoZWlnaHQ9IjEwIiBmaWxsPSJibGFjayIvPgo8cmVjdCB4PSIxMTAiIHk9IjExMCIgd2lkdGg9IjMwIiBoZWlnaHQ9IjMwIiBmaWxsPSJibGFjayIvPgo8L3N2Zz4K',
+                    description: `카카오 기업 고객으로, 클립데스크 영상 제작 서비스를 주로 이용합니다.
+
+담당자: 김영수 팀장
+부서: 콘텐츠기획팀
+주요 이용 서비스:
+- 마케팅 영상 제작 (월 평균 25건)
+- 브랜드 영상 제작 (월 평균 10건)
+- 교육용 영상 제작 (분기별 15건)
+
+특이사항:
+- 크리에이티브 요구사항 高
+- 빠른 피드백 및 수정 요청
+- 브랜드 가이드라인 엄격 적용`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['CUSTOMER001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            // 원본 데이터 저장
+            originalData = { ...data };
+            
+            // 표시 요소 업데이트
+            document.getElementById('platformBadge').textContent = data.platform;
+            document.getElementById('platformBadge').className = `platform-badge ${data.platformClass}`;
+            document.getElementById('statusBadge').textContent = data.status;
+            document.getElementById('statusBadge').className = `status-badge ${data.statusClass}`;
+            document.getElementById('companyName').textContent = data.companyName;
+            document.getElementById('userId').textContent = data.userId;
+            document.getElementById('managerName').textContent = data.managerName;
+            document.getElementById('phoneNumber').textContent = data.phoneNumber;
+            document.getElementById('email').textContent = data.email;
+            document.getElementById('address').textContent = data.address;
+            document.getElementById('joinDate').textContent = data.joinDate;
+            document.getElementById('customerDescription').textContent = data.description;
+            
+            // 입력 요소 업데이트
+            document.getElementById('managerNameInput').value = data.managerName;
+            document.getElementById('userIdInput').value = data.userId;
+            document.getElementById('phoneNumberInput').value = data.phoneNumber;
+            document.getElementById('companyNameSelect').value = data.companyName;
+            document.getElementById('platformSelect').value = data.platform;
+            document.getElementById('statusSelect').value = data.status;
+            document.getElementById('emailInput').value = data.email;
+            document.getElementById('addressInput').value = data.address;
+            document.getElementById('descriptionTextarea').value = data.description;
+            
+            // 프로필사진 업데이트
+            if (data.profileImage) {
+                document.getElementById('profileImage').src = data.profileImage;
+                document.getElementById('profileImage').alt = `${data.managerName} 프로필사진`;
+            } else {
+                document.getElementById('profileDisplay').innerHTML = '<div class="no-profile">등록된 프로필사진이 없습니다.</div>';
+            }
+            
+            // QR 코드 업데이트
+            if (data.qrCode) {
+                document.getElementById('qrImage').src = data.qrCode;
+                document.getElementById('qrImage').alt = `${data.companyName} QR Code`;
+            } else {
+                document.getElementById('qrDisplay').innerHTML = '<div class="no-profile">QR 코드가 없습니다.</div>';
+            }
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'enterprise-customer-management.html';
+        }
+        
+        // 편집 모드 토글
+        function toggleEditMode() {
+            isEditMode = true;
+            document.getElementById('basicInfoGrid').classList.add('edit-mode');
+            document.getElementById('contactInfoGrid').classList.add('edit-mode');
+            document.getElementById('profileSection').classList.add('edit-mode');
+            document.getElementById('descriptionSection').classList.add('edit-mode');
+            document.getElementById('viewModeButtons').style.display = 'none';
+            document.getElementById('editModeButtons').style.display = 'flex';
+        }
+        
+        // 편집 취소
+        function cancelEdit() {
+            isEditMode = false;
+            document.getElementById('basicInfoGrid').classList.remove('edit-mode');
+            document.getElementById('contactInfoGrid').classList.remove('edit-mode');
+            document.getElementById('profileSection').classList.remove('edit-mode');
+            document.getElementById('descriptionSection').classList.remove('edit-mode');
+            document.getElementById('viewModeButtons').style.display = 'flex';
+            document.getElementById('editModeButtons').style.display = 'none';
+            
+            // 원본 데이터로 복원
+            if (originalData) {
+                updateUI(originalData);
+            }
+        }
+        
+        // 저장 기능
+        function saveCustomer() {
+            // 입력 값 검증
+            const managerName = document.getElementById('managerNameInput').value.trim();
+            const userId = document.getElementById('userIdInput').value.trim();
+            const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
+            const companyName = document.getElementById('companyNameSelect').value;
+            const platform = document.getElementById('platformSelect').value;
+            const status = document.getElementById('statusSelect').value;
+            const email = document.getElementById('emailInput').value.trim();
+            const address = document.getElementById('addressInput').value.trim();
+            const description = document.getElementById('descriptionTextarea').value.trim();
+            
+            if (!managerName) {
+                alert('담당자 이름을 입력해주세요.');
+                document.getElementById('managerNameInput').focus();
+                return;
+            }
+            
+            if (!userId) {
+                alert('아이디를 입력해주세요.');
+                document.getElementById('userIdInput').focus();
+                return;
+            }
+            
+            if (!phoneNumber) {
+                alert('연락처를 입력해주세요.');
+                document.getElementById('phoneNumberInput').focus();
+                return;
+            }
+            
+            if (!companyName) {
+                alert('업체명을 선택해주세요.');
+                document.getElementById('companyNameSelect').focus();
+                return;
+            }
+            
+            if (!email) {
+                alert('이메일을 입력해주세요.');
+                document.getElementById('emailInput').focus();
+                return;
+            }
+            
+            // 이메일 형식 검증
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('올바른 이메일 형식을 입력해주세요.');
+                document.getElementById('emailInput').focus();
+                return;
+            }
+            
+            if (!address) {
+                alert('주소를 입력해주세요.');
+                document.getElementById('addressInput').focus();
+                return;
+            }
+            
+            // 저장 확인
+            if (confirm('변경사항을 저장하시겠습니까?')) {
+                // 플랫폼 클래스 매핑
+                const platformClass = platform === '소리바로' ? 'platform-soribaro' : 'platform-clipdesk';
+                
+                // 상태 클래스 매핑
+                const statusClassMap = {
+                    '대기': 'status-pending',
+                    '정상': 'status-active',
+                    '휴면': 'status-dormant',
+                    '탈퇴': 'status-inactive'
+                };
+                const statusClass = statusClassMap[status];
+                
+                // 업데이트된 데이터로 UI 갱신
+                const updatedData = {
+                    ...originalData,
+                    managerName: managerName,
+                    userId: userId,
+                    phoneNumber: phoneNumber,
+                    companyName: companyName,
+                    platform: platform,
+                    platformClass: platformClass,
+                    status: status,
+                    statusClass: statusClass,
+                    email: email,
+                    address: address,
+                    description: description
+                };
+                
+                updateUI(updatedData);
+                
+                // 편집 모드 종료
+                isEditMode = false;
+                document.getElementById('basicInfoGrid').classList.remove('edit-mode');
+                document.getElementById('contactInfoGrid').classList.remove('edit-mode');
+                document.getElementById('profileSection').classList.remove('edit-mode');
+                document.getElementById('descriptionSection').classList.remove('edit-mode');
+                document.getElementById('viewModeButtons').style.display = 'flex';
+                document.getElementById('editModeButtons').style.display = 'none';
+                
+                // 실제 구현 시 서버 API 호출
+                console.log('저장된 데이터:', updatedData);
+                alert('고객 정보가 성공적으로 저장되었습니다.');
+            }
+        }
+        
+        // 주소 검색 기능
+        function searchAddress() {
+            // 실제 구현 시 다음 주소 API 등을 사용
+            const sampleAddresses = [
+                '서울특별시 강남구 테헤란로 152',
+                '서울특별시 서초구 서초대로74길 11',
+                '경기도 성남시 분당구 판교역로 166',
+                '서울특별시 마포구 월드컵북로 396'
+            ];
+            
+            const selectedAddress = sampleAddresses[Math.floor(Math.random() * sampleAddresses.length)];
+            document.getElementById('addressInput').value = selectedAddress;
+            
+            alert(`주소가 선택되었습니다:\n${selectedAddress}`);
+        }
+        
+        // 프로필사진 업로드 처리
+        function handleProfileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // 파일 크기 검사 (5MB = 5 * 1024 * 1024 bytes)
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert('파일 크기가 5MB를 초과합니다.');
+                return;
+            }
+            
+            // 이미지 파일 검사
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 업로드할 수 있습니다.');
+                return;
+            }
+            
+            // 파일을 읽어서 미리보기 표시
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImage').src = e.target.result;
+                console.log('프로필사진이 업로드되었습니다:', file.name);
+            };
+            reader.readAsDataURL(file);
+        }
+
+    </script>
+</body>
+</html>

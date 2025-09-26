@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>번역 작업물 비교 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            margin: 0;
+            padding: 0;
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 2px solid #e5e7eb;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            z-index: 100;
+            position: relative;
+        }
+        
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        
+        .header-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .download-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .download-btn:hover {
+            background: #059669;
+        }
+        
+        .close-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .close-btn:hover {
+            background: #dc2626;
+        }
+        
+        .comparison-container {
+            display: flex;
+            height: calc(100vh - 70px);
+            position: relative;
+        }
+        
+        .comparison-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+            border-right: 2px solid #e5e7eb;
+        }
+        
+        .comparison-panel:last-child {
+            border-right: none;
+        }
+        
+        .panel-header {
+            background: #f8f9fa;
+            padding: 15px 20px;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .panel-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0;
+            position: relative;
+        }
+        
+        .text-item {
+            border-bottom: 1px solid #f3f4f6;
+            padding: 20px;
+            transition: background-color 0.2s;
+        }
+        
+        .text-item:hover {
+            background: #f9fafb;
+        }
+        
+        .text-item.changed {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .item-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+        }
+        
+        .line-no {
+            background: #3b82f6;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            min-width: 50px;
+            text-align: center;
+        }
+        
+        .timecode {
+            background: #e0e7ff;
+            color: #3730a3;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .text-content {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 14px;
+            line-height: 1.6;
+            min-height: 60px;
+        }
+        
+        .text-content.changed {
+            background: #fff7ed;
+            border-color: #f59e0b;
+        }
+        
+        .diff-highlight {
+            background: #fde047;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-weight: 600;
+        }
+        
+        .comment-section {
+            margin-top: 12px;
+            padding: 12px;
+            background: #fef3c7;
+            border: 1px solid #f59e0b;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #92400e;
+        }
+        
+        .comment-label {
+            font-weight: 600;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        
+        /* 코멘트 카테고리 태그 */
+        .comment-category-tag {
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            display: inline-block;
+        }
+        
+        .comment-category-tag.translation {
+            background: #3b82f6;
+        }
+        
+        .comment-category-tag.guideline {
+            background: #f59e0b;
+        }
+        
+        .comment-category-tag.sync {
+            background: #8b5cf6;
+        }
+        
+        .comment-category-tag.other {
+            background: #6b7280;
+        }
+        
+        /* 코멘트 서브카테고리 태그 */
+        .comment-subcategory-tag {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 10px;
+            font-weight: 500;
+            background: #e5e7eb;
+            color: #374151;
+            display: inline-block;
+        }
+        
+        /* 답글 스타일 */
+        .comment-reply {
+            margin-top: 12px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-left: 3px solid #3b82f6;
+            border-radius: 6px;
+        }
+        
+        .reply-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+            font-size: 12px;
+        }
+        
+        .reply-author {
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        
+        .reply-time {
+            color: #6b7280;
+            font-size: 11px;
+        }
+        
+        .reply-content {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.4;
+        }
+        
+        /* Overview Ruler */
+        .overview-ruler {
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 12px;
+            height: 100%;
+            background: #f3f4f6;
+            border-left: 1px solid #e5e7eb;
+        }
+        
+        .ruler-marker {
+            position: absolute;
+            width: 100%;
+            height: 3px;
+            background: #f59e0b;
+            cursor: pointer;
+        }
+        
+        .ruler-marker:hover {
+            background: #d97706;
+        }
+        
+        /* 스크롤바 스타일링 */
+        .panel-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .panel-content::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        
+        .panel-content::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 class="header-title">
+            <span>🌐</span>
+            번역 작업물 비교 - 주문번호: 20250123098765 | 파일: 의학과_임상실습_교육영상.mp4
+        </h1>
+        <div class="header-buttons">
+            <button class="download-btn" onclick="downloadComparison()">
+                <span>📁</span>
+                파일 다운로드
+            </button>
+            <button class="close-btn" onclick="window.close()">창 닫기</button>
+        </div>
+    </div>
+    
+    <div class="comparison-container">
+        <!-- 출발어 영역 -->
+        <div class="comparison-panel">
+            <div class="panel-header">
+                <span>📖</span>
+                출발어
+            </div>
+            <div class="panel-content" id="source-panel">
+                <!-- 30개 출발어 데이터가 JavaScript로 생성됩니다 -->
+            </div>
+        </div>
+        
+        <!-- 작업본 영역 -->
+        <div class="comparison-panel">
+            <div class="panel-header">
+                <span>📝</span>
+                작업본
+            </div>
+            <div class="panel-content" id="original-panel">
+                <!-- 30개 작업본 데이터가 JavaScript로 생성됩니다 -->
+            </div>
+        </div>
+        
+        <!-- 검수본 영역 -->
+        <div class="comparison-panel">
+            <div class="panel-header">
+                <span>✅</span>
+                검수본
+            </div>
+            <div class="panel-content" id="reviewed-panel">
+                <!-- 30개 검수본 데이터가 JavaScript로 생성됩니다 -->
+            </div>
+            
+            <!-- Overview Ruler -->
+            <div class="overview-ruler" id="overview-ruler">
+                <!-- 마커들이 JavaScript로 생성됩니다 -->
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 30개 번역 데이터 생성
+        const sourceData = [
+            { lineNo: 1, timecode: "00:00:10 - 00:00:15", text: "안녕하세요. 오늘은 의학과 임상실습에 대해 설명하겠습니다." },
+            { lineNo: 2, timecode: "00:00:16 - 00:00:25", text: "임상실습은 의학 교육의 핵심 과정입니다." },
+            { lineNo: 3, timecode: "00:00:26 - 00:00:35", text: "학생들은 실제 환자를 대상으로 진료 경험을 쌓게 됩니다." },
+            { lineNo: 4, timecode: "00:00:36 - 00:00:45", text: "이론 지식을 실제 임상 상황에 적용하는 능력을 기릅니다." },
+            { lineNo: 5, timecode: "00:00:46 - 00:00:55", text: "의료진과의 협력을 통해 팀워크를 배우게 됩니다." },
+            { lineNo: 6, timecode: "00:00:56 - 00:01:05", text: "환자 안전과 의료 윤리에 대한 이해도 중요합니다." },
+            { lineNo: 7, timecode: "00:01:06 - 00:01:15", text: "내과, 외과, 소아과 등 다양한 과에서 실습을 진행합니다." },
+            { lineNo: 8, timecode: "00:01:16 - 00:01:25", text: "각 과마다 특성에 맞는 실습 내용이 구성되어 있습니다." },
+            { lineNo: 9, timecode: "00:01:26 - 00:01:35", text: "병력 청취와 신체 검진 기법을 익히게 됩니다." },
+            { lineNo: 10, timecode: "00:01:36 - 00:01:45", text: "진단 과정에서 필요한 검사들을 이해하고 해석합니다." },
+            { lineNo: 11, timecode: "00:01:46 - 00:01:55", text: "치료 계획 수립에 참여하여 임상적 사고를 기릅니다." },
+            { lineNo: 12, timecode: "00:01:56 - 00:02:05", text: "수술실에서는 무균술과 기본적인 수술 기법을 학습합니다." },
+            { lineNo: 13, timecode: "00:02:06 - 00:02:15", text: "응급실 실습을 통해 응급 상황 대처 능력을 기릅니다." },
+            { lineNo: 14, timecode: "00:02:16 - 00:02:25", text: "중환자실에서는 중증 환자 관리를 경험합니다." },
+            { lineNo: 15, timecode: "00:02:26 - 00:02:35", text: "외래 진료에서는 환자와의 소통 기법을 익힙니다." },
+            { lineNo: 16, timecode: "00:02:36 - 00:02:45", text: "의료 기록 작성법과 차트 관리 방법을 배웁니다." },
+            { lineNo: 17, timecode: "00:02:46 - 00:02:55", text: "감염 관리와 예방 조치의 중요성을 이해합니다." },
+            { lineNo: 18, timecode: "00:02:56 - 00:03:05", text: "의료진 간의 효과적인 의사소통 방법을 학습합니다." },
+            { lineNo: 19, timecode: "00:03:06 - 00:03:15", text: "환자의 권리와 프라이버시 보호에 대해 배웁니다." },
+            { lineNo: 20, timecode: "00:03:16 - 00:03:25", text: "의료 사고 예방과 안전 관리 체계를 이해합니다." },
+            { lineNo: 21, timecode: "00:03:26 - 00:03:35", text: "임상 연구의 기본 원칙과 윤리 지침을 학습합니다." },
+            { lineNo: 22, timecode: "00:03:36 - 00:03:45", text: "다학제 팀 진료의 중요성과 역할을 이해합니다." },
+            { lineNo: 23, timecode: "00:03:46 - 00:03:55", text: "의료 기술의 발전과 디지털 헬스케어를 경험합니다." },
+            { lineNo: 24, timecode: "00:03:56 - 00:04:05", text: "환자 교육과 상담 기법을 실습합니다." },
+            { lineNo: 25, timecode: "00:04:06 - 00:04:15", text: "의료 질 향상과 환자 만족도 개선 방안을 학습합니다." },
+            { lineNo: 26, timecode: "00:04:16 - 00:04:25", text: "국제 의료 표준과 가이드라인을 이해합니다." },
+            { lineNo: 27, timecode: "00:04:26 - 00:04:35", text: "원격 진료와 텔레메디신의 활용법을 배웁니다." },
+            { lineNo: 28, timecode: "00:04:36 - 00:04:45", text: "의료 데이터 분석과 인공지능 활용 사례를 학습합니다." },
+            { lineNo: 29, timecode: "00:04:46 - 00:04:55", text: "지속적인 전문성 개발의 중요성을 인식합니다." },
+            { lineNo: 30, timecode: "00:04:56 - 00:05:05", text: "미래 의료진으로서의 책임감과 사명감을 기릅니다." }
+        ];
+
+        const originalData = [
+            { lineNo: 1, timecode: "00:00:10 - 00:00:15", text: "Hello. Today, I will explain about clinical practice in the Department of Medicine." },
+            { lineNo: 2, timecode: "00:00:16 - 00:00:25", text: "Clinical practice is a core process of medical education." },
+            { lineNo: 3, timecode: "00:00:26 - 00:00:35", text: "Students will gain clinical experience with real patients." },
+            { lineNo: 4, timecode: "00:00:36 - 00:00:45", text: "They develop the ability to apply theoretical knowledge to actual clinical situations." },
+            { lineNo: 5, timecode: "00:00:46 - 00:00:55", text: "They learn teamwork through cooperation with medical staff." },
+            { lineNo: 6, timecode: "00:00:56 - 00:01:05", text: "Understanding patient safety and medical ethics is also important." },
+            { lineNo: 7, timecode: "00:01:06 - 00:01:15", text: "Practice is conducted in various departments such as internal medicine, surgery, and pediatrics." },
+            { lineNo: 8, timecode: "00:01:16 - 00:01:25", text: "Each department has practice content tailored to its characteristics." },
+            { lineNo: 9, timecode: "00:01:26 - 00:01:35", text: "Students learn history taking and physical examination techniques." },
+            { lineNo: 10, timecode: "00:01:36 - 00:01:45", text: "They understand and interpret the tests needed in the diagnostic process." },
+            { lineNo: 11, timecode: "00:01:46 - 00:01:55", text: "They participate in treatment planning to develop clinical thinking." },
+            { lineNo: 12, timecode: "00:01:56 - 00:02:05", text: "In the operating room, they learn aseptic technique and basic surgical techniques." },
+            { lineNo: 13, timecode: "00:02:06 - 00:02:15", text: "Emergency room practice develops emergency response capabilities." },
+            { lineNo: 14, timecode: "00:02:16 - 00:02:25", text: "In the intensive care unit, they experience critical patient management." },
+            { lineNo: 15, timecode: "00:02:26 - 00:02:35", text: "In outpatient care, they learn communication techniques with patients." },
+            { lineNo: 16, timecode: "00:02:36 - 00:02:45", text: "They learn medical record writing and chart management methods." },
+            { lineNo: 17, timecode: "00:02:46 - 00:02:55", text: "They understand the importance of infection control and preventive measures." },
+            { lineNo: 18, timecode: "00:02:56 - 00:03:05", text: "They learn effective communication methods between medical staff." },
+            { lineNo: 19, timecode: "00:03:06 - 00:03:15", text: "They learn about patient rights and privacy protection." },
+            { lineNo: 20, timecode: "00:03:16 - 00:03:25", text: "They understand medical accident prevention and safety management systems." },
+            { lineNo: 21, timecode: "00:03:26 - 00:03:35", text: "They learn the basic principles and ethical guidelines of clinical research." },
+            { lineNo: 22, timecode: "00:03:36 - 00:03:45", text: "They understand the importance and role of multidisciplinary team care." },
+            { lineNo: 23, timecode: "00:03:46 - 00:03:55", text: "They experience the development of medical technology and digital healthcare." },
+            { lineNo: 24, timecode: "00:03:56 - 00:04:05", text: "They practice patient education and counseling techniques." },
+            { lineNo: 25, timecode: "00:04:06 - 00:04:15", text: "They learn about medical quality improvement and patient satisfaction improvement plans." },
+            { lineNo: 26, timecode: "00:04:16 - 00:04:25", text: "They understand international medical standards and guidelines." },
+            { lineNo: 27, timecode: "00:04:26 - 00:04:35", text: "They learn how to use telemedicine and telemedicine." },
+            { lineNo: 28, timecode: "00:04:36 - 00:04:45", text: "They learn medical data analysis and artificial intelligence use cases." },
+            { lineNo: 29, timecode: "00:04:46 - 00:04:55", text: "They recognize the importance of continuous professional development." },
+            { lineNo: 30, timecode: "00:04:56 - 00:05:05", text: "They develop a sense of responsibility and mission as future medical professionals." }
+        ];
+
+        const reviewedData = [
+            { lineNo: 1, changed: false, text: "Hello. Today, I will explain about clinical practice in the Department of Medicine.", comment: null },
+            { 
+                lineNo: 2, 
+                changed: true, 
+                text: "Clinical practice is a <span class='diff-highlight'>core component</span> of medical education.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "직역",
+                    content: '"core process" → "core component" (더 자연스러운 표현)',
+                    reply: null
+                }
+            },
+            { lineNo: 3, changed: false, text: "Students will gain clinical experience with real patients.", comment: null },
+            { 
+                lineNo: 4, 
+                changed: true, 
+                text: "They develop the ability to apply theoretical knowledge to <span class='diff-highlight'>real</span> clinical situations.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어 통일성 부족",
+                    content: '"actual" → "real" (용어 통일)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 5, 
+                changed: true, 
+                text: "They learn teamwork through <span class='diff-highlight'>collaboration</span> with medical staff.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "직역",
+                    content: '"cooperation" → "collaboration" (더 적절한 표현)',
+                    reply: {
+                        author: "작업자",
+                        time: "2025-01-28 09:30",
+                        content: "collaboration이 더 정확한 표현이네요. 수정하겠습니다."
+                    }
+                }
+            },
+            { lineNo: 6, changed: false, text: "Understanding patient safety and medical ethics is also important.", comment: null },
+            { 
+                lineNo: 7, 
+                changed: true, 
+                text: "Practice is conducted in various departments such as internal medicine, surgery, <span class='diff-highlight'>and</span> pediatrics.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "어색한 문장 구성",
+                    content: '"and" 추가로 자연스러운 나열 구조 완성',
+                    reply: null
+                }
+            },
+            { lineNo: 8, changed: false, text: "Each department has practice content tailored to its characteristics.", comment: null },
+            { 
+                lineNo: 9, 
+                changed: true, 
+                text: "Students learn <span class='diff-highlight'>medical history taking</span> and physical examination techniques.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "번역 누락",
+                    content: '"history taking" → "medical history taking" (의료 전문용어 명확화)',
+                    reply: null
+                }
+            },
+            { lineNo: 10, changed: false, text: "They understand and interpret the tests needed in the diagnostic process.", comment: null },
+            { 
+                lineNo: 11, 
+                changed: true, 
+                text: "They participate in treatment planning to develop <span class='diff-highlight'>clinical reasoning</span>.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "직역",
+                    content: '"clinical thinking" → "clinical reasoning" (의학 전문용어)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 12, 
+                changed: true, 
+                text: "In the operating room, they learn <span class='diff-highlight'>sterile technique</span> and basic surgical techniques.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"aseptic technique" → "sterile technique" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { 
+                lineNo: 13, 
+                changed: true, 
+                text: "Emergency <span class='diff-highlight'>department</span> practice develops emergency response capabilities.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어 통일성 부족",
+                    content: '"emergency room" → "emergency department" (의료 표준 용어)',
+                    reply: null
+                }
+            },
+            { lineNo: 14, changed: false, text: "In the intensive care unit, they experience critical patient management.", comment: null },
+            { 
+                lineNo: 15, 
+                changed: true, 
+                text: "In <span class='diff-highlight'>ambulatory</span> care, they learn communication techniques with patients.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"outpatient" → "ambulatory" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { lineNo: 16, changed: false, text: "They learn medical record writing and chart management methods.", comment: null },
+            { 
+                lineNo: 17, 
+                changed: true, 
+                text: "They understand the importance of <span class='diff-highlight'>infection prevention</span> and preventive measures.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "어색한 문장 구성",
+                    content: '"infection control" → "infection prevention" (중복 표현 개선)',
+                    reply: null
+                }
+            },
+            { lineNo: 18, changed: false, text: "They learn effective communication methods between medical staff.", comment: null },
+            { 
+                lineNo: 19, 
+                changed: true, 
+                text: "They learn about <span class='diff-highlight'>patient rights and confidentiality</span>.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"privacy protection" → "confidentiality" (의료 전문용어)',
+                    reply: {
+                        author: "검수자",
+                        time: "2025-01-28 11:45",
+                        content: "의료 분야에서는 confidentiality가 더 정확한 표현입니다."
+                    }
+                }
+            },
+            { lineNo: 20, changed: false, text: "They understand medical accident prevention and safety management systems.", comment: null },
+            { 
+                lineNo: 21, 
+                changed: true, 
+                text: "They learn the basic principles and <span class='diff-highlight'>ethical guidelines</span> of clinical research.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어 통일성 부족",
+                    content: '"ethics guidelines" → "ethical guidelines" (형용사 형태로 통일)',
+                    reply: null
+                }
+            },
+            { lineNo: 22, changed: false, text: "They understand the importance and role of multidisciplinary team care.", comment: null },
+            { 
+                lineNo: 23, 
+                changed: true, 
+                text: "They experience <span class='diff-highlight'>advances in</span> medical technology and digital healthcare.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "어색한 문장 구성",
+                    content: '"the development of" → "advances in" (더 자연스러운 표현)',
+                    reply: null
+                }
+            },
+            { lineNo: 24, changed: false, text: "They practice patient education and counseling techniques.", comment: null },
+            { 
+                lineNo: 25, 
+                changed: true, 
+                text: "They learn about <span class='diff-highlight'>healthcare quality improvement</span> and patient satisfaction improvement plans.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"medical quality" → "healthcare quality" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { lineNo: 26, changed: false, text: "They understand international medical standards and guidelines.", comment: null },
+            { 
+                lineNo: 27, 
+                changed: true, 
+                text: "They learn how to use <span class='diff-highlight'>telemedicine and telehealth</span>.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "번역 중복",
+                    content: '중복 표현 수정: "telemedicine and telemedicine" → "telemedicine and telehealth"',
+                    reply: {
+                        author: "검수자",
+                        time: "2025-01-28 13:20",
+                        content: "중복 표현이 수정되어 더 정확해졌습니다."
+                    }
+                }
+            },
+            { 
+                lineNo: 28, 
+                changed: true, 
+                text: "They learn medical data analysis and <span class='diff-highlight'>AI</span> use cases.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "용어집 미반영",
+                    content: '"artificial intelligence" → "AI" (용어집 반영)',
+                    reply: null
+                }
+            },
+            { lineNo: 29, changed: false, text: "They recognize the importance of continuous professional development.", comment: null },
+            { 
+                lineNo: 30, 
+                changed: true, 
+                text: "They develop a sense of responsibility and mission <span class='diff-highlight'>as future healthcare professionals</span>.", 
+                comment: {
+                    category: "translation",
+                    subcategory: "어색한 문장 구성",
+                    content: '"as future medical professionals" → "as future healthcare professionals" (포괄적 표현)',
+                    reply: {
+                        author: "작업자",
+                        time: "2025-01-28 15:10",
+                        content: "healthcare professionals가 더 포괄적이고 적절한 표현이네요."
+                    }
+                }
+            }
+        ];
+
+        // 데이터 렌더링 함수
+        function renderData() {
+            const sourcePanel = document.getElementById('source-panel');
+            const originalPanel = document.getElementById('original-panel');
+            const reviewedPanel = document.getElementById('reviewed-panel');
+            const overviewRuler = document.getElementById('overview-ruler');
+
+            // 출발어 데이터 렌더링
+            sourcePanel.innerHTML = sourceData.map(item => `
+                <div class="text-item">
+                    <div class="item-header">
+                        <span class="line-no">${item.lineNo}</span>
+                        <span class="timecode">${item.timecode}</span>
+                    </div>
+                    <div class="text-content">
+                        ${item.text}
+                    </div>
+                </div>
+            `).join('');
+
+            // 작업본 데이터 렌더링
+            originalPanel.innerHTML = originalData.map(item => `
+                <div class="text-item">
+                    <div class="item-header">
+                        <span class="line-no">${item.lineNo}</span>
+                        <span class="timecode">${item.timecode}</span>
+                    </div>
+                    <div class="text-content">
+                        ${item.text}
+                    </div>
+                </div>
+            `).join('');
+
+            // 검수본 데이터 렌더링
+            reviewedPanel.innerHTML = reviewedData.map(item => `
+                <div class="text-item${item.changed ? ' changed' : ''}">
+                    <div class="item-header">
+                        <span class="line-no">${item.lineNo}</span>
+                        <span class="timecode">${originalData[item.lineNo - 1].timecode}</span>
+                    </div>
+                    <div class="text-content${item.changed ? ' changed' : ''}">
+                        ${item.text}
+                    </div>
+                    ${item.comment ? `
+                        <div class="comment-section">
+                            <div class="comment-label">
+                                <span>💬</span>
+                                코멘트
+                                <span class="comment-category-tag ${item.comment.category}">${getCategoryName(item.comment.category)}</span>
+                                <span class="comment-subcategory-tag">${item.comment.subcategory}</span>
+                            </div>
+                            ${item.comment.content}
+                            ${item.comment.reply ? `
+                                <div class="comment-reply">
+                                    <div class="reply-header">
+                                        <span>↳</span>
+                                        <span class="reply-author">${item.comment.reply.author}</span>
+                                        <span class="reply-time">${item.comment.reply.time}</span>
+                                    </div>
+                                    <div class="reply-content">
+                                        ${item.comment.reply.content}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('');
+
+            // Overview Ruler 마커 생성
+            const changedItems = reviewedData.filter(item => item.changed);
+            overviewRuler.innerHTML = changedItems.map((item, index) => {
+                const position = (item.lineNo / 30) * 100;
+                return `<div class="ruler-marker" style="top: ${position}%;" title="라인 ${item.lineNo}: ${getCategoryName(item.comment.category)} > ${item.comment.subcategory}" onclick="scrollToLine(${item.lineNo})"></div>`;
+            }).join('');
+        }
+
+        // 카테고리 이름 변환
+        function getCategoryName(category) {
+            const names = {
+                'translation': '번역',
+                'guideline': '가이드라인',
+                'sync': '싱크',
+                'other': '기타'
+            };
+            return names[category] || category;
+        }
+
+        // 파일 다운로드 함수
+        function downloadComparison() {
+            alert('출발어, 작업본, 검수본을 다운로드합니다.');
+        }
+
+        // Overview Ruler 클릭 시 해당 라인으로 스크롤
+        function scrollToLine(lineNo) {
+            const reviewedPanel = document.getElementById('reviewed-panel');
+            const targetItem = reviewedPanel.querySelector(`.text-item:nth-child(${lineNo})`);
+            
+            if (targetItem) {
+                targetItem.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+                
+                // 임시 하이라이트 효과
+                targetItem.style.backgroundColor = '#fbbf24';
+                setTimeout(() => {
+                    targetItem.style.backgroundColor = '';
+                }, 1000);
+            }
+        }
+
+        // 3개 패널 동기화 스크롤
+        let isScrolling = false;
+        
+        function syncScroll(sourceElement, targetElements) {
+            sourceElement.addEventListener('scroll', function() {
+                if (!isScrolling) {
+                    isScrolling = true;
+                    const scrollPercent = this.scrollTop / (this.scrollHeight - this.clientHeight);
+                    
+                    targetElements.forEach(target => {
+                        target.scrollTop = scrollPercent * (target.scrollHeight - target.clientHeight);
+                    });
+                    
+                    setTimeout(() => isScrolling = false, 100);
+                }
+            });
+        }
+
+        // URL 파라미터에서 정보 가져오기
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const orderNumber = urlParams.get('orderNumber');
+            const fileName = urlParams.get('fileName');
+            
+            if (orderNumber || fileName) {
+                let titleText = '번역 작업물 비교';
+                
+                if (orderNumber) {
+                    titleText += ` - 주문번호: ${decodeURIComponent(orderNumber)}`;
+                }
+                
+                if (fileName) {
+                    titleText += ` | 파일: ${decodeURIComponent(fileName)}`;
+                }
+                
+                document.querySelector('.header-title').innerHTML = `
+                    <span>🌐</span>
+                    ${titleText}
+                `;
+            }
+            
+            // 창 최대화 시도
+            try {
+                if (window.outerHeight < screen.availHeight || window.outerWidth < screen.availWidth) {
+                    window.moveTo(0, 0);
+                    window.resizeTo(screen.availWidth, screen.availHeight);
+                }
+            } catch (e) {
+                console.log('창 크기 조정 권한이 없습니다:', e);
+            }
+
+            // 데이터 렌더링
+            renderData();
+
+            // 3개 패널 스크롤 동기화 설정
+            const sourcePanel = document.getElementById('source-panel');
+            const originalPanel = document.getElementById('original-panel');
+            const reviewedPanel = document.getElementById('reviewed-panel');
+            
+            syncScroll(sourcePanel, [originalPanel, reviewedPanel]);
+            syncScroll(originalPanel, [sourcePanel, reviewedPanel]);
+            syncScroll(reviewedPanel, [sourcePanel, originalPanel]);
+        });
+    </script>
+</body>
+</html>

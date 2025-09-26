@@ -1,0 +1,1921 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클립데스크 의뢰 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 600px;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 작업현황 섹션 */
+        .work-status-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            height: 1000px;
+            overflow-y: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .work-details {
+            padding: 24px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 24px;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .detail-description {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+        
+        .detail-description .detail-label {
+            margin-bottom: 8px;
+        }
+        
+        .description-content {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* 프로젝트 목록 */
+        .project-list {
+            margin-top: 30px;
+            margin-bottom: 20px;
+            height: 252px; /* 고정 높이 */
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-header {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 8px;
+            flex-shrink: 0; /* 헤더 크기 고정 */
+        }
+        
+        .project-content {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+            flex: 1; /* 남은 공간 모두 사용 */
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-table-header {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px; /* 작업번호, 서브타이틀, 작업단가 */
+            padding: 12px 16px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 500;
+            font-size: 13px;
+            color: #6b7280;
+            flex-shrink: 0; /* 헤더 크기 고정 */
+            text-align: center; /* 중앙 정렬 */
+        }
+        
+        .project-items {
+            flex: 1;
+            overflow-y: auto; /* 스크롤 가능 */
+        }
+        
+        .project-item {
+            display: grid;
+            grid-template-columns: 80px 1fr 100px; /* 헤더와 동일한 그리드 */
+            padding: 12px 16px;
+            border-bottom: 1px solid #f3f4f6;
+            align-items: center;
+            transition: background-color 0.2s;
+            text-align: center; /* 중앙 정렬 */
+            cursor: pointer; /* 클릭 가능한 커서 */
+        }
+        
+        .project-item:hover {
+            background-color: #f9fafb;
+        }
+        
+        .project-item.selected {
+            background-color: #e0e7ff;
+            border-left: 4px solid #6366f1;
+        }
+        
+        .project-item:last-child {
+            border-bottom: none;
+        }
+        
+        .project-number {
+            font-weight: 500;
+            color: #6b7280;
+            text-align: center;
+        }
+        
+        .project-title {
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        .project-price {
+            text-align: center;
+            color: #6b7280;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        /* 빈 프로젝트 목록 */
+        .project-empty {
+            padding: 40px 20px;
+            text-align: center;
+            background: #f9fafb;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        /* 빈 상태일 때 스크롤 방지 */
+        .project-items.empty-state {
+            overflow-y: hidden;
+        }
+        
+        .empty-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+        
+        .empty-message {
+            font-size: 16px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+        
+        .empty-guide {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        /* 상담자 작성 정보 섹션 */
+        .consultant-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            height: 1000px;
+            overflow-y: hidden;
+        }
+        
+        .consultant-form {
+            padding: 24px;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            width: 140px;
+            flex-shrink: 0;
+        }
+        
+        .required {
+            color: #ef4444;
+        }
+        
+        .form-input,
+        .form-select {
+            width: 350px;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .form-textarea {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .form-group .form-textarea {
+            align-self: flex-start;
+        }
+        
+        /* 단위 표시가 있는 입력 필드 */
+        .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-with-unit .form-input {
+            width: 350px;
+        }
+        
+        .unit-label {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        /* 파일 리스트 영역 */
+        .file-list-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .file-list-container {
+            margin-top: 15px;
+        }
+
+        .file-list-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .file-list-table th,
+        .file-list-table td {
+            padding: 8px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .file-list-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .file-list-table td {
+            text-align: center;
+        }
+
+        .file-list-actions {
+            margin-top: 15px;
+            text-align: right;
+        }
+
+        .btn-download {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 13px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-download:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-download-all {
+            background-color: #059669;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-download-all:hover {
+            background-color: #047857;
+        }
+
+        .icon-download::before {
+            content: "⬇️";
+        }
+
+        /* 클라우드 링크 공유 영역 */
+        .cloud-links-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+        }
+
+        .cloud-links-container {
+            margin-top: 15px;
+        }
+
+        .cloud-link-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px 0;
+        }
+
+        .link-label {
+            font-weight: 600;
+            color: #374151;
+            min-width: 60px;
+        }
+
+        .link-url {
+            flex: 1;
+            color: #2563eb;
+            background-color: #f8fafc;
+            padding: 10px 15px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .btn-copy {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+            min-width: 150px;
+            justify-content: center;
+        }
+
+        .btn-copy:hover {
+            background-color: #059669;
+        }
+
+        .icon-copy::before {
+            content: "📋";
+        }
+
+        /* 작업 금액 관리 영역 */
+        .payment-management-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .payment-management-container {
+            margin-top: 15px;
+        }
+
+        .payment-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .payment-item:last-child {
+            border-bottom: none;
+        }
+
+        .payment-label {
+            font-weight: 600;
+            color: #374151;
+            min-width: 120px;
+        }
+
+        .payment-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            max-width: 300px;
+        }
+
+        .payment-input:readonly {
+            background-color: #f9fafb;
+            color: #6b7280;
+        }
+
+        .payment-unit {
+            color: #6b7280;
+            font-size: 14px;
+            min-width: 20px;
+        }
+
+        .event-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+        }
+
+        .event-checkbox {
+            margin: 0;
+        }
+
+        .event-label {
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .btn-confirm {
+            background-color: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-confirm:hover {
+            background-color: #059669;
+        }
+
+        /* 하단 버튼 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+            padding: 20px 0;
+        }
+
+        .btn-cancel {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-list {
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-list:hover {
+            background-color: #4b5563;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-left: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+        
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+        
+        /* 프로젝트 분할 생성 버튼 */
+        .new-project-btn {
+            background: #06b6d4;
+            color: white;
+            width: 100%;
+            margin-top: 16px;
+        }
+        
+        .new-project-btn:hover {
+            background: #0891b2;
+        }
+        
+        /* 상담자 정보 버튼 영역 */
+        .consultant-buttons {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .btn-info {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-info:hover {
+            background: #2563eb;
+        }
+        
+        .btn-warning {
+            background: #f59e0b;
+            color: white;
+        }
+        
+        .btn-warning:hover {
+            background: #d97706;
+        }
+        
+        /* 프로젝트 생성 모달 */
+        .project-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .project-modal-content {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 1000px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .project-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .project-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            margin: 0;
+        }
+        
+        .project-modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .project-modal-body {
+            padding: 24px;
+        }
+        
+        .project-form-group {
+            margin-bottom: 20px;
+        }
+        
+        .project-form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+        
+        .project-form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+        }
+        
+        .project-form-input:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .file-selection-area {
+            display: grid;
+            grid-template-columns: 1fr 80px 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .file-list-container {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: white;
+        }
+        
+        .file-list-header {
+            background: #f8f9fa;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            display: grid;
+            grid-template-columns: 40px 1fr 60px;
+            align-items: center;
+        }
+        
+        .file-list-body {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .file-item {
+            display: grid;
+            grid-template-columns: 40px 1fr 60px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #e5e7eb;
+            align-items: center;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-align: center; /* 중앙 정렬 */
+        }
+        
+        .file-item:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .file-item:last-child {
+            border-bottom: none;
+        }
+        
+        .file-checkbox {
+            width: 18px;
+            height: 18px;
+        }
+        
+        .file-name {
+            font-size: 14px;
+            color: #374151;
+            padding-left: 8px;
+        }
+        
+        .file-status {
+            font-size: 12px;
+            color: #6b7280;
+            text-align: center;
+        }
+        
+        .transfer-buttons {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .transfer-btn {
+            background: #e5e7eb;
+            border: none;
+            border-radius: 6px;
+            padding: 8px 12px;
+            cursor: pointer;
+            font-size: 18px;
+            color: #6b7280;
+            transition: all 0.2s;
+        }
+        
+        .transfer-btn:hover {
+            background: #d1d5db;
+            color: #374151;
+        }
+        
+        .project-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .btn-modal-cancel {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-modal-cancel:hover {
+            background: #4b5563;
+        }
+        
+        .btn-modal-save {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-modal-save:hover {
+            background: #059669;
+        }
+    </style>
+</head>
+<body>
+    <h1 class="page-title">
+        <span>🎬</span>
+        의뢰 상세정보
+    </h1>
+    
+
+    
+    <div class="detail-container">
+        <!-- 작업현황 섹션 -->
+        <div class="work-status-section">
+            <div class="section-title">작업현황</div>
+            <div class="work-details">
+                <div class="detail-grid">
+                    <div class="detail-label">주문번호</div>
+                    <div class="detail-value" id="orderNumber">20250820000001</div>
+                    <div class="detail-label">프로젝트 제목</div>
+                    <div class="detail-value" id="projectTitle">백업당구기관 경연 영상 편집의뢰</div>
+                    
+                    <div class="detail-label">신청자 이름</div>
+                    <div class="detail-value" id="clientName">-</div>
+                    <div class="detail-label">편집 분야</div>
+                    <div class="detail-value" id="editField">하이라이트 스타일</div>
+                    
+                    <div class="detail-label">이메일</div>
+                    <div class="detail-value" id="email">ydyoo20@naver.com</div>
+                    <div class="detail-label">제작 콘텐츠</div>
+                    <div class="detail-value" id="contentType">영상 편집</div>
+                    
+                    <div class="detail-label">접수일시</div>
+                    <div class="detail-value" id="requestDate">2025-08-20</div>
+                    <div class="detail-label">연락처</div>
+                    <div class="detail-value" id="contact">010-7610-3400</div>
+                    
+                    <div class="detail-label">작업상태</div>
+                    <div class="detail-value" id="workStatus">접수</div>
+                    <div class="detail-label">참고 영상 링크</div>
+                    <div class="detail-value" id="referenceLink">https://www.youtube.com/watch</div>
+                </div>
+                
+                <div class="detail-description">
+                    <div class="detail-label">상세의뢰내역</div>
+                    <div class="description-content" id="detailRequest">
+                        80주년 골목길 기념 소소소 이벤트 (1차 소원 한 줄 소원 이벤트)
+                        소개자
+                        김구 신생아 1차 소원 영상은 편목의 이벤트
+
+                        - 편목할 기념 편집자
+                        - 1차 소원 하고자(1차 소원 한 줄 소원 기념)
+                        - 소원의무 철저
+                        - 올카로드(각별히시내철도 창의 영상 부문편집법제한 한 기념 이벤트)
+                        - 편시설(각별히시내철도시설 창의 영상 이벤트)
+                    </div>
+                </div>
+                
+                <!-- 프로젝트 목록 -->
+                <div class="project-list">
+                    <div class="project-header">프로젝트 목록</div>
+                    <div class="project-content">
+                        <div class="project-table-header">
+                            <div>작업번호</div>
+                            <div>서브 타이틀</div>
+                            <div>작업단가</div>
+                        </div>
+                        <div class="project-items empty-state">
+                            <div class="project-empty">
+                                <div class="empty-icon">📁</div>
+                                <div class="empty-message">생성된 작업목록이 없습니다</div>
+                                <div class="empty-guide">새 프로젝트를 생성하세요</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="btn new-project-btn" onclick="createNewProject()">
+                    프로젝트 분할 생성
+                </button>
+            </div>
+        </div>
+        
+        <!-- 상담자 작성 정보 섹션 -->
+        <div class="consultant-section">
+            <div class="section-title">상담자 작성 정보</div>
+            <div class="consultant-form">
+                <div class="form-group">
+                    <label class="form-label" for="subTitle">서브타이틀 <span class="required">*</span></label>
+                    <input type="text" class="form-input" id="subTitle" placeholder="서브타이틀을 입력하세요">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="consultantEditField">편집 분야 <span class="required">*</span></label>
+                    <select class="form-select" id="consultantEditField">
+                        <option value="">선택</option>
+                        <option value="long">롱폼</option>
+                        <option value="short">숏폼</option>
+                        <option value="both">둘 다</option>
+                        <option value="etc">기타</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="consultantContentType">제작 콘텐츠 <span class="required">*</span></label>
+                    <select class="form-select" id="consultantContentType">
+                        <option value="">선택</option>
+                        <option value="education">교육 및 정보</option>
+                        <option value="lifestyle">라이프 스타일</option>
+                        <option value="entertainment">엔터테인먼트</option>
+                        <option value="art">예술</option>
+                        <option value="community">이슈/커뮤니티</option>
+                        <option value="etc">기타</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="originalRuntime">원본 러닝 타임</label>
+                    <select class="form-select" id="originalRuntime">
+                        <option value="">선택</option>
+                        <option value="30min">30분</option>
+                        <option value="60min">60분</option>
+                        <option value="120min">120분</option>
+                        <option value="more">그 이상</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="cameraCount">카메라 대수</label>
+                    <select class="form-select" id="cameraCount">
+                        <option value="">선택</option>
+                        <option value="1">1대</option>
+                        <option value="2">2대</option>
+                        <option value="3">3대</option>
+                        <option value="more">그 이상</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="editGrade">편집 등급</label>
+                    <select class="form-select" id="editGrade">
+                        <option value="">선택</option>
+                        <option value="standard">스탠다드 편집</option>
+                        <option value="deluxe">디럭스 편집</option>
+                        <option value="premium">프리미엄 편집</option>
+                        <option value="express">익스프레스 편집</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="introYn">인트로 유/무</label>
+                    <select class="form-select" id="introYn">
+                        <option value="">선택</option>
+                        <option value="yes">유</option>
+                        <option value="no">무</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="outroYn">아웃트로 유/무</label>
+                    <select class="form-select" id="outroYn">
+                        <option value="">선택</option>
+                        <option value="yes">유</option>
+                        <option value="no">무</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="channelLogoYn">채널 로고 유/무</label>
+                    <select class="form-select" id="channelLogoYn">
+                        <option value="">선택</option>
+                        <option value="yes">유</option>
+                        <option value="no">무</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="thumbnailType">썸네일 종류</label>
+                    <select class="form-select" id="thumbnailType">
+                        <option value="">선택</option>
+                        <option value="normal">일반 썸네일</option>
+                        <option value="design">디자인 썸네일</option>
+                        <option value="none">썸네일 없음</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="finalExpectedTime">최종본 예상 시간 <span class="required">*</span></label>
+                    <div class="input-with-unit">
+                        <input type="text" class="form-input" id="finalExpectedTime" placeholder="본 견적에 입력하세요">
+                        <span class="unit-label">분</span>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="customerRequest">고객 요청 사항</label>
+                    <textarea class="form-textarea" id="customerRequest" placeholder="고객 요청 사항을 입력하세요" style="height: 150px;"></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="partialPayment">부분 결제 금액 <span class="required">*</span></label>
+                    <div class="input-with-unit">
+                        <input type="text" class="form-input" id="partialPayment" placeholder="부분 결제 금액을 입력하세요">
+                        <span class="unit-label">원</span>
+                    </div>
+                </div>
+                
+                <!-- 상담자 정보 버튼 영역 -->
+                <div class="consultant-buttons">
+                    <button class="btn btn-info" onclick="viewDetails()">상세보기</button>
+                    <button class="btn btn-warning" onclick="resetForm()">초기화</button>
+                    <button class="btn btn-success" onclick="saveConsultantInfo()">저장</button>
+                    <button class="btn btn-danger" onclick="deleteConsultantInfo()">삭제</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 파일 리스트 -->
+    <div class="file-list-section">
+        <h3 class="section-title">파일 리스트</h3>
+        <div class="file-list-container">
+            <table class="file-list-table">
+                <thead>
+                    <tr>
+                        <th width="80">NO</th>
+                        <th>파일명</th>
+                        <th width="150">다운로드</th>
+                    </tr>
+                </thead>
+                <tbody id="fileListBody">
+                    <tr>
+                        <td>01</td>
+                        <td>회사소개_영상_최종본.mp4</td>
+                        <td>
+                            <button class="btn btn-download" onclick="downloadFile('회사소개_영상_최종본.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>제품홍보_영상_편집본.mp4</td>
+                        <td>
+                            <button class="btn btn-download" onclick="downloadFile('제품홍보_영상_편집본.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>브랜드_스토리_영상.mp4</td>
+                        <td>
+                            <button class="btn btn-download" onclick="downloadFile('브랜드_스토리_영상.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>인터뷰_영상_편집.mp4</td>
+                        <td>
+                            <button class="btn btn-download" onclick="downloadFile('인터뷰_영상_편집.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>05</td>
+                        <td>교육_콘텐츠_영상.mp4</td>
+                        <td>
+                            <button class="btn btn-download" onclick="downloadFile('교육_콘텐츠_영상.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="file-list-actions">
+                <button class="btn btn-download-all" onclick="downloadAllFiles()">
+                    <i class="icon-download"></i> 모두 다운로드
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 클라우드 링크 공유 -->
+    <div class="cloud-links-section">
+        <h3 class="section-title">클라우드 링크 공유</h3>
+        <div class="cloud-links-container">
+            <div class="cloud-link-item">
+                <span class="link-label">URL</span>
+                <span class="link-url" id="cloudUrl">https://drive.google.com/drive/folders/1ABcDeFgHiJkLmNoPqRsTuVwXyZ123456</span>
+                <button class="btn btn-copy" onclick="copyToClipboard('cloudUrl')">
+                    <i class="icon-copy"></i> 클립보드로 복사
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 작업 금액 관리 -->
+    <div class="payment-management-section">
+        <h3 class="section-title">작업 금액 관리</h3>
+        <div class="payment-management-container">
+            <div class="payment-item">
+                <label class="payment-label">최종결제금액</label>
+                <input type="text" class="payment-input" id="finalPayment" placeholder="최종결제금액을 입력하세요">
+                <span class="payment-unit">원</span>
+            </div>
+            <div class="payment-item">
+                <label class="payment-label">예상결제금액</label>
+                <input type="text" class="payment-input" id="expectedPayment" placeholder="0 원" readonly>
+                <span class="payment-unit">원</span>
+            </div>
+            <div class="payment-item">
+                <label class="payment-label">이벤트 처리</label>
+                <div class="event-controls">
+                    <input type="checkbox" id="freeEvent" class="event-checkbox">
+                    <label for="freeEvent" class="event-label">무료이벤트</label>
+                    <button class="btn btn-confirm" onclick="confirmPayment()">금액 확정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 하단 버튼 영역 -->
+    <div class="bottom-actions">
+        <button class="btn btn-cancel" onclick="cancelWork()">작업취소</button>
+        <button class="btn btn-list" onclick="goToList()">목록</button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 데이터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // 페이지 로드 시 파라미터 데이터로 폼 채우기
+        document.addEventListener('DOMContentLoaded', function() {
+            const orderNumber = urlParams.get('orderNumber');
+            const title = urlParams.get('title');
+            const clientName = urlParams.get('client');
+            const email = urlParams.get('email');
+            const contact = urlParams.get('contact');
+            const requestDate = urlParams.get('requestDate');
+            const fileCount = urlParams.get('fileCount');
+            const amountStatus = urlParams.get('amountStatus');
+            const progressStatus = urlParams.get('progressStatus');
+            
+            // 데이터가 있으면 폼에 채우기
+            if (orderNumber) document.getElementById('orderNumber').textContent = orderNumber;
+            if (title) document.getElementById('projectTitle').textContent = title;
+            if (clientName) document.getElementById('clientName').textContent = clientName;
+            if (email) document.getElementById('email').textContent = email;
+            if (contact) document.getElementById('contact').textContent = contact;
+            if (requestDate) document.getElementById('requestDate').textContent = requestDate;
+            if (progressStatus) document.getElementById('workStatus').textContent = progressStatus;
+            
+            console.log('클립데스크 상세 페이지 파라미터:', {
+                orderNumber, title, clientName, email, contact, requestDate, fileCount, amountStatus, progressStatus
+            });
+        });
+        
+        // 프로젝트 분할 생성
+        function createNewProject() {
+            document.getElementById('projectModal').style.display = 'flex';
+            // 파일 아이템 클릭 이벤트 추가
+            addFileItemClickEvents();
+        }
+        
+        // 파일 아이템 클릭 이벤트 추가
+        function addFileItemClickEvents() {
+            const fileItems = document.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                // 기존 이벤트 리스너 제거 (중복 방지)
+                item.removeEventListener('click', toggleFileCheckbox);
+                // 새 이벤트 리스너 추가
+                item.addEventListener('click', toggleFileCheckbox);
+            });
+        }
+        
+        // 파일 아이템 클릭 시 체크박스 토글
+        function toggleFileCheckbox(event) {
+            // 체크박스 자체를 클릭한 경우는 무시 (중복 토글 방지)
+            if (event.target.type === 'checkbox') {
+                return;
+            }
+            
+            const checkbox = this.querySelector('.file-checkbox');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+            }
+        }
+        
+        // 프로젝트 모달 닫기
+        function closeProjectModal() {
+            document.getElementById('projectModal').style.display = 'none';
+            // 폼 초기화
+            document.getElementById('projectSubTitle').value = '';
+            // 파일 선택 초기화
+            resetFileSelection();
+        }
+        
+        // 프로젝트 모달 초기화 (초기화 버튼용)
+        function resetProjectModal() {
+            if (confirm('모든 프로젝트와 파일 상태를 초기화하시겠습니까?\n생성된 프로젝트가 모두 삭제됩니다.')) {
+                // 폼 초기화
+                document.getElementById('projectSubTitle').value = '';
+                
+                // 파일 선택 초기화
+                resetFileSelection();
+                
+                // 모든 파일 상태를 "대기"로 초기화
+                resetAllFileStatus();
+                
+                // 생성된 프로젝트 모두 삭제
+                resetProjectList();
+                
+                alert('초기화가 완료되었습니다.');
+            }
+        }
+        
+        // 파일 선택 초기화
+        function resetFileSelection() {
+            // 모든 체크박스 해제
+            const checkboxes = document.querySelectorAll('.file-checkbox');
+            checkboxes.forEach(cb => cb.checked = false);
+            
+            // 선택된 파일 목록 비우기
+            document.getElementById('selectedFiles').innerHTML = '';
+            
+            // 왼쪽 파일들을 다시 표시
+            const availableFiles = document.getElementById('availableFiles');
+            const fileItems = availableFiles.querySelectorAll('.file-item');
+            fileItems.forEach(item => {
+                item.style.display = 'grid';
+            });
+        }
+        
+        // 모든 파일 상태를 "대기"로 초기화
+        function resetAllFileStatus() {
+            const availableFiles = document.getElementById('availableFiles');
+            const fileItems = availableFiles.querySelectorAll('.file-item');
+            
+            fileItems.forEach(item => {
+                const statusElement = item.querySelector('.file-status');
+                if (statusElement) {
+                    statusElement.textContent = '대기';
+                    statusElement.style.color = ''; // 기본 색상으로 복원
+                }
+            });
+        }
+        
+        // 생성된 프로젝트 목록 모두 삭제
+        function resetProjectList() {
+            const projectItems = document.querySelector('.project-items');
+            
+            // 모든 프로젝트 아이템 제거
+            const projectItemElements = projectItems.querySelectorAll('.project-item');
+            projectItemElements.forEach(item => {
+                item.remove();
+            });
+            
+            // 빈 상태 메시지 다시 표시
+            const emptyMessage = document.createElement('div');
+            emptyMessage.className = 'project-empty';
+            emptyMessage.innerHTML = `
+                <div class="empty-icon">📁</div>
+                <div class="empty-message">생성된 작업목록이 없습니다</div>
+                <div class="empty-guide">새 프로젝트를 생성하세요</div>
+            `;
+            
+            projectItems.appendChild(emptyMessage);
+            projectItems.classList.add('empty-state'); // 스크롤 비활성화
+        }
+        
+        // 선택한 파일들을 오른쪽으로 이동
+        function moveFilesToRight() {
+            const availableFiles = document.getElementById('availableFiles');
+            const selectedFiles = document.getElementById('selectedFiles');
+            const checkedBoxes = availableFiles.querySelectorAll('.file-checkbox:checked');
+            
+            if (checkedBoxes.length === 0) {
+                alert('이동할 파일을 선택해주세요.');
+                return;
+            }
+            
+            checkedBoxes.forEach(checkbox => {
+                const fileItem = checkbox.closest('.file-item');
+                const fileName = fileItem.querySelector('.file-name').textContent;
+                
+                // 새로운 파일 아이템 생성 (오른쪽용)
+                const newFileItem = document.createElement('div');
+                newFileItem.className = 'file-item';
+                newFileItem.innerHTML = `
+                    <input type="checkbox" class="file-checkbox" value="${checkbox.value}">
+                    <span class="file-name">${fileName}</span>
+                    <span class="file-status">선택</span>
+                `;
+                
+                // 클릭 이벤트 추가
+                newFileItem.addEventListener('click', toggleFileCheckbox);
+                
+                selectedFiles.appendChild(newFileItem);
+                
+                // 왼쪽에서 제거
+                fileItem.style.display = 'none';
+                checkbox.checked = false;
+            });
+        }
+        
+        // 선택한 파일들을 왼쪽으로 이동
+        function moveFilesToLeft() {
+            const availableFiles = document.getElementById('availableFiles');
+            const selectedFiles = document.getElementById('selectedFiles');
+            const checkedBoxes = selectedFiles.querySelectorAll('.file-checkbox:checked');
+            
+            if (checkedBoxes.length === 0) {
+                alert('이동할 파일을 선택해주세요.');
+                return;
+            }
+            
+            checkedBoxes.forEach(checkbox => {
+                const fileItem = checkbox.closest('.file-item');
+                const fileName = checkbox.value;
+                
+                // 왼쪽에서 해당 파일 찾아서 다시 표시
+                const originalItems = availableFiles.querySelectorAll('.file-item');
+                originalItems.forEach(item => {
+                    const originalCheckbox = item.querySelector('.file-checkbox');
+                    if (originalCheckbox.value === fileName) {
+                        item.style.display = 'grid';
+                    }
+                });
+                
+                // 오른쪽에서 제거
+                fileItem.remove();
+            });
+        }
+        
+        // 새 프로젝트 저장
+        function saveNewProject() {
+            const subTitle = document.getElementById('projectSubTitle').value.trim();
+            const selectedFiles = document.getElementById('selectedFiles');
+            const selectedFileItems = selectedFiles.querySelectorAll('.file-item');
+            
+            if (!subTitle) {
+                alert('서브 타이틀을 입력해주세요.');
+                document.getElementById('projectSubTitle').focus();
+                return;
+            }
+            
+            if (selectedFileItems.length === 0) {
+                alert('프로젝트에 포함할 파일을 선택해주세요.');
+                return;
+            }
+            
+            // 프로젝트 목록에 추가
+            addProjectToList(subTitle, selectedFileItems.length);
+            
+            // 선택된 파일들을 왼쪽으로 돌려보내고 상태를 "생성"으로 변경
+            const availableFiles = document.getElementById('availableFiles');
+            selectedFileItems.forEach(fileItem => {
+                const checkbox = fileItem.querySelector('.file-checkbox');
+                const fileName = fileItem.querySelector('.file-name').textContent;
+                const fileValue = checkbox.value;
+                
+                // 왼쪽에서 해당 파일 찾아서 다시 표시하고 상태를 "생성"으로 변경
+                const originalItems = availableFiles.querySelectorAll('.file-item');
+                originalItems.forEach(item => {
+                    const originalCheckbox = item.querySelector('.file-checkbox');
+                    const originalStatus = item.querySelector('.file-status');
+                    if (originalCheckbox.value === fileValue) {
+                        item.style.display = 'grid';
+                        originalStatus.textContent = '생성'; // 상태를 "생성"으로 변경
+                        originalStatus.style.color = '#059669'; // 녹색으로 표시
+                    }
+                });
+                
+                // 오른쪽에서 제거
+                fileItem.remove();
+            });
+            
+            // 서브 타이틀만 초기화 (모달은 닫지 않음)
+            document.getElementById('projectSubTitle').value = '';
+            
+            alert(`새 프로젝트 "${subTitle}"이 생성되었습니다.`);
+        }
+        
+        // 프로젝트 목록에 추가
+        function addProjectToList(title, fileCount) {
+            const projectItems = document.querySelector('.project-items');
+            const emptyMessage = projectItems.querySelector('.project-empty');
+            
+            // 빈 메시지가 있으면 제거하고 스크롤 활성화
+            if (emptyMessage) {
+                emptyMessage.remove();
+                projectItems.classList.remove('empty-state'); // 스크롤 활성화
+            }
+            
+            // 새 프로젝트 아이템 생성
+            const projectItem = document.createElement('div');
+            projectItem.className = 'project-item';
+            
+            // 현재 프로젝트 수 계산
+            const existingProjects = projectItems.querySelectorAll('.project-item');
+            const projectNumber = existingProjects.length + 1;
+            
+            // 작업단가 계산 (파일 개수 * 기본 단가 예시)
+            const basePrice = 50000; // 기본 단가 5만원
+            const totalPrice = fileCount * basePrice;
+            
+            projectItem.innerHTML = `
+                <div class="project-number">${projectNumber.toString().padStart(2, '0')}</div>
+                <div class="project-title">${title}</div>
+                <div class="project-price">${totalPrice.toLocaleString()}원</div>
+            `;
+            
+            // innerHTML 설정 후 데이터 속성 설정
+            projectItem.setAttribute('data-project-number', projectNumber);
+            projectItem.setAttribute('data-project-title', title);
+            
+            // 간단한 클릭 이벤트 추가
+            projectItem.addEventListener('click', function() {
+                selectProject(projectNumber);
+            });
+            
+            projectItems.appendChild(projectItem);
+        }
+        
+        // 심플한 프로젝트 선택
+        function selectProject(projectNumber) {
+            console.log('프로젝트 선택:', projectNumber);
+            
+            // 모든 프로젝트 선택 해제
+            document.querySelectorAll('.project-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            // 클릭된 프로젝트 선택
+            const targetProject = document.querySelector(`[data-project-number="${projectNumber}"]`);
+            if (targetProject) {
+                targetProject.classList.add('selected');
+                
+                // 프로젝트별 임의 데이터 설정
+                setProjectData(projectNumber);
+            }
+        }
+        
+        // 프로젝트별 임의 데이터 설정
+        function setProjectData(projectNumber) {
+            const projectTitle = document.querySelector(`[data-project-number="${projectNumber}"]`)
+                ?.getAttribute('data-project-title') || '';
+            
+            // 서브 타이틀은 프로젝트 제목으로 설정
+            document.getElementById('subTitle').value = projectTitle;
+            
+            // 프로젝트별 임의 데이터
+            if (projectNumber === 1) {
+                console.log('프로젝트 1 데이터 설정 시작');
+                document.getElementById('consultantEditField').value = 'long';
+                console.log('편집 분야 설정:', document.getElementById('consultantEditField').value);
+                document.getElementById('consultantContentType').value = 'education';
+                console.log('제작 콘텐츠 설정:', document.getElementById('consultantContentType').value);
+                
+                // 설정 후 다시 확인
+                setTimeout(() => {
+                    console.log('1초 후 편집 분야 확인:', document.getElementById('consultantEditField').value);
+                    console.log('1초 후 제작 콘텐츠 확인:', document.getElementById('consultantContentType').value);
+                }, 1000);
+                
+                document.getElementById('originalRuntime').value = '60min';
+                document.getElementById('cameraCount').value = '2';
+                document.getElementById('editGrade').value = 'standard';
+                document.getElementById('introYn').value = 'yes';
+                document.getElementById('outroYn').value = 'yes';
+                document.getElementById('channelLogoYn').value = 'yes';
+                document.getElementById('thumbnailType').value = 'normal';
+                document.getElementById('finalExpectedTime').value = '45';
+                document.getElementById('customerRequest').value = '깔끔하고 전문적인 느낌으로 편집해주세요.';
+                document.getElementById('partialPayment').value = '150000';
+            } else if (projectNumber === 2) {
+                document.getElementById('consultantEditField').value = 'short';
+                document.getElementById('consultantContentType').value = 'entertainment';
+                document.getElementById('originalRuntime').value = '30min';
+                document.getElementById('cameraCount').value = '1';
+                document.getElementById('editGrade').value = 'deluxe';
+                document.getElementById('introYn').value = 'no';
+                document.getElementById('outroYn').value = 'no';
+                document.getElementById('channelLogoYn').value = 'no';
+                document.getElementById('thumbnailType').value = 'design';
+                document.getElementById('finalExpectedTime').value = '20';
+                document.getElementById('customerRequest').value = '재미있고 역동적인 편집을 원합니다.';
+                document.getElementById('partialPayment').value = '80000';
+            } else {
+                // 3번째 이후 프로젝트는 기본값
+                document.getElementById('consultantEditField').value = 'both';
+                document.getElementById('consultantContentType').value = 'lifestyle';
+                document.getElementById('originalRuntime').value = '120min';
+                document.getElementById('cameraCount').value = '3';
+                document.getElementById('editGrade').value = 'premium';
+                document.getElementById('introYn').value = 'yes';
+                document.getElementById('outroYn').value = 'yes';
+                document.getElementById('channelLogoYn').value = 'yes';
+                document.getElementById('thumbnailType').value = 'design';
+                document.getElementById('finalExpectedTime').value = '90';
+                document.getElementById('customerRequest').value = '고품질의 프리미엄 편집을 부탁드립니다.';
+                document.getElementById('partialPayment').value = '300000';
+            }
+        }
+        
+
+        
+        // 상담 등록
+        function saveConsultation() {
+            alert('상담 정보가 등록되었습니다.');
+        }
+        
+        // 취소
+        function cancelConsultation() {
+            if (confirm('작업을 취소하시겠습니까?')) {
+                history.back();
+            }
+        }
+        
+        // 처리
+        function approveProject() {
+            alert('프로젝트가 처리되었습니다.');
+        }
+        
+        // 삭제
+        function deleteProject() {
+            if (confirm('정말로 삭제하시겠습니까?')) {
+                alert('프로젝트가 삭제되었습니다.');
+            }
+        }
+        
+        // 상담자 정보 관련 함수들
+        function viewDetails() {
+            alert('상세보기 기능이 실행됩니다.');
+        }
+        
+        function resetForm() {
+            if (confirm('모든 입력 내용을 초기화하시겠습니까?')) {
+                document.getElementById('subTitle').value = '';
+                document.getElementById('editField').selectedIndex = 0;
+                document.getElementById('contentType').selectedIndex = 0;
+                document.getElementById('originalRuntime').selectedIndex = 0;
+                document.getElementById('cameraCount').selectedIndex = 0;
+                document.getElementById('editGrade').selectedIndex = 0;
+                document.getElementById('introYn').selectedIndex = 0;
+                document.getElementById('outroYn').selectedIndex = 0;
+                document.getElementById('channelLogoYn').selectedIndex = 0;
+                document.getElementById('thumbnailType').selectedIndex = 0;
+                document.getElementById('finalExpectedTime').value = '';
+                document.getElementById('customerRequest').value = '';
+                document.getElementById('partialPayment').value = '';
+                alert('폼이 초기화되었습니다.');
+            }
+        }
+        
+        function saveConsultantInfo() {
+            // 필수 항목 체크
+            const requiredFields = [
+                { id: 'subTitle', name: '서브타이틀' },
+                { id: 'editField', name: '편집 분야' },
+                { id: 'contentType', name: '제작 콘텐츠' },
+                { id: 'finalExpectedTime', name: '최종본 예상 시간' },
+                { id: 'partialPayment', name: '부분 결제 금액' }
+            ];
+            
+            for (let field of requiredFields) {
+                const element = document.getElementById(field.id);
+                if (!element.value || element.value.trim() === '') {
+                    alert(`${field.name}은(는) 필수 입력 항목입니다.`);
+                    element.focus();
+                    return;
+                }
+            }
+            
+            alert('상담자 정보가 저장되었습니다.');
+        }
+        
+        function deleteConsultantInfo() {
+            if (confirm('상담자 정보를 삭제하시겠습니까?')) {
+                resetForm();
+                alert('상담자 정보가 삭제되었습니다.');
+            }
+        }
+
+        // 개별 파일 다운로드
+        function downloadFile(filename) {
+            // 실제 구현에서는 서버에서 파일을 다운로드하는 로직이 필요합니다
+            console.log('다운로드 파일:', filename);
+            alert(filename + ' 파일 다운로드를 시작합니다.');
+            
+            // 예시: 가상의 다운로드 링크 생성
+            // const link = document.createElement('a');
+            // link.href = '/download/' + encodeURIComponent(filename);
+            // link.download = filename;
+            // document.body.appendChild(link);
+            // link.click();
+            // document.body.removeChild(link);
+        }
+
+        // 모든 파일 다운로드
+        function downloadAllFiles() {
+            const fileList = [
+                '회사소개_영상_최종본.mp4',
+                '제품홍보_영상_편집본.mp4',
+                '브랜드_스토리_영상.mp4',
+                '인터뷰_영상_편집.mp4',
+                '교육_콘텐츠_영상.mp4'
+            ];
+            
+            console.log('전체 파일 다운로드:', fileList);
+            alert('전체 파일 (' + fileList.length + '개) 다운로드를 시작합니다.');
+            
+            // 실제 구현에서는 ZIP 파일로 압축하여 다운로드하거나
+            // 각 파일을 순차적으로 다운로드하는 로직이 필요합니다
+            // fileList.forEach((filename, index) => {
+            //     setTimeout(() => {
+            //         downloadFile(filename);
+            //     }, index * 1000); // 1초 간격으로 다운로드
+            // });
+        }
+
+        // 클립보드 복사 함수
+        function copyToClipboard(elementId) {
+            const element = document.getElementById(elementId);
+            const text = element.textContent;
+            
+            // 클립보드 API 사용
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(text).then(function() {
+                    alert('URL이 클립보드에 복사되었습니다.');
+                }).catch(function(err) {
+                    console.error('클립보드 복사 실패:', err);
+                    fallbackCopyTextToClipboard(text);
+                });
+            } else {
+                // 클립보드 API를 지원하지 않는 브라우저용 fallback
+                fallbackCopyTextToClipboard(text);
+            }
+        }
+
+        // 클립보드 복사 fallback 함수
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            
+            // 화면 밖으로 숨기기
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    alert('URL이 클립보드에 복사되었습니다.');
+                } else {
+                    alert('클립보드 복사에 실패했습니다.');
+                }
+            } catch (err) {
+                console.error('클립보드 복사 실패:', err);
+                alert('클립보드 복사에 실패했습니다.');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        // 금액 확정 함수
+        function confirmPayment() {
+            const finalPayment = document.getElementById('finalPayment').value;
+            const freeEvent = document.getElementById('freeEvent').checked;
+            
+            if (!finalPayment && !freeEvent) {
+                alert('최종결제금액을 입력하거나 무료이벤트를 체크해주세요.');
+                return;
+            }
+            
+            let confirmMessage;
+            let displayAmount;
+            
+            if (freeEvent) {
+                displayAmount = '0원 (무료이벤트)';
+                confirmMessage = `${displayAmount}으로 금액을 확정하시겠습니까?\n확정한 금액은 고객에게 노출됩니다.`;
+            } else {
+                // 숫자만 입력된 경우 원 단위 추가
+                const numericAmount = finalPayment.replace(/[^0-9]/g, '');
+                displayAmount = numericAmount ? `${parseInt(numericAmount).toLocaleString()}원` : finalPayment;
+                confirmMessage = `${displayAmount}으로 금액을 확정하시겠습니까?\n확정한 금액은 고객에게 노출됩니다.`;
+            }
+            
+            if (confirm(confirmMessage)) {
+                if (freeEvent) {
+                    document.getElementById('expectedPayment').value = '0';
+                    alert('무료이벤트로 금액이 확정되었습니다.');
+                } else {
+                    document.getElementById('expectedPayment').value = finalPayment;
+                    alert('금액이 확정되었습니다.');
+                }
+            }
+        }
+
+        // 작업 취소 함수
+        function cancelWork() {
+            if (confirm('작업을 취소하시겠습니까?\n취소된 작업은 복구할 수 없습니다.')) {
+                alert('작업이 취소되었습니다.');
+                // 실제로는 서버에 취소 요청을 보내고 목록 페이지로 이동
+                // window.location.href = 'clipdesk-management.html';
+            }
+        }
+
+        // 목록으로 돌아가기 함수
+        function goToList() {
+            if (confirm('목록으로 돌아가시겠습니까?\n저장되지 않은 변경사항은 사라집니다.')) {
+                window.location.href = 'clipdesk-management.html';
+            }
+        }
+
+        // 무료이벤트 체크박스 변경 시
+        document.addEventListener('DOMContentLoaded', function() {
+            const freeEventCheckbox = document.getElementById('freeEvent');
+            const finalPaymentInput = document.getElementById('finalPayment');
+            
+            freeEventCheckbox.addEventListener('change', function() {
+                if (this.checked) {
+                    finalPaymentInput.disabled = true;
+                    finalPaymentInput.value = '';
+                    finalPaymentInput.placeholder = '무료이벤트 적용';
+                } else {
+                    finalPaymentInput.disabled = false;
+                    finalPaymentInput.placeholder = '최종결제금액을 입력하세요';
+                }
+            });
+        });
+    </script>
+
+    <!-- 프로젝트 생성 모달 -->
+    <div id="projectModal" class="project-modal">
+        <div class="project-modal-content">
+            <div class="project-modal-header">
+                <h3 class="project-modal-title">프로젝트 분할 생성</h3>
+                <button class="project-modal-close" onclick="closeProjectModal()">&times;</button>
+            </div>
+            
+            <div class="project-modal-body">
+                <div class="project-form-group">
+                    <label class="project-form-label" for="projectSubTitle">서브 타이틀</label>
+                    <input type="text" class="project-form-input" id="projectSubTitle" placeholder="서브 타이틀을 입력하세요">
+                </div>
+                
+                <div class="file-selection-area">
+                    <!-- 왼쪽: 사용 가능한 파일 목록 -->
+                    <div class="file-list-container">
+                        <div class="file-list-header">
+                            <span></span>
+                            <span>파일명</span>
+                            <span>상태</span>
+                        </div>
+                        <div class="file-list-body" id="availableFiles">
+                            <!-- 임의의 파일 데이터 10개 -->
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video001.mp4">
+                                <span class="file-name">프로젝트_인트로_영상.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video002.mp4">
+                                <span class="file-name">메인_콘텐츠_part1.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video003.mp4">
+                                <span class="file-name">메인_콘텐츠_part2.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video004.mp4">
+                                <span class="file-name">인터뷰_영상_A.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video005.mp4">
+                                <span class="file-name">인터뷰_영상_B.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video006.mp4">
+                                <span class="file-name">배경_음악_삽입용.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video007.mp4">
+                                <span class="file-name">제품_시연_영상.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video008.mp4">
+                                <span class="file-name">고객_후기_영상.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video009.mp4">
+                                <span class="file-name">아웃트로_영상.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                            <div class="file-item">
+                                <input type="checkbox" class="file-checkbox" value="video010.mp4">
+                                <span class="file-name">추가_자료_영상.mp4</span>
+                                <span class="file-status">대기</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 중앙: 이동 버튼 -->
+                    <div class="transfer-buttons">
+                        <button class="transfer-btn" onclick="moveFilesToRight()" title="선택한 파일을 오른쪽으로 이동">▶</button>
+                        <button class="transfer-btn" onclick="moveFilesToLeft()" title="선택한 파일을 왼쪽으로 이동">◀</button>
+                    </div>
+                    
+                    <!-- 오른쪽: 선택된 파일 목록 -->
+                    <div class="file-list-container">
+                        <div class="file-list-header">
+                            <span></span>
+                            <span>파일명</span>
+                            <span>상태</span>
+                        </div>
+                        <div class="file-list-body" id="selectedFiles">
+                            <!-- 선택된 파일들이 여기에 표시됩니다 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="project-modal-footer">
+                <button class="btn btn-modal-cancel" onclick="resetProjectModal()">초기화</button>
+                <button class="btn btn-modal-save" onclick="saveNewProject()">저장</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

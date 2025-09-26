@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact US 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: block;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+
+        /* 첨부파일 스타일 */
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+
+        .file-item:hover {
+            background: #f9fafb;
+            border-color: #3b82f6;
+        }
+
+        .file-icon {
+            font-size: 16px;
+        }
+
+        .file-name {
+            flex: 1;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .file-size {
+            color: #6b7280;
+            font-size: 12px;
+        }
+
+        .no-files {
+            color: #6b7280;
+            font-style: italic;
+        }
+
+        /* 문의 내용 영역 */
+        .inquiry-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .inquiry-content {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 200px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        /* 상태 배지 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-processing {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .status-completed {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📞</span>
+            Contact US 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 문의 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">문의 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <!-- 첫 번째 줄: 이름 | 등록일시 -->
+                    <div class="info-label">이름</div>
+                    <div class="info-value" id="customerName">김철수</div>
+                    <div class="info-label">등록일시</div>
+                    <div class="info-value" id="registeredDate">2025-08-27 14:30:00</div>
+                    
+                    <!-- 두 번째 줄: 연락처 | 첨부파일 -->
+                    <div class="info-label">연락처</div>
+                    <div class="info-value" id="customerPhone">010-1234-5678</div>
+                    <div class="info-label">첨부파일</div>
+                    <div class="info-value" id="attachmentFiles">
+                        <div class="file-list">
+                            <div class="file-item">
+                                <span class="file-icon">📎</span>
+                                <span class="file-name">회의록_요구사항.pdf</span>
+                                <span class="file-size">(2.3MB)</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 세 번째 줄: 이메일 -->
+                    <div class="info-label">이메일</div>
+                    <div class="info-value" id="customerEmail">kim.cs@email.com</div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 문의 내용 섹션 -->
+    <div class="inquiry-section">
+        <div class="section-title">문의 내용</div>
+        <div class="info-content">
+            <div class="inquiry-content" id="inquiryContent">안녕하세요. 소리바로 서비스에 대해 문의드립니다.
+
+저희 회사에서 회의록 작성 서비스를 이용하고 싶은데, 다음과 같은 사항들에 대해 궁금합니다.
+
+1. 월 평균 20-30건 정도의 회의록 작업이 예상되는데, 기업용 요금제가 있는지 궁금합니다.
+2. 회의 녹음 파일의 보안은 어떻게 관리되는지 알고 싶습니다.
+3. 작업 완료까지 소요되는 시간은 보통 얼마나 걸리는지요?
+4. 전문 용어가 많이 포함된 회의의 경우 별도 용어집 제공이 가능한지 궁금합니다.
+
+빠른 답변 부탁드립니다.
+감사합니다.</div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Contact US 상세 페이지 로드, ID:', itemId);
+            loadContactDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadContactDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'CONTACT001': {
+                    customerName: '김철수',
+                    customerPhone: '010-1234-5678',
+                    customerEmail: 'kim.cs@email.com',
+                    registeredDate: '2025-08-27 14:30:00',
+                    attachments: [
+                        { name: '회의록_요구사항.pdf', size: '2.3MB', icon: '📎' },
+                        { name: '참고자료.docx', size: '1.8MB', icon: '📄' }
+                    ],
+                    inquiryContent: `안녕하세요. 소리바로 서비스에 대해 문의드립니다.
+
+저희 회사에서 회의록 작성 서비스를 이용하고 싶은데, 다음과 같은 사항들에 대해 궁금합니다.
+
+1. 월 평균 20-30건 정도의 회의록 작업이 예상되는데, 기업용 요금제가 있는지 궁금합니다.
+2. 회의 녹음 파일의 보안은 어떻게 관리되는지 알고 싶습니다.
+3. 작업 완료까지 소요되는 시간은 보통 얼마나 걸리는지요?
+4. 전문 용어가 많이 포함된 회의의 경우 별도 용어집 제공이 가능한지 궁금합니다.
+
+빠른 답변 부탁드립니다.
+감사합니다.`
+                },
+                'CONTACT002': {
+                    customerName: '이영희',
+                    customerPhone: '010-2345-6789',
+                    customerEmail: 'lee.yh@email.com',
+                    registeredDate: '2025-08-27 13:15:00',
+                    attachments: [
+                        { name: '에러_스크린샷.png', size: '856KB', icon: '🖼️' }
+                    ],
+                    inquiryContent: `파일 업로드 관련해서 문제가 발생했습니다.
+
+500MB 이상의 대용량 파일을 업로드하려고 하는데 계속 실패합니다.
+브라우저는 Chrome 최신 버전을 사용하고 있고, 인터넷 연결도 안정적입니다.
+
+에러 메시지: "파일 업로드 중 오류가 발생했습니다. 다시 시도해주세요."
+
+해결 방법을 알려주시면 감사하겠습니다.`
+                },
+                'CONTACT003': {
+                    customerName: '박민수',
+                    customerPhone: '010-3456-7890',
+                    customerEmail: 'park.ms@email.com',
+                    registeredDate: '2025-08-27 12:45:00',
+                    attachments: [],
+                    inquiryContent: `번역 서비스 요금에 대해 문의드립니다.
+
+영어 → 한국어 번역 작업을 의뢰하려고 하는데,
+문서 분량이 약 100페이지 정도 됩니다.
+
+1. 페이지당 요금이 어떻게 되는지
+2. 대량 작업 할인이 있는지
+3. 작업 기간은 얼마나 소요되는지
+
+알려주시면 감사하겠습니다.`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['CONTACT001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('customerName').textContent = data.customerName;
+            document.getElementById('customerPhone').textContent = data.customerPhone;
+            document.getElementById('customerEmail').textContent = data.customerEmail;
+            document.getElementById('registeredDate').textContent = data.registeredDate;
+            document.getElementById('inquiryContent').textContent = data.inquiryContent;
+            
+            // 첨부파일 렌더링
+            renderAttachments(data.attachments);
+        }
+        
+        // 첨부파일 렌더링
+        function renderAttachments(attachments) {
+            const attachmentContainer = document.getElementById('attachmentFiles');
+            
+            if (!attachments || attachments.length === 0) {
+                attachmentContainer.innerHTML = '<div class="no-files">첨부파일이 없습니다.</div>';
+                return;
+            }
+            
+            let html = '<div class="file-list">';
+            attachments.forEach(file => {
+                html += `
+                    <div class="file-item" onclick="downloadFile('${file.name}')">
+                        <span class="file-icon">${file.icon}</span>
+                        <span class="file-name">${file.name}</span>
+                        <span class="file-size">(${file.size})</span>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            
+            attachmentContainer.innerHTML = html;
+        }
+        
+        // 파일 다운로드 (시연용)
+        function downloadFile(fileName) {
+            alert(`파일 다운로드: ${fileName}`);
+            // 실제 구현 시 파일 다운로드 로직
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'contact-management.html';
+        }
+    </script>
+</body>
+</html>

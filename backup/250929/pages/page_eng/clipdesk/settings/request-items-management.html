@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클립데스크 - 고객 의뢰 항목 관리</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8fafc;
+            color: #334155;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .header h1 {
+            color: #1e293b;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            color: #64748b;
+            font-size: 14px;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 20px;
+            align-items: start;
+        }
+
+        .left-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .section-header {
+            background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+            color: white;
+            padding: 20px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-add {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-add:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .btn-detail {
+            background: #6366f1;
+            color: white;
+            padding: 6px 12px;
+            font-size: 12px;
+        }
+
+        .btn-detail:hover {
+            background: #4f46e5;
+        }
+
+        .section-content {
+            padding: 20px 30px;
+        }
+
+        .item-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 8px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        .item-number {
+            min-width: 80px;
+        }
+
+        .item-text {
+            flex: 1;
+        }
+
+        .item-action {
+            min-width: 100px;
+        }
+
+        .dropdown {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            background: white;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .dropdown:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .text-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            width: 100%;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .right-panel {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            min-height: 700px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-header {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 20px 30px;
+        }
+
+        .detail-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .detail-content {
+            padding: 15px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .detail-empty {
+            text-align: center;
+            color: #64748b;
+            padding: 60px 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .detail-empty i {
+            font-size: 48px;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 20px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .radio-item input[type="radio"] {
+            margin: 0;
+        }
+
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 35px 20px;
+            text-align: center;
+            background: #f9fafb;
+            transition: all 0.2s ease;
+        }
+
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .upload-btn {
+            background: #3b82f6;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .upload-btn:hover {
+            background: #2563eb;
+        }
+
+        .btn-modify {
+            background: #f59e0b;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .btn-modify:hover {
+            background: #d97706;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 6px;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .right-panel {
+                order: -1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎬 고객 의뢰 항목 관리</h1>
+            <p>클립데스크 서비스의 고객 의뢰 항목을 관리합니다</p>
+        </div>
+
+        <div class="main-content">
+            <div class="left-panel">
+                <!-- 편집 분야 -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">편집 분야</div>
+                        <div class="section-buttons">
+                            <button class="btn btn-add" onclick="addEditItem()">추가</button>
+                            <button class="btn btn-save" onclick="saveEditItems()">저장</button>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <div id="editItems">
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="편집 분야 항목을 입력하세요" value="영상 편집">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('edit', 1, '영상 편집')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="편집 분야 항목을 입력하세요" value="컬러 그레이딩">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('edit', 2, '컬러 그레이딩')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3" selected>3</option>
+                                        <option value="4">4</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="편집 분야 항목을 입력하세요" value="사운드 믹싱">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('edit', 3, '사운드 믹싱')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4" selected>4</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="편집 분야 항목을 입력하세요" value="모션 그래픽">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('edit', 4, '모션 그래픽')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 제작 콘텐츠 관리 -->
+                <div class="section">
+                    <div class="section-header">
+                        <div class="section-title">제작 콘텐츠 관리</div>
+                        <div class="section-buttons">
+                            <button class="btn btn-add" onclick="addContentItem()">추가</button>
+                            <button class="btn btn-save" onclick="saveContentItems()">저장</button>
+                        </div>
+                    </div>
+                    <div class="section-content">
+                        <div id="contentItems">
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="제작 콘텐츠 항목을 입력하세요" value="홍보 영상">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('content', 1, '홍보 영상')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="제작 콘텐츠 항목을 입력하세요" value="교육 콘텐츠">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('content', 2, '교육 콘텐츠')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3" selected>3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="제작 콘텐츠 항목을 입력하세요" value="제품 소개">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('content', 3, '제품 소개')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4" selected>4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="제작 콘텐츠 항목을 입력하세요" value="이벤트 영상">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('content', 4, '이벤트 영상')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5" selected>5</option>
+                                        <option value="6">6</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="제작 콘텐츠 항목을 입력하세요" value="브랜딩 영상">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('content', 5, '브랜딩 영상')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                            <div class="item-row">
+                                <div class="item-number">
+                                    <select class="dropdown">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6" selected>6</option>
+                                    </select>
+                                </div>
+                                <div class="item-text">
+                                    <input type="text" class="text-input" placeholder="제작 콘텐츠 항목을 입력하세요" value="인터뷰 영상">
+                                </div>
+                                <div class="item-action" style="display: flex; gap: 8px;">
+                                    <button class="btn btn-detail" onclick="showDetail('content', 6, '인터뷰 영상')">상세보기</button>
+                                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 상세보기 영역 -->
+            <div class="right-panel">
+                <div class="detail-header">
+                    <div class="detail-title">고객 의뢰 항목 상세</div>
+                </div>
+                <div class="detail-content">
+                    <div id="detailEmpty" class="detail-empty">
+                        <i>📋</i>
+                        <div>상세보기 버튼을 클릭하여<br>항목 정보를 확인하세요</div>
+                    </div>
+                    <div id="detailForm" style="display: none;">
+                        <div class="form-group">
+                            <label class="form-label">제목</label>
+                            <input type="text" id="detailTitle" class="form-input" placeholder="제목을 입력하세요">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">이미지 업로드</label>
+                            <div class="upload-area" onclick="document.getElementById('imageUpload').click()">
+                                <button type="button" class="upload-btn">이미지 선택</button>
+                                <div style="margin-top: 8px; color: #64748b; font-size: 12px;">
+                                    JPG, PNG 파일만 업로드 가능 (최대 5MB)
+                                </div>
+                            </div>
+                            <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="previewImage(this)">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">이미지 확인</label>
+                            <div id="imagePreview" style="min-height: 100px; border: 1px solid #e5e7eb; border-radius: 6px; padding: 18px; text-align: center; color: #9ca3af;">
+                                업로드된 이미지가 여기에 표시됩니다
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">이미지 사용여부</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="imageUseY" name="imageUse" value="Y" checked>
+                                    <label for="imageUseY">사용</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="imageUseN" name="imageUse" value="N">
+                                    <label for="imageUseN">미사용</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">사용여부</label>
+                            <div class="radio-group">
+                                <div class="radio-item">
+                                    <input type="radio" id="useY" name="use" value="Y" checked>
+                                    <label for="useY">사용</label>
+                                </div>
+                                <div class="radio-item">
+                                    <input type="radio" id="useN" name="use" value="N">
+                                    <label for="useN">미사용</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">설명</label>
+                            <textarea id="detailDescription" class="form-input form-textarea" placeholder="상세 설명을 입력하세요"></textarea>
+                        </div>
+                        
+                        <button class="btn-modify" onclick="modifyItem()">수정</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 현재 선택된 항목 정보
+        let currentItem = null;
+
+        // 상세보기 표시
+        function showDetail(type, number, title) {
+            currentItem = { type, number, title };
+            
+            document.getElementById('detailEmpty').style.display = 'none';
+            document.getElementById('detailForm').style.display = 'block';
+            document.getElementById('detailTitle').value = title;
+            
+            // 기본값 설정
+            document.getElementById('detailDescription').value = `${title}에 대한 상세 설명입니다.`;
+            document.getElementById('imagePreview').innerHTML = '업로드된 이미지가 여기에 표시됩니다';
+        }
+
+        // 이미지 미리보기
+        function previewImage(input) {
+            const preview = document.getElementById('imagePreview');
+            
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    preview.innerHTML = `<img src="${e.target.result}" class="image-preview" alt="미리보기">`;
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        // 편집 분야 항목 추가
+        function addEditItem() {
+            const container = document.getElementById('editItems');
+            const itemCount = container.children.length + 1;
+            
+            if (itemCount > 10) {
+                alert('편집 분야는 최대 10개까지 추가할 수 있습니다.');
+                return;
+            }
+            
+            const newItem = createItemRow(itemCount, 10, 'edit');
+            container.appendChild(newItem);
+        }
+
+        // 제작 콘텐츠 항목 추가
+        function addContentItem() {
+            const container = document.getElementById('contentItems');
+            const itemCount = container.children.length + 1;
+            
+            if (itemCount > 10) {
+                alert('제작 콘텐츠는 최대 10개까지 추가할 수 있습니다.');
+                return;
+            }
+            
+            const newItem = createItemRow(itemCount, 10, 'content');
+            container.appendChild(newItem);
+        }
+
+        // 항목 행 생성
+        function createItemRow(selectedNumber, maxNumber, type) {
+            const row = document.createElement('div');
+            row.className = 'item-row';
+            
+            let options = '';
+            for (let i = 1; i <= maxNumber; i++) {
+                options += `<option value="${i}" ${i === selectedNumber ? 'selected' : ''}>${i}</option>`;
+            }
+            
+            row.innerHTML = `
+                <div class="item-number">
+                    <select class="dropdown">${options}</select>
+                </div>
+                <div class="item-text">
+                    <input type="text" class="text-input" placeholder="${type === 'edit' ? '편집 분야' : '제작 콘텐츠'} 항목을 입력하세요">
+                </div>
+                <div class="item-action" style="display: flex; gap: 8px;">
+                    <button class="btn btn-detail" onclick="showDetail('${type}', ${selectedNumber}, this.parentElement.parentElement.querySelector('.text-input').value)">상세보기</button>
+                    <button class="btn" onclick="removeItem(this)" style="background: #ef4444; color: white; padding: 6px 12px; font-size: 12px;">삭제</button>
+                </div>
+            `;
+            
+            return row;
+        }
+        
+        // 항목 삭제 함수
+        function removeItem(button) {
+            const row = button.closest('.item-row');
+            const container = row.parentElement;
+            
+            // 최소 1개는 유지
+            if (container.children.length <= 1) {
+                alert('최소 1개의 항목은 유지되어야 합니다.');
+                return;
+            }
+            
+            if (confirm('이 항목을 삭제하시겠습니까?')) {
+                row.remove();
+            }
+        }
+
+        // 편집 분야 저장
+        function saveEditItems() {
+            const items = [];
+            const rows = document.querySelectorAll('#editItems .item-row');
+            
+            rows.forEach(row => {
+                const number = row.querySelector('select').value;
+                const text = row.querySelector('input').value;
+                if (text.trim()) {
+                    items.push({ number, text });
+                }
+            });
+            
+            console.log('편집 분야 저장:', items);
+            alert('편집 분야 항목이 저장되었습니다.');
+        }
+
+        // 제작 콘텐츠 저장
+        function saveContentItems() {
+            const items = [];
+            const rows = document.querySelectorAll('#contentItems .item-row');
+            
+            rows.forEach(row => {
+                const number = row.querySelector('select').value;
+                const text = row.querySelector('input').value;
+                if (text.trim()) {
+                    items.push({ number, text });
+                }
+            });
+            
+            console.log('제작 콘텐츠 저장:', items);
+            alert('제작 콘텐츠 항목이 저장되었습니다.');
+        }
+
+        // 항목 수정
+        function modifyItem() {
+            if (!currentItem) {
+                alert('수정할 항목을 선택해주세요.');
+                return;
+            }
+            
+            const title = document.getElementById('detailTitle').value;
+            const description = document.getElementById('detailDescription').value;
+            const imageUse = document.querySelector('input[name="imageUse"]:checked').value;
+            const use = document.querySelector('input[name="use"]:checked').value;
+            
+            console.log('항목 수정:', {
+                ...currentItem,
+                title,
+                description,
+                imageUse,
+                use
+            });
+            
+            alert('항목이 수정되었습니다.');
+        }
+
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('클립데스크 고객 의뢰 항목 관리 페이지가 로드되었습니다.');
+        });
+    </script>
+</body>
+</html>

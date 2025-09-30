@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메일 템플릿 관리 - 클립데스크 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: auto;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 템플릿 타입 배지 */
+        .template-type-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .type-signup { background: #dbeafe; color: #1e40af; }
+        .type-draft { background: #fef3c7; color: #92400e; }
+        .type-modify { background: #e0f2fe; color: #0369a1; }
+        .type-approve { background: #dcfce7; color: #166534; }
+        .type-assign { background: #f3e8ff; color: #7c3aed; }
+        .type-reject { background: #fee2e2; color: #dc2626; }
+        .type-request { background: #fce7f3; color: #be185d; }
+        .type-payment { background: #ecfdf5; color: #047857; }
+        
+        /* 코드 배지 */
+        .code-badge {
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 500;
+            white-space: nowrap;
+            background: #f1f5f9;
+            color: #475569;
+            font-family: 'Courier New', monospace;
+        }
+        
+        /* 하단 액션 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📧</span>
+            메일 템플릿 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div style="flex: 1;"></div>
+            <div class="search-group">
+                <label class="search-label">검색</label>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchMailTemplateData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterPage()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">메일 템플릿 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">No.</th>
+                    <th width="200">제목</th>
+                    <th width="150">템플릿타입</th>
+                    <th width="150">이메일 제목 코드</th>
+                    <th width="120">이메일 코드</th>
+                    <th width="150">등록일시</th>
+                </tr>
+            </thead>
+            <tbody id="mailTemplateTableBody">
+                <tr onclick="goToDetail('MAIL001')">
+                    <td>10</td>
+                    <td>회원가입 완료 안내</td>
+                    <td><span class="template-type-badge type-signup">회원가입 완료</span></td>
+                    <td><span class="code-badge">SIGNUP/COMPLETE</span></td>
+                    <td><span class="code-badge">SU_COMP</span></td>
+                    <td>2025-08-27 09:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL002')">
+                    <td>9</td>
+                    <td>가편집 초안 완성 알림</td>
+                    <td><span class="template-type-badge type-draft">가편집 초안 완성</span></td>
+                    <td><span class="code-badge">EDIT/DRAFT/COMPLETE</span></td>
+                    <td><span class="code-badge">ED_DR_COMP</span></td>
+                    <td>2025-08-27 10:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL003')">
+                    <td>8</td>
+                    <td>가편집 수정 완료 안내</td>
+                    <td><span class="template-type-badge type-modify">가편집 수정 완료</span></td>
+                    <td><span class="code-badge">EDIT/MODIFY/COMPLETE</span></td>
+                    <td><span class="code-badge">ED_MO_COMP</span></td>
+                    <td>2025-08-26 11:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL004')">
+                    <td>7</td>
+                    <td>가편집 최종 승인 안내</td>
+                    <td><span class="template-type-badge type-approve">가편집 최종 승인</span></td>
+                    <td><span class="code-badge">EDIT/FINAL/APPROVE</span></td>
+                    <td><span class="code-badge">ED_FI_APP</span></td>
+                    <td>2025-08-26 14:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL005')">
+                    <td>6</td>
+                    <td>본편집 초안 완성 알림</td>
+                    <td><span class="template-type-badge type-draft">본편집 초안 완성</span></td>
+                    <td><span class="code-badge">MAIN/DRAFT/COMPLETE</span></td>
+                    <td><span class="code-badge">MA_DR_COMP</span></td>
+                    <td>2025-08-25 15:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL006')">
+                    <td>5</td>
+                    <td>본편집 수정 완료 안내</td>
+                    <td><span class="template-type-badge type-modify">본편집 수정 완료</span></td>
+                    <td><span class="code-badge">MAIN/MODIFY/COMPLETE</span></td>
+                    <td><span class="code-badge">MA_MO_COMP</span></td>
+                    <td>2025-08-25 16:45:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL007')">
+                    <td>4</td>
+                    <td>본편집 최종 승인 안내</td>
+                    <td><span class="template-type-badge type-approve">본편집 최종 승인</span></td>
+                    <td><span class="code-badge">MAIN/FINAL/APPROVE</span></td>
+                    <td><span class="code-badge">MA_FI_APP</span></td>
+                    <td>2025-08-24 08:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL008')">
+                    <td>3</td>
+                    <td>작업 배정 알림</td>
+                    <td><span class="template-type-badge type-assign">작업 배정</span></td>
+                    <td><span class="code-badge">WORK/ASSIGN</span></td>
+                    <td><span class="code-badge">WO_ASSIGN</span></td>
+                    <td>2025-08-24 09:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL009')">
+                    <td>2</td>
+                    <td>작업 거절 안내</td>
+                    <td><span class="template-type-badge type-reject">작업 거절</span></td>
+                    <td><span class="code-badge">WORK/REJECT</span></td>
+                    <td><span class="code-badge">WO_REJECT</span></td>
+                    <td>2025-08-23 10:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('MAIL010')">
+                    <td>1</td>
+                    <td>편집 의뢰 접수 확인</td>
+                    <td><span class="template-type-badge type-request">편집 의뢰</span></td>
+                    <td><span class="code-badge">EDIT/REQUEST</span></td>
+                    <td><span class="code-badge">ED_REQUEST</span></td>
+                    <td>2025-08-23 11:00:00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchMailTemplateData() {
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            console.log('검색어:', searchKeyword);
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 상세 페이지 이동
+        function goToDetail(id) {
+            const url = `mail-template-detail.html?id=${id}`;
+            window.location.href = url;
+        }
+        
+        // 등록 페이지로 이동
+        function openRegisterPage() {
+            window.location.href = 'mail-template-register.html';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('메일 템플릿 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchMailTemplateData();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadMailTemplateData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadMailTemplateData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('메일 템플릿 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다기록/통화기록 등록 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .info-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+        }
+        
+        .info-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* 설명 영역 */
+        .description-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .description-textarea {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .description-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+
+        .required {
+            color: #dc2626;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📞</span>
+            다기록/통화기록 등록
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">구분<span class="required">*</span></div>
+                    <select id="categorySelect" class="info-select">
+                        <option value="">선택하세요</option>
+                        <option value="통화기록">통화기록</option>
+                        <option value="다기록">다기록</option>
+                        <option value="Transaction">Transaction</option>
+                        <option value="Caption">Caption</option>
+                    </select>
+                    
+                    <div class="info-label">분류명<span class="required">*</span></div>
+                    <input type="text" id="categoryName" class="info-input" placeholder="분류명을 입력하세요">
+                    
+                    <div class="info-label">시작일<span class="required">*</span></div>
+                    <input type="date" id="startDate" class="info-input">
+                    
+                    <div class="info-label">종료일</div>
+                    <input type="datetime-local" id="endDate" class="info-input" value="9999-12-31T23:59" readonly disabled>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 요금 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">요금 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">기본요금<span class="required">*</span></div>
+                    <input type="number" id="basicPrice" class="info-input" placeholder="0" min="0" step="0.01">
+                    
+                    <div class="info-label">추가요금(분)<span class="required">*</span></div>
+                    <input type="number" id="additionalPrice" class="info-input" placeholder="0" min="0" step="0.01">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 상세 설명 섹션 -->
+    <div class="description-section">
+        <div class="section-title">상세 설명</div>
+        <div class="info-content">
+            <textarea class="description-textarea" id="detailDescription" placeholder="상세 설명을 입력하세요..."></textarea>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-register" onclick="registerRecordItem()">
+            <span>📝</span>
+            등록
+        </button>
+    </div>
+
+    <script>
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('다기록/통화기록 등록 페이지 로드');
+            
+            // 현재 날짜를 기본값으로 설정
+            const now = new Date();
+            const currentDate = now.toISOString().slice(0, 10);
+            document.getElementById('startDate').value = currentDate;
+            
+            // 종료일을 9999-12-31 23:59:59로 고정 설정 (이미 HTML에서 설정됨)
+        });
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'record-management.html';
+        }
+        
+        // 등록 기능
+        function registerRecordItem() {
+            // 필수 항목 검증
+            const category = document.getElementById('categorySelect').value;
+            const categoryName = document.getElementById('categoryName').value.trim();
+            const basicPrice = document.getElementById('basicPrice').value;
+            const additionalPrice = document.getElementById('additionalPrice').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            
+            if (!category) {
+                alert('구분을 선택해주세요.');
+                document.getElementById('categorySelect').focus();
+                return;
+            }
+            
+            if (!categoryName) {
+                alert('분류명을 입력해주세요.');
+                document.getElementById('categoryName').focus();
+                return;
+            }
+            
+            if (!basicPrice || basicPrice <= 0) {
+                alert('기본요금을 입력해주세요.');
+                document.getElementById('basicPrice').focus();
+                return;
+            }
+            
+            if (!additionalPrice || additionalPrice <= 0) {
+                alert('추가요금(분)을 입력해주세요.');
+                document.getElementById('additionalPrice').focus();
+                return;
+            }
+            
+            if (!startDate) {
+                alert('시작일을 입력해주세요.');
+                document.getElementById('startDate').focus();
+                return;
+            }
+            
+            // 등록 확인
+            if (confirm('새로운 요금 정책을 등록하시겠습니까?')) {
+                // 통화 단위 결정
+                const isDollar = category === 'Transaction' || category === 'Caption';
+                const currencySymbol = isDollar ? '$' : '원';
+                
+                // 실제 구현 시 서버 API 호출
+                const formData = {
+                    category: category,
+                    categoryName: categoryName,
+                    basicPrice: parseFloat(basicPrice),
+                    additionalPrice: parseFloat(additionalPrice),
+                    currency: currencySymbol,
+                    startDate: startDate,
+                    endDate: '9999-12-31 23:59:59',
+                    description: document.getElementById('detailDescription').value.trim()
+                };
+                
+                console.log('등록 데이터:', formData);
+                alert('등록이 완료되었습니다.');
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,3991 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클립데스크 작업현황 상세 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 작업현황 섹션 */
+        .work-status-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            height: 650px;
+            overflow-y: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .work-details {
+            padding: 24px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 24px;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .detail-description {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+        
+        .detail-description .detail-label {
+            margin-bottom: 8px;
+        }
+        
+        .description-content {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .reference-link-box {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 38px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        
+        /* 상담자 작성 정보 섹션 */
+        .consultant-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            height: 650px;
+            overflow-y: auto;
+        }
+        
+        .consultant-form {
+            padding: 24px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 24px;
+        }
+        
+        .form-group {
+            display: contents;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .form-input,
+        .form-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .form-group.full-width .form-label {
+            margin-bottom: 8px;
+        }
+        
+        .form-textarea {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+        }
+        
+        /* 단위 표시가 있는 입력 필드 */
+        .input-with-unit {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .input-with-unit .form-input {
+            flex: 1;
+        }
+        
+        .unit-label {
+            font-size: 14px;
+            color: #374151;
+            font-weight: 500;
+        }
+        
+        /* 파일 리스트 영역 */
+        .file-list-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .file-list-container {
+            margin-top: 15px;
+        }
+
+        .file-list-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .file-list-table th,
+        .file-list-table td {
+            padding: 6px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .file-list-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .file-list-table td {
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .file-list-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-download {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-download:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-download-all {
+            background-color: #059669;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-download-all:hover {
+            background-color: #047857;
+        }
+
+        .icon-download::before {
+            content: "⬇️";
+        }
+        
+        /* 하단 버튼 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+            padding: 20px 0;
+        }
+
+        .btn-cancel {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin-right: 10px;
+        }
+
+        .btn-cancel:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-list {
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-list:hover {
+            background-color: #4b5563;
+        }
+
+        /* URL 섹션 스타일 */
+        .url-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+
+        .url-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .url-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f9fafb;
+            color: #374151;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+
+        .url-input[readonly] {
+            background: #f9fafb;
+            color: #374151;
+            cursor: default;
+        }
+
+        .url-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .url-input::placeholder {
+            color: #9ca3af;
+        }
+
+        .clipboard-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+
+        .clipboard-btn:hover {
+            background: #2563eb;
+        }
+
+        .clipboard-btn:active {
+            background: #1d4ed8;
+        }
+
+        /* 웍스파이 프로젝트 관련 스타일 */
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .new-project-btn {
+            background: #10b981;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .new-project-btn:hover {
+            background: #059669;
+        }
+
+        .new-project-btn span {
+            font-size: 16px;
+        }
+
+        /* 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-container {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-form {
+            padding: 24px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .form-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        .form-group.required label::after {
+            content: ' *';
+            color: #ef4444;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-range input {
+            flex: 1;
+        }
+
+        .date-range span {
+            color: #6b7280;
+        }
+
+        /* 토글 스위치 */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .toggle-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-label {
+            display: block;
+            width: 44px;
+            height: 24px;
+            background-color: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-label::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-input:checked + .toggle-label {
+            background-color: #3b82f6;
+        }
+
+        .toggle-input:checked + .toggle-label::after {
+            transform: translateX(20px);
+        }
+
+        /* 에디터 툴바 */
+        .simple-editor-toolbar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .simple-editor-btn {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .simple-editor-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .simple-content-editor {
+            min-height: 120px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            background: white;
+            font-size: 14px;
+            line-height: 1.6;
+            outline: none;
+        }
+
+        .simple-content-editor:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .simple-content-editor:empty:before {
+            content: attr(placeholder);
+            color: #9ca3af;
+        }
+
+        /* 파일 업로드 */
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: border-color 0.2s;
+            background: #f9fafb;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .file-upload-area:hover {
+            border-color: #9ca3af;
+        }
+
+        .file-upload-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-text p {
+            margin: 4px 0;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .file-upload-subtext {
+            color: #6b7280 !important;
+            font-size: 12px !important;
+        }
+
+        .file-upload-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .file-upload-btn:hover {
+            background: #2563eb;
+        }
+
+        .file-preview {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 6px;
+        }
+
+        .file-remove-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-list {
+            margin-top: 10px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        .modal-footer {
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: 500;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        /* 웍스파이 프로젝트 섹션 */
+        .workspy-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* 웍스파이 빈 상태 스타일 */
+        .workspy-empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 2px dashed #d1d5db;
+        }
+
+        .workspy-empty-state .icon {
+            font-size: 32px;
+            color: #6b7280;
+            margin-bottom: 15px;
+        }
+
+        .workspy-empty-state p {
+            color: #374151;
+            margin-bottom: 10px;
+        }
+
+        .workspy-empty-state p:last-of-type {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        
+        /* 웍스파이 프로젝트 등록 모달 스타일 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-container {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-form {
+            padding: 24px;
+        }
+
+        .form-row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            align-items: flex-start;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+        }
+
+        .form-group.full-width {
+            flex: 1 1 100%;
+        }
+
+        .form-group.required label::after {
+            content: ' *';
+            color: #ef4444;
+        }
+
+        .form-group label {
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .date-range {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .date-range input {
+            flex: 1;
+        }
+
+        .date-range span {
+            color: #6b7280;
+        }
+
+        /* 토글 스위치 */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .toggle-input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-label {
+            display: block;
+            width: 44px;
+            height: 24px;
+            background-color: #d1d5db;
+            border-radius: 12px;
+            cursor: pointer;
+            position: relative;
+            transition: background-color 0.3s;
+        }
+
+        .toggle-label::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: white;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-input:checked + .toggle-label {
+            background-color: #3b82f6;
+        }
+
+        .toggle-input:checked + .toggle-label::after {
+            transform: translateX(20px);
+        }
+
+        /* 에디터 툴바 */
+        .simple-editor-toolbar {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 8px;
+            padding: 8px;
+            background: #f8f9fa;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .simple-editor-btn {
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .simple-editor-btn:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+
+        .simple-content-editor {
+            min-height: 120px;
+            padding: 12px;
+            border: 1px solid #e5e7eb;
+            border-top: none;
+            border-radius: 0 0 6px 6px;
+            background: white;
+            font-size: 14px;
+            line-height: 1.6;
+            outline: none;
+        }
+
+        .simple-content-editor:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .simple-content-editor:empty:before {
+            content: attr(placeholder);
+            color: #9ca3af;
+        }
+
+        /* 파일 업로드 */
+        .file-upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            transition: border-color 0.2s;
+            background: #f9fafb;
+            height: 180px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .file-upload-area:hover {
+            border-color: #9ca3af;
+        }
+
+        .file-upload-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-text p {
+            margin: 4px 0;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .file-upload-subtext {
+            color: #6b7280 !important;
+            font-size: 12px !important;
+        }
+
+        .file-upload-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin-top: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .file-upload-btn:hover {
+            background: #2563eb;
+        }
+
+        .file-preview {
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-preview img {
+            max-width: 200px;
+            max-height: 150px;
+            border-radius: 6px;
+        }
+
+        .file-remove-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .file-list {
+            margin-top: 10px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 4px;
+            margin-bottom: 4px;
+        }
+
+        .btn-save {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-save:hover {
+            background: #059669;
+        }
+
+        /* 프로젝트 상세 모달 스타일 */
+        .detail-modal {
+            max-width: 1000px;
+            width: 95%;
+            max-height: 95vh;
+        }
+
+        .detail-content {
+            padding: 0;
+        }
+
+        .tab-navigation {
+            display: flex;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8fafc;
+        }
+
+        .detail-tab-btn {
+            flex: 1;
+            padding: 12px 20px;
+            border: none;
+            background: #f8fafc;
+            color: #6b7280;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .detail-tab-btn:hover {
+            background: #f3f4f6;
+        }
+
+        .detail-tab-btn.active {
+            background: white;
+            color: #3b82f6;
+            border-bottom: 3px solid #3b82f6;
+        }
+
+        .detail-tab-panel {
+            padding: 24px;
+            min-height: 400px;
+        }
+
+        .detail-section {
+            margin-bottom: 30px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-item.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .info-item label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-item span {
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .info-item h3 {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        /* 프로젝트 요약 정보 행 스타일 */
+        .project-summary-row {
+            display: flex;
+            gap: 20px;
+            margin: 25px 0;
+            padding: 0;
+        }
+
+        .summary-item {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            padding: 16px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            min-height: 86px;
+        }
+
+        .summary-item label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #6b7280;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin: 0;
+        }
+
+        .summary-value {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1f2937;
+            padding: 4px 0;
+        }
+
+        .content-box {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 12px;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .thumbnail-preview,
+        .attachments-list {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .applicant-stats {
+            display: flex;
+            gap: 20px;
+        }
+
+        .stat-item {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .stat-item strong {
+            color: #3b82f6;
+        }
+
+        .applicants-table-wrapper {
+            overflow-x: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+        }
+
+        .applicants-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+
+        .applicants-table th {
+            background: #f8f9fa;
+            padding: 12px;
+            text-align: center;
+            font-size: 12px;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+            white-space: nowrap;
+        }
+
+        .applicants-table td {
+            padding: 12px;
+            font-size: 12px;
+            color: #6b7280;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .applicants-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        .applicants-table tbody tr:hover {
+            background: #f9fafb;
+        }
+
+        .applicant-status {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .status-approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-cancelled {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+
+        /* 체크박스 정렬 */
+        input[type="checkbox"] {
+            vertical-align: middle;
+            margin: 0;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 10px 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+
+    </style>
+</head>
+<body>
+    <h1 class="page-title">
+        <span>🎬</span>
+        작업현황 상세정보
+    </h1>
+    
+    <div class="detail-container">
+        <!-- 작업현황 섹션 -->
+        <div class="work-status-section">
+            <div class="section-title">고객/의뢰정보</div>
+            <div class="work-details">
+                <div class="detail-grid">
+                    <div class="detail-label">주문번호</div>
+                    <div class="detail-value" id="orderNumber">-</div>
+                    <div class="detail-label">의뢰명</div>
+                    <div class="detail-value" id="requestTitle">-</div>
+                    
+                    <div class="detail-label">의뢰자명</div>
+                    <div class="detail-value" id="clientName">-</div>
+                    <div class="detail-label">편집 분야</div>
+                    <div class="detail-value" id="editField">-</div>
+                    
+                    <div class="detail-label">이메일</div>
+                    <div class="detail-value" id="email">-</div>
+                    <div class="detail-label">제작 콘텐츠</div>
+                    <div class="detail-value" id="contentType">-</div>
+                    
+                    <div class="detail-label">접수일시</div>
+                    <div class="detail-value" id="requestDate">-</div>
+                    <div class="detail-label">연락처</div>
+                    <div class="detail-value" id="contact">-</div>
+                    
+                    <div class="detail-label">최종결제금액</div>
+                    <div class="detail-value" id="finalPaymentAmount">-</div>
+                    <div class="detail-label">작업상태</div>
+                    <div class="detail-value" id="workStatus">-</div>
+                </div>
+                
+                <!-- 참고 영상 링크 (제목 하단에 위치) -->
+                <div class="detail-description">
+                    <div class="detail-label">참고 영상 링크</div>
+                    <div class="reference-link-box" id="referenceLink">-</div>
+                </div>
+                
+                <div class="detail-description">
+                    <div class="detail-label">상세의뢰내역</div>
+                    <div class="description-content" id="detailRequest">
+                        상세의뢰내역이 여기에 표시됩니다.
+                        고객의 구체적인 요청사항과 편집 지시사항이 포함됩니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 상담자 작성 정보 섹션 -->
+        <div class="consultant-section">
+            <div class="section-title">상담사 작성 정보</div>
+            <div class="consultant-form">
+                <div class="form-grid">
+                    <div class="form-label">서브타이틀</div>
+                    <div class="form-input" id="consultantSubTitle">-</div>
+                    <div class="form-label">편집 분야</div>
+                    <div class="form-input" id="consultantEditField">-</div>
+                    
+                    <div class="form-label">제작 콘텐츠</div>
+                    <div class="form-input" id="consultantContentType">-</div>
+                    <div class="form-label">원본 러닝 타임</div>
+                    <div class="form-input" id="originalRuntime">-</div>
+                    
+                    <div class="form-label">카메라 대수</div>
+                    <div class="form-input" id="cameraCount">-</div>
+                    <div class="form-label">편집 등급</div>
+                    <div class="form-input" id="editGrade">-</div>
+                    
+                    <div class="form-label">인트로 유/무</div>
+                    <div class="form-input" id="introYn">-</div>
+                    <div class="form-label">아웃트로 유/무</div>
+                    <div class="form-input" id="outroYn">-</div>
+                    
+                    <div class="form-label">채널 로고 유/무</div>
+                    <div class="form-input" id="channelLogoYn">-</div>
+                    <div class="form-label">썸네일 종류</div>
+                    <div class="form-input" id="thumbnailType">-</div>
+                    
+                    <div class="form-label">최종본 예상 시간</div>
+                    <div class="form-input" id="finalExpectedTime">-</div>
+                    <div class="form-label">부분 결제 금액</div>
+                    <div class="form-input" id="partialPayment">-</div>
+                </div>
+                
+                <div class="form-group full-width">
+                    <div class="form-label">고객 요청 사항</div>
+                    <div class="form-textarea" id="customerRequest">
+                        고객 요청 사항이 여기에 표시됩니다.
+                        상담사가 입력한 고객의 구체적인 요청사항과 편집 지시사항이 포함됩니다.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 파일 리스트 -->
+    <div class="file-list-section">
+        <h3 class="section-title">파일 리스트</h3>
+        <div class="file-list-container">
+            <table class="file-list-table">
+                <thead>
+                    <tr>
+                        <th width="80">No.</th>
+                        <th>파일명</th>
+                        <th width="150">다운로드</th>
+                    </tr>
+                </thead>
+                <tbody id="fileListBody">
+                    <tr>
+                        <td>01</td>
+                        <td>작업완료_영상_최종본.mp4</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('작업완료_영상_최종본.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>편집_영상_1차본.mp4</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('편집_영상_1차본.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>썸네일_이미지.jpg</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('썸네일_이미지.jpg')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>자막_파일.srt</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('자막_파일.srt')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="file-list-actions">
+                <button class="btn btn-primary" onclick="openWorksbyProjectModal()" style="background: #3b82f6; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; display: flex; align-items: center; gap: 6px;">
+                    <span>🚀</span>
+                    웍스파이 프로젝트 등록
+                </button>
+                <button class="btn-download-all" onclick="downloadAllFiles()">
+                    <i class="icon-download"></i> 모두 다운로드
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- URL 섹션 -->
+    <div class="url-section">
+        <div class="url-container">
+            <span style="margin: 0; font-size: 16px; font-weight: 600; color: #374151;">URL</span>
+            <div class="url-input-group">
+                <input type="url" id="urlInput" value="https://clipdesk.soribaro.co.kr/project/CLP-2025-001/detail" readonly class="url-input">
+                <button type="button" onclick="copyToClipboard()" class="clipboard-btn">
+                    클립보드에 복사
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 웍스파이 프로젝트 섹션 (초기에는 숨김) -->
+    <div class="workspy-section" id="workspy-section" style="display: none;">
+        <h2 class="section-title">
+            <span>🚀</span>
+            웍스파이 프로젝트
+        </h2>
+        
+        <div id="workspy-project-content">
+            <!-- 프로젝트 등록 후 동적으로 생성될 내용 -->
+        </div>
+    </div>
+
+    <!-- 하단 버튼 영역 -->
+    <div class="bottom-actions">
+        <button class="btn-cancel" onclick="cancelWork()">작업취소</button>
+        <button class="btn-list" onclick="goToList()">목록</button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 데이터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // 페이지 로드 시 파라미터 데이터로 폼 채우기
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL 파라미터에서 데이터 추출
+            const orderNumber = urlParams.get('orderNumber');
+            const requestTitle = urlParams.get('requestTitle');
+            const subTitle = urlParams.get('subTitle');
+            const totalAmount = urlParams.get('totalAmount');
+            const partialAmount = urlParams.get('partialAmount');
+            const editor = urlParams.get('editor');
+            const status = urlParams.get('status');
+            const clientName = urlParams.get('clientName');
+            const email = urlParams.get('email');
+            const contact = urlParams.get('contact');
+            const requestDate = urlParams.get('requestDate');
+            const completeDate = urlParams.get('completeDate');
+            const workTime = urlParams.get('workTime');
+            
+            // 고객/의뢰정보 데이터 설정
+            if (orderNumber) document.getElementById('orderNumber').textContent = orderNumber;
+            if (requestTitle) document.getElementById('requestTitle').textContent = requestTitle;
+            if (clientName) document.getElementById('clientName').textContent = clientName;
+            if (email) document.getElementById('email').textContent = email;
+            if (contact) document.getElementById('contact').textContent = contact;
+            if (requestDate) document.getElementById('requestDate').textContent = requestDate;
+            if (status) document.getElementById('workStatus').textContent = status;
+            
+            // 편집 분야와 제작 콘텐츠는 임의 데이터로 설정
+            document.getElementById('editField').textContent = '롱폼';
+            document.getElementById('contentType').textContent = '교육 및 정보';
+            document.getElementById('referenceLink').textContent = 'https://youtube.com/example';
+            
+            // 최종결제금액 설정
+            if (totalAmount) {
+                document.getElementById('finalPaymentAmount').textContent = totalAmount;
+            } else {
+                // totalAmount가 없으면 임의 데이터 설정
+                document.getElementById('finalPaymentAmount').textContent = '450,000원';
+            }
+            
+            // 상담사 작성 정보 - 임의 데이터 설정
+            setConsultantData(subTitle);
+            
+            console.log('클립데스크 작업현황 상세 페이지 파라미터:', {
+                orderNumber, requestTitle, subTitle, totalAmount, partialAmount, editor, status,
+                clientName, email, contact, requestDate, completeDate, workTime
+            });
+        });
+        
+        // 상담사 작성 정보 임의 데이터 설정
+        function setConsultantData(subTitle) {
+            // 서브타이틀 설정
+            if (subTitle) {
+                document.getElementById('consultantSubTitle').textContent = subTitle;
+            }
+            
+            // 서브타이틀에 따른 임의 데이터 설정
+            if (subTitle && subTitle.includes('홍보')) {
+                document.getElementById('consultantEditField').textContent = '롱폼';
+                document.getElementById('consultantContentType').textContent = '교육 및 정보';
+                document.getElementById('originalRuntime').textContent = '60분';
+                document.getElementById('cameraCount').textContent = '2대';
+                document.getElementById('editGrade').textContent = '스탠다드 편집';
+                document.getElementById('introYn').textContent = '유';
+                document.getElementById('outroYn').textContent = '유';
+                document.getElementById('channelLogoYn').textContent = '유';
+                document.getElementById('thumbnailType').textContent = '디자인 썸네일';
+                document.getElementById('finalExpectedTime').textContent = '45분';
+                document.getElementById('customerRequest').textContent = '기업 홍보용으로 전문적이고 깔끔한 느낌으로 편집해주세요.';
+                document.getElementById('partialPayment').textContent = '150,000원';
+            } else if (subTitle && subTitle.includes('제품')) {
+                document.getElementById('consultantEditField').textContent = '숏폼';
+                document.getElementById('consultantContentType').textContent = '라이프 스타일';
+                document.getElementById('originalRuntime').textContent = '30분';
+                document.getElementById('cameraCount').textContent = '1대';
+                document.getElementById('editGrade').textContent = '디럭스 편집';
+                document.getElementById('introYn').textContent = '무';
+                document.getElementById('outroYn').textContent = '무';
+                document.getElementById('channelLogoYn').textContent = '무';
+                document.getElementById('thumbnailType').textContent = '일반 썸네일';
+                document.getElementById('finalExpectedTime').textContent = '20분';
+                document.getElementById('customerRequest').textContent = '제품의 특징이 잘 드러나도록 편집해주세요.';
+                document.getElementById('partialPayment').textContent = '120,000원';
+            } else {
+                // 기본값
+                document.getElementById('consultantEditField').textContent = '둘 다';
+                document.getElementById('consultantContentType').textContent = '엔터테인먼트';
+                document.getElementById('originalRuntime').textContent = '120분';
+                document.getElementById('cameraCount').textContent = '3대';
+                document.getElementById('editGrade').textContent = '프리미엄 편집';
+                document.getElementById('introYn').textContent = '유';
+                document.getElementById('outroYn').textContent = '유';
+                document.getElementById('channelLogoYn').textContent = '유';
+                document.getElementById('thumbnailType').textContent = '디자인 썸네일';
+                document.getElementById('finalExpectedTime').textContent = '90분';
+                document.getElementById('customerRequest').textContent = '고품질의 프리미엄 편집을 부탁드립니다.';
+                document.getElementById('partialPayment').textContent = '200,000원';
+            }
+        }
+
+        // 개별 파일 다운로드
+        function downloadFile(filename) {
+            console.log('다운로드 파일:', filename);
+            alert(filename + ' 파일 다운로드를 시작합니다.');
+        }
+
+        // 모든 파일 다운로드
+        function downloadAllFiles() {
+            const fileList = [
+                '작업완료_영상_최종본.mp4',
+                '편집_영상_1차본.mp4',
+                '썸네일_이미지.jpg',
+                '자막_파일.srt'
+            ];
+            
+            console.log('전체 파일 다운로드:', fileList);
+            alert('전체 파일 (' + fileList.length + '개) 다운로드를 시작합니다.');
+        }
+
+        // 작업취소 함수
+        function cancelWork() {
+            if (confirm('작업을 취소하시겠습니까?\n\n취소된 작업은 복구할 수 없습니다.')) {
+                alert('작업이 취소되었습니다.');
+                // 실제로는 서버에 취소 요청을 보내고 상태를 업데이트합니다
+                window.location.href = 'clip_work-management.html';
+            }
+        }
+
+        // 클립보드에 URL 복사 함수
+        function copyToClipboard() {
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value;
+            
+            // 클립보드에 복사
+            navigator.clipboard.writeText(url).then(() => {
+                // 성공 시 버튼 텍스트 임시 변경
+                const button = document.querySelector('.clipboard-btn');
+                const originalText = button.textContent;
+                button.textContent = '복사완료!';
+                button.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#3b82f6';
+                }, 2000);
+                
+            }).catch(err => {
+                // 클립보드 API가 지원되지 않는 경우 fallback
+                try {
+                    urlInput.select();
+                    urlInput.setSelectionRange(0, 99999); // 모바일 지원
+                    document.execCommand('copy');
+                    alert('URL이 클립보드에 복사되었습니다.');
+                } catch (fallbackErr) {
+                    alert('클립보드 복사에 실패했습니다.\nURL을 수동으로 복사해주세요.');
+                }
+            });
+        }
+
+        // 목록으로 돌아가기 함수
+        function goToList() {
+            window.location.href = 'clip_work-management.html';
+        }
+
+        // 파일별 프로젝트 매핑을 저장하는 전역 변수
+        let fileProjectMapping = {};
+        let currentProjectData = null;
+        let manuallyAssignedWorkers = [];
+
+        // 웍스파이 프로젝트 등록 모달 열기
+        function openWorksbyProjectModal() {
+            document.getElementById('worksbyProjectModal').style.display = 'flex';
+            initializeWorksbyProjectForm();
+        }
+
+        // 현재 선택된 파일들 가져오기 (임시 구현)
+        function getCurrentSelectedFiles() {
+            const activeRow = document.querySelector('.detail-container');
+            if (activeRow) {
+                return [
+                    { id: '1', name: '클립데스크_영상편집_2025_01.mp4', duration: '00:15:30' },
+                    { id: '2', name: '클립데스크_영상편집_2025_02.mp4', duration: '00:25:45' }
+                ];
+            }
+            return [];
+        }
+
+        // 웍스파이 프로젝트 폼 초기화
+        function initializeWorksbyProjectForm() {
+            const baseProjectName = "클립데스크 영상 편집";
+            
+            const today = new Date();
+            const twoWeeksLater = new Date();
+            twoWeeksLater.setDate(today.getDate() + 14);
+            
+            // 작업기간: 오늘부터 1주일 후
+            const oneWeekLater = new Date();
+            oneWeekLater.setDate(today.getDate() + 7);
+            
+            const formatDateTime = (date) => { 
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                return `${year}-${month}-${day}T${hours}:${minutes}`;
+            };
+            
+            const formatDate = (date) => { 
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            };
+            
+            document.getElementById('worksbyServiceSelect').value = '클립데스크';
+            document.getElementById('worksbyProjectTitle').value = baseProjectName + ' 편집 프로젝트';
+            
+            // 모집기간: 오늘 현재 시간부터 2주 후 같은 시간까지
+            document.getElementById('worksbyProjectStartDate').value = formatDateTime(today);
+            document.getElementById('worksbyProjectEndDate').value = formatDateTime(twoWeeksLater);
+            
+            // 작업기간: 오늘부터 1주일 후까지
+            document.getElementById('worksbyWorkStartDate').value = formatDate(today);
+            document.getElementById('worksbyWorkEndDate').value = formatDate(oneWeekLater);
+            
+            document.getElementById('worksbyWorkerCount').value = '3';
+            document.getElementById('worksbyBudgetAmount').value = '300000';
+            
+            const contentEditor = document.getElementById('worksbyContentEditor');
+            if (contentEditor) {
+                contentEditor.innerHTML = `
+                    클립데스크 영상 편집<br>
+                    전문적인 편집자를 찾습니다.<br>
+                    빠른 작업 가능한 분 우대
+                `;
+            }
+            
+            document.getElementById('worksbyActiveToggle').checked = true;
+            document.getElementById('worksbyImportantProject').checked = false;
+        }
+
+        // 웍스파이 프로젝트 등록 모달 닫기
+        function closeWorksbyProjectModal() {
+            document.getElementById('worksbyProjectModal').style.display = 'none';
+            document.getElementById('worksbyProjectForm').reset();
+            document.getElementById('worksbyContentEditor').innerHTML = '';
+        }
+
+        // 웍스파이 프로젝트 제출 처리
+        function handleWorksbyProjectSubmit() {
+            const selectedFiles = getCurrentSelectedFiles();
+            
+            const formData = {
+                service: document.getElementById('worksbyServiceSelect').value,
+                title: document.getElementById('worksbyProjectTitle').value,
+                startDate: document.getElementById('worksbyProjectStartDate').value,
+                endDate: document.getElementById('worksbyProjectEndDate').value,
+                workStartDate: document.getElementById('worksbyWorkStartDate').value,
+                workEndDate: document.getElementById('worksbyWorkEndDate').value,
+                qualification: document.getElementById('worksbyQualification').value,
+                workerCount: document.getElementById('worksbyWorkerCount').value,
+                budget: document.getElementById('worksbyBudgetAmount').value,
+                description: document.getElementById('worksbyContentEditor').innerHTML,
+                isActive: document.getElementById('worksbyActiveToggle').checked,
+                isImportant: document.getElementById('worksbyImportantProject').checked,
+                selectedFiles: selectedFiles.map(file => parseInt(file.id))
+            };
+            
+            if (!formData.title.trim()) {
+                alert('프로젝트명을 입력해주세요.');
+                return;
+            }
+            if (!formData.startDate || !formData.endDate) {
+                alert('모집기간을 설정해주세요.');
+                return;
+            }
+            
+            saveWorksbyProject(formData, selectedFiles);
+        }
+
+        // 웍스파이 프로젝트 저장
+        function saveWorksbyProject(formData, selectedFilesObjects) {
+            const projectNo = 'PJ' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + 
+                             Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+            
+            const projectData = {
+                projectNo: projectNo,
+                title: formData.title,
+                service: formData.service,
+                startDate: formData.startDate,
+                endDate: formData.endDate,
+                workStartDate: formData.workStartDate,
+                workEndDate: formData.workEndDate,
+                qualification: formData.qualification,
+                workerCount: formData.workerCount || '0',
+                budget: formatBudget(formData.budget),
+                description: formData.description,
+                isActive: formData.isActive,
+                isImportant: formData.isImportant,
+                selectedFiles: formData.selectedFiles,
+                selectedFilesDetail: selectedFilesObjects && Array.isArray(selectedFilesObjects)
+                    ? selectedFilesObjects.map(f => ({ id: f.id, name: f.name, duration: f.duration }))
+                    : null,
+                regDate: new Date().toISOString().slice(0, 16).replace('T', ' ').replace(/-/g, '.')
+            };
+            
+            currentProjectData = projectData;
+            if (formData.selectedFiles) {
+            formData.selectedFiles.forEach(fileId => {
+                fileProjectMapping[fileId] = projectData;
+            });
+            }
+            
+            addWorksbyProjectToSection(projectData);
+            
+            // 작업관리 영역 표시
+            showWorkManagementSection();
+            
+            closeWorksbyProjectModal();
+            alert('웍스파이 프로젝트가 등록되었습니다!\n\n프로젝트가 웍스파이에 등록되어 작업자 모집이 시작됩니다.');
+        }
+
+        // 웍스파이 프로젝트를 섹션에 추가
+        function addWorksbyProjectToSection(projectData) {
+            // 웍스파이 프로젝트 영역 표시
+            const worksbySection = document.getElementById('workspy-section');
+            if (worksbySection) {
+                worksbySection.style.display = 'block';
+            }
+            
+            const projectContent = document.getElementById('workspy-project-content');
+            if (projectContent) {
+                projectContent.innerHTML = `
+                    <div style="margin-bottom: 15px; display: flex; justify-content: space-between; align-items: center;">
+                        <div style="color: #374151; font-weight: 600; font-size: 14px;">
+                            총 <span style="color: #3b82f6;">1</span>개의 웍스파이 프로젝트
+                        </div>
+                    </div>
+                    <div style="overflow-x: auto;">
+                        <table style="width: 100%; table-layout: fixed; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background: #f8f9fa;">
+                                    <th style="width: 40px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">No.</th>
+                                    <th style="width: 60px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">썸네일</th>
+                                    <th style="width: 277px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">프로젝트명</th>
+                                    <th style="width: 70px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">서비스</th>
+                                    <th style="width: 70px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업자</th>
+                                    <th style="width: 264px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">모집기간</th>
+                                    <th style="width: 93px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">모집상태</th>
+                                    <th style="width: 264px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업기간</th>
+                                    <th style="width: 80px; padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151;">작업상태</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${generateProjectTableRow(projectData)}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            } else {
+                alert('프로젝트 생성 중 오류가 발생했습니다. 페이지를 새로고침 후 다시 시도해주세요.');
+            }
+        }
+
+        // 프로젝트 테이블 행 생성
+        function generateProjectTableRow(data) {
+            const thumbnailColor = getRandomThumbnailColor();
+            const workerStatus = `0 / ${data.workerCount || '0'}`;
+            
+            return `
+                <tr style="cursor: pointer; transition: background-color 0.2s;" 
+                    onmouseenter="this.style.backgroundColor='#f9fafb'" 
+                    onmouseleave="this.style.backgroundColor=''"
+                    onclick="openProjectDetailModal('${data.projectNo}')">
+                    <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">1</td>
+                    <td style="padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
+                        <div style="width: 40px; height: 40px; ${thumbnailColor} border-radius: 6px; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 10px; font-weight: 600; color: white;">
+                            CLIPDESK
+                        </div>
+                    </td>
+                    <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.title}</td>
+                    <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${data.service}</td>
+                    <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">${workerStatus}</td>
+                    <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${formatDateTime(data.startDate)} ~ ${formatDateTime(data.endDate)}</td>
+                    <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
+                        <span style="display:inline-block; background: #3b82f6; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">진행중</span>
+                    </td>
+                    <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.workStartDate && data.workEndDate ? `${formatDisplayDate(data.workStartDate)} ~ ${formatDisplayDate(data.workEndDate)}` : ''}</td>
+                    <td style="padding: 10px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px;">
+                        <span style="display:inline-block; background: #3b82f6; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700;">진행중</span>
+                    </td>
+                </tr>
+            `;
+        }
+
+        // 유틸리티 함수들
+        function getRandomThumbnailColor() {
+            const colors = [
+                'background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);',
+                'background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);',
+                'background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);',
+                'background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);',
+                'background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);'
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function formatDisplayDate(dateTimeString) {
+            const date = new Date(dateTimeString);
+            return date.toISOString().slice(0, 10).replace(/-/g, '.');
+        }
+
+        function formatDateTime(dateTimeString) {
+            if (!dateTimeString) return '';
+            const date = new Date(dateTimeString);
+            const yyyy = date.getFullYear();
+            const mm = String(date.getMonth() + 1).padStart(2, '0');
+            const dd = String(date.getDate()).padStart(2, '0');
+            const hh = String(date.getHours()).padStart(2, '0');
+            const mi = String(date.getMinutes()).padStart(2, '0');
+            return `${yyyy}.${mm}.${dd} ${hh}:${mi}`;
+        }
+
+        function formatBudget(budget) {
+            if (!budget) return '0원';
+            const number = parseInt(budget.replace(/[^0-9]/g, ''));
+            return number.toLocaleString() + '원';
+        }
+
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        // 파일 업로드 핸들러들
+        function handleWorksbyThumbnailUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('worksbyThumbnailImage').src = e.target.result;
+                    document.getElementById('worksbyThumbnailPreview').style.display = 'block';
+                    document.querySelector('#worksbyThumbnailUpload .file-upload-content').style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeWorksbyThumbnail() {
+            document.getElementById('worksbyThumbnailPreview').style.display = 'none';
+            document.querySelector('#worksbyThumbnailUpload .file-upload-content').style.display = 'block';
+            document.getElementById('worksbyThumbnailInput').value = '';
+        }
+
+        function handleWorksbyAttachmentUpload(input) {
+            const fileList = document.getElementById('worksbyAttachmentList');
+            Array.from(input.files).forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>${file.name}</span>
+                    <button type="button" onclick="this.parentElement.remove()">✕</button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+
+        // 프로젝트 상세 모달 열기
+        function openProjectDetailModal(projectNo) {
+            if (!currentProjectData) {
+                alert('프로젝트 데이터를 찾을 수 없습니다.');
+                return;
+            }
+            
+            document.getElementById('projectDetailModal').style.display = 'flex';
+            showDetailTab('info');
+            
+            document.getElementById('detailNo').textContent = currentProjectData.projectNo;
+            document.getElementById('detailService').textContent = currentProjectData.service;
+            document.getElementById('detailRegDate').textContent = currentProjectData.regDate;
+            document.getElementById('detailTitle').textContent = currentProjectData.title;
+            document.getElementById('detailProjectPeriod').textContent = `${formatDateTime(currentProjectData.startDate)} ~ ${formatDateTime(currentProjectData.endDate)}`;
+            
+            const workPeriodText = (currentProjectData.workStartDate && currentProjectData.workEndDate)
+                ? `${formatDisplayDate(currentProjectData.workStartDate)} ~ ${formatDisplayDate(currentProjectData.workEndDate)}`
+                : '2025.08.20 ~ 2025.09.03';
+            const workEl = document.getElementById('detailWorkPeriod');
+            if (workEl) workEl.textContent = workPeriodText;
+            
+            const qualificationLabelMap = { anyone: '누구나', stenographer: '속기사' };
+            const qualEl = document.getElementById('detailQualification');
+            if (qualEl) qualEl.textContent = qualificationLabelMap[currentProjectData.qualification] || '누구나';
+            
+            document.getElementById('detailWorkerCount').textContent = `0 / ${currentProjectData.workerCount}명`;
+            document.getElementById('detailBudget').textContent = currentProjectData.budget;
+            document.getElementById('detailContent').innerHTML = currentProjectData.description;
+            document.getElementById('detailThumbnail').textContent = '이미지 없음';
+            document.getElementById('detailAttachments').textContent = '파일 없음';
+            
+            displaySelectedFilesInDetail(currentProjectData.selectedFilesDetail || []);
+        }
+
+        function displaySelectedFilesInDetail(selectedFilesDetail) {
+            const textBox = document.getElementById('detailSelectedFilesBox');
+            let lines = [];
+            if (Array.isArray(selectedFilesDetail) && selectedFilesDetail.length > 0) {
+                lines = selectedFilesDetail.map(f => `${f.name} (${f.duration})`);
+            } else {
+                lines = [
+                    '클립데스크_영상편집_2025_01.mp4 (00:15:30)',
+                    '클립데스크_영상편집_2025_02.mp4 (00:25:45)'
+                ];
+            }
+            if (textBox) {
+                textBox.textContent = lines.join('\n');
+            }
+        }
+
+        function closeProjectDetailModal() {
+            document.getElementById('projectDetailModal').style.display = 'none';
+        }
+
+        function showDetailTab(tabName) {
+            document.querySelectorAll('.detail-tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+                btn.style.background = '#f8fafc';
+                btn.style.color = '#6b7280';
+                btn.style.borderBottom = 'none';
+            });
+            
+            document.querySelectorAll('.detail-tab-panel').forEach(panel => {
+                panel.classList.remove('active');
+                panel.style.display = 'none';
+            });
+            
+            const activeBtn = document.querySelector(`[onclick="showDetailTab('${tabName}')"]`);
+            const activePanel = document.getElementById(`detail-tab-${tabName}`);
+            
+            if (activeBtn && activePanel) {
+                activeBtn.classList.add('active');
+                activeBtn.style.background = 'white';
+                activeBtn.style.color = '#3b82f6';
+                activeBtn.style.borderBottom = '3px solid #3b82f6';
+                
+                activePanel.classList.add('active');
+                activePanel.style.display = 'block';
+            }
+            
+            const actionBtn = document.querySelector('.btn-edit');
+            if (actionBtn) {
+                if (tabName === 'info') {
+                    actionBtn.textContent = '수정';
+                    actionBtn.onclick = editProjectDetail;
+                    actionBtn.style.background = '#3b82f6';
+                } else if (tabName === 'workers') {
+                    actionBtn.textContent = '확정';
+                    actionBtn.onclick = confirmWorkers;
+                    actionBtn.style.background = '#f59e0b';
+                    
+                    setTimeout(() => {
+                        sortWorkersByAssignmentStatus();
+                    }, 100);
+                }
+            }
+        }
+
+        function editProjectDetail() {
+            alert('프로젝트 수정 기능은 향후 구현 예정입니다.');
+        }
+
+        function confirmWorkers() {
+            const assignedWorkers = getAssignedWorkersFromTable();
+            const manualWorkers = manuallyAssignedWorkers;
+            const totalAssignedWorkers = assignedWorkers.length + manualWorkers.length;
+            
+            if (totalAssignedWorkers === 0) {
+                alert('배정된 작업자가 없습니다.\n작업자를 배정한 후 확정해주세요.');
+                return;
+            }
+            
+            if (confirm(`총 ${totalAssignedWorkers}명의 작업자 배정을 확정하시겠습니까?\n\n확정 후에는 작업관리가 시작됩니다.`)) {
+                closeProjectDetailModal();
+                
+                // 작업관리 섹션 표시
+                showWorkManagementSection();
+                
+                alert('작업자 확정이 완료되었습니다.\n\n작업관리가 시작되었습니다.');
+            }
+        }
+
+        // 작업자 관리 함수들
+        function toggleAllWorkers(selectAllCheckbox) {
+            const checkboxes = document.querySelectorAll('input[name="workerSelect"]');
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = selectAllCheckbox.checked;
+            });
+            updateSelectedWorkerCount();
+        }
+        
+        function updateSelectedWorkerCount() {
+            const checkedBoxes = document.querySelectorAll('input[name="workerSelect"]:checked');
+            const countElement = document.getElementById('selectedWorkerCount');
+            if (countElement) {
+                countElement.textContent = checkedBoxes.length;
+            }
+        }
+        
+        document.addEventListener('change', function(e) {
+            if (e.target.name === 'workerSelect') {
+                updateSelectedWorkerCount();
+            }
+        });
+        
+        function batchUpdateWorkerStatus(status) {
+            const checkedBoxes = document.querySelectorAll('input[name="workerSelect"]:checked');
+            if (checkedBoxes.length === 0) {
+                alert('선택된 작업자가 없습니다.');
+                return;
+            }
+            
+            const statusText = status === 'assigned' ? '배정' : '미배정';
+            const confirmMessage = `선택된 ${checkedBoxes.length}명의 작업자를 ${statusText}하시겠습니까?`;
+            
+            if (confirm(confirmMessage)) {
+                checkedBoxes.forEach(checkbox => {
+                    const row = checkbox.closest('tr');
+                    const statusCell = row.querySelector('td:nth-child(9)');
+                    const statusSpan = statusCell.querySelector('.applicant-status');
+                    
+                    if (status === 'assigned') {
+                        statusSpan.textContent = '배정';
+                        statusSpan.className = 'applicant-status status-approved';
+                        const assignDateCell = row.querySelector('td:nth-child(8)');
+                        const today = new Date();
+                        assignDateCell.textContent = today.toISOString().slice(0, 10).replace(/-/g, '.');
+                    } else if (status === 'unassigned') {
+                        statusSpan.textContent = '미배정';
+                        statusSpan.className = 'applicant-status status-cancelled';
+                        const assignDateCell = row.querySelector('td:nth-child(8)');
+                        assignDateCell.textContent = '-';
+                    }
+                    
+                    checkbox.checked = false;
+                });
+                
+                const selectAllCheckbox = document.getElementById('selectAllWorkers');
+                if (selectAllCheckbox) {
+                    selectAllCheckbox.checked = false;
+                }
+                
+                updateSelectedWorkerCount();
+                updateWorkerStats();
+                sortWorkersByAssignmentStatus();
+                
+                alert(`${checkedBoxes.length}명의 작업자가 ${statusText}되었습니다.`);
+            }
+        }
+        
+        function sortWorkersByAssignmentStatus() {
+            const table = document.querySelector('#detail-tab-workers table tbody');
+            if (!table) return;
+            
+            const rows = Array.from(table.querySelectorAll('tr'));
+            const headerRow = rows.find(row => row.querySelector('th'));
+            const dataRows = rows.filter(row => !row.querySelector('th'));
+            
+            dataRows.sort((a, b) => {
+                const statusA = a.querySelector('.applicant-status')?.textContent.trim();
+                const statusB = b.querySelector('.applicant-status')?.textContent.trim();
+                
+                const priorityA = statusA === '배정' ? 0 : 1;
+                const priorityB = statusB === '배정' ? 0 : 1;
+                
+                if (priorityA !== priorityB) {
+                    return priorityA - priorityB;
+                }
+                
+                const nameA = a.querySelector('td:nth-child(2)')?.textContent.trim() || '';
+                const nameB = b.querySelector('td:nth-child(2)')?.textContent.trim() || '';
+                return nameA.localeCompare(nameB);
+            });
+            
+            table.innerHTML = '';
+            if (headerRow) {
+                table.appendChild(headerRow);
+            }
+            dataRows.forEach(row => {
+                table.appendChild(row);
+            });
+        }
+        
+        function getAssignedWorkersFromTable() {
+            const assignedWorkers = [];
+            const workerRows = document.querySelectorAll('#detail-tab-workers .applicants-table tbody tr');
+            
+            workerRows.forEach(row => {
+                const statusSpan = row.querySelector('.applicant-status');
+                if (statusSpan && statusSpan.textContent.trim() === '배정') {
+                    const nameCell = row.querySelector('td:nth-child(2)');
+                    if (nameCell) {
+                        assignedWorkers.push({
+                            name: nameCell.textContent.trim()
+                        });
+                    }
+                }
+            });
+            
+            return assignedWorkers;
+        }
+        
+        function updateWorkerStats() {
+            const allRows = document.querySelectorAll('#workersList tr');
+            let assignedCount = 0;
+            let totalCount = allRows.length;
+            
+            allRows.forEach(row => {
+                const statusSpan = row.querySelector('.applicant-status');
+                if (statusSpan && statusSpan.textContent.trim() === '배정') {
+                    assignedCount++;
+                }
+            });
+            
+            const unassignedCount = totalCount - assignedCount;
+            
+            document.getElementById('totalWorkers').textContent = totalCount;
+            document.getElementById('assignedCount').textContent = assignedCount;
+            document.getElementById('excludedCount').textContent = unassignedCount;
+        }
+
+        // 작업자 수동 배정 관련 함수들
+        function openManualAssignModal() {
+            document.getElementById('manualAssignModal').style.display = 'block';
+            document.getElementById('searchResults').innerHTML = '<div style="text-align: center; color: #6b7280; padding: 40px;">검색어를 입력하고 검색 버튼을 눌러주세요.</div>';
+            document.getElementById('searchKeyword').value = '';
+        }
+        
+        function closeManualAssignModal() {
+            document.getElementById('manualAssignModal').style.display = 'none';
+        }
+        
+        function searchWorkers() {
+            const searchType = document.getElementById('searchType').value;
+            const keyword = document.getElementById('searchKeyword').value.trim();
+            
+            if (!keyword) {
+                alert('검색어를 입력하세요.');
+                return;
+            }
+
+            const allWorkers = [
+                { id: 'w001', name: '차정훈', email: 'jeonghoon@email.com', phone: '010-1234-5678', address: '서울특별시 강남구', certificate: '1급' },
+                { id: 'w002', name: '김철수', email: 'chulsu@email.com', phone: '010-2345-6789', address: '경기도 수원시', certificate: '2급' },
+                { id: 'w003', name: '김민지', email: 'minji@email.com', phone: '010-1111-2222', address: '서울특별시 강남구', certificate: '1급' },
+                { id: 'w004', name: '박준호', email: 'junho@email.com', phone: '010-2222-3333', address: '경기도 성남시', certificate: '2급' },
+                { id: 'w005', name: '이소연', email: 'soyeon@email.com', phone: '010-3333-4444', address: '인천광역시', certificate: '3급' },
+                { id: 'w006', name: '정민수', email: 'minsu@email.com', phone: '010-4444-5555', address: '대전광역시', certificate: '1급' },
+                { id: 'w007', name: '한지영', email: 'jiyoung@email.com', phone: '010-5555-6666', address: '부산광역시', certificate: '2급' },
+                { id: 'w008', name: '윤서준', email: 'seojun@email.com', phone: '010-6666-7777', address: '광주광역시', certificate: '1급' }
+            ];
+
+            const filteredWorkers = allWorkers.filter(worker => {
+                if (manuallyAssignedWorkers.some(assigned => assigned.id === worker.id)) {
+                    return false;
+                }
+                
+                switch(searchType) {
+                    case 'name':
+                        return worker.name.includes(keyword);
+                    case 'email':
+                        return worker.email.includes(keyword);
+                    case 'phone':
+                        return worker.phone.includes(keyword);
+                    default:
+                        return worker.name.includes(keyword);
+                }
+            });
+
+            const resultsContainer = document.getElementById('searchResults');
+            
+            if (filteredWorkers.length === 0) {
+                resultsContainer.innerHTML = '<div style="text-align: center; color: #6b7280; padding: 40px;">검색 결과가 없습니다.</div>';
+                return;
+            }
+
+            let html = '<div style="margin-bottom: 15px; color: #374151; font-weight: 600;">검색 결과 ' + filteredWorkers.length + '명</div>';
+            
+            filteredWorkers.forEach(worker => {
+                html += `
+                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 15px; margin-bottom: 10px; background: white;">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 8px;">
+                                    <input type="radio" name="selectedWorker" value="${worker.id}" data-name="${worker.name}" style="margin: 0;">
+                                    <div>
+                                        <div style="font-weight: 600; color: #1f2937; margin-bottom: 4px;">${worker.name}</div>
+                                        <div style="font-size: 13px; color: #6b7280;">${worker.email}</div>
+                                    </div>
+                                </div>
+                                <div style="font-size: 13px; color: #6b7280; margin-left: 30px;">
+                                    📞 ${worker.phone} | 📍 ${worker.address} | 📜 ${worker.certificate}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            resultsContainer.innerHTML = html;
+        }
+        
+        function assignSelectedWorker() {
+            const selectedRadio = document.querySelector('input[name="selectedWorker"]:checked');
+            
+            if (!selectedRadio) {
+                alert('배정할 작업자를 선택하세요.');
+                return;
+            }
+
+            const workerId = selectedRadio.value;
+            const workerName = selectedRadio.getAttribute('data-name');
+            
+            if (manuallyAssignedWorkers.some(worker => worker.id === workerId)) {
+                alert('이미 배정된 작업자입니다.');
+                return;
+            }
+            
+            if (confirm(`${workerName} 작업자를 배정하시겠습니까?`)) {
+                const allWorkers = [
+                    { id: 'w001', name: '차정훈', email: 'jeonghoon@email.com', phone: '010-1234-5678', address: '서울특별시 강남구', certificate: '1급' },
+                    { id: 'w002', name: '김철수', email: 'chulsu@email.com', phone: '010-2345-6789', address: '경기도 수원시', certificate: '2급' },
+                    { id: 'w003', name: '김민지', email: 'minji@email.com', phone: '010-1111-2222', address: '서울특별시 강남구', certificate: '1급' },
+                    { id: 'w004', name: '박준호', email: 'junho@email.com', phone: '010-2222-3333', address: '경기도 성남시', certificate: '2급' },
+                    { id: 'w005', name: '이소연', email: 'soyeon@email.com', phone: '010-3333-4444', address: '인천광역시', certificate: '3급' },
+                    { id: 'w006', name: '정민수', email: 'minsu@email.com', phone: '010-4444-5555', address: '대전광역시', certificate: '1급' },
+                    { id: 'w007', name: '한지영', email: 'jiyoung@email.com', phone: '010-5555-6666', address: '부산광역시', certificate: '2급' },
+                    { id: 'w008', name: '윤서준', email: 'seojun@email.com', phone: '010-6666-7777', address: '광주광역시', certificate: '1급' }
+                ];
+                
+                const selectedWorker = allWorkers.find(worker => worker.id === workerId);
+                if (selectedWorker) {
+                    manuallyAssignedWorkers.push(selectedWorker);
+                    updateManuallyAssignedWorkersDisplay();
+                    
+                    // 작업관리 영역의 편집자 정보도 업데이트
+                    const editorNameElement = document.getElementById('editor-name');
+                    if (editorNameElement) {
+                        editorNameElement.textContent = workerName;
+                        editorNameElement.style.color = '#374151';
+                    }
+                    
+                    // 편집자 상태를 "할당됨"으로 변경
+                    const editorStatusElement = document.getElementById('editor-status');
+                    if (editorStatusElement) {
+                        editorStatusElement.textContent = '할당됨';
+                        editorStatusElement.style.background = '#fef3c7';
+                        editorStatusElement.style.color = '#92400e';
+                    }
+                    
+                    alert(`${workerName} 작업자가 배정되었습니다.`);
+                    closeManualAssignModal();
+                }
+            }
+        }
+        
+        function updateManuallyAssignedWorkersDisplay() {
+            const count = manuallyAssignedWorkers.length;
+            
+            const section = document.getElementById('manuallyAssignedWorkersSection');
+            const list = document.getElementById('manuallyAssignedWorkersList');
+            const counter = document.getElementById('manualAssignedCount');
+            
+            if (count > 0) {
+                if (section) section.style.display = 'block';
+                if (counter) counter.textContent = count;
+                
+                let html = '';
+                manuallyAssignedWorkers.forEach((worker, index) => {
+                    html += `
+                        <div style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: white; border-radius: 6px; margin-bottom: 8px; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; align-items: center; gap: 15px;">
+                                <div style="display: flex; align-items: center; justify-content: center; width: 32px; height: 32px; background: #4f46e5; color: white; border-radius: 50%; font-size: 12px; font-weight: 600;">
+                                    ${index + 1}
+                                </div>
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 2px;">
+                                        <span style="font-weight: 600; color: #1f2937;">${worker.name}</span>
+                                        <span style="font-size: 11px; color: #4f46e5;">${worker.email}</span>
+                                    </div>
+                                    <div style="font-size: 12px; color: #6b7280;">
+                                        📞 ${worker.phone} | 📍 ${worker.address}
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="removeManuallyAssignedWorker('${worker.id}')" style="background: #ef4444; color: white; border: none; border-radius: 4px; padding: 6px 10px; font-size: 11px; cursor: pointer; transition: background-color 0.2s;">
+                                제거
+                            </button>
+                        </div>
+                    `;
+                });
+                
+                if (list) list.innerHTML = html;
+            } else {
+                if (section) section.style.display = 'none';
+            }
+        }
+        
+        function removeManuallyAssignedWorker(workerId) {
+            const workerIndex = manuallyAssignedWorkers.findIndex(worker => worker.id === workerId);
+            if (workerIndex > -1) {
+                const worker = manuallyAssignedWorkers[workerIndex];
+                if (confirm(`${worker.name} 작업자 배정을 취소하시겠습니까?`)) {
+                    manuallyAssignedWorkers.splice(workerIndex, 1);
+                    updateManuallyAssignedWorkersDisplay();
+                }
+            }
+        }
+
+        // 프로젝트 마감 함수
+        function closeProject() {
+            if (confirm('프로젝트를 마감하시겠습니까?\n\n마감된 프로젝트는 더 이상 수정할 수 없습니다.')) {
+                // 프로젝트 상태를 마감으로 변경
+                if (currentProjectData) {
+                    currentProjectData.status = 'closed';
+                    currentProjectData.closedDate = new Date().toISOString().slice(0, 16).replace('T', ' ').replace(/-/g, '.');
+                }
+                
+                closeProjectDetailModal();
+                
+                // 웍스파이 프로젝트 테이블에서 상태 업데이트
+                updateProjectStatusInTable('마감');
+                
+                alert('프로젝트가 마감되었습니다.');
+            }
+        }
+
+        // 프로젝트 삭제 함수
+        function deleteProject() {
+            if (confirm('프로젝트를 삭제하시겠습니까?\n\n삭제된 프로젝트는 복구할 수 없습니다.')) {
+                // 프로젝트 데이터 초기화
+                currentProjectData = null;
+                fileProjectMapping = {};
+                
+                // 웍스파이 프로젝트 영역 숨기기
+                const worksbySection = document.getElementById('workspy-section');
+                if (worksbySection) {
+                    worksbySection.style.display = 'none';
+                }
+                
+                // 작업관리 영역 숨기기
+                const workMgmt = document.getElementById('work-management-section');
+                if (workMgmt) {
+                    workMgmt.remove();
+                }
+                
+                closeProjectDetailModal();
+                alert('프로젝트가 삭제되었습니다.');
+            }
+        }
+
+        // 작업관리 섹션 표시
+        function showWorkManagementSection() {
+            // 웍스파이 프로젝트 섹션 뒤에 작업관리 섹션 추가
+            const worksbySection = document.querySelector('.workspy-section');
+            
+            // 기존 작업관리 섹션이 있으면 제거
+            const existingWorkSection = document.getElementById('work-management-section');
+            if (existingWorkSection) {
+                existingWorkSection.remove();
+            }
+            
+            // 새 작업관리 섹션 생성
+            const workManagementSection = document.createElement('div');
+            workManagementSection.id = 'work-management-section';
+            workManagementSection.className = 'workspy-section';
+            workManagementSection.style.marginTop = '30px';
+            
+            workManagementSection.innerHTML = `
+                <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1f2937; font-size: 18px; font-weight: 600;">
+                    <span>🔧</span>
+                    작업관리
+                </h2>
+                
+                <div style="display: flex; gap: 20px;">
+                    <!-- 왼쪽: 편집자 배정 -->
+                    <div style="flex: 1; background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; padding: 20px;">
+                        <div style="margin-bottom: 20px;">
+                            <div style="color: #374151; font-weight: 600; font-size: 14px; margin-bottom: 10px;">
+                                편집자 배정
+                            </div>
+                        </div>
+                        
+                        <div id="work-management-list">
+                            <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #f9fafb;">
+                                <div style="display: flex; flex-direction: column; gap: 12px;">
+                                    <div>
+                                        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">편집자</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <div id="editor-name" style="flex: 1; max-width: 50%; padding: 8px 12px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px; font-weight: 500; color: #9ca3af;">
+                                                -
+                                            </div>
+                                            <button onclick="openWorkerAssignModal()" style="background: #8b5cf6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">
+                                                👤 편집자 배정
+                                            </button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">편집자 상태</label>
+                                        <div style="max-width: 50%;">
+                                            <span id="editor-status" style="background: #fef2f2; color: #991b1b; padding: 4px 12px; border-radius: 12px; font-size: 14px; font-weight: 600;">할당 안됨</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">가편집 산출물</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select style="flex: 1; max-width: 50%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-weight: 500; background: white;">
+                                                <option value="작업대기" selected>작업대기</option>
+                                                <option value="작업시작">작업시작</option>
+                                                <option value="초안완료">초안완료</option>
+                                                <option value="수정중">수정중</option>
+                                                <option value="수정완료">수정완료</option>
+                                                <option value="최종완료">최종완료</option>
+                                            </select>
+                                            <button style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">확인</button>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">본편집 산출물</label>
+                                        <div style="display: flex; gap: 8px; align-items: center;">
+                                            <select style="flex: 1; max-width: 50%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-weight: 500; background: #f3f4f6; color: #9ca3af; cursor: not-allowed;" disabled>
+                                                <option value="작업대기" selected>작업대기</option>
+                                                <option value="작업시작">작업시작</option>
+                                                <option value="초안완료">초안완료</option>
+                                                <option value="수정중">수정중</option>
+                                                <option value="수정완료">수정완료</option>
+                                                <option value="최종완료">최종완료</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 오른쪽: 작업 특이사항 -->
+                    <div style="flex: 1; background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; padding: 20px;">
+                        <div style="margin-bottom: 20px;">
+                            <div style="color: #374151; font-weight: 600; font-size: 14px; margin-bottom: 10px;">
+                                작업 특이사항
+                            </div>
+                        </div>
+                        
+                        <div style="height: calc(100% - 100px); display: flex; flex-direction: column;">
+                            <textarea id="work-special-notes" placeholder="작업 특이사항을 입력하세요..." style="flex: 1; min-height: 300px; padding: 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; resize: vertical; font-family: inherit; line-height: 1.5;"></textarea>
+                            
+                            <div style="margin-top: 20px; text-align: right;">
+                                <button onclick="saveSpecialNotes()" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; font-weight: 500;">저장</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 웍스파이 섹션 뒤에 삽입
+            if (worksbySection && worksbySection.parentNode) {
+                worksbySection.parentNode.insertBefore(workManagementSection, worksbySection.nextSibling);
+            }
+        }
+
+        // 작업관리 리스트 채우기
+        function populateWorkManagementTable() {
+            const listContainer = document.getElementById('work-management-list');
+            
+            if (!listContainer) return;
+            
+            // 배정된 작업자 목록 가져오기
+            const assignedWorkers = getAssignedWorkersFromTable();
+            const manualWorkers = manuallyAssignedWorkers;
+            const allAssignedWorkers = [...assignedWorkers, ...manualWorkers];
+            
+            // 드롭다운 옵션들
+            const workStatusOptions = [
+                '작업대기', '작업시작', '초안완료', '수정중', '수정완료', '최종완료'
+            ];
+            
+            // 리스트 내용 생성
+            let listContent = '';
+            allAssignedWorkers.forEach((worker, index) => {
+                // 드롭다운 생성 함수
+                const createDropdown = (id, currentValue = '작업대기', disabled = false) => {
+                    let options = '';
+                    workStatusOptions.forEach(option => {
+                        const selected = option === currentValue ? 'selected' : '';
+                        options += `<option value="${option}" ${selected}>${option}</option>`;
+                    });
+                    const disabledAttr = disabled ? 'disabled' : '';
+                    const disabledStyle = disabled ? 'background: #f3f4f6; color: #9ca3af; cursor: not-allowed;' : 'background: white;';
+                    return `<select id="${id}" ${disabledAttr} style="flex: 1; max-width: 50%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-weight: 500; ${disabledStyle}" onchange="updateWorkStatus('${worker.name || worker.id}', '${id}')">${options}</select>`;
+                };
+                
+                listContent += `
+                    <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; background: #f9fafb;" data-worker-id="${worker.id || worker.name}">
+                        <div style="display: flex; flex-direction: column; gap: 12px;">
+                            <div>
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">편집자</label>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    <div style="flex: 1; max-width: 50%; padding: 8px 12px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; font-size: 14px; font-weight: 500;">
+                                        ${worker.name}
+                                    </div>
+                                    <button onclick="openWorkerAssignModal()" style="background: #8b5cf6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">
+                                        👤 새 작업자 배정
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">편집자 상태</label>
+                                <div style="max-width: 50%;">
+                                    <span id="editor-status-${index}" style="background: #fef3c7; color: #92400e; padding: 4px 12px; border-radius: 12px; font-size: 14px; font-weight: 600;">할당됨</span>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">가편집 산출물</label>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    ${createDropdown(`rough-edit-${index}`, '작업대기')}
+                                    <div id="rough-edit-buttons-${index}">
+                                        <button onclick="handleRoughEditAction('${index}', 'confirm')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">확인</button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">본편집 산출물</label>
+                                <div style="display: flex; gap: 8px; align-items: center;">
+                                    ${createDropdown(`final-edit-${index}`, '작업대기', true)}
+                                    <div id="final-edit-buttons-${index}" style="display: none;">
+                                        <!-- 본편집 버튼들이 여기에 동적으로 생성됩니다 -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            if (allAssignedWorkers.length === 0) {
+                listContent = '<div style="text-align: center; color: #6b7280; padding: 40px;">배정된 작업자가 없습니다.</div>';
+            }
+            
+            listContainer.innerHTML = listContent;
+        }
+        
+        // 작업 상태 업데이트 함수
+        function updateWorkStatus(workerName, dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            if (dropdown) {
+                const newStatus = dropdown.value;
+                console.log(`${workerName}의 ${dropdownId} 상태가 ${newStatus}로 변경되었습니다.`);
+                
+                // 워커 인덱스 추출
+                const workerIndex = dropdownId.split('-').pop();
+                
+                // 가편집 또는 본편집 구분
+                if (dropdownId.includes('rough-edit')) {
+                    updateRoughEditButtons(workerIndex, newStatus);
+                } else if (dropdownId.includes('final-edit')) {
+                    updateFinalEditButtons(workerIndex, newStatus);
+                }
+            }
+        }
+
+        // 가편집 버튼 업데이트
+        function updateRoughEditButtons(workerIndex, status) {
+            const buttonsContainer = document.getElementById(`rough-edit-buttons-${workerIndex}`);
+            if (!buttonsContainer) return;
+
+            let buttonsHTML = '';
+            switch(status) {
+                case '작업대기':
+                case '작업시작':
+                case '수정중':
+                case '최종완료':
+                    buttonsHTML = '<button onclick="handleRoughEditAction(\'' + workerIndex + '\', \'confirm\')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">확인</button>';
+                    break;
+                case '초안완료':
+                case '수정완료':
+                    buttonsHTML = '<button onclick="handleRoughEditAction(\'' + workerIndex + '\', \'upload\')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">업로드</button>';
+                    break;
+            }
+            buttonsContainer.innerHTML = buttonsHTML;
+        }
+
+        // 본편집 버튼 업데이트
+        function updateFinalEditButtons(workerIndex, status) {
+            const buttonsContainer = document.getElementById(`final-edit-buttons-${workerIndex}`);
+            if (!buttonsContainer) return;
+
+            let buttonsHTML = '';
+            switch(status) {
+                case '작업대기':
+                    buttonsHTML = `
+                        <button onclick="handleFinalEditAction('${workerIndex}', 'confirm')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">확인</button>
+                        <button onclick="handleFinalEditAction('${workerIndex}', 'revert')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">되돌리기</button>
+                    `;
+                    break;
+                case '작업시작':
+                case '수정중':
+                case '최종완료':
+                    buttonsHTML = '<button onclick="handleFinalEditAction(\'' + workerIndex + '\', \'confirm\')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">확인</button>';
+                    break;
+                case '초안완료':
+                case '수정완료':
+                    buttonsHTML = '<button onclick="handleFinalEditAction(\'' + workerIndex + '\', \'upload\')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">업로드</button>';
+                    break;
+            }
+            buttonsContainer.innerHTML = buttonsHTML;
+        }
+
+        // 작업 특이사항 저장 함수
+        function saveSpecialNotes() {
+            const notes = document.getElementById('work-special-notes').value;
+            if (notes.trim()) {
+                alert('작업 특이사항이 저장되었습니다.');
+                console.log('작업 특이사항:', notes);
+            } else {
+                alert('작업 특이사항을 입력하세요.');
+            }
+        }
+
+        // 작업자 배정 모달 관련 함수들
+        function openWorkerAssignModal() {
+            document.getElementById('workerAssignModal').style.display = 'flex';
+            // 라디오 버튼 초기화
+            document.querySelectorAll('input[name="clipWorker"]').forEach(radio => radio.checked = false);
+            // 검색 결과 초기화
+            document.getElementById('clip-search-results').innerHTML = '<div style="text-align: center; color: #6b7280; padding: 20px;">검색어를 입력하고 검색 버튼을 눌러주세요.</div>';
+            document.getElementById('clip-worker-search').value = '';
+        }
+
+        function closeWorkerAssignModal() {
+            document.getElementById('workerAssignModal').style.display = 'none';
+        }
+
+        function searchClipWorkers() {
+            const searchKeyword = document.getElementById('clip-worker-search').value.trim();
+            const searchType = document.getElementById('clip-search-type').value;
+            const resultsContainer = document.getElementById('clip-search-results');
+            
+            if (!searchKeyword) {
+                alert('검색어를 입력하세요.');
+                return;
+            }
+
+            // 더미 검색 결과 데이터
+            const allWorkers = [
+                { id: 'c001', name: '김편집', gender: '남성', phone: '010-1234-5678', birth: '1990.05.15', address: '서울특별시 강남구', grade: '1급', email: 'kim@email.com' },
+                { id: 'c002', name: '이영상', gender: '여성', phone: '010-2345-6789', birth: '1989.03.22', address: '대구광역시', grade: '1급', email: 'lee@email.com' },
+                { id: 'c003', name: '박미디어', gender: '남성', phone: '010-3456-7890', birth: '1991.07.10', address: '광주광역시', grade: '2급', email: 'park@email.com' },
+                { id: 'c004', name: '최클립', gender: '여성', phone: '010-4567-8901', birth: '1986.12.05', address: '울산광역시', grade: '1급', email: 'choi@email.com' },
+                { id: 'c005', name: '정비디오', gender: '남성', phone: '010-5678-9012', birth: '1993.09.18', address: '세종특별시', grade: '3급', email: 'jung@email.com' }
+            ];
+
+            // 검색 필터링
+            let filteredWorkers = allWorkers.filter(worker => {
+                const searchValue = searchKeyword.toLowerCase();
+                switch(searchType) {
+                    case 'name':
+                        return worker.name.toLowerCase().includes(searchValue);
+                    case 'phone':
+                        return worker.phone.includes(searchKeyword);
+                    case 'email':
+                        return worker.email.toLowerCase().includes(searchValue);
+                    case 'address':
+                        return worker.address.toLowerCase().includes(searchValue);
+                    default:
+                        return worker.name.toLowerCase().includes(searchValue) ||
+                               worker.phone.includes(searchKeyword) ||
+                               worker.email.toLowerCase().includes(searchValue);
+                }
+            });
+
+            // 검색 결과 HTML 생성
+            let html = '';
+            if (filteredWorkers.length === 0) {
+                html = '<div style="text-align: center; color: #6b7280; padding: 20px;">검색 결과가 없습니다.</div>';
+            } else {
+                filteredWorkers.forEach(worker => {
+                    html += `
+                        <div style="display: flex; align-items: center; gap: 15px; padding: 8px 12px; background: white; border-radius: 6px; margin-bottom: 6px;">
+                            <input type="radio" name="clipWorker" value="${worker.id}" id="search-${worker.id}" data-name="${worker.name}">
+                            <label for="search-${worker.id}" style="flex: 1; cursor: pointer; display: flex; align-items: center; gap: 20px;">
+                                <div style="font-weight: 600; color: #1f2937; font-size: 15px; min-width: 80px;">${worker.name}</div>
+                                <div style="font-size: 14px; color: #6b7280;">${worker.gender} | ${worker.phone} | ${worker.birth} | ${worker.address} | ${worker.grade}</div>
+                            </label>
+                        </div>
+                    `;
+                });
+            }
+
+            resultsContainer.innerHTML = html;
+        }
+
+        // 작업자 관리 모달에서 작업자 확정
+        function confirmWorkers() {
+            const assignedWorkers = document.querySelectorAll('#workersList .applicant-status.status-approved');
+            if (assignedWorkers.length === 0) {
+                alert('배정된 작업자가 없습니다.');
+                return;
+            }
+
+            // 배정된 작업자 이름 수집
+            const workerNames = [];
+            assignedWorkers.forEach(statusSpan => {
+                const row = statusSpan.closest('tr');
+                const nameCell = row.querySelector('td:nth-child(2)');
+                if (nameCell) {
+                    workerNames.push(nameCell.textContent.trim());
+                }
+            });
+            
+            if (confirm(`${workerNames.length}명의 작업자를 확정하시겠습니까?\n\n확정 작업자: ${workerNames.join(', ')}`)) {
+                // 첫 번째 배정된 작업자로 편집자 정보 업데이트
+                if (workerNames.length > 0) {
+                    const editorNameElement = document.getElementById('editor-name');
+                    if (editorNameElement) {
+                        editorNameElement.textContent = workerNames[0];
+                        editorNameElement.style.color = '#374151';
+                    }
+                    
+                    // 편집자 상태를 "할당됨"으로 변경
+                    const editorStatusElement = document.getElementById('editor-status');
+                    if (editorStatusElement) {
+                        editorStatusElement.textContent = '할당됨';
+                        editorStatusElement.style.background = '#fef3c7';
+                        editorStatusElement.style.color = '#92400e';
+                    }
+                }
+                
+                closeWorkerAssignModal();
+                alert(`${workerNames.length}명의 작업자가 확정되었습니다.`);
+            }
+        }
+
+        // 가편집 산출물 액션 처리
+        function handleRoughEditAction(workerIndex, actionType) {
+            const roughEditDropdown = document.getElementById(`rough-edit-${workerIndex}`);
+            const currentStatus = roughEditDropdown.value;
+            
+            switch(actionType) {
+                case 'confirm':
+                    handleRoughEditConfirm(workerIndex, currentStatus);
+                    break;
+                case 'upload':
+                    handleFileUpload(workerIndex, 'rough');
+                    break;
+                case 'view':
+                    handleFileView(workerIndex, 'rough');
+                    break;
+                case 'delete':
+                    handleFileDelete(workerIndex, 'rough');
+                    break;
+            }
+        }
+
+        // 가편집 확인 버튼 처리
+        function handleRoughEditConfirm(workerIndex, status) {
+            switch(status) {
+                case '작업대기':
+                    if (confirm('상태값을 변경하시겠습니까?')) {
+                        // 상태 변경 없이 확인만
+                        alert('상태가 확인되었습니다.');
+                    }
+                    break;
+                case '작업시작':
+                    if (confirm('가편집을 시작하시겠습니까?')) {
+                        alert('가편집 작업이 성공적으로 수락되고 시작되었습니다.');
+                        updateEditorStatus(workerIndex, '수락');
+                    }
+                    break;
+                case '수정중':
+                    if (confirm('가편집 수정 중으로 상태값을 변경하시겠습니까?')) {
+                        alert('가편집 수정 중 상태로 변경되었습니다.');
+                    }
+                    break;
+                case '최종완료':
+                    if (confirm('가편집 작업을 완료하시겠습니까?')) {
+                        alert('가편집 작업이 완료되었습니다.');
+                        // 가편집 영역 비활성화 및 본편집 영역 활성화
+                        disableRoughEdit(workerIndex);
+                        enableFinalEdit(workerIndex);
+                    }
+                    break;
+                default:
+                    alert('현재 상태에서는 확인 액션을 수행할 수 없습니다.');
+            }
+        }
+
+        // 편집자 상태 업데이트
+        function updateEditorStatus(workerIndex, status) {
+            const statusElement = document.getElementById(`editor-status-${workerIndex}`);
+            if (statusElement) {
+                statusElement.textContent = status;
+                // 상태에 따른 색상 변경
+                switch(status) {
+                    case '할당됨':
+                        statusElement.style.background = '#fef3c7';
+                        statusElement.style.color = '#92400e';
+                        break;
+                    case '수락':
+                        statusElement.style.background = '#dcfce7';
+                        statusElement.style.color = '#166534';
+                        break;
+                }
+            }
+        }
+
+        // 가편집 영역 비활성화
+        function disableRoughEdit(workerIndex) {
+            const roughEditDropdown = document.getElementById(`rough-edit-${workerIndex}`);
+            const roughEditButtons = document.getElementById(`rough-edit-buttons-${workerIndex}`);
+            
+            if (roughEditDropdown) {
+                roughEditDropdown.disabled = true;
+                roughEditDropdown.style.background = '#f3f4f6';
+                roughEditDropdown.style.color = '#9ca3af';
+                roughEditDropdown.style.cursor = 'not-allowed';
+            }
+            
+            if (roughEditButtons) {
+                roughEditButtons.style.display = 'none';
+            }
+        }
+
+        // 본편집 영역 활성화
+        function enableFinalEdit(workerIndex) {
+            const finalEditDropdown = document.getElementById(`final-edit-${workerIndex}`);
+            const finalEditButtons = document.getElementById(`final-edit-buttons-${workerIndex}`);
+            
+            if (finalEditDropdown) {
+                finalEditDropdown.disabled = false;
+                finalEditDropdown.style.background = 'white';
+                finalEditDropdown.style.color = 'inherit';
+                finalEditDropdown.style.cursor = 'pointer';
+            }
+            
+            if (finalEditButtons) {
+                finalEditButtons.style.display = 'block';
+                finalEditButtons.innerHTML = `
+                    <button onclick="handleFinalEditAction('${workerIndex}', 'confirm')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">확인</button>
+                    <button onclick="handleFinalEditAction('${workerIndex}', 'revert')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">되돌리기</button>
+                `;
+            }
+        }
+
+        // 본편집 산출물 액션 처리
+        function handleFinalEditAction(workerIndex, actionType) {
+            const finalEditDropdown = document.getElementById(`final-edit-${workerIndex}`);
+            const currentStatus = finalEditDropdown.value;
+            
+            switch(actionType) {
+                case 'confirm':
+                    handleFinalEditConfirm(workerIndex, currentStatus);
+                    break;
+                case 'revert':
+                    handleFinalEditRevert(workerIndex);
+                    break;
+                case 'upload':
+                    handleFileUpload(workerIndex, 'final');
+                    break;
+                case 'view':
+                    handleFileView(workerIndex, 'final');
+                    break;
+                case 'delete':
+                    handleFileDelete(workerIndex, 'final');
+                    break;
+            }
+        }
+
+        // 본편집 확인 버튼 처리
+        function handleFinalEditConfirm(workerIndex, status) {
+            switch(status) {
+                case '작업대기':
+                    if (confirm('상태값을 변경하시겠습니까?')) {
+                        alert('상태가 확인되었습니다.');
+                    }
+                    break;
+                case '작업시작':
+                    if (confirm('본편집을 시작하시겠습니까?')) {
+                        alert('본편집 작업이 성공적으로 수락되고 시작되었습니다.');
+                    }
+                    break;
+                case '수정중':
+                    if (confirm('본편집 수정 중으로 상태값을 변경하시겠습니까?')) {
+                        alert('본편집 수정 중 상태로 변경되었습니다.');
+                    }
+                    break;
+                case '최종완료':
+                    if (confirm('본편집 작업을 완료하시겠습니까?')) {
+                        alert('본편집 작업이 완료되었습니다.');
+                        // 본편집 완료 처리
+                        disableFinalEdit(workerIndex);
+                    }
+                    break;
+                default:
+                    alert('현재 상태에서는 확인 액션을 수행할 수 없습니다.');
+            }
+        }
+
+        // 본편집 되돌리기 처리
+        function handleFinalEditRevert(workerIndex) {
+            if (confirm('가편집 완료 상태에서 초안완료 상태로 되돌리시겠습니까?')) {
+                alert('가편집 완료 상태에서 초안완료 상태로 성공적으로 되돌렸습니다.');
+                
+                // 가편집 영역 다시 활성화
+                const roughEditDropdown = document.getElementById(`rough-edit-${workerIndex}`);
+                const roughEditButtons = document.getElementById(`rough-edit-buttons-${workerIndex}`);
+                
+                if (roughEditDropdown) {
+                    roughEditDropdown.disabled = false;
+                    roughEditDropdown.value = '초안완료';
+                    roughEditDropdown.style.background = 'white';
+                    roughEditDropdown.style.color = 'inherit';
+                    roughEditDropdown.style.cursor = 'pointer';
+                }
+                
+                if (roughEditButtons) {
+                    roughEditButtons.style.display = 'block';
+                    roughEditButtons.innerHTML = '<button onclick="handleRoughEditAction(\'' + workerIndex + '\', \'upload\')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">업로드</button>';
+                }
+                
+                // 본편집 영역 다시 비활성화
+                const finalEditDropdown = document.getElementById(`final-edit-${workerIndex}`);
+                const finalEditButtons = document.getElementById(`final-edit-buttons-${workerIndex}`);
+                
+                if (finalEditDropdown) {
+                    finalEditDropdown.disabled = true;
+                    finalEditDropdown.value = '작업대기';
+                    finalEditDropdown.style.background = '#f3f4f6';
+                    finalEditDropdown.style.color = '#9ca3af';
+                    finalEditDropdown.style.cursor = 'not-allowed';
+                }
+                
+                if (finalEditButtons) {
+                    finalEditButtons.style.display = 'none';
+                }
+            }
+        }
+
+        // 본편집 영역 비활성화
+        function disableFinalEdit(workerIndex) {
+            const finalEditDropdown = document.getElementById(`final-edit-${workerIndex}`);
+            const finalEditButtons = document.getElementById(`final-edit-buttons-${workerIndex}`);
+            
+            if (finalEditDropdown) {
+                finalEditDropdown.disabled = true;
+                finalEditDropdown.style.background = '#f3f4f6';
+                finalEditDropdown.style.color = '#9ca3af';
+                finalEditDropdown.style.cursor = 'not-allowed';
+            }
+            
+            if (finalEditButtons) {
+                finalEditButtons.style.display = 'none';
+            }
+        }
+
+        // 파일 업로드 처리 (실제 업로드 없이 바로 다음 단계로)
+        function handleFileUpload(workerIndex, editType) {
+            // 업로드 확인 다이얼로그
+            if (confirm(`${editType === 'rough' ? '가편집' : '본편집'} 파일을 업로드하시겠습니까?`)) {
+                alert(`${editType === 'rough' ? '가편집' : '본편집'} 파일이 성공적으로 업로드되었습니다.`);
+                // 업로드 후 버튼 변경
+                updateButtonsAfterUpload(workerIndex, editType);
+            }
+        }
+
+        // 업로드 후 버튼 업데이트 (업로드 버튼 유지 + 뷰어/삭제 버튼 추가)
+        function updateButtonsAfterUpload(workerIndex, editType) {
+            const buttonsContainer = document.getElementById(`${editType}-edit-buttons-${workerIndex}`);
+            if (buttonsContainer) {
+                buttonsContainer.innerHTML = `
+                    <button onclick="handleFileUpload('${workerIndex}', '${editType}')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">업로드</button>
+                    <button onclick="handleFileView('${workerIndex}', '${editType}')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">뷰어</button>
+                    <button onclick="handleFileDelete('${workerIndex}', '${editType}')" style="background: #6b7280; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">삭제</button>
+                `;
+            }
+        }
+
+        // 파일 뷰어 처리
+        function handleFileView(workerIndex, editType) {
+            alert(`${editType === 'rough' ? '가편집' : '본편집'} 파일 뷰어를 엽니다.`);
+            // 실제로는 파일 뷰어 모달이나 새 창을 열어 파일을 표시
+        }
+
+        // 파일 삭제 처리
+        function handleFileDelete(workerIndex, editType) {
+            if (confirm(`${editType === 'rough' ? '가편집' : '본편집'} 파일을 삭제하시겠습니까?`)) {
+                alert('파일이 삭제되었습니다.');
+                // 삭제 후 업로드 버튼만 남기기
+                const buttonsContainer = document.getElementById(`${editType}-edit-buttons-${workerIndex}`);
+                if (buttonsContainer) {
+                    buttonsContainer.innerHTML = `<button onclick="handleFileUpload('${workerIndex}', '${editType}')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">업로드</button>`;
+                }
+            }
+        }
+
+        // 프로젝트 테이블에서 상태 업데이트
+        function updateProjectStatusInTable(status) {
+            // 웍스파이 프로젝트 테이블에서 현재 프로젝트의 상태 업데이트
+            const projectRows = document.querySelectorAll('#workspy-empty-state table tbody tr');
+            projectRows.forEach(row => {
+                const statusCell = row.querySelector('td:last-child');
+                if (statusCell) {
+                    const statusSpan = statusCell.querySelector('span');
+                    if (statusSpan) {
+                        statusSpan.textContent = status;
+                        if (status === '마감') {
+                            statusSpan.style.background = '#6b7280';
+                        }
+                    }
+                }
+            });
+        }
+
+
+
+
+
+
+        // 에디터 텍스트 포맷팅  
+        function formatText(command) {
+            document.execCommand(command, false, null);
+        }
+
+        // 파일 업로드 핸들러들 (기획용 - 실제 업로드 없음)
+        function handleWorksbyThumbnailUpload(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    document.getElementById('worksbyThumbnailImage').src = e.target.result;
+                    document.getElementById('worksbyThumbnailPreview').style.display = 'block';
+                    document.querySelector('#worksbyThumbnailUpload .file-upload-content').style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+
+        function removeWorksbyThumbnail() {
+            document.getElementById('worksbyThumbnailPreview').style.display = 'none';
+            document.querySelector('#worksbyThumbnailUpload .file-upload-content').style.display = 'block';
+            document.getElementById('worksbyThumbnailInput').value = '';
+        }
+
+        function handleWorksbyAttachmentUpload(input) {
+            const fileList = document.getElementById('worksbyAttachmentList');
+            Array.from(input.files).forEach(file => {
+                const fileItem = document.createElement('div');
+                fileItem.className = 'file-item';
+                fileItem.innerHTML = `
+                    <span>${file.name}</span>
+                    <button type="button" onclick="this.parentElement.remove()">✕</button>
+                `;
+                fileList.appendChild(fileItem);
+            });
+        }
+    </script>
+
+    <!-- 웍스파이 프로젝트 등록 모달 -->
+    <div id="worksbyProjectModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2>웍스파이 프로젝트 등록</h2>
+                <button class="modal-close" onclick="closeWorksbyProjectModal()">&times;</button>
+            </div>
+            
+            <form class="modal-form" id="worksbyProjectForm">
+                <div class="form-row" style="display: flex; align-items: center; gap: 20px;">
+                    <div class="form-group required" style="flex: 1;">
+                        <label>서비스</label>
+                        <input type="text" id="worksbyServiceSelect" value="클립데스크" readonly style="background-color: #f9fafb; color: #6b7280; cursor: not-allowed;">
+                    </div>
+                    
+                    <div style="display: flex; align-items: center; gap: 30px; margin-top: 24px;">
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label style="margin: 0; font-size: 14px; font-weight: 500; color: #374151;">신청버튼</label>
+                            <div class="toggle-switch">
+                                <input type="checkbox" id="worksbyActiveToggle" class="toggle-input" checked>
+                                <label for="worksbyActiveToggle" class="toggle-label"></label>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <input type="checkbox" id="worksbyImportantProject">
+                            <label for="worksbyImportantProject" style="margin: 0; font-size: 14px; font-weight: 500; color: #374151;">중요</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group required full-width">
+                        <label>프로젝트명</label>
+                        <input type="text" id="worksbyProjectTitle" required placeholder="프로젝트명을 입력하세요">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label>모집기간</label>
+                        <div class="date-range">
+                            <input type="datetime-local" id="worksbyProjectStartDate" required>
+                            <span>~</span>
+                            <input type="datetime-local" id="worksbyProjectEndDate" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>작업자 수</label>
+                        <input type="number" id="worksbyWorkerCount" placeholder="0" style="width: 80px;">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>금액</label>
+                        <input type="text" id="worksbyBudgetAmount" placeholder="금액을 입력하세요" style="width: 120px;">
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group required">
+                        <label>작업기간</label>
+                        <div class="date-range">
+                            <input type="date" id="worksbyWorkStartDate" style="width: 217px; flex: none;">
+                            <span>~</span>
+                            <input type="date" id="worksbyWorkEndDate" style="width: 217px; flex: none;">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>지원자격</label>
+                        <select id="worksbyQualification" style="min-width: 140px; height: 36px; border: 1px solid #d1d5db; border-radius: 6px; padding: 0 10px; font-size: 14px;">
+                            <option value="anyone">누구나</option>
+                            <option value="stenographer">속기사</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group full-width">
+                        <label>프로젝트 설명</label>
+                        <div class="simple-editor-toolbar">
+                            <button type="button" class="simple-editor-btn" onclick="formatText('bold')" title="굵게"><strong>B</strong></button>
+                            <button type="button" class="simple-editor-btn" onclick="formatText('underline')" title="밑줄"><u>U</u></button>
+                            <button type="button" class="simple-editor-btn" onclick="formatText('insertUnorderedList')" title="목록">•</button>
+                            <button type="button" class="simple-editor-btn" onclick="formatText('createLink')" title="링크">🔗</button>
+                        </div>
+                        <div id="worksbyContentEditor" contenteditable="true" class="simple-content-editor" 
+                             placeholder="프로젝트 상세설명을 입력하세요..."></div>
+                    </div>
+                </div>
+                
+                
+                <div class="modal-footer">
+                    <button type="button" class="btn-secondary" onclick="closeWorksbyProjectModal()">취소</button>
+                    <button type="button" class="btn-save" onclick="handleWorksbyProjectSubmit()">저장</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 프로젝트 상세보기 모달 -->
+    <div id="projectDetailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container detail-modal">
+            <div class="modal-header">
+                <h2>📋 프로젝트 상세정보</h2>
+                <button class="modal-close" onclick="closeProjectDetailModal()">&times;</button>
+            </div>
+            
+            <div class="detail-content">
+                <!-- 탭 네비게이션 제거 - 프로젝트 정보만 표시 -->
+                <div style="background: #f8fafc; padding: 15px 20px; border-bottom: 1px solid #e5e7eb;">
+                    <h2 style="margin: 0; font-size: 18px; font-weight: 600; color: #3b82f6; display: flex; align-items: center; gap: 10px;">
+                        📄 프로젝트 정보
+                    </h2>
+                </div>
+                
+                <!-- 탭 콘텐츠 -->
+                <div class="tab-content">
+                    <!-- 프로젝트 정보 탭 -->
+                    <div id="detail-tab-info" class="detail-tab-panel active">
+                        <div class="detail-section">
+                            <div class="info-grid" style="grid-template-columns: repeat(3, 1fr); align-items: end;">
+                                <div class="info-item">
+                                    <label>프로젝트번호</label>
+                                    <span id="detailNo">PJ202508060001</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>서비스</label>
+                                    <span id="detailService">클립데스크</span>
+                                </div>
+                                <div class="info-item">
+                                    <label>등록일</label>
+                                    <span id="detailRegDate">2025.08.06 09:00</span>
+                                </div>
+                            </div>
+                            
+                            <div class="info-item full-width" style="margin-bottom: 15px;">
+                                <label>프로젝트명</label>
+                                <h3 id="detailTitle">클립데스크 영상 편집 프로젝트</h3>
+                            </div>
+                            
+                            <!-- 선택된 파일 목록 -->
+                            <div class="info-item full-width" style="margin-bottom: 25px; z-index: 1; position: relative;">
+                                <label>선택된 파일</label>
+                                <div id="detailSelectedFilesBox" style="margin-top: 8px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 6px; padding: 10px 12px; min-height: 72px; white-space: pre-line; color: #374151; display: flex; flex-direction: column; justify-content: center;">
+클립데스크_영상편집_2025_01.mp4 (00:05:00)
+클립데스크_영상편집_2025_02.mp4 (01:30:00)
+                                </div>
+                            </div>
+                            
+                            <div class="project-summary-row" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: end; position: relative; z-index: 0;">
+                                <div class="summary-item" style="min-height: 92px;">
+                                    <label>모집기간</label>
+                                    <div class="summary-value" id="detailProjectPeriod" style="min-width: 240px;">2025.08.06 11:00 ~ 2025.08.20 11:00</div>
+                                </div>
+                                <div class="summary-item">
+                                    <label>모집상태</label>
+                                    <div class="summary-value"><span id="detailRecruitStatusBadge" style="display:inline-block; background: #3b82f6; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; min-width: 86px; text-align: center;">진행중</span></div>
+                                </div>
+                                <div class="summary-item" style="min-height: 92px;">
+                                    <label>작업기간</label>
+                                    <div class="summary-value" id="detailWorkPeriod" style="min-width: 240px;">2025.08.21 ~ 2025.09.02</div>
+                                </div>
+                                <div class="summary-item">
+                                    <label>작업상태</label>
+                                    <div class="summary-value"><span id="detailWorkStatusBadge" style="display:inline-block; background: #3b82f6; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 700; min-width: 86px; text-align: center;">진행중</span></div>
+                                </div>
+                                <div class="summary-item" style="margin-top: 10px;">
+                                    <label>작업자 수</label>
+                                    <div class="summary-value" id="detailWorkerCount">0 / 5명</div>
+                                </div>
+                                <div class="summary-item" style="margin-top: 10px;">
+                                    <label>금액</label>
+                                    <div class="summary-value" id="detailBudget">300,000원</div>
+                                </div>
+                                <div class="summary-item" style="margin-top: 10px;">
+                                    <label>지원자격</label>
+                                    <div class="summary-value" id="detailQualification">누구나</div>
+                                </div>
+                            </div>
+
+                            <div class="info-item full-width" style="margin-bottom: 25px;">
+                                <label>프로젝트 설명</label>
+                                <div id="detailContent" class="content-box">클립데스크 영상 편집<br>전문적인 편집자를 찾습니다.<br>빠른 작업 가능한 분</div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <!-- 모달 하단 버튼 -->
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 10px;">
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-danger" onclick="closeProject()" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; gap: 6px;" onmouseover="this.style.background='#059669'" onmouseout="this.style.background='#10b981'">
+                        <span>✅</span>
+                    프로젝트 마감
+                </button>
+                    <button type="button" class="btn-delete" onclick="deleteProject()" style="background: #dc2626; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; gap: 6px;">
+                        <span>🗑️</span>
+                        프로젝트 삭제
+                    </button>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button type="button" class="btn-secondary" onclick="closeProjectDetailModal()">닫기</button>
+                    <button type="button" class="btn-edit" onclick="editProjectDetail()">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 작업자 수동 배정 검색 팝업 -->
+    <div id="manualAssignModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1500;">
+        <div style="position: relative; width: 90%; max-width: 800px; margin: 5% auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;">
+            <!-- 팝업 헤더 -->
+            <div style="background: #4f46e5; color: white; padding: 20px 30px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e5e7eb;">
+                <h2 style="margin: 0; font-size: 1.4rem; font-weight: 600;">작업자 수동 배정</h2>
+                <button onclick="closeManualAssignModal()" style="background: none; border: none; color: white; font-size: 28px; cursor: pointer; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center;">×</button>
+            </div>
+
+            <!-- 검색 조건 -->
+            <div style="padding: 20px 30px; border-bottom: 1px solid #e5e7eb;">
+                <div style="display: flex; gap: 15px; align-items: center;">
+                    <select id="searchType" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;">
+                        <option value="name">이름</option>
+                        <option value="email">이메일</option>
+                    </select>
+                    <input type="text" id="searchKeyword" placeholder="검색어를 입력하세요" style="flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px;" onkeypress="if(event.key==='Enter') searchWorkers()">
+                    <button onclick="searchWorkers()" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        검색
+                    </button>
+                </div>
+            </div>
+
+            <!-- 검색 결과 -->
+            <div style="max-height: 400px; overflow-y: auto; padding: 20px 30px;">
+                <div id="searchResults">
+                    <div style="text-align: center; color: #6b7280; padding: 40px;">
+                        검색어를 입력하고 검색 버튼을 눌러주세요.
+                    </div>
+                </div>
+            </div>
+
+            <!-- 배정 버튼 -->
+            <div style="padding: 20px 30px; border-top: 1px solid #e5e7eb; text-align: right;">
+                <button onclick="closeManualAssignModal()" style="background: #6b7280; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; margin-right: 10px;">
+                    취소
+                </button>
+                <button onclick="assignSelectedWorker()" style="background: #10b981; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                    선택한 작업자 배정
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 프로젝트 상세 모달 -->
+    <div id="projectDetailModal" class="modal-overlay" style="display: none;">
+        <div class="modal-container detail-modal">
+            <div class="modal-header">
+                <h2>프로젝트 상세정보</h2>
+                <button class="modal-close" onclick="closeProjectDetailModal()">&times;</button>
+            </div>
+            
+            <div class="detail-content">
+                <!-- 탭 네비게이션 -->
+                <div class="tab-navigation">
+                    <button class="detail-tab-btn active" onclick="showDetailTab('info')">
+                        📋 프로젝트 정보
+                    </button>
+                    <button class="detail-tab-btn" onclick="showDetailTab('workers')">
+                        👥 작업자 관리
+                    </button>
+                </div>
+
+                <!-- 프로젝트 정보 탭 -->
+                <div id="detail-tab-info" class="detail-tab-panel active">
+                    <div class="detail-section">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <label>프로젝트 번호</label>
+                                <span id="detailNo">PJ20250825001</span>
+                            </div>
+                            <div class="info-item">
+                                <label>서비스</label>
+                                <span id="detailService">클립데스크</span>
+                            </div>
+                            <div class="info-item">
+                                <label>등록일</label>
+                                <span id="detailRegDate">2025.08.25 14:30</span>
+                            </div>
+                            <div class="info-item full-width">
+                                <label>프로젝트명</label>
+                                <h3 id="detailTitle">클립데스크 영상 편집 프로젝트</h3>
+                            </div>
+                        </div>
+                        
+                        <!-- 프로젝트 요약 정보 행 -->
+                        <div class="project-summary-row">
+                            <div class="summary-item">
+                                <label>모집 기간</label>
+                                <div class="summary-value" id="detailProjectPeriod">2025.08.25 14:30 ~ 2025.09.08 14:30</div>
+                            </div>
+                            <div class="summary-item">
+                                <label>작업 기간</label>
+                                <div class="summary-value" id="detailWorkPeriod">2025.08.20 ~ 2025.09.03</div>
+                            </div>
+                            <div class="summary-item">
+                                <label>지원 자격</label>
+                                <div class="summary-value" id="detailQualification">누구나</div>
+                            </div>
+                        </div>
+
+                        <div class="project-summary-row">
+                            <div class="summary-item">
+                                <label>모집 인원</label>
+                                <div class="summary-value" id="detailWorkerCount">0 / 3명</div>
+                            </div>
+                            <div class="summary-item">
+                                <label>예산</label>
+                                <div class="summary-value" id="detailBudget">300,000원</div>
+                            </div>
+                            <div class="summary-item">
+                                <label>선택된 파일</label>
+                                <div class="summary-value">
+                                    <div class="content-box" id="detailSelectedFilesBox" style="font-size: 12px; padding: 8px; min-height: 40px;">
+                                        클립데스크_영상편집_2025_01.mp4 (00:15:30)
+                                        클립데스크_영상편집_2025_02.mp4 (00:25:45)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detail-section">
+                        <h3 class="section-title">프로젝트 설명</h3>
+                        <div class="content-box" id="detailContent">
+                            클립데스크 영상 편집<br>
+                            전문적인 편집자를 찾습니다.<br>
+                            빠른 작업 가능한 분 우대
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 작업자 관리 탭 -->
+                <div id="detail-tab-workers" class="detail-tab-panel" style="display: none;">
+                    <div class="detail-section">
+                        <div class="section-header">
+                            <h3 class="section-title">지원자 현황</h3>
+                            <div class="applicant-stats">
+                                <div class="stat-item">총 <strong id="totalWorkers">12</strong>명</div>
+                                <div class="stat-item">배정 <strong id="assignedCount">0</strong>명</div>
+                                <div class="stat-item">미배정 <strong id="excludedCount">12</strong>명</div>
+                                <div class="stat-item">선택 <strong id="selectedWorkerCount">0</strong>명</div>
+                            </div>
+                        </div>
+
+                        <!-- 작업자 관리 액션 버튼들 -->
+                        <div style="display: flex; gap: 10px; margin-bottom: 20px; align-items: center;">
+                            <button class="btn btn-primary" onclick="batchUpdateWorkerStatus('assigned')">
+                                ✓ 일괄 배정
+                            </button>
+                            <button class="btn btn-secondary" onclick="batchUpdateWorkerStatus('unassigned')">
+                                ✕ 일괄 미배정
+                            </button>
+                            <div style="margin-left: auto;">
+                                <button class="btn btn-primary" onclick="openManualAssignModal()">
+                                    👤 작업자 수동 배정
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 수동 배정된 작업자 목록 (처음에는 숨김) -->
+                        <div id="manuallyAssignedWorkersSection" style="display: none; margin-bottom: 20px; padding: 16px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                                <span style="font-weight: 600; color: #374151;">수동 배정된 작업자</span>
+                                <span style="background: #3b82f6; color: white; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: 600;" id="manualAssignedCount">0</span>
+                            </div>
+                            <div id="manuallyAssignedWorkersList"></div>
+                        </div>
+
+                        <!-- 지원자 테이블 -->
+                        <div class="applicants-table-wrapper">
+                            <table class="applicants-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 40px;">
+                                            <input type="checkbox" id="selectAllWorkers" onchange="toggleAllWorkers(this)">
+                                        </th>
+                                        <th style="width: 80px;">이름</th>
+                                        <th style="width: 140px;">이메일</th>
+                                        <th style="width: 100px;">연락처</th>
+                                        <th style="width: 100px;">주소</th>
+                                        <th style="width: 60px;">자격증</th>
+                                        <th style="width: 80px;">지원일</th>
+                                        <th style="width: 80px;">배정일</th>
+                                        <th style="width: 80px;">상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="workersList">
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>김민수</td>
+                                        <td>minsu@email.com</td>
+                                        <td>010-1234-5678</td>
+                                        <td>서울 강남구</td>
+                                        <td>1급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>이영희</td>
+                                        <td>younghee@email.com</td>
+                                        <td>010-2345-6789</td>
+                                        <td>경기 수원시</td>
+                                        <td>2급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>박철수</td>
+                                        <td>chulsu@email.com</td>
+                                        <td>010-3456-7890</td>
+                                        <td>인천 남동구</td>
+                                        <td>1급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>정미나</td>
+                                        <td>mina@email.com</td>
+                                        <td>010-4567-8901</td>
+                                        <td>대전 유성구</td>
+                                        <td>3급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>한지수</td>
+                                        <td>jisu@email.com</td>
+                                        <td>010-5678-9012</td>
+                                        <td>부산 해운대구</td>
+                                        <td>2급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>오세준</td>
+                                        <td>sejun@email.com</td>
+                                        <td>010-6789-0123</td>
+                                        <td>광주 서구</td>
+                                        <td>1급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>윤소라</td>
+                                        <td>sora@email.com</td>
+                                        <td>010-7890-1234</td>
+                                        <td>대구 중구</td>
+                                        <td>2급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>강동호</td>
+                                        <td>dongho@email.com</td>
+                                        <td>010-8901-2345</td>
+                                        <td>울산 남구</td>
+                                        <td>1급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>송민지</td>
+                                        <td>minji@email.com</td>
+                                        <td>010-9012-3456</td>
+                                        <td>세종시</td>
+                                        <td>3급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>임태현</td>
+                                        <td>taehyun@email.com</td>
+                                        <td>010-0123-4567</td>
+                                        <td>제주 제주시</td>
+                                        <td>2급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>홍예진</td>
+                                        <td>yejin@email.com</td>
+                                        <td>010-1357-2468</td>
+                                        <td>강원 춘천시</td>
+                                        <td>1급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><input type="checkbox" name="workerSelect"></td>
+                                        <td>최준영</td>
+                                        <td>junyoung@email.com</td>
+                                        <td>010-2468-1357</td>
+                                        <td>경남 창원시</td>
+                                        <td>2급</td>
+                                        <td>2025.08.25</td>
+                                        <td>-</td>
+                                        <td><span class="applicant-status status-cancelled">미배정</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 모달 하단 버튼 -->
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 20px 24px; border-top: 1px solid #e5e7eb;">
+                <button class="btn-danger" onclick="closeProject()" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; transition: background-color 0.2s;" onmouseover="this.style.background='#dc2626'" onmouseout="this.style.background='#ef4444'">
+                    프로젝트 마감
+                </button>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn-secondary" onclick="closeProjectDetailModal()">닫기</button>
+                    <button class="btn-edit">수정</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 작업자 관리 모달 -->
+    <div id="workerAssignModal" class="modal-overlay" style="display: none; z-index: 1000;">
+        <div class="modal-container" style="max-width: 1000px; width: 95%; max-height: 95vh;">
+            <div class="modal-header">
+                <h2>👥 작업자 관리</h2>
+                <button class="modal-close" onclick="closeWorkerAssignModal()">&times;</button>
+            </div>
+            
+            <div class="modal-form" style="padding: 24px; min-height: 400px;">
+                <div class="detail-section" style="margin-bottom: 30px;">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h3 class="section-title" style="margin: 0; font-size: 16px; font-weight: 600; color: #374151;">👥 작업자 관리</h3>
+                        <div class="applicant-stats" style="display: flex; gap: 20px;">
+                            <span class="stat-item" style="font-size: 14px; color: #6b7280;">총 <strong id="totalWorkers" style="color: #3b82f6;">5</strong>명</span>
+                            <span class="stat-item" style="font-size: 14px; color: #6b7280;">배정 <strong id="assignedCount" style="color: #3b82f6;">1</strong>명</span>
+                            <span class="stat-item" style="font-size: 14px; color: #6b7280;">미배정 <strong id="excludedCount" style="color: #3b82f6;">4</strong>명</span>
+                        </div>
+                            </div>
+                            
+                    <div class="applicants-table-wrapper" style="overflow-x: auto; border: 1px solid #e5e7eb; border-radius: 8px;">
+                        <table class="applicants-table" style="width: 100%; border-collapse: collapse; background: white;">
+                            <thead>
+                                <tr>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;"><input type="checkbox" id="selectAllWorkers" onchange="toggleAllWorkers(this)"></th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">이름</th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">성별</th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">연락처</th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">생년월일</th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">주소</th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #374151; border-bottom: 1px solid #e5e7eb; white-space: nowrap;">한글속기자격증</th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; white-space: nowrap;">배정일</th>
+                                    <th style="background: #f8f9fa; padding: 12px; text-align: center; border: 1px solid #e5e7eb; font-size: 12px; font-weight: 600; color: #374151; white-space: nowrap;">상태</th>
+                                </tr>
+                            </thead>
+                            <tbody id="workersList">
+                                <tr style="border-bottom: 1px solid #f3f4f6;">
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><input type="checkbox" name="workerSelect" value="1"></td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">차정훈</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">남성</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">010-1**2-3456</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">1990.**.**</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">서울특별시 강남구</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">1급</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">2025.09.24</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><span class="applicant-status status-approved" style="padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; background: #dcfce7; color: #166534;">배정</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #f3f4f6;">
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><input type="checkbox" name="workerSelect" value="2"></td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">김민영</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">여성</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">010-2**3-4567</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">1988.**.**</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">경기도 안양시</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">2급</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">-</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><span class="applicant-status status-cancelled" style="padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; background: #fef2f2; color: #991b1b;">미배정</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #f3f4f6;">
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><input type="checkbox" name="workerSelect" value="3"></td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">박준호</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">남성</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">010-3**4-5678</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">1985.**.**</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">부산광역시 해운대구</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">1급</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">-</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><span class="applicant-status status-cancelled" style="padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; background: #fef2f2; color: #991b1b;">미배정</span></td>
+                                </tr>
+                                <tr style="border-bottom: 1px solid #f3f4f6;">
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><input type="checkbox" name="workerSelect" value="4"></td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">이수진</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">여성</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">010-4**5-6789</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">1992.**.**</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">경상남도 창원시</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">3급</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">-</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><span class="applicant-status status-cancelled" style="padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; background: #fef2f2; color: #991b1b;">미배정</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><input type="checkbox" name="workerSelect" value="5"></td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">최영수</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">남성</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">010-5**6-7890</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">1987.**.**</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">인천광역시 연수구</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">2급</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;">-</td>
+                                    <td style="padding: 12px; font-size: 12px; color: #6b7280; text-align: center;"><span class="applicant-status status-cancelled" style="padding: 3px 8px; border-radius: 12px; font-size: 10px; font-weight: 600; white-space: nowrap; background: #fef2f2; color: #991b1b;">미배정</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        </div>
+                        
+                    <!-- 배정/미배정 버튼 -->
+                    <div class="batch-actions" style="display: flex; gap: 10px; align-items: center; margin-top: 15px; padding: 15px; background: white; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <div style="display: flex; align-items: center; gap: 8px; color: #6b7280; font-size: 14px;">
+                            <span>선택된 작업자:</span>
+                            <span id="selectedWorkerCount" style="font-weight: 600; color: #374151;">0명</span>
+                        </div>
+                        <div style="margin-left: auto; display: flex; gap: 8px;">
+                            <button class="batch-btn btn-approve" onclick="batchUpdateWorkerStatus('assigned')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; transition: background-color 0.2s;">
+                                ✓ 배정
+                            </button>
+                            <button class="batch-btn btn-reject" onclick="batchUpdateWorkerStatus('unassigned')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; transition: background-color 0.2s;">
+                                ✗ 미배정
+                            </button>
+                            <button class="batch-btn btn-manual" onclick="openManualAssignModal()" style="background: #8b5cf6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 13px; cursor: pointer; transition: background-color 0.2s;">
+                                👤 작업자 수동 배정
+                        </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 모달 하단 버튼 -->
+            <div class="modal-footer" style="display: flex; justify-content: flex-end; padding: 15px 25px; border-top: 1px solid #e2e8f0; background: white; flex-shrink: 0; gap: 10px;">
+                <button type="button" class="btn-secondary" onclick="closeWorkerAssignModal()" style="background: #6b7280; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; transition: background-color 0.2s;">닫기</button>
+                <button type="button" class="btn-confirm" onclick="confirmWorkers()" style="background: #f59e0b; color: white; border: none; border-radius: 6px; padding: 10px 20px; font-size: 14px; cursor: pointer; transition: background-color 0.2s;">확정</button>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

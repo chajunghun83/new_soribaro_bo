@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clipdesk Request Status Management - Soribaro BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 25px;
+        }
+        
+        .search-grid-unified {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            align-items: end;
+            justify-content: flex-end;
+        }
+        
+        .date-range-group {
+            display: flex;
+            gap: 8px;
+            align-items: end;
+        }
+        
+        .date-range-group .form-group {
+            flex: 1;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            padding: 8px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 5px;
+            font-size: 13px;
+            background: white;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #8b5cf6;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+        }
+        
+        .text-search-group {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .text-search-group select {
+            flex: 0 0 130px;
+        }
+        
+        .text-search-group input {
+            flex: 1;
+        }
+        
+        .search-buttons {
+            display: flex;
+            gap: 6px;
+            justify-content: flex-end;
+        }
+        
+        .btn {
+            height: 35px;
+            padding: 0 14px;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            box-sizing: border-box;
+        }
+        
+        .btn-primary {
+            background: #8b5cf6;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #7c3aed;
+        }
+        
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-success:hover {
+            background: #059669;
+        }
+        
+        /* 테이블 */
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-bottom: 25px;
+        }
+        
+        .table-responsive {
+            overflow-x: auto;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 1300px;
+        }
+        
+        .data-table thead {
+            background: #f8f9fa;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 16px 12px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            font-weight: 600;
+            color: #374151;
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .data-table tbody tr {
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        
+        .data-table tbody tr:hover {
+            background-color: #f3f4f6;
+        }
+        
+        .data-table td {
+            color: #4b5563;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+            display: inline-block;
+        }
+        
+        .status-consulting {
+            background: #fef3c7;
+            color: #d97706;
+        }
+        
+        .status-confirmed {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .status-received {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        /* 페이징 */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 25px;
+        }
+        
+        .btn-outline {
+            background: white;
+            border: 1px solid #d1d5db;
+            color: #6b7280;
+        }
+        
+        .btn-outline:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .btn-sm {
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
+
+    </style>
+</head>
+<body>
+    <h1 class="page-title">
+        <span>🎬</span>
+        클립데스크 의뢰현황관리
+    </h1>
+    
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-grid-unified">
+            <div class="date-range-group">
+                <div class="form-group">
+                    <label for="start-date">시작일</label>
+                    <input type="date" id="start-date" value="2025-07-01">
+                </div>
+                <div class="form-group">
+                    <label for="end-date">종료일</label>
+                    <input type="date" id="end-date" value="2025-07-31">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="progress-status-select">진행상태</label>
+                <select id="progress-status-select">
+                    <option value="">전체</option>
+                    <option value="inprogress">진행중</option>
+                    <option value="cancelled">취소</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>선택</label>
+                <div class="text-search-group">
+                    <select id="search-type">
+                        <option value="">전체</option>
+                        <option value="order">주문번호</option>
+                        <option value="title">의뢰명</option>
+                        <option value="client">의뢰자명</option>
+                        <option value="contact">연락처</option>
+                    </select>
+                    <input type="text" id="search-text" placeholder="검색어를 입력하세요">
+                </div>
+            </div>
+            <div class="search-buttons">
+                <button class="btn btn-primary" onclick="searchClipdesk()">
+                    <span>🔍</span>
+                    검색
+                </button>
+                <button class="btn btn-success" onclick="downloadExcel()">
+                    <span>📊</span>
+                    엑셀 다운로드
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 테이블 -->
+    <div class="table-container">
+        <div class="table-responsive">
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>주문번호</th>
+                        <th>의뢰명</th>
+                        <th>의뢰자명</th>
+                        <th>이메일</th>
+                        <th>연락처</th>
+                        <th>의뢰일</th>
+                        <th>파일개수</th>
+                        <th>금액확정여부</th>
+                        <th>진행상태</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>15</td>
+                        <td>20250725034567</td>
+                        <td>기업 홍보영상 편집</td>
+                        <td>김영상</td>
+                        <td>kim.video@company.co.kr</td>
+                        <td>02-1234-5678</td>
+                        <td>2025-07-25 14:30</td>
+                        <td>3</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>14</td>
+                        <td>20250724098765</td>
+                        <td>제품 소개 영상 제작</td>
+                        <td>이상품</td>
+                        <td>product.lee@marketing.com</td>
+                        <td>031-987-6543</td>
+                        <td>2025-07-24 11:15</td>
+                        <td>5</td>
+                        <td><span class="status-badge status-consulting">상담대기</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>13</td>
+                        <td>20250723012345</td>
+                        <td>교육용 동영상 편집</td>
+                        <td>박교육</td>
+                        <td>edu.park@school.ac.kr</td>
+                        <td>02-5555-1234</td>
+                        <td>2025-07-23 09:45</td>
+                        <td>2</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>12</td>
+                        <td>20250722567890</td>
+                        <td>웨딩 영상 하이라이트</td>
+                        <td>최신랑</td>
+                        <td>wedding.choi@gmail.com</td>
+                        <td>010-9876-5432</td>
+                        <td>2025-07-22 16:20</td>
+                        <td>8</td>
+                        <td><span class="status-badge status-consulting">상담대기</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>11</td>
+                        <td>20250721234567</td>
+                        <td>유튜브 썸네일 제작</td>
+                        <td>정유튜버</td>
+                        <td>youtube.jung@creator.net</td>
+                        <td>010-1111-2222</td>
+                        <td>2025-07-21 13:10</td>
+                        <td>1</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>10</td>
+                        <td>20250720789012</td>
+                        <td>인터뷰 영상 편집</td>
+                        <td>강인터뷰</td>
+                        <td>interview.kang@media.tv</td>
+                        <td>02-7777-8888</td>
+                        <td>2025-07-20 10:30</td>
+                        <td>4</td>
+                        <td><span class="status-badge status-consulting">상담대기</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>9</td>
+                        <td>20250719345678</td>
+                        <td>브랜드 스토리 영상</td>
+                        <td>윤브랜드</td>
+                        <td>brand.yoon@company.kr</td>
+                        <td>051-3333-4444</td>
+                        <td>2025-07-19 15:45</td>
+                        <td>6</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>8</td>
+                        <td>20250718901234</td>
+                        <td>이벤트 영상 제작</td>
+                        <td>임이벤트</td>
+                        <td>event.lim@agency.com</td>
+                        <td>032-5555-6666</td>
+                        <td>2025-07-18 12:00</td>
+                        <td>3</td>
+                        <td><span class="status-badge status-consulting">상담대기</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>7</td>
+                        <td>20250717456789</td>
+                        <td>제품 리뷰 영상 편집</td>
+                        <td>한리뷰어</td>
+                        <td>review.han@blog.net</td>
+                        <td>010-7777-8888</td>
+                        <td>2025-07-17 08:30</td>
+                        <td>2</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>6</td>
+                        <td>20250716012345</td>
+                        <td>세미나 하이라이트 영상</td>
+                        <td>조세미나</td>
+                        <td>seminar.cho@education.org</td>
+                        <td>02-9999-0000</td>
+                        <td>2025-07-16 17:15</td>
+                        <td>7</td>
+                        <td><span class="status-badge status-consulting">상담대기</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>5</td>
+                        <td>20250715678901</td>
+                        <td>광고 영상 제작</td>
+                        <td>송광고</td>
+                        <td>ad.song@creative.co.kr</td>
+                        <td>031-1111-2222</td>
+                        <td>2025-07-15 14:20</td>
+                        <td>4</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>4</td>
+                        <td>20250714234567</td>
+                        <td>뮤직비디오 편집</td>
+                        <td>류뮤직</td>
+                        <td>music.ryu@artist.com</td>
+                        <td>010-4444-5555</td>
+                        <td>2025-07-14 11:30</td>
+                        <td>5</td>
+                        <td><span class="status-badge status-consulting">상담대기</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>3</td>
+                        <td>20250713789012</td>
+                        <td>다큐멘터리 편집</td>
+                        <td>오다큐</td>
+                        <td>docu.oh@filmmaker.net</td>
+                        <td>02-6666-7777</td>
+                        <td>2025-07-13 09:00</td>
+                        <td>12</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>2</td>
+                        <td>20250712345678</td>
+                        <td>드론 촬영 영상 편집</td>
+                        <td>전드론</td>
+                        <td>drone.jeon@aerial.kr</td>
+                        <td>051-8888-9999</td>
+                        <td>2025-07-12 16:45</td>
+                        <td>3</td>
+                        <td><span class="status-badge status-consulting">상담대기</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                    <tr onclick="openClipdeskDetail(this)">
+                        <td>1</td>
+                        <td>20250711901234</td>
+                        <td>기업 IR 영상 제작</td>
+                        <td>홍투자</td>
+                        <td>ir.hong@startup.co.kr</td>
+                        <td>02-0000-1111</td>
+                        <td>2025-07-11 13:20</td>
+                        <td>6</td>
+                        <td><span class="status-badge status-confirmed">금액확정</span></td>
+                        <td><span class="status-badge status-received">접수</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <!-- 페이징 -->
+    <div class="pagination-container">
+        <button class="btn btn-outline btn-sm">첫 페이지</button>
+        <button class="btn btn-outline btn-sm">이전</button>
+        <div style="display: flex; gap: 5px;">
+            <button class="btn btn-primary btn-sm">1</button>
+            <button class="btn btn-outline btn-sm">2</button>
+            <button class="btn btn-outline btn-sm">3</button>
+            <button class="btn btn-outline btn-sm">4</button>
+            <button class="btn btn-outline btn-sm">5</button>
+            <span style="padding: 8px;">...</span>
+            <button class="btn btn-outline btn-sm">10</button>
+        </div>
+        <button class="btn btn-outline btn-sm">다음</button>
+        <button class="btn btn-outline btn-sm">마지막 페이지</button>
+    </div>
+
+    <script>
+        // 검색 기능
+        function searchClipdesk() {
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            const progressStatus = document.getElementById('progress-status-select').value;
+            const searchType = document.getElementById('search-type').value;
+            const searchText = document.getElementById('search-text').value;
+            
+            console.log('검색 조건:', {
+                startDate, endDate, progressStatus, searchType, searchText
+            });
+            
+            alert('검색 기능이 실행되었습니다.');
+        }
+        
+        // 엑셀 다운로드
+        function downloadExcel() {
+            console.log('엑셀 다운로드 시작');
+            alert('엑셀 파일을 다운로드합니다.');
+        }
+        
+        // 상세 페이지 이동
+        function openClipdeskDetail(row) {
+            const cells = row.cells;
+            const orderNumber = cells[1].textContent;
+            const title = cells[2].textContent;
+            const clientName = cells[3].textContent;
+            const email = cells[4].textContent;
+            const contact = cells[5].textContent;
+            const requestDate = cells[6].textContent;
+            const fileCount = cells[7].textContent;
+            const amountStatus = cells[8].querySelector('.status-badge').textContent;
+            const progressStatus = cells[9].querySelector('.status-badge').textContent;
+            
+            // URL 파라미터 생성
+            const params = new URLSearchParams({
+                orderNumber: orderNumber,
+                title: title,
+                client: clientName,
+                email: email,
+                contact: contact,
+                requestDate: requestDate,
+                fileCount: fileCount,
+                amountStatus: amountStatus,
+                progressStatus: progressStatus
+            });
+            
+            // 페이지 이동
+            try {
+                // iframe 환경에서 실행 중인지 확인
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    const detailUrl = `pages/clipdesk/clipdesk-detail.html?${params.toString()}`;
+                    window.parent.loadPage(detailUrl);
+                } else {
+                    const detailUrl = `clipdesk-detail.html?${params.toString()}`;
+                    window.location.href = detailUrl;
+                }
+            } catch (error) {
+                // 오류 발생 시 기본적인 페이지 이동 시도
+                window.location.href = `clipdesk-detail.html?${params.toString()}`;
+            }
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            // 모든 테이블 행에 클릭 이벤트 추가
+            const tableRows = document.querySelectorAll('.data-table tbody tr');
+            
+            tableRows.forEach((row) => {
+                row.addEventListener('click', function(event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                    openClipdeskDetail(this);
+                });
+                
+                // 커서 포인터 스타일 추가
+                row.style.cursor = 'pointer';
+            });
+        });
+    </script>
+
+</body>
+</html>

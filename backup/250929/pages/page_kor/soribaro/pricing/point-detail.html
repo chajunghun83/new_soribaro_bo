@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>포인트 정책 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 포인트 구분 배지 */
+        .point-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .point-welcome {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .point-reception {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .point-payment {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        /* 설명 영역 */
+        .description-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .description-content {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>💰</span>
+            포인트 정책 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">포인트 구분</div>
+                    <div class="info-value">
+                        <span id="pointBadge" class="point-badge point-welcome">웰컴적립</span>
+                    </div>
+                    
+                    <div class="info-label">시작일</div>
+                    <div class="info-value" id="startDate">2025-01-01 00:00:00</div>
+                    
+                    <div class="info-label">종료일</div>
+                    <div class="info-value" id="endDate">9999-12-31 23:59:59</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 포인트 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">포인트 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">지급포인트</div>
+                    <div class="info-value" id="pointAmount">1,000</div>
+                    
+                    <div class="info-label">단위</div>
+                    <div class="info-value" id="pointUnit">원</div>
+                    
+                    <div class="info-label">만료기간(일)</div>
+                    <div class="info-value" id="expiryDays">365</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 상세 설명 섹션 -->
+    <div class="description-section">
+        <div class="section-title">상세 설명</div>
+        <div class="info-content">
+            <div class="description-content" id="detailDescription">
+                웰컴적립 포인트 정책에 대한 상세 설명입니다.
+                
+                ■ 적립 조건
+                - 신규 회원 가입 시 자동 적립
+                - 최초 1회만 지급
+                - 본인 인증 완료 후 적용
+                
+                ■ 포인트 활용
+                - 모든 소리바로 서비스 이용 시 사용 가능
+                - 현금과 동일한 가치로 사용
+                - 다른 할인과 중복 적용 불가
+                
+                ■ 유효 기간
+                - 적립일로부터 365일간 유효
+                - 만료 30일 전 알림 발송
+                - 만료 시 자동 소멸
+                
+                ■ 주의사항
+                - 회원 탈퇴 시 포인트 소멸
+                - 부정 사용 시 회수 조치 가능
+                - 현금 환불 불가
+            </div>
+        </div>
+    </div>
+    
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('포인트 정책 상세 페이지 로드, ID:', itemId);
+            loadPointDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadPointDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'POINT001': {
+                    pointType: '웰컴적립',
+                    pointClass: 'point-welcome',
+                    pointAmount: '1,000',
+                    pointUnit: '원',
+                    expiryDays: '365',
+                    startDate: '2025-01-01 00:00:00',
+                    endDate: '9999-12-31 23:59:59',
+                    description: `웰컴적립 포인트 정책에 대한 상세 설명입니다.
+                
+■ 적립 조건
+- 신규 회원 가입 시 자동 적립
+- 최초 1회만 지급
+- 본인 인증 완료 후 적용
+
+■ 포인트 활용
+- 모든 소리바로 서비스 이용 시 사용 가능
+- 현금과 동일한 가치로 사용
+- 다른 할인과 중복 적용 불가
+
+■ 유효 기간
+- 적립일로부터 365일간 유효
+- 만료 30일 전 알림 발송
+- 만료 시 자동 소멸
+
+■ 주의사항
+- 회원 탈퇴 시 포인트 소멸
+- 부정 사용 시 회수 조치 가능
+- 현금 환불 불가`
+                },
+                'POINT002': {
+                    pointType: '접수',
+                    pointClass: 'point-reception',
+                    pointAmount: '500',
+                    pointUnit: '원',
+                    expiryDays: '180',
+                    startDate: '2025-01-01 00:00:00',
+                    endDate: '9999-12-31 23:59:59',
+                    description: `접수 포인트 정책에 대한 상세 설명입니다.
+                
+■ 적립 조건
+- 서비스 접수 완료 시 적립
+- 접수 건당 1회 지급
+- 결제 완료 후 즉시 적립
+
+■ 포인트 활용
+- 다음 서비스 이용 시 할인 적용
+- 누적 적립을 통한 등급 혜택
+- 추천인 적립 시 추가 보너스
+
+■ 유효 기간
+- 적립일로부터 180일간 유효
+- 만료 15일 전 알림 발송
+- 사용 시 먼저 적립된 포인트부터 차감
+
+■ 주의사항
+- 서비스 취소 시 포인트 회수
+- 중복 접수 시 1회만 적립
+- 법인 고객은 별도 정책 적용`
+                },
+                'POINT003': {
+                    pointType: '포인트 지급',
+                    pointClass: 'point-payment',
+                    pointAmount: '10',
+                    pointUnit: '%',
+                    expiryDays: '90',
+                    startDate: '2025-02-01 00:00:00',
+                    endDate: '9999-12-31 23:59:59',
+                    description: `포인트 지급 정책에 대한 상세 설명입니다.
+                
+■ 지급 조건
+- 특별 이벤트 및 프로모션 시 지급
+- 고객 만족도 조사 참여 시
+- 서비스 품질 개선 기여 시
+
+■ 포인트 활용
+- 모든 서비스에서 현금처럼 사용
+- 가족 계정 간 포인트 공유 가능
+- VIP 등급 달성 시 추가 혜택
+
+■ 유효 기간
+- 적립일로부터 90일간 유효
+- 단기 유효기간으로 빠른 사용 유도
+- 만료 7일 전 SMS 알림
+
+■ 주의사항
+- 일회성 지급으로 재지급 불가
+- 타 포인트와 합산 사용 가능
+- 시스템 오류 시 자동 복구`
+                },
+                'POINT006': {
+                    pointType: '포인트 지급',
+                    pointClass: 'point-payment',
+                    pointAmount: '5',
+                    pointUnit: '%',
+                    expiryDays: '90',
+                    startDate: '2025-05-01 00:00:00',
+                    endDate: '2025-12-31 23:59:59',
+                    description: `포인트 지급 정책에 대한 상세 설명입니다.
+                
+■ 지급 조건
+- 특별 이벤트 및 프로모션 시 지급
+- 고객 만족도 조사 참여 시
+- 서비스 품질 개선 기여 시
+
+■ 포인트 활용
+- 결제 금액의 5% 포인트로 적립
+- 가족 계정 간 포인트 공유 가능
+- VIP 등급 달성 시 추가 혜택
+
+■ 유효 기간
+- 적립일로부터 90일간 유효
+- 단기 유효기간으로 빠른 사용 유도
+- 만료 7일 전 SMS 알림
+
+■ 주의사항
+- 결제 금액 기준 퍼센트 적립
+- 타 포인트와 합산 사용 가능
+- 최대 적립 한도 월 10,000원`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['POINT001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('pointBadge').textContent = data.pointType;
+            document.getElementById('pointBadge').className = `point-badge ${data.pointClass}`;
+            document.getElementById('pointAmount').textContent = data.pointAmount;
+            document.getElementById('pointUnit').textContent = data.pointUnit;
+            document.getElementById('expiryDays').textContent = data.expiryDays;
+            document.getElementById('startDate').textContent = data.startDate;
+            document.getElementById('endDate').textContent = data.endDate;
+            document.getElementById('detailDescription').textContent = data.description;
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'point-management.html';
+        }
+    </script>
+</body>
+</html>

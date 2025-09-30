@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>쿠폰번호 리스트 관리</title>
+    <link rel="stylesheet" href="../../styles/common.css">
+    <style>
+        /* 테이블 헤더 중앙정렬 */
+        table th {
+            text-align: center;
+        }
+        
+        /* 테이블 데이터 중앙정렬 */
+        table td {
+            text-align: center;
+        }
+    </style>
+</head>
+<body style="background: #f5f6fa; padding: 30px;">
+    <h1 class="page-title">🎫 쿠폰번호 리스트 관리</h1>
+    
+    <!-- 검색 폼 -->
+    <div class="search-section">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <!-- 상태 라디오 버튼 (왼쪽) -->
+            <div style="display: flex; align-items: center; gap: 25px;">
+                <span style="font-weight: 500; color: #374151; font-size: 14px;">상태</span>
+                <div style="display: flex; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 4px; gap: 2px;">
+                    <label class="status-btn active" data-value="all" style="padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; background: #3b82f6; color: white; border: 1px solid #3b82f6;">
+                        <input type="radio" name="status" value="all" checked style="display: none;">
+                        전체
+                    </label>
+                    <label class="status-btn" data-value="registered" style="padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; background: transparent; color: #64748b; border: 1px solid transparent;">
+                        <input type="radio" name="status" value="registered" style="display: none;">
+                        등록
+                    </label>
+                    <label class="status-btn" data-value="unregistered" style="padding: 10px 24px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s; background: transparent; color: #64748b; border: 1px solid transparent;">
+                        <input type="radio" name="status" value="unregistered" style="display: none;">
+                        미등록
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 검색 조건 (오른쪽) -->
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <select id="searchCategory" style="padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; min-width: 120px; background: white; color: #374151; outline: none; transition: border-color 0.2s;">
+                    <option value="all">전체</option>
+                    <option value="name">이름</option>
+                    <option value="coupon">쿠폰번호</option>
+                    <option value="email">이메일</option>
+                </select>
+                <div style="position: relative;">
+                    <input type="text" id="searchInput" placeholder="검색어를 입력하세요" style="width: 280px; padding: 10px 14px; border: 1px solid #e2e8f0; border-radius: 6px; font-size: 14px; background: white; color: #374151; outline: none; transition: border-color 0.2s;">
+                </div>
+                <button id="searchBtn" style="padding: 10px 20px; background: #3b82f6; color: white; border: none; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background-color 0.2s; display: flex; align-items: center; gap: 6px;">
+                    🔍 검색
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 쿠폰 관리 버튼들 -->
+    <div style="margin-bottom: 20px; display: flex; justify-content: flex-end; gap: 10px;">
+        <button class="btn btn-outline btn-sm" onclick="downloadSample()">일괄 등록 샘플 다운로드</button>
+        <button class="btn btn-outline btn-sm" onclick="bulkUpload()">쿠폰번호 일괄 등록</button>
+        <button class="btn btn-outline btn-sm">📊 엑셀 다운로드</button>
+        <button class="btn btn-primary btn-sm" onclick="showAddCouponModal()">➕ 신규 등록</button>
+    </div>
+
+    <!-- 쿠폰 목록 테이블 -->
+    <div class="table-section">
+        <div class="table-header">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span>🎫 총 10,070건</span>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>쿠폰번호</th>
+                    <th>이메일</th>
+                    <th>이름</th>
+                    <th>등록일시</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>10070</td>
+                    <td>TEMP-0123-4567-IJKL</td>
+                    <td>user10@example.com</td>
+                    <td>한예슬</td>
+                    <td>2025.07.22 14:50</td>
+                </tr>
+                <tr>
+                    <td>10069</td>
+                    <td>TEMP-9012-3456-HIJK</td>
+                    <td>user9@example.com</td>
+                    <td>송지훈</td>
+                    <td>2025.07.22 13:20</td>
+                </tr>
+                <tr>
+                    <td>10068</td>
+                    <td>TEMP-8901-2345-GHIJ</td>
+                    <td>user8@example.com</td>
+                    <td>윤서연</td>
+                    <td>2025.07.22 11:45</td>
+                </tr>
+                <tr>
+                    <td>10067</td>
+                    <td>TEMP-7890-1234-FGHI</td>
+                    <td>user7@example.com</td>
+                    <td>임동현</td>
+                    <td>2025.07.22 10:30</td>
+                </tr>
+                <tr>
+                    <td>10066</td>
+                    <td>TEMP-6789-0123-EFGH</td>
+                    <td>user6@example.com</td>
+                    <td>강미나</td>
+                    <td>2025.07.22 09:15</td>
+                </tr>
+                <tr>
+                    <td>10065</td>
+                    <td>TEMP-5678-9012-DEFG</td>
+                    <td>user5@example.com</td>
+                    <td>정우성</td>
+                    <td>2025.07.23 18:05</td>
+                </tr>
+                <tr>
+                    <td>10064</td>
+                    <td>TEMP-4567-8901-CDEF</td>
+                    <td>user4@example.com</td>
+                    <td>최수진</td>
+                    <td>2025.07.23 17:10</td>
+                </tr>
+                <tr>
+                    <td>10063</td>
+                    <td>TEMP-3456-7890-BCDE</td>
+                    <td>user3@example.com</td>
+                    <td>박철수</td>
+                    <td>2025.07.23 16:20</td>
+                </tr>
+                <tr>
+                    <td>10062</td>
+                    <td>TEMP-2345-6789-ABCD</td>
+                    <td>user2@example.com</td>
+                    <td>이영희</td>
+                    <td>2025.07.23 15:45</td>
+                </tr>
+                <tr>
+                    <td>10061</td>
+                    <td>TEMP-1234-5678-9ABC</td>
+                    <td>user1@example.com</td>
+                    <td>김민수</td>
+                    <td>2025.07.23 14:30</td>
+                </tr>
+            </tbody>
+        </table>
+        
+        <!-- 페이징 -->
+        <div class="pagination-container" style="display: flex; justify-content: center; align-items: center; padding: 20px; gap: 10px;">
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">첫 페이지</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">이전</button>
+            <div style="display: flex; gap: 5px;">
+                <button class="btn btn-primary btn-sm" style="padding: 5px 10px; background-color: #3b82f6; color: white;">1</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">2</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">3</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">4</button>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">5</button>
+                <span style="padding: 5px;">...</span>
+                <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">671</button>
+            </div>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">다음</button>
+            <button class="btn btn-outline btn-sm" style="padding: 5px 10px;">마지막</button>
+            <div style="margin-left: 20px; display: flex; align-items: center; gap: 5px;">
+                <span style="font-size: 13px;">페이지당</span>
+                <select style="padding: 3px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 12px;">
+                    <option>15</option>
+                    <option>30</option>
+                    <option>50</option>
+                    <option>100</option>
+                </select>
+                <span style="font-size: 13px;">개씩 보기</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 파일 업로드를 위한 숨겨진 input -->
+    <input type="file" id="bulkUploadInput" accept=".xlsx,.xls,.csv" style="display: none;">
+
+    <!-- 쿠폰 신규 등록 팝업 -->
+    <div id="couponAddModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.5); z-index: 1000;">
+        <div style="position: relative; width: 90%; max-width: 500px; margin: 10% auto; background: white; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); overflow: hidden;">
+            <!-- 팝업 헤더 -->
+            <div style="background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; padding: 20px 25px; display: flex; justify-content: space-between; align-items: center;">
+                <h2 style="margin: 0; font-size: 1.3rem; font-weight: 600; display: flex; align-items: center; gap: 10px;">
+                    🎫 쿠폰 신규 등록
+                </h2>
+                <button onclick="closeAddCouponModal()" style="background: none; border: none; color: white; font-size: 24px; cursor: pointer; padding: 0; width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; border-radius: 50%; transition: background-color 0.2s;">×</button>
+            </div>
+
+            <!-- 팝업 본문 -->
+            <div style="padding: 30px 25px;">
+                <div style="margin-bottom: 25px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #374151; font-size: 14px;">
+                        쿠폰코드 <span style="color: #ef4444;">*</span>
+                    </label>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <input type="text" id="coupon-part-1" maxlength="4" placeholder="****" style="width: 80px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; text-align: center; font-weight: 600; outline: none; transition: border-color 0.2s;">
+                        <span style="color: #9ca3af; font-size: 18px; font-weight: bold;">-</span>
+                        <input type="text" id="coupon-part-2" maxlength="4" placeholder="****" style="width: 80px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; text-align: center; font-weight: 600; outline: none; transition: border-color 0.2s;">
+                        <span style="color: #9ca3af; font-size: 18px; font-weight: bold;">-</span>
+                        <input type="text" id="coupon-part-3" maxlength="4" placeholder="****" style="width: 80px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; text-align: center; font-weight: 600; outline: none; transition: border-color 0.2s;">
+                        <span style="color: #9ca3af; font-size: 18px; font-weight: bold;">-</span>
+                        <input type="text" id="coupon-part-4" maxlength="4" placeholder="****" style="width: 80px; padding: 12px; border: 2px solid #e5e7eb; border-radius: 8px; font-size: 16px; text-align: center; font-weight: 600; outline: none; transition: border-color 0.2s;">
+                    </div>
+                </div>
+
+                <!-- 버튼 영역 -->
+                <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 30px;">
+                    <button onclick="closeAddCouponModal()" style="padding: 12px 24px; background: #f3f4f6; color: #374151; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s;">
+                        취소
+                    </button>
+                    <button onclick="saveCoupon()" style="padding: 12px 24px; background: #3b82f6; color: white; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);">
+                        저장
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../../scripts/common.js"></script>
+    <script>
+        // 상태 버튼 클릭 이벤트
+        document.querySelectorAll('.status-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 모든 버튼에서 active 클래스 제거
+                document.querySelectorAll('.status-btn').forEach(b => b.classList.remove('active'));
+                // 클릭된 버튼에 active 클래스 추가
+                this.classList.add('active');
+            });
+        });
+
+        // 검색 기능
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const category = document.getElementById('searchCategory').value;
+            const searchText = document.getElementById('searchInput').value.trim();
+            
+            if (searchText === '') {
+                alert('검색어를 입력해주세요.');
+                return;
+            }
+            
+            // 실제 검색 로직 구현
+            console.log('검색 카테고리:', category);
+            console.log('검색어:', searchText);
+            alert(`${category}에서 "${searchText}" 검색 결과를 표시합니다.`);
+        });
+
+        // 엔터키로 검색
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
+        // 버튼 기능들
+        function downloadSample() {
+            alert('일괄 등록 샘플 파일을 다운로드합니다.');
+        }
+
+        function bulkUpload() {
+            alert('쿠폰번호 일괄 등록 기능을 실행합니다.');
+        }
+
+        function downloadExcel() {
+            alert('엑셀 파일을 다운로드합니다.');
+        }
+
+        // 신규 등록 기능
+        function showAddCouponModal() {
+            document.getElementById('couponAddModal').style.display = 'block';
+            document.body.style.overflow = 'hidden';
+            // 첫 번째 입력 필드로 포커스 이동
+            document.getElementById('coupon-part-1').focus();
+        }
+
+        function closeAddCouponModal() {
+            document.getElementById('couponAddModal').style.display = 'none';
+            document.body.style.overflow = 'auto';
+            // 입력 필드 초기화
+            document.querySelectorAll('.coupon-input').forEach(input => {
+                input.value = '';
+            });
+        }
+
+        // 쿠폰 입력 필드 관리
+        document.querySelectorAll('.coupon-input').forEach((input, index) => {
+            // 입력 시 자동으로 다음 필드로 이동
+            input.addEventListener('input', function() {
+                // 대문자로 변환
+                this.value = this.value.toUpperCase();
+                
+                // 숫자와 영문자만 허용
+                this.value = this.value.replace(/[^A-Z0-9]/g, '');
+                
+                // 4자리 제한
+                if (this.value.length > 4) {
+                    this.value = this.value.substring(0, 4);
+                }
+                
+                // 4자리가 되면 다음 필드로 포커스 이동
+                if (this.value.length === 4 && index < 3) {
+                    document.getElementById(`coupon-part-${index + 2}`).focus();
+                }
+            });
+            
+            // 백스페이스 시 이전 필드로 이동
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && this.value.length === 0 && index > 0) {
+                    document.getElementById(`coupon-part-${index}`).focus();
+                }
+            });
+        });
+
+        // 쿠폰 저장
+        function saveCoupon() {
+            const parts = [];
+            for (let i = 1; i <= 4; i++) {
+                const value = document.getElementById(`coupon-part-${i}`).value.trim();
+                if (value.length !== 4) {
+                    alert('모든 쿠폰 코드 필드를 4자리로 입력해주세요.');
+                    document.getElementById(`coupon-part-${i}`).focus();
+                    return;
+                }
+                parts.push(value);
+            }
+            
+            const couponCode = parts.join('-');
+            
+            // 간단한 중복 체크 (실제로는 서버에서 확인)
+            const existingCoupons = Array.from(document.querySelectorAll('tbody tr')).map(row => row.cells[1].textContent);
+            if (existingCoupons.includes(couponCode)) {
+                alert('이미 존재하는 쿠폰 코드입니다.');
+                return;
+            }
+            
+            // 실제로는 서버로 데이터 전송
+            console.log('새 쿠폰 코드:', couponCode);
+            alert('쿠폰이 등록되었습니다.');
+            closeAddCouponModal();
+        }
+
+        // ESC 키로 팝업 닫기
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeAddCouponModal();
+            }
+        });
+
+        // 팝업 배경 클릭 시 닫기
+        document.getElementById('couponAddModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeAddCouponModal();
+            }
+        });
+
+        // 테이블 행 hover 효과
+        document.addEventListener('DOMContentLoaded', function() {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                row.addEventListener('mouseenter', function() {
+                    this.style.backgroundColor = '#f9fafb';
+                });
+                row.addEventListener('mouseleave', function() {
+                    this.style.backgroundColor = '';
+                });
+            });
+        });
+    </script>
+</body>
+</html> 

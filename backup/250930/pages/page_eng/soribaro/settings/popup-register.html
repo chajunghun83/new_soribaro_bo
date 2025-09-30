@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팝업 이벤트 등록 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .info-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+        }
+        
+        .info-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* 팝업 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-textarea {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 400px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .content-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+
+        .required {
+            color: #dc2626;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>🎉</span>
+            <span id="pageTitle">팝업 이벤트 등록</span>
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">제목<span class="required">*</span></div>
+                    <input type="text" id="popupTitle" class="info-input" placeholder="팝업 이벤트 제목을 입력하세요">
+                    
+                    <div class="info-label">서비스유형<span class="required">*</span></div>
+                    <select id="serviceType" class="info-select">
+                        <option value="">선택하세요</option>
+                        <option value="한글">한글</option>
+                        <option value="영어">영어</option>
+                    </select>
+                    
+                    <div class="info-label">타겟<span class="required">*</span></div>
+                    <select id="target" class="info-select">
+                        <option value="">선택하세요</option>
+                        <option value="전체">전체</option>
+                        <option value="고객">고객</option>
+                        <option value="작업자">작업자</option>
+                        <option value="기업고객">기업고객</option>
+                    </select>
+                    
+                    <div class="info-label">사용여부<span class="required">*</span></div>
+                    <select id="status" class="info-select">
+                        <option value="사용">사용</option>
+                        <option value="미사용">미사용</option>
+                    </select>
+                    
+                    <div class="info-label">시작일<span class="required">*</span></div>
+                    <input type="date" id="startDate" class="info-input">
+                    
+                    <div class="info-label">종료일<span class="required">*</span></div>
+                    <input type="date" id="endDate" class="info-input">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 팝업 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">팝업 내용</div>
+        <div class="info-content">
+            <textarea class="content-textarea" id="popupContent" placeholder="팝업 이벤트 내용을 입력하세요...
+
+예시:
+🎉 이벤트 제목 🎉
+
+이벤트 설명...
+
+■ 이벤트 기간
+2025년 8월 1일 ~ 2025년 8월 31일
+
+■ 이벤트 내용
+✅ 혜택 1
+✅ 혜택 2
+✅ 혜택 3
+
+■ 참여 방법
+1. 첫 번째 단계
+2. 두 번째 단계
+3. 세 번째 단계
+
+■ 주의사항
+- 주의사항 1
+- 주의사항 2
+
+문의사항이 있으시면 고객센터로 연락해 주세요.
+
+감사합니다."></textarea>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-register" onclick="registerPopup()">
+            <span id="registerIcon">📝</span>
+            <span id="registerText">등록</span>
+        </button>
+    </div>
+
+    <script>
+        let isEditMode = false;
+        let editItemId = null;
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('팝업 이벤트 등록 페이지 로드');
+            
+            // URL 파라미터 확인 (수정 모드인지)
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+            const id = urlParams.get('id');
+            
+            if (mode === 'edit' && id) {
+                isEditMode = true;
+                editItemId = id;
+                document.getElementById('pageTitle').textContent = '팝업 이벤트 수정';
+                document.getElementById('registerIcon').textContent = '✏️';
+                document.getElementById('registerText').textContent = '수정';
+                
+                // 기존 데이터 로드
+                loadExistingData(id);
+            } else {
+                // 현재 날짜를 기본값으로 설정
+                const now = new Date();
+                const currentDate = now.toISOString().slice(0, 10);
+                document.getElementById('startDate').value = currentDate;
+                
+                // 종료일을 한 달 후로 설정
+                const nextMonth = new Date(now);
+                nextMonth.setMonth(nextMonth.getMonth() + 1);
+                document.getElementById('endDate').value = nextMonth.toISOString().slice(0, 10);
+            }
+        });
+        
+        // 기존 데이터 로드 (수정 모드)
+        function loadExistingData(id) {
+            // 실제 구현 시 서버 API 호출
+            const mockData = getMockData(id);
+            
+            document.getElementById('popupTitle').value = mockData.popupTitle;
+            document.getElementById('serviceType').value = mockData.serviceType;
+            document.getElementById('startDate').value = mockData.startDate;
+            document.getElementById('endDate').value = mockData.endDate;
+            document.getElementById('target').value = mockData.target;
+            document.getElementById('status').value = mockData.status;
+            document.getElementById('popupContent').value = mockData.content;
+        }
+        
+        // 임시 데이터 (수정 모드용)
+        function getMockData(id) {
+            const mockDatabase = {
+                'POPUP001': {
+                    popupTitle: '신규 회원 가입 이벤트',
+                    serviceType: '한글',
+                    startDate: '2025-08-01',
+                    endDate: '2025-08-31',
+                    target: '고객',
+                    status: '사용',
+                    content: `🎉 신규 회원 가입 이벤트 🎉
+
+소리바로 서비스에 오신 것을 환영합니다!
+
+■ 이벤트 기간
+2025년 8월 1일 ~ 2025년 8월 31일
+
+■ 이벤트 내용
+✅ 신규 회원 가입 시 1,000 포인트 즉시 지급
+✅ 첫 번째 서비스 이용 시 20% 할인 쿠폰 제공
+✅ 친구 추천 시 추가 500 포인트 지급
+
+■ 참여 방법
+1. 소리바로 홈페이지에서 회원가입
+2. 이메일 인증 완료
+3. 포인트 자동 지급 확인
+
+■ 주의사항
+- 본 이벤트는 신규 회원에게만 적용됩니다.
+- 중복 참여는 불가능합니다.
+- 이벤트 기간 내에 가입한 회원에게만 혜택이 제공됩니다.
+
+문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.
+
+감사합니다.`
+                }
+            };
+            
+            return mockDatabase[id] || {};
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'popup-management.html';
+        }
+        
+        // 등록/수정 기능
+        function registerPopup() {
+            // 필수 항목 검증
+            const popupTitle = document.getElementById('popupTitle').value.trim();
+            const serviceType = document.getElementById('serviceType').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            const target = document.getElementById('target').value;
+            const status = document.getElementById('status').value;
+            const popupContent = document.getElementById('popupContent').value.trim();
+            
+            if (!popupTitle) {
+                alert('제목을 입력해주세요.');
+                document.getElementById('popupTitle').focus();
+                return;
+            }
+            
+            if (!serviceType) {
+                alert('서비스유형을 선택해주세요.');
+                document.getElementById('serviceType').focus();
+                return;
+            }
+            
+            if (!startDate) {
+                alert('시작일을 입력해주세요.');
+                document.getElementById('startDate').focus();
+                return;
+            }
+            
+            if (!endDate) {
+                alert('종료일을 입력해주세요.');
+                document.getElementById('endDate').focus();
+                return;
+            }
+            
+            if (!target) {
+                alert('타겟을 선택해주세요.');
+                document.getElementById('target').focus();
+                return;
+            }
+            
+            if (!popupContent) {
+                alert('팝업 내용을 입력해주세요.');
+                document.getElementById('popupContent').focus();
+                return;
+            }
+            
+            // 날짜 검증
+            if (new Date(startDate) >= new Date(endDate)) {
+                alert('종료일은 시작일보다 늦은 날짜여야 합니다.');
+                document.getElementById('endDate').focus();
+                return;
+            }
+            
+            // 등록/수정 확인
+            const action = isEditMode ? '수정' : '등록';
+            if (confirm(`팝업 이벤트를 ${action}하시겠습니까?`)) {
+                // 실제 구현 시 서버 API 호출
+                const formData = {
+                    popupTitle: popupTitle,
+                    serviceType: serviceType,
+                    startDate: startDate,
+                    endDate: endDate,
+                    target: target,
+                    status: status,
+                    popupContent: popupContent
+                };
+                
+                console.log(`${action} 데이터:`, formData);
+                alert(`팝업 이벤트 ${action}이 완료되었습니다.`);
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

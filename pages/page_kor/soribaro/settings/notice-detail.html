@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공지사항 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 서비스 유형 배지 */
+        .service-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .service-korean {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .service-english {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 게시장소 배지 */
+        .location-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .location-system {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .location-user {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .location-stenographer {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .location-enterprise {
+            background: #fce7f3;
+            color: #be185d;
+        }
+        
+        .location-reviewer {
+            background: #e0f2fe;
+            color: #0369a1;
+        }
+        
+        .location-clipdesk {
+            background: #fff7ed;
+            color: #ea580c;
+        }
+
+        /* 유형 배지 */
+        .type-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .type-general {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .type-other {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* 상단고정 배지 */
+        .pin-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .pin-yes {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .pin-no {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        /* 공지사항 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 300px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+
+        /* 파일 첨부 영역 */
+        .file-attachment-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+
+        .file-list {
+            padding: 20px;
+        }
+
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            transition: background-color 0.2s;
+        }
+
+        .file-item:hover {
+            background: #f3f4f6;
+        }
+
+        .file-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .file-icon {
+            font-size: 18px;
+        }
+
+        .file-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .file-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .file-size {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .file-download {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .file-download:hover {
+            background: #2563eb;
+        }
+
+        .no-files {
+            text-align: center;
+            color: #6b7280;
+            font-size: 14px;
+            padding: 40px 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📢</span>
+            공지사항 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">제목</div>
+                    <div class="info-value" id="noticeTitle">소리바로 서비스 업데이트 안내</div>
+                    
+                    <div class="info-label">서비스유형</div>
+                    <div class="info-value">
+                        <span id="serviceBadge" class="service-badge service-korean">한글</span>
+                    </div>
+                    
+                    <div class="info-label">게시장소</div>
+                    <div class="info-value">
+                        <span id="locationBadge" class="location-badge location-user">사용자</span>
+                    </div>
+                    
+                    <div class="info-label">유형</div>
+                    <div class="info-value">
+                        <span id="typeBadge" class="type-badge type-general">일반</span>
+                    </div>
+                    
+                    <div class="info-label">상단고정</div>
+                    <div class="info-value">
+                        <span id="pinBadge" class="pin-badge pin-yes">Y</span>
+                    </div>
+                    
+                    <div class="info-label">조회수</div>
+                    <div class="info-value" id="viewCount">1,234</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 등록/수정 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">등록/수정 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">등록자</div>
+                    <div class="info-value" id="registeredBy">관리자</div>
+                    
+                    <div class="info-label">등록일시</div>
+                    <div class="info-value" id="registeredDate">2025-08-27 09:00:00</div>
+                    
+                    <div class="info-label">수정자</div>
+                    <div class="info-value" id="modifiedBy">관리자</div>
+                    
+                    <div class="info-label">수정일시</div>
+                    <div class="info-value" id="modifiedDate">2025-08-27 09:00:00</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 공지사항 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">공지사항 내용</div>
+        <div class="info-content">
+            <div class="content-display" id="noticeContent">안녕하세요. 소리바로 서비스를 이용해 주셔서 감사합니다.
+
+이번에 소리바로 서비스가 새롭게 업데이트되어 안내드립니다.
+
+■ 주요 업데이트 내용
+
+1. 음성인식 정확도 개선
+   - AI 음성인식 엔진 업그레이드로 정확도 95% 달성
+   - 방언 및 전문용어 인식률 향상
+
+2. 새로운 기능 추가
+   - 실시간 음성 변환 기능
+   - 다중 화자 구분 자동 인식
+   - 타임스탬프 자동 삽입
+
+3. 사용자 인터페이스 개선
+   - 직관적인 파일 업로드 인터페이스
+   - 작업 진행 상황 실시간 모니터링
+   - 모바일 최적화 완료
+
+4. 새로운 요금제 출시
+   - 개인 사용자를 위한 라이트 플랜
+   - 기업 고객을 위한 프리미엄 플랜
+   - 대용량 처리를 위한 엔터프라이즈 플랜
+
+■ 적용 일정
+- 2025년 8월 30일(금) 오후 6시부터 적용
+
+■ 문의사항
+기타 궁금한 사항이 있으시면 고객센터(1588-1234)로 연락해 주시기 바랍니다.
+
+감사합니다.</div>
+        </div>
+    </div>
+    
+    <!-- 첨부파일 섹션 -->
+    <div class="file-attachment-section">
+        <div class="section-title">첨부파일</div>
+        <div class="file-list" id="attachmentList">
+            <!-- 파일이 있는 경우 -->
+            <div class="file-item">
+                <div class="file-info">
+                    <span class="file-icon">📄</span>
+                    <div class="file-details">
+                        <span class="file-name">서비스_업데이트_상세내용.pdf</span>
+                        <span class="file-size">2.3 MB</span>
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <button class="file-download" onclick="downloadFile('file1')">
+                        <span>⬇️</span>
+                        다운로드
+                    </button>
+                </div>
+            </div>
+            
+            <div class="file-item">
+                <div class="file-info">
+                    <span class="file-icon">🖼️</span>
+                    <div class="file-details">
+                        <span class="file-name">UI_업데이트_스크린샷.png</span>
+                        <span class="file-size">1.8 MB</span>
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <button class="file-download" onclick="downloadFile('file2')">
+                        <span>⬇️</span>
+                        다운로드
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-action btn-edit" onclick="editNotice()">
+            <span>✏️</span>
+            수정
+        </button>
+        <button class="btn-action btn-delete" onclick="deleteNotice()">
+            <span>🗑️</span>
+            삭제
+        </button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('공지사항 상세 페이지 로드, ID:', itemId);
+            loadNoticeDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadNoticeDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'NOTICE001': {
+                    serviceType: '한글',
+                    serviceClass: 'service-korean',
+                    noticeTitle: '소리바로 서비스 업데이트 안내',
+                    location: '사용자',
+                    locationClass: 'location-user',
+                    type: '일반',
+                    typeClass: 'type-general',
+                    pinned: 'Y',
+                    pinnedClass: 'pin-yes',
+                    viewCount: '1,234',
+                    registeredBy: '관리자',
+                    registeredDate: '2025-08-27 09:00:00',
+                    modifiedBy: '관리자',
+                    modifiedDate: '2025-08-27 09:00:00',
+                    attachedFiles: [
+                        {
+                            id: 'file1',
+                            name: '서비스_업데이트_상세내용.pdf',
+                            size: '2.3 MB',
+                            icon: '📄',
+                            url: '/files/service_update_details.pdf'
+                        },
+                        {
+                            id: 'file2',
+                            name: 'UI_업데이트_스크린샷.png',
+                            size: '1.8 MB',
+                            icon: '🖼️',
+                            url: '/files/ui_update_screenshot.png'
+                        }
+                    ],
+                    content: `안녕하세요. 소리바로 서비스를 이용해 주셔서 감사합니다.
+
+이번에 소리바로 서비스가 새롭게 업데이트되어 안내드립니다.
+
+■ 주요 업데이트 내용
+
+1. 음성인식 정확도 개선
+   - AI 음성인식 엔진 업그레이드로 정확도 95% 달성
+   - 방언 및 전문용어 인식률 향상
+
+2. 새로운 기능 추가
+   - 실시간 음성 변환 기능
+   - 다중 화자 구분 자동 인식
+   - 타임스탬프 자동 삽입
+
+3. 사용자 인터페이스 개선
+   - 직관적인 파일 업로드 인터페이스
+   - 작업 진행 상황 실시간 모니터링
+   - 모바일 최적화 완료
+
+4. 새로운 요금제 출시
+   - 개인 사용자를 위한 라이트 플랜
+   - 기업 고객을 위한 프리미엄 플랜
+   - 대용량 처리를 위한 엔터프라이즈 플랜
+
+■ 적용 일정
+- 2025년 8월 30일(금) 오후 6시부터 적용
+
+■ 문의사항
+기타 궁금한 사항이 있으시면 고객센터(1588-1234)로 연락해 주시기 바랍니다.
+
+감사합니다.`
+                },
+                'NOTICE002': {
+                    serviceType: '한글',
+                    serviceClass: 'service-korean',
+                    noticeTitle: '시스템 점검 안내',
+                    location: '시스템관리자',
+                    locationClass: 'location-system',
+                    type: '일반',
+                    typeClass: 'type-general',
+                    pinned: 'Y',
+                    pinnedClass: 'pin-yes',
+                    viewCount: '2,567',
+                    registeredBy: '관리자',
+                    registeredDate: '2025-08-27 10:30:00',
+                    modifiedBy: '관리자',
+                    modifiedDate: '2025-08-27 10:30:00',
+                    attachedFiles: [
+                        {
+                            id: 'file3',
+                            name: '시스템_점검_안내서.pdf',
+                            size: '1.2 MB',
+                            icon: '📄',
+                            url: '/files/system_maintenance_guide.pdf'
+                        }
+                    ],
+                    content: `시스템 점검으로 인한 서비스 일시 중단 안내
+
+안녕하세요. 소리바로 서비스 운영팀입니다.
+
+서비스 품질 향상을 위한 시스템 점검을 실시하오니 이용에 참고하시기 바랍니다.
+
+■ 점검 일시
+- 2025년 8월 28일(토) 오전 2시 ~ 오전 6시 (4시간)
+
+■ 점검 내용
+- 서버 하드웨어 업그레이드
+- 데이터베이스 최적화
+- 보안 패치 적용
+- 백업 시스템 점검
+
+■ 영향 범위
+- 전체 서비스 이용 불가
+- 파일 업로드/다운로드 불가
+- 회원가입/로그인 불가
+
+점검 시간 동안 서비스 이용에 불편을 드려 죄송합니다.
+
+감사합니다.`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['NOTICE001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('serviceBadge').textContent = data.serviceType;
+            document.getElementById('serviceBadge').className = `service-badge ${data.serviceClass}`;
+            document.getElementById('noticeTitle').textContent = data.noticeTitle;
+            document.getElementById('locationBadge').textContent = data.location;
+            document.getElementById('locationBadge').className = `location-badge ${data.locationClass}`;
+            document.getElementById('typeBadge').textContent = data.type;
+            document.getElementById('typeBadge').className = `type-badge ${data.typeClass}`;
+            document.getElementById('pinBadge').textContent = data.pinned;
+            document.getElementById('pinBadge').className = `pin-badge ${data.pinnedClass}`;
+            document.getElementById('viewCount').textContent = data.viewCount;
+            document.getElementById('registeredBy').textContent = data.registeredBy;
+            document.getElementById('registeredDate').textContent = data.registeredDate;
+            document.getElementById('modifiedBy').textContent = data.modifiedBy;
+            document.getElementById('modifiedDate').textContent = data.modifiedDate;
+            document.getElementById('noticeContent').textContent = data.content;
+            
+            // 첨부파일 업데이트
+            updateAttachmentList(data.attachedFiles);
+        }
+        
+        // 첨부파일 목록 업데이트
+        function updateAttachmentList(files) {
+            const attachmentList = document.getElementById('attachmentList');
+            
+            if (!files || files.length === 0) {
+                attachmentList.innerHTML = '<div class="no-files">첨부된 파일이 없습니다.</div>';
+                return;
+            }
+            
+            const fileItems = files.map(file => `
+                <div class="file-item">
+                    <div class="file-info">
+                        <span class="file-icon">${file.icon}</span>
+                        <div class="file-details">
+                            <span class="file-name">${file.name}</span>
+                            <span class="file-size">${file.size}</span>
+                        </div>
+                    </div>
+                    <div class="file-actions">
+                        <button class="file-download" onclick="downloadFile('${file.id}')">
+                            <span>⬇️</span>
+                            다운로드
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            attachmentList.innerHTML = fileItems;
+        }
+        
+        // 파일 다운로드
+        function downloadFile(fileId) {
+            // 실제 구현 시 서버에서 파일 다운로드 처리
+            console.log('파일 다운로드:', fileId);
+            alert('파일 다운로드를 시작합니다.');
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'notice-management.html';
+        }
+        
+        // 수정 기능
+        function editNotice() {
+            const url = `notice-register.html?id=${itemId}&mode=edit`;
+            window.location.href = url;
+        }
+        
+        // 삭제 기능
+        function deleteNotice() {
+            if (confirm('이 공지사항을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
+                alert('공지사항이 삭제되었습니다.');
+                // 실제 구현 시 서버 API 호출하여 삭제
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

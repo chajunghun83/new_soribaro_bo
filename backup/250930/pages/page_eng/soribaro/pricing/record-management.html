@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>다기록/통화기록 관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-select {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 120px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: auto;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 구분 배지 */
+        .category-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .category-call {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .category-multi {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .category-transaction {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .category-caption {
+            background: #fce7f3;
+            color: #be185d;
+        }
+        
+        /* 하단 액션 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📞</span>
+            다기록/통화기록 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div style="flex: 1;"></div>
+            <div class="search-group">
+                <label class="search-label">구분</label>
+                <select id="categoryFilter" class="search-select">
+                    <option value="">전체</option>
+                    <option value="통화기록">통화기록</option>
+                    <option value="다기록">다기록</option>
+                    <option value="Transaction">Transaction</option>
+                    <option value="Caption">Caption</option>
+                </select>
+            </div>
+            
+            <button class="search-btn" onclick="searchRecordData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterModal()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">다기록/통화기록 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">No.</th>
+                    <th width="120">구분</th>
+                    <th width="200">분류명</th>
+                    <th width="180">시작일</th>
+                    <th width="180">종료일</th>
+                    <th width="120">기본요금</th>
+                    <th width="120">추가요금(분)</th>
+                    <th width="100">등록자</th>
+                    <th width="180">등록일</th>
+                </tr>
+            </thead>
+            <tbody id="recordTableBody">
+                <tr onclick="goToDetail('CALL001')">
+                    <td>10</td>
+                    <td><span class="category-badge category-call">통화기록</span></td>
+                    <td>통화기록 서비스_2025-08-27</td>
+                    <td>2025-01-01 00:00:00</td>
+                    <td>9999-12-31 23:59:59</td>
+                    <td>10,000원</td>
+                    <td>500원</td>
+                    <td>관리자</td>
+                    <td>2025-08-27 09:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('MULTI001')">
+                    <td>9</td>
+                    <td><span class="category-badge category-multi">다기록</span></td>
+                    <td>다기록 서비스_2025-08-27</td>
+                    <td>2025-01-01 00:00:00</td>
+                    <td>9999-12-31 23:59:59</td>
+                    <td>15,000원</td>
+                    <td>800원</td>
+                    <td>관리자</td>
+                    <td>2025-08-27 10:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('TRANS001')">
+                    <td>8</td>
+                    <td><span class="category-badge category-transaction">Transaction</span></td>
+                    <td>Transaction 서비스_2025-08-26</td>
+                    <td>2025-02-01 00:00:00</td>
+                    <td>9999-12-31 23:59:59</td>
+                    <td>$20</td>
+                    <td>$1</td>
+                    <td>관리자</td>
+                    <td>2025-08-26 11:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('CAPTION001')">
+                    <td>7</td>
+                    <td><span class="category-badge category-caption">Caption</span></td>
+                    <td>Caption 서비스_2025-08-26</td>
+                    <td>2025-03-01 00:00:00</td>
+                    <td>9999-12-31 23:59:59</td>
+                    <td>$12</td>
+                    <td>$0.6</td>
+                    <td>관리자</td>
+                    <td>2025-08-26 14:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('CALL002')">
+                    <td>6</td>
+                    <td><span class="category-badge category-call">통화기록</span></td>
+                    <td>통화기록 서비스_2025-08-25</td>
+                    <td>2025-04-01 00:00:00</td>
+                    <td>2025-12-31 23:59:59</td>
+                    <td>9,000원</td>
+                    <td>450원</td>
+                    <td>관리자</td>
+                    <td>2025-08-25 15:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('MULTI002')">
+                    <td>5</td>
+                    <td><span class="category-badge category-multi">다기록</span></td>
+                    <td>다기록 서비스_2025-08-25</td>
+                    <td>2025-05-01 00:00:00</td>
+                    <td>2025-12-31 23:59:59</td>
+                    <td>14,000원</td>
+                    <td>750원</td>
+                    <td>관리자</td>
+                    <td>2025-08-25 16:45:00</td>
+                </tr>
+                <tr onclick="goToDetail('TRANS002')">
+                    <td>4</td>
+                    <td><span class="category-badge category-transaction">Transaction</span></td>
+                    <td>Transaction 서비스_2025-08-24</td>
+                    <td>2025-06-01 00:00:00</td>
+                    <td>2025-12-31 23:59:59</td>
+                    <td>$18</td>
+                    <td>$0.9</td>
+                    <td>관리자</td>
+                    <td>2025-08-24 08:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('CAPTION002')">
+                    <td>3</td>
+                    <td><span class="category-badge category-caption">Caption</span></td>
+                    <td>Caption 서비스_2025-08-24</td>
+                    <td>2025-07-01 00:00:00</td>
+                    <td>2025-12-31 23:59:59</td>
+                    <td>$11</td>
+                    <td>$0.55</td>
+                    <td>관리자</td>
+                    <td>2025-08-24 09:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('CALL003')">
+                    <td>2</td>
+                    <td><span class="category-badge category-call">통화기록</span></td>
+                    <td>통화기록 서비스_2025-08-23</td>
+                    <td>2025-08-01 00:00:00</td>
+                    <td>2025-12-31 23:59:59</td>
+                    <td>8,500원</td>
+                    <td>400원</td>
+                    <td>관리자</td>
+                    <td>2025-08-23 10:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('MULTI003')">
+                    <td>1</td>
+                    <td><span class="category-badge category-multi">다기록</span></td>
+                    <td>다기록 서비스_2025-08-23</td>
+                    <td>2025-08-15 00:00:00</td>
+                    <td>2025-12-31 23:59:59</td>
+                    <td>13,500원</td>
+                    <td>700원</td>
+                    <td>관리자</td>
+                    <td>2025-08-23 11:00:00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+    
+
+    <script>
+        // 검색 기능
+        function searchRecordData() {
+            const category = document.getElementById('categoryFilter').value;
+            console.log('검색 조건:', { category });
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n구분: ' + (category || '전체'));
+        }
+        
+        // 상세 페이지 이동
+        function goToDetail(id) {
+            const url = `record-detail.html?id=${id}`;
+            window.location.href = url;
+        }
+        
+        // 등록 페이지로 이동
+        function openRegisterModal() {
+            window.location.href = 'record-register.html';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('다기록/통화기록 관리 페이지 로드 완료');
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadRecordData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadRecordData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('다기록/통화기록 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

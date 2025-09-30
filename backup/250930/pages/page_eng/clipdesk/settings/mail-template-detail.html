@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메일 템플릿 상세정보 - 클립데스크 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 150px 1fr 150px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 템플릿 타입 배지 */
+        .template-type-badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .type-signup { background: #dbeafe; color: #1e40af; }
+        .type-draft { background: #fef3c7; color: #92400e; }
+        .type-modify { background: #e0f2fe; color: #0369a1; }
+        .type-approve { background: #dcfce7; color: #166534; }
+        .type-assign { background: #f3e8ff; color: #7c3aed; }
+        .type-reject { background: #fee2e2; color: #dc2626; }
+        .type-request { background: #fce7f3; color: #be185d; }
+        .type-payment { background: #ecfdf5; color: #047857; }
+
+        /* 코드 배지 */
+        .code-badge {
+            padding: 4px 8px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            white-space: nowrap;
+            background: #f1f5f9;
+            color: #475569;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 300px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            white-space: pre-wrap;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📧</span>
+            메일 템플릿 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">템플릿 타입</div>
+                    <div class="info-value">
+                        <span id="templateType" class="template-type-badge type-signup">회원가입 완료</span>
+                    </div>
+                    
+                    <div class="info-label">이메일 제목</div>
+                    <div class="info-value" id="emailTitle">회원가입 완료 안내</div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-label">이메일 제목 코드</div>
+                    <div class="info-value">
+                        <span id="emailTitleCode" class="code-badge">SIGNUP/COMPLETE</span>
+                    </div>
+                    
+                    <div class="info-label">이메일 코드</div>
+                    <div class="info-value">
+                        <span id="emailCode" class="code-badge">SU_COMP</span>
+                    </div>
+                </div>
+                
+                <div class="info-grid">
+                    <div class="info-label">등록일시</div>
+                    <div class="info-value" id="regDate">2025-08-27 09:00:00</div>
+                    <div></div>
+                    <div></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 메일 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">메일 내용</div>
+        <div class="info-content">
+            <div class="content-display" id="emailContent">안녕하세요, 클립데스크입니다.
+
+회원가입이 성공적으로 완료되었습니다.
+
+이제 클립데스크의 모든 서비스를 이용하실 수 있습니다.
+- 영상 편집 의뢰
+- 포트폴리오 관리
+- 작업 진행 상황 확인
+
+궁금한 사항이 있으시면 언제든 고객센터로 문의해주세요.
+
+감사합니다.</div>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-action btn-edit" onclick="editTemplate()">
+            <span>✏️</span>
+            수정
+        </button>
+        <button class="btn-action btn-delete" onclick="deleteTemplate()">
+            <span>🗑️</span>
+            삭제
+        </button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('메일 템플릿 상세 페이지 로드, ID:', itemId);
+            loadTemplateDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadTemplateDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'MAIL001': {
+                    templateType: 'signup_complete',
+                    templateTypeName: '회원가입 완료',
+                    regDate: '2025-08-27 09:00:00',
+                    emailTitle: '회원가입 완료 안내',
+                    emailTitleCode: 'SIGNUP/COMPLETE',
+                    emailCode: 'SU_COMP',
+                    emailContent: `안녕하세요, 클립데스크입니다.
+
+회원가입이 성공적으로 완료되었습니다.
+
+이제 클립데스크의 모든 서비스를 이용하실 수 있습니다.
+- 영상 편집 의뢰
+- 포트폴리오 관리
+- 작업 진행 상황 확인
+
+궁금한 사항이 있으시면 언제든 고객센터로 문의해주세요.
+
+감사합니다.`
+                },
+                'MAIL002': {
+                    templateType: 'edit_draft_complete',
+                    templateTypeName: '가편집 초안 완성',
+                    regDate: '2025-08-27 10:30:00',
+                    emailTitle: '가편집 초안 완성 알림',
+                    emailTitleCode: 'EDIT/DRAFT/COMPLETE',
+                    emailCode: 'ED_DR_COMP',
+                    emailContent: `안녕하세요, 클립데스크입니다.
+
+요청하신 영상의 가편집 초안이 완성되었습니다.
+
+주문번호: [ORDER_NO]
+작업명: [WORK_NAME]
+
+마이페이지에서 초안을 확인하시고 피드백을 남겨주세요.
+수정사항이 있으시면 상세히 기재해주시면 반영하여 작업하겠습니다.
+
+감사합니다.`
+                },
+                'MAIL003': {
+                    templateType: 'payment_complete',
+                    templateTypeName: '결제 완료',
+                    regDate: '2025-08-22 14:20:00',
+                    emailTitle: '결제 완료 확인',
+                    emailTitleCode: 'PAYMENT/COMPLETE',
+                    emailCode: 'PAY_COMP',
+                    emailContent: `안녕하세요, 클립데스크입니다.
+
+결제가 성공적으로 완료되었습니다.
+
+주문번호: [ORDER_NO]
+결제금액: [AMOUNT]원
+결제방법: [PAYMENT_METHOD]
+
+작업이 곧 시작됩니다. 진행 상황은 마이페이지에서 확인하실 수 있습니다.
+
+감사합니다.`
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['MAIL001'];
+        }
+        
+        // 템플릿 타입별 CSS 클래스 매핑
+        function getTemplateTypeClass(type) {
+            const typeMap = {
+                'signup_complete': 'type-signup',
+                'edit_draft_complete': 'type-draft',
+                'edit_modify_complete': 'type-modify',
+                'edit_final_approve': 'type-approve',
+                'main_draft_complete': 'type-draft',
+                'main_modify_complete': 'type-modify',
+                'main_final_approve': 'type-approve',
+                'work_assign': 'type-assign',
+                'work_reject': 'type-reject',
+                'edit_request': 'type-request',
+                'payment_complete': 'type-payment',
+                'payment_request': 'type-request'
+            };
+            return typeMap[type] || 'type-signup';
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            const templateTypeElement = document.getElementById('templateType');
+            templateTypeElement.textContent = data.templateTypeName;
+            templateTypeElement.className = 'template-type-badge ' + getTemplateTypeClass(data.templateType);
+            
+            document.getElementById('regDate').textContent = data.regDate;
+            document.getElementById('emailTitle').textContent = data.emailTitle;
+            document.getElementById('emailTitleCode').textContent = data.emailTitleCode;
+            document.getElementById('emailCode').textContent = data.emailCode;
+            document.getElementById('emailContent').textContent = data.emailContent;
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'mail-template-management.html';
+        }
+        
+        // 수정 기능
+        function editTemplate() {
+            const url = `mail-template-register.html?id=${itemId}&mode=edit`;
+            window.location.href = url;
+        }
+        
+        // 삭제 기능
+        function deleteTemplate() {
+            if (confirm('이 메일 템플릿을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
+                alert('메일 템플릿이 삭제되었습니다.');
+                // 실제 구현 시 서버 API 호출하여 삭제
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Request Details - Soribaro BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* 페이지 헤더 */
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+        
+        .cancel-button {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cancel-button:hover {
+            background: #b91c1c;
+        }
+        
+        .accept-button {
+            background: #16a34a;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .accept-button:hover {
+            background: #15803d;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .section-title {
+            margin: 0 0 25px 0;
+            color: #374151;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 140px 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        
+        .info-label {
+            font-weight: 600;
+            color: #374151;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .info-value.highlight {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .info-value.success {
+            color: #10b981;
+            font-weight: 600;
+        }
+        
+        /* 정보 섹션 그리드 배치 */
+        .info-sections-grid {
+            display: grid;
+            grid-template-columns: 750px 750px;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+        
+        /* 상태 배지 */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-received { background: rgba(16, 185, 129, 0.1); color: #10b981; }
+        .status-inprogress { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+        .status-completed { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+        .status-cancelled { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+        
+        /* 파일 플레이어 섹션 */
+        .file-player-section {
+            margin-top: 25px;
+            padding-top: 25px;
+            border-top: 1px solid #e5e7eb;
+        }
+        
+        .file-info-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .file-name-info {
+            color: #6b7280;
+            font-size: 13px;
+            line-height: 1.4;
+        }
+        
+        .audio-player {
+            width: 100%;
+            margin: 15px 0;
+        }
+        
+        /* 고객 세부 요청사항 */
+        .customer-request-section {
+            position: relative;
+        }
+        
+        .customer-request-textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 15px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .share-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+            margin-top: 15px;
+            float: right;
+        }
+        
+        /* 고객 첨부파일 */
+        .file-list {
+            max-height: 150px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+        }
+        
+        .file-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        
+        .file-item-content {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+        
+        .file-item input[type="checkbox"] {
+            margin-right: 12px;
+        }
+        
+        .file-item span {
+            color: #3b82f6;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 13px;
+        }
+        
+        .file-status {
+            font-size: 10px;
+            color: #6b7280;
+            min-width: 40px;
+            text-align: center;
+        }
+        
+        .file-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+        
+        .download-btn, .share-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .share-btn {
+            background: #3b82f6;
+        }
+        
+        /* 반응형 */
+        @media (max-width: 1600px) {
+            .info-sections-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 20px;
+            }
+            
+            .info-sections-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .info-label {
+                font-weight: 600;
+                margin-bottom: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 페이지 헤더 -->
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📄</span>
+            Request Details
+        </h1>
+        <div style="display: flex; gap: 10px;">
+            <button class="cancel-button" onclick="cancelRequest()">
+                <span>✕</span>
+                Cancel Request
+            </button>
+            <button class="accept-button" onclick="acceptRequest()">
+                <span>✓</span>
+                Accept Request
+            </button>
+            <button class="back-button" onclick="goBack()">
+                <span>←</span>
+                Back to List
+            </button>
+        </div>
+    </div>
+    
+    <!-- 의뢰 상세정보 -->
+    <div>
+        <!-- 첫 번째 행: 의뢰 정보 + 요청 정보 -->
+        <div class="info-sections-grid">
+            <!-- 의뢰 정보 -->
+            <div class="info-section">
+                <h2 class="section-title">
+                    <span>📋</span>
+                    Request Information
+                </h2>
+                <div class="info-grid">
+                    <span class="info-label">Order Number</span>
+                    <span id="order-number" class="info-value">20250723033432</span>
+                    
+                    <span class="info-label">Request Date</span>
+                    <span id="request-date" class="info-value">2025-07-23 16:52</span>
+                    
+                    <span class="info-label">Service Type</span>
+                    <span id="service-type" class="info-value">통화기록</span>
+                    
+                    <span class="info-label">Client Name</span>
+                    <span id="client-name" class="info-value">김진</span>
+                    
+                    <span class="info-label">Contact</span>
+                    <span id="client-contact" class="info-value">010-2394-9235</span>
+                </div>
+            </div>
+
+            <!-- 요청 정보 -->
+            <div class="info-section">
+                <h2 class="section-title">
+                    <span>💰</span>
+                    Request Information
+                </h2>
+                <div class="info-grid">
+                    <span class="info-label">Record Original</span>
+                    <span class="info-value">신청</span>
+                    
+                    <span class="info-label">Additional Request</span>
+                    <span class="info-value">2부</span>
+                    
+                    <span class="info-label">Recipient</span>
+                    <span class="info-value">황진은</span>
+                    
+                    <span class="info-label">Recipient Contact</span>
+                    <span class="info-value">010-4585-3518</span>
+                    
+                    <span class="info-label">Address</span>
+                    <span class="info-value">전남 나주시 그린로 198 10층</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 두 번째 행: 결제 정보 + 파일 정보 -->
+        <div class="info-sections-grid">
+            <!-- 결제 정보 -->
+            <div class="info-section">
+                <h2 class="section-title">
+                    <span>💳</span>
+                    Payment Information
+                </h2>
+                <div class="info-grid">
+                    <span class="info-label">Payment Method</span>
+                    <span id="payment-method" class="info-value">계좌이체</span>
+                    
+                    <span class="info-label">Depositor Name</span>
+                    <span id="depositor-name" class="info-value">김영희</span>
+                    
+                    <span class="info-label">Used Points</span>
+                    <span id="used-points" class="info-value">0</span>
+                    
+                    <span class="info-label">Payment Amount</span>
+                    <span id="payment-amount" class="info-value highlight">40,000원</span>
+                    
+                    <span class="info-label">Edit Payment Amount</span>
+                    <div style="display: flex; gap: 10px; align-items: center;">
+                        <input type="number" id="payment-amount-edit" placeholder="40000" style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 4px; font-size: 14px; width: 120px;">
+                        <span style="color: #6b7280; font-size: 14px;">원</span>
+                        <button onclick="updatePaymentAmount()" style="background: #f59e0b; color: white; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; font-weight: 500;">
+                            Update Payment
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 파일 정보 -->
+            <div class="info-section">
+                <h2 class="section-title">
+                    <span>📁</span>
+                    File Information
+                </h2>
+                <div class="info-grid">
+                    <span class="info-label">File Count</span>
+                    <span class="info-value">3개</span>
+                    
+                    <span class="info-label">File 1</span>
+                    <div class="info-value" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>통화녹음_20250723.m4a (00:05:42)</span>
+                        <button onclick="downloadFile('통화녹음_20250723.m4a')" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 10px;">
+                            Download
+                        </button>
+                    </div>
+                    
+                    <span class="info-label">File 2</span>
+                    <div class="info-value" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>회의녹음_20250723.wav (00:12:15)</span>
+                        <button onclick="downloadFile('회의녹음_20250723.wav')" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 10px;">
+                            Download
+                        </button>
+                    </div>
+                    
+                    <span class="info-label">File 3</span>
+                    <div class="info-value" style="display: flex; justify-content: space-between; align-items: center;">
+                        <span>상담녹음_20250723.mp3 (00:03:28)</span>
+                        <button onclick="downloadFile('상담녹음_20250723.mp3')" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 12px; margin-left: 10px;">
+                            Download
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 모두 Download 버튼 -->
+                <div style="text-align: right; margin-top: 20px;">
+                    <button onclick="downloadAllFiles()" style="background: #16a34a; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        📥 Download All
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 세 번째 행: 고객 세부 요청사항 + 고객 첨부파일 -->
+        <div class="info-sections-grid">
+            <!-- 고객 세부 요청사항 -->
+            <div class="info-section">
+                <h2 class="section-title">
+                    <span>📝</span>
+                    Customer Detailed Request
+                </h2>
+                <div class="customer-request-section">
+                    <textarea class="customer-request-textarea" readonly>고객님께서 법정에서 사용할 증빙자료로 활용하기 위해 정확한 전사를 요청하셨습니다. 특히 시간대별 발화자 구분을 명확하게 해주시고, 중요한 부분은 강조 표시를 해달라고 하셨습니다.</textarea>
+                </div>
+            </div>
+
+            <!-- 고객 첨부파일 -->
+            <div class="info-section">
+                <h2 class="section-title">
+                    <span>📎</span>
+                    Customer Attachments
+                </h2>
+                <div class="file-list">
+                    <div class="file-item">
+                        <span onclick="downloadFile('참고자료_법정증빙용.pdf')">참고자료_법정증빙용.pdf</span>
+                    </div>
+                    <div class="file-item">
+                        <span onclick="downloadFile('전사_양식_요청서.hwp')">전사_양식_요청서.hwp</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // URL 파라미터 파싱
+        function getUrlParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                orderNumber: params.get('orderNumber') || '20250723033432',
+                clientName: params.get('clientName') || '김진',
+                contact: params.get('contact') || '010-2394-9235',
+                requestDate: params.get('requestDate') || '2025-07-23 16:52',
+                serviceType: params.get('serviceType') || '통화기록',
+                paymentMethod: params.get('paymentMethod') || '계좌이체',
+                paymentAmount: params.get('paymentAmount') || '40,000',
+                status: params.get('status') || 'received'
+            };
+        }
+
+        // 페이지 로드 시 데이터 설정
+        window.addEventListener('DOMContentLoaded', function() {
+            const params = getUrlParams();
+            
+            // 기본 정보 설정
+            document.getElementById('order-number').textContent = params.orderNumber;
+            document.getElementById('client-name').textContent = params.clientName;
+            document.getElementById('client-contact').textContent = params.contact;
+            document.getElementById('request-date').textContent = params.requestDate;
+            document.getElementById('service-type').textContent = params.serviceType;
+            document.getElementById('payment-method').textContent = params.paymentMethod;
+            document.getElementById('payment-amount').textContent = params.paymentAmount + '원';
+            
+            // 상태 설정
+            const statusElement = document.getElementById('request-status');
+            statusElement.className = 'status-badge status-' + params.status;
+            switch(params.status) {
+                case 'received': statusElement.textContent = 'Received'; break;
+                case 'inprogress': statusElement.textContent = '진행중'; break;
+                case 'completed': statusElement.textContent = '완료'; break;
+                case 'cancelled': statusElement.textContent = '취소'; break;
+                default: statusElement.textContent = 'Received';
+            }
+        });
+
+        // 뒤로 가기
+        function goBack() {
+            try {
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    console.log('parent.loadPage로 이전 페이지 이동');
+                    window.parent.loadPage('pages/soribaro/b2c/request-management.html');
+                    return;
+                }
+            } catch (e) {
+                console.log('parent.loadPage 실패:', e);
+            }
+            
+            try {
+                if (window.history.length > 1) {
+                    console.log('history.back() 사용');
+                    window.history.back();
+                    return;
+                }
+            } catch (e) {
+                console.log('history.back() 실패:', e);
+            }
+            
+            try {
+                console.log('직접 페이지 이동');
+                window.location.href = 'request-management.html';
+            } catch (e) {
+                console.log('직접 페이지 이동 실패:', e);
+                alert('Cannot return to previous page.');
+            }
+        }
+
+        // 의뢰 취소
+        function cancelRequest() {
+            const message = 'Do you want to cancel this request?\nCancellation cannot be undone.';
+            
+            if (confirm(message)) {
+                // 의뢰 취소 로직 (실제 구현에서는 서버 API 호출)
+                console.log('Request has been cancelled.');
+                alert('Request has been cancelled.');
+                
+                // 상태 업데이트
+                const statusElement = document.getElementById('request-status');
+                statusElement.className = 'status-badge status-cancelled';
+                statusElement.textContent = '취소';
+            }
+        }
+
+        // 의뢰 수락
+        function acceptRequest() {
+            const message = 'Do you want to accept this request?\nWork will begin after acceptance.';
+            
+            if (confirm(message)) {
+                // 의뢰 수락 로직 (실제 구현에서는 서버 API 호출)
+                console.log('Request has been accepted.');
+                alert('Request has been accepted. Please start the work.');
+                
+                // 상태 업데이트
+                const statusElement = document.getElementById('request-status');
+                statusElement.className = 'status-badge status-in-progress';
+                statusElement.textContent = '작업중';
+            }
+        }
+
+        // 파일 Download
+        function downloadFile(fileName) {
+            console.log(`파일 Download: ${fileName}`);
+            alert(`Downloading ${fileName} file.`);
+        }
+
+        // 모든 파일 Download
+        function downloadAllFiles() {
+            const fileNames = [
+                '통화녹음_20250723.m4a',
+                '회의녹음_20250723.wav',
+                '상담녹음_20250723.mp3'
+            ];
+            
+            console.log('모든 파일 Download 시작');
+            alert(`Downloading ${fileNames.length} files in total.`);
+            
+            // 각 파일을 순차적으로 Download
+            fileNames.forEach((fileName, index) => {
+                setTimeout(() => {
+                    console.log(`Download 중: ${fileName}`);
+                }, index * 500); // 0.5초 간격으로 Download
+            });
+        }
+
+        // 결제금액 수정
+        function updatePaymentAmount() {
+            const newAmount = document.getElementById('payment-amount-edit').value;
+            
+            if (!newAmount || newAmount <= 0) {
+                alert('Please enter a valid amount.');
+                return;
+            }
+            
+            if (confirm(`Do you want to update the payment amount to ${Number(newAmount).toLocaleString()} KRW?`)) {
+                // 실제 환경에서는 서버 API 호출
+                const formattedAmount = Number(newAmount).toLocaleString() + '원';
+                document.getElementById('payment-amount').textContent = formattedAmount;
+                document.getElementById('payment-amount-edit').value = '';
+                
+                alert('Payment amount has been updated.');
+            }
+        }
+    </script>
+</body>
+</html>

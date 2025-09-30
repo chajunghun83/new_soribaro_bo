@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>공증신청/기록완본 상세정보 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+        
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        /* 구분 배지 */
+        .category-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .category-record {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .category-notary {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 할인률 표시 */
+        .discount-rate {
+            color: #dc2626;
+            font-weight: 600;
+        }
+        
+        /* 가격 정보 */
+        .price-info {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 20px;
+        }
+        
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .price-row:last-child {
+            margin-bottom: 0;
+            padding-top: 8px;
+            border-top: 1px solid #bae6fd;
+            font-weight: 600;
+        }
+        
+        .price-label {
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .price-value {
+            font-size: 14px;
+            color: #374151;
+        }
+        
+        .final-price {
+            color: #dc2626 !important;
+            font-size: 16px !important;
+            font-weight: 700 !important;
+        }
+        
+        /* 설명 영역 */
+        .description-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .description-content {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+        }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-delete:hover {
+            background: #dc2626;
+        }
+        
+        /* 상태 표시 */
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        
+        .status-expired {
+            background: #f3f4f6;
+            color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>💰</span>
+            공증신청/기록완본 상세정보
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">구분</div>
+                    <div class="info-value">
+                        <span id="categoryBadge" class="category-badge category-notary">공증</span>
+                    </div>
+                    
+                    <div class="info-label">분류명</div>
+                    <div class="info-value" id="categoryName">공증서류 발급 서비스</div>
+                    
+                    <div class="info-label">시작일</div>
+                    <div class="info-value" id="startDate">2025-01-01 00:00:00</div>
+                    
+                    <div class="info-label">종료일</div>
+                    <div class="info-value" id="endDate">9999-12-31 23:59:59</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 금액 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">금액 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">현재요금</div>
+                    <div class="info-value" id="currentPrice">50,000원</div>
+                    
+                    <div class="info-label">할인율</div>
+                    <div class="info-value">
+                        <span id="discountRate" class="discount-rate">10%</span>
+                    </div>
+                </div>
+                
+                <!-- 가격 정보 -->
+                <div class="price-info">
+                    <div class="price-row">
+                        <span class="price-label">정가</span>
+                        <span class="price-value" id="originalPrice">50,000원</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label">할인금액</span>
+                        <span class="price-value" id="discountAmount">-5,000원</span>
+                    </div>
+                    <div class="price-row">
+                        <span class="price-label final-price">최종 판매가</span>
+                        <span class="price-value final-price" id="finalPrice">45,000원</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 상세 설명 섹션 -->
+    <div class="description-section">
+        <div class="section-title">상세 설명</div>
+        <div class="info-content">
+            <div class="description-content" id="detailDescription">
+                공증서류 발급 서비스에 대한 상세 설명입니다.
+                
+                ■ 서비스 내용
+                - 각종 공증서류 발급 대행
+                - 공증인 사무소 방문 대행
+                - 서류 검토 및 보완
+                - 공증 완료 후 배송 서비스
+                
+                ■ 처리 절차
+                1. 서류 접수 및 검토
+                2. 공증인 사무소 방문 예약
+                3. 공증 진행
+                4. 완료된 서류 고객 전달
+                
+                ■ 소요 시간
+                - 일반 서류: 3-5 영업일
+                - 복잡한 서류: 7-10 영업일
+                
+                ■ 주의사항
+                - 공증 대상 서류의 원본이 필요합니다.
+                - 신분증 사본을 함께 제출해주세요.
+                - 공증 수수료는 별도 부과됩니다.
+            </div>
+        </div>
+    </div>
+    
+
+
+    <script>
+        // URL 파라미터에서 ID 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const itemId = urlParams.get('id');
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('공증신청/기록완본 상세 페이지 로드, ID:', itemId);
+            loadNotaryDetail(itemId);
+        });
+        
+        // 상세 정보 로딩
+        function loadNotaryDetail(id) {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = getMockData(id);
+            updateUI(mockData);
+        }
+        
+        // 임시 데이터 생성
+        function getMockData(id) {
+            const mockDatabase = {
+                'NOT001': {
+                    category: '공증',
+                    categoryClass: 'category-notary',
+                    name: '공증신청 가격 정책_2025-08-27',
+                    currentPrice: '50,000원',
+                    discountRate: '10%',
+                    startDate: '2025-01-01 00:00:00',
+                    endDate: '9999-12-31 23:59:59',
+                    originalPrice: 50000,
+                    discountPercent: 10
+                },
+                'REC001': {
+                    category: '기록',
+                    categoryClass: 'category-record',
+                    name: '기록완본 가격 정책_2025-08-27',
+                    currentPrice: '30,000원',
+                    discountRate: '15%',
+                    startDate: '2025-01-01 00:00:00',
+                    endDate: '9999-12-31 23:59:59',
+                    originalPrice: 30000,
+                    discountPercent: 15
+                }
+            };
+            
+            return mockDatabase[id] || mockDatabase['NOT001'];
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            document.getElementById('categoryBadge').textContent = data.category;
+            document.getElementById('categoryBadge').className = `category-badge ${data.categoryClass}`;
+            document.getElementById('categoryName').textContent = data.name;
+            document.getElementById('currentPrice').textContent = data.currentPrice;
+            document.getElementById('discountRate').textContent = data.discountRate;
+            document.getElementById('startDate').textContent = data.startDate;
+            document.getElementById('endDate').textContent = data.endDate;
+            
+            // 가격 계산
+            const discountAmount = Math.round(data.originalPrice * data.discountPercent / 100);
+            const finalPrice = data.originalPrice - discountAmount;
+            
+            document.getElementById('originalPrice').textContent = data.originalPrice.toLocaleString() + '원';
+            document.getElementById('discountAmount').textContent = '-' + discountAmount.toLocaleString() + '원';
+            document.getElementById('finalPrice').textContent = finalPrice.toLocaleString() + '원';
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'notary-management.html';
+        }
+    </script>
+</body>
+</html>

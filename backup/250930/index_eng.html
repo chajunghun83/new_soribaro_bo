@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soribaro BO Admin Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f5f6fa;
+            color: #333;
+            min-height: 100vh;
+        }
+        
+        /* 컨테이너 */
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* 사이드바 */
+        .sidebar {
+            width: 300px;
+            background: linear-gradient(180deg, #2c3e50, #34495e);
+            color: white;
+            position: fixed;
+            height: 100vh;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        /* 로고 영역 */
+        .logo {
+            padding: 20px;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .logo h2 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .menu-item {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .menu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+        }
+        
+        .menu-item.active {
+            background-color: rgba(52, 152, 219, 0.2);
+            border-left: 4px solid #3498db;
+        }
+        
+        .menu-title {
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            flex: 1;
+        }
+        
+        .menu-icon {
+            margin-right: 10px;
+            width: 16px;
+            text-align: center;
+            font-size: 16px;
+        }
+        
+        .submenu {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(0,0,0,0.1);
+        }
+        
+        .submenu.active {
+            max-height: 800px;
+        }
+        
+        .submenu-item {
+            padding: 12px 20px;
+            padding-left: 40px !important;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            color: rgba(255,255,255,0.8);
+            gap: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        .submenu-item:hover {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+        }
+        
+        .submenu-item.active {
+            background-color: rgba(52, 152, 219, 0.3);
+            border-left: 4px solid #3498db;
+            color: white;
+            font-weight: 600;
+            padding-left: 36px !important;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        
+        /* 3단계 서브메뉴 */
+        .submenu-level-2 {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+            background-color: rgba(0,0,0,0.2);
+        }
+        
+        .submenu-level-2.active {
+            max-height: 800px;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+        
+        .submenu-level-2 .submenu-item {
+            padding-left: 60px !important;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            line-height: 1.3;
+        }
+        
+        .submenu-level-2 .submenu-item:hover, .submenu-level-2 .submenu-item.active {
+            background-color: rgba(255,255,255,0.1);
+            border-left: 4px solid #3498db;
+            color: white;
+        }
+        
+        /* 서브메뉴 스크롤바 스타일 (웹킷) */
+        .submenu-level-2.active::-webkit-scrollbar {
+            width: 4px;
+        }
+        
+        .submenu-level-2.active::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+        .submenu-level-2.active::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.3);
+            border-radius: 2px;
+        }
+        
+        .submenu-level-2.active::-webkit-scrollbar-thumb:hover {
+            background: rgba(255,255,255,0.5);
+        }
+        
+        /* 메뉴 확장/축소 화살표 */
+        .menu-arrow {
+            margin-left: auto;
+            transition: transform 0.3s ease;
+            font-size: 12px;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .menu-item.active .menu-arrow {
+            transform: rotate(90deg);
+            color: rgba(255,255,255,0.9);
+        }
+        
+        .submenu-item.has-children {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .submenu-item .menu-arrow {
+            color: rgba(255,255,255,0.5);
+        }
+        
+        /* 메인 컨텐츠 */
+        .main-content {
+            flex: 1;
+            margin-left: 300px;
+            background-color: #f5f6fa;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* 헤더 영역 */
+        .main-header {
+            background: #f8f9fa;
+            padding: 10px 30px;
+            border-bottom: 1px solid #e9ecef;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            min-height: 45px;
+            flex-shrink: 0;
+        }
+        
+        .content-wrapper {
+            flex: 1;
+            padding: 30px;
+            padding-top: 0;
+        }
+        
+        .content-frame {
+            width: 100%;
+            height: calc(100vh - 105px);
+            border: none;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        /* 로딩 애니메이션 */
+        .loading {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: calc(100vh - 105px);
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            margin: 30px;
+            margin-top: 0;
+        }
+        
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* 웍스파이 연동 표시 */
+        .workspy-badge {
+            display: inline-block;
+            background: #3b82f6;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 9px;
+            font-weight: 500;
+            margin-left: 4px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        /* 언어 전환 버튼 */
+        .lang-switch-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 15px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .lang-switch-btn:hover {
+            background: #059669;
+            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
+        }
+
+        /* 프로필 메뉴 */
+        .profile-menu {
+            position: relative;
+        }
+
+        .profile-button {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: white;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            padding: 6px 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .profile-button:hover {
+            background: #f8f9fa;
+            border-color: #d1d5db;
+        }
+
+        .profile-avatar {
+            width: 28px;
+            height: 28px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .profile-text {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .profile-greeting {
+            color: #6b7280;
+            font-size: 13px;
+        }
+
+        .profile-name {
+            font-weight: 600;
+            color: #374151;
+            font-size: 13px;
+        }
+
+        .profile-arrow {
+            font-size: 10px;
+            color: #6b7280;
+            margin-left: 2px;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 8px;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            min-width: 180px;
+            display: none;
+            overflow: hidden;
+        }
+
+        .profile-dropdown.active {
+            display: block;
+        }
+
+        .dropdown-item {
+            padding: 12px 16px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #374151;
+            border-bottom: 1px solid #f3f4f6;
+        }
+
+        .dropdown-item:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-item:hover {
+            background: #f9fafb;
+        }
+
+        .dropdown-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 비밀번호 변경 모달 */
+        .password-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .password-modal {
+            background: white;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modal-title {
+            margin: 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #6b7280;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f3f4f6;
+            color: #374151;
+        }
+
+        .modal-content {
+            padding: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s;
+            box-sizing: border-box;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-help {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px 24px;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .modal-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .modal-btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        /* 반응형 개선 */
+        @media (max-width: 1200px) {
+            .sidebar {
+                width: 280px;
+            }
+            .main-content {
+                margin-left: 280px;
+            }
+        }
+        
+        /* 페이지 스타일 */
+        .page {
+            display: none;
+        }
+        
+        .page.active {
+            display: block;
+        }
+    </style>
+</head>
+  <body>
+    <div class="container">
+        <!-- 사이드바 -->
+        <div class="sidebar">
+            <!-- 로고 영역 -->
+            <div class="logo">
+                <h2>🏢 Soribaro BO</h2>
+            </div>
+        <!-- 웍스파이 프로젝트 관리 -->
+        <div class="menu-item" onclick="loadPage('pages/page_eng/dashboard.html')">
+            <div class="menu-title">
+                <span class="menu-icon">🚀</span>
+                <s>Workspy Project Management</s>
+            </div>
+        </div>
+        
+        <!-- 사용자 관리 -->
+        <div class="menu-item" onclick="toggleSubmenu('user-management')">
+            <div class="menu-title">
+                <span class="menu-icon">👥</span>
+                User Management
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="user-management">
+            <div class="submenu-item active" onclick="loadPage('pages/page_eng/user/worker-management.html')">
+                Worker Management<span class="workspy-badge">Workspy Integration</span>
+            </div>
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/user/b2c-member-management.html')">
+                B2C Member Management
+            </div>
+        </div>
+        
+        <!-- 소리바로 서비스 -->
+        <div class="menu-item" onclick="toggleSubmenu('soribaro-service')">
+            <div class="menu-title">
+                <span class="menu-icon">🔊</span>
+                Soribaro Service
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="soribaro-service">
+                <!-- 녹취록 (B2C) -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('b2c-service')">
+                    Transcription (B2C)
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="b2c-service">
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/b2c/request-management.html')">Request Status Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/b2c/work-management.html')">Work Status Management</div>
+                </div>
+                
+                <!-- 엔터프라이즈 (B2B) -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('b2b-service')">
+                    Enterprise (B2B)
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="b2b-service">
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/enterprise/meeting-management.html')">Meeting Minutes Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/enterprise/vod-management.html')">VOD Work Management</div>
+                </div>
+                
+                <!-- 번역 서비스 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('translation-service')">
+                    Translation Service
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="translation-service">
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/translation/trans-management.html')">Translation Work Management</div>
+                </div>
+                
+                <!-- 가격 정책 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('pricing-policy')">
+                    Pricing Policy
+                    <span class="menu-arrow">▶</span>
+                </div>
+                            <div class="submenu-level-2" id="pricing-policy">
+                <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/pricing/notary-management.html')">Notarization/Record Complete</div>
+                <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/pricing/record-management.html')">Multi-Record/Call Record</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/pricing/point-management.html')">Point Policy</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/pricing/customer-point-management.html')">Customer Point Change History</div>
+                </div>
+                
+                <!-- 고객 응대 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('customer-support')">
+                    Customer Support
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="customer-support">
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/customer/contact-management.html')">Contact US</div>
+                </div>
+                
+                <!-- 소리바로 서비스 관리 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('soribaro-settings')">
+                    Soribaro Service Management
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="soribaro-settings">
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/settings/notice-management.html')">Notice Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/settings/faq-management.html')">FAQ</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/settings/popup-management.html')">Popup Event Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/soribaro/settings/aligo-template-management.html')">Aligo Template Management</div>
+                </div>
+        </div>
+        
+        <!-- Clipdesk Service -->
+        <div class="menu-item" onclick="toggleSubmenu('clipdesk-service')">
+            <div class="menu-title">
+                <span class="menu-icon">🎬</span>
+                Clipdesk Service
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="clipdesk-service">
+                <!-- 영상작업관리 -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('video-management')">
+                    Video Work Management
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="video-management">
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/clipdesk-management.html')">Request Status Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/clip_work-management.html')">Work Status Management</div>
+                </div>
+                
+                <!-- Clipdesk Service Management -->
+                <div class="submenu-item has-children" onclick="toggleSubmenu('clipdesk-settings')">
+                    Clipdesk Service Management
+                    <span class="menu-arrow">▶</span>
+                </div>
+                <div class="submenu-level-2" id="clipdesk-settings">
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/settings/request-items-management.html')">Customer Request Items Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/settings/portfolio-management.html')">Portfolio Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/settings/blog-management.html')">Blog Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/settings/review-management.html')">Review Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/settings/mail-template-management.html')">Mail Template Management</div>
+                    <div class="submenu-item" onclick="loadPage('pages/page_eng/clipdesk/settings/notification-mail-check.html')">Notification Mail Check</div>
+                </div>
+        </div>
+        
+        <!-- Report -->
+        <div class="menu-item" onclick="toggleSubmenu('report-menu')">
+            <div class="menu-title">
+                <span class="menu-icon">📊</span>
+                Report
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="report-menu">
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/report/work-report.html')">Work Result Report</div>
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/report/work-status.html')"><s>Worker Status (Future Development)</s></div>
+        </div>
+        
+        <!-- Integrated Service Management -->
+        <div class="menu-item" onclick="toggleSubmenu('integrated-management')">
+            <div class="menu-title">
+                <span class="menu-icon">🔧</span>
+                Integrated Service Management
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="integrated-management">
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/common/settings/terms-management.html')">Terms of Service Management</div>
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/common/settings/enterprise-company-management.html')">Enterprise Company Management</div>
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/common/settings/enterprise-customer-management.html')">Enterprise Customer Management</div>
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/common/settings/property-management.html')">Property Management</div>
+        </div>
+        
+        <!-- System Management -->
+        <div class="menu-item" onclick="toggleSubmenu('system-management')">
+            <div class="menu-title">
+                <span class="menu-icon">⚙️</span>
+                System Management
+                <span class="menu-arrow">▶</span>
+            </div>
+        </div>
+        <div class="submenu" id="system-management">
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/system/admin-account-management.html')">Admin Management</div>
+            <div class="submenu-item" onclick="loadPage('pages/page_eng/system/common-code-management.html')">Common Code Management</div>
+        </div>
+        
+        <!-- Logout -->
+        <div class="menu-item" onclick="logout()">
+            <div class="menu-title">
+                <span class="menu-icon">🚪</span>
+                Logout
+            </div>
+        </div>
+        
+        <!-- 구분선 -->
+        <div style="height: 1px; background: rgba(255,255,255,0.2); margin: 15px 20px;"></div>
+        
+        <!-- Worker Page -->
+        <div class="menu-item" onclick="switchToWorkerPage()" style="background-color: rgba(0,0,0,0.1);">
+            <div class="menu-title">
+                <span class="menu-icon">👤</span>
+                Worker Page
+            </div>
+        </div>
+    </div>
+        
+        <!-- 메인 컨텐츠 -->
+        <div class="main-content">
+            <!-- 헤더 영역 -->
+            <div class="main-header">
+                <!-- 언어 전환 버튼 -->
+                <button class="lang-switch-btn" onclick="switchToKorean()">
+                    <span>🇰🇷</span>
+                    한국어
+                </button>
+                <div class="profile-menu">
+                    <div class="profile-button" onclick="toggleProfileDropdown()">
+                        <div class="profile-avatar">관</div>
+                        <div class="profile-text">
+                            <span class="profile-greeting">Welcome</span>
+                            <span class="profile-name">Admin</span>
+                            <span class="profile-arrow">▼</span>
+                        </div>
+                    </div>
+                    <div class="profile-dropdown" id="profileDropdown">
+                        <div class="dropdown-item" onclick="openProfileEdit()">
+                            <span class="dropdown-icon">👤</span>
+                            Profile Edit
+                        </div>
+                        <div class="dropdown-item" onclick="openPasswordChange()">
+                            <span class="dropdown-icon">🔒</span>
+                            Change Password
+                        </div>
+                        <div class="dropdown-item" onclick="logoutFromProfile()">
+                            <span class="dropdown-icon">🚪</span>
+                            Logout
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 컨텐츠 래퍼 -->
+            <div class="content-wrapper">
+                <iframe id="content-frame" class="content-frame" src="pages/page_eng/user/worker-management.html"></iframe>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 비밀번호 변경 모달 -->
+    <div id="passwordModal" class="password-modal-overlay" style="display: none;">
+        <div class="password-modal">
+            <div class="modal-header">
+                <h2 class="modal-title">🔒 Change Password</h2>
+                <button class="modal-close" onclick="closePasswordModal()">&times;</button>
+            </div>
+            
+            <div class="modal-content">
+                <div class="form-group">
+                    <label class="form-label" for="newPassword">New Password</label>
+                    <input type="password" id="newPassword" class="form-input" placeholder="Enter new password">
+                    <div class="form-help">8-16 characters including letters, numbers, and special characters</div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="confirmPassword">Confirm Password</label>
+                    <input type="password" id="confirmPassword" class="form-input" placeholder="Re-enter password">
+                    <div class="form-help">8-16 characters including letters, numbers, and special characters</div>
+                </div>
+            </div>
+            
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-secondary" onclick="closePasswordModal()">Close</button>
+                <button class="modal-btn modal-btn-primary" onclick="changePassword()">Change</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 메뉴 토글 함수
+        function toggleSubmenu(menuId) {
+            const submenu = document.getElementById(menuId);
+            if (!submenu) return;
+            
+            const isCurrentlyActive = submenu.classList.contains('active');
+            
+            // 클릭된 메뉴가 이미 활성화되어 있으면 닫기
+            if (isCurrentlyActive) {
+                submenu.classList.remove('active');
+                // 부모 메뉴 아이템의 active 클래스도 제거
+                const parentMenuItem = submenu.previousElementSibling;
+                if (parentMenuItem && parentMenuItem.classList.contains('has-children')) {
+                    parentMenuItem.classList.remove('active');
+                }
+            } else {
+                // 같은 레벨의 다른 서브메뉴들 닫기
+                const parentElement = submenu.parentElement;
+                const siblingSubmenus = parentElement.querySelectorAll('.submenu, .submenu-level-2, .submenu-level-3');
+                
+                siblingSubmenus.forEach(sibling => {
+                    if (sibling !== submenu && sibling.parentElement === parentElement) {
+                        sibling.classList.remove('active');
+                        // 해당 서브메뉴의 부모 메뉴 아이템도 비활성화
+                        const siblingParent = sibling.previousElementSibling;
+                        if (siblingParent && siblingParent.classList.contains('has-children')) {
+                            siblingParent.classList.remove('active');
+                        }
+                    }
+                });
+                
+                // 현재 서브메뉴 활성화
+                submenu.classList.add('active');
+                // 부모 메뉴 아이템 활성화
+                const parentMenuItem = submenu.previousElementSibling;
+                if (parentMenuItem && parentMenuItem.classList.contains('has-children')) {
+                    parentMenuItem.classList.add('active');
+                }
+            }
+            
+            // 이벤트 전파 중단
+            event.stopPropagation();
+        }
+        
+        // 페이지 로드 함수
+        function loadPage(pageUrl) {
+            const contentFrame = document.getElementById('content-frame');
+            
+            // 로딩 표시
+            showLoading();
+            
+            // 모든 메뉴 아이템 비활성화
+            document.querySelectorAll('.menu-item, .submenu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // 현재 페이지에 해당하는 메뉴 아이템 활성화
+            setActiveMenu(pageUrl);
+            
+            // iframe으로 페이지 로드
+            contentFrame.src = pageUrl;
+            
+            // 이벤트 전파 중단
+            if (event) {
+                event.stopPropagation();
+            }
+        }
+        
+        // 활성 메뉴 설정 함수
+        function setActiveMenu(pageUrl) {
+            // 모든 서브메뉴 항목에서 해당 페이지 URL을 가진 항목 찾기
+            const allMenuItems = document.querySelectorAll('.menu-item, .submenu-item');
+            
+            allMenuItems.forEach(item => {
+                const onclick = item.getAttribute('onclick');
+                if (onclick && onclick.includes(pageUrl)) {
+                    // 해당 메뉴 아이템 활성화
+                    item.classList.add('active');
+                    
+                    // 상위 메뉴들 열기 및 활성화
+                    let currentElement = item;
+                    while (currentElement) {
+                        // 서브메뉴인 경우 열기
+                        if (currentElement.classList.contains('submenu') || 
+                            currentElement.classList.contains('submenu-level-2') ||
+                            currentElement.classList.contains('submenu-level-3')) {
+                            currentElement.classList.add('active');
+                        }
+                        
+                        // 부모 메뉴 아이템 활성화 (has-children 클래스가 있는 경우)
+                        if (currentElement.previousElementSibling && 
+                            currentElement.previousElementSibling.classList.contains('has-children')) {
+                            currentElement.previousElementSibling.classList.add('active');
+                        }
+                        
+                        // 최상위 메뉴까지 올라가기
+                        currentElement = currentElement.parentElement;
+                        if (currentElement && currentElement.classList.contains('menu-item')) {
+                            currentElement.classList.add('active');
+                            break;
+                        }
+                    }
+                }
+            });
+        }
+        
+        // 로딩 표시 함수
+        function showLoading() {
+            const mainContent = document.querySelector('.main-content');
+            const contentFrame = document.getElementById('content-frame');
+            
+            // 임시로 로딩 div 생성
+            const loadingDiv = document.createElement('div');
+            loadingDiv.className = 'loading';
+            loadingDiv.innerHTML = '<div class="loading-spinner"></div>';
+            loadingDiv.id = 'loading-indicator';
+            
+            // 기존 로딩 인디케이터 제거
+            const existingLoading = document.getElementById('loading-indicator');
+            if (existingLoading) {
+                existingLoading.remove();
+            }
+            
+            // 로딩 인디케이터 추가
+            mainContent.appendChild(loadingDiv);
+            contentFrame.style.display = 'none';
+            
+            // 페이지 로드 완료 후 로딩 제거
+            setTimeout(() => {
+                loadingDiv.remove();
+                contentFrame.style.display = 'block';
+            }, 800);
+        }
+        
+        // 프로필 드롭다운 토글
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('active');
+            
+            // 외부 클릭 시 드롭다운 닫기
+            if (dropdown.classList.contains('active')) {
+                document.addEventListener('click', closeProfileDropdownOnOutsideClick);
+            } else {
+                document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
+            }
+            
+            event.stopPropagation();
+        }
+
+        // 외부 클릭 시 프로필 드롭다운 닫기
+        function closeProfileDropdownOnOutsideClick(event) {
+            const profileMenu = document.querySelector('.profile-menu');
+            if (!profileMenu.contains(event.target)) {
+                document.getElementById('profileDropdown').classList.remove('active');
+                document.removeEventListener('click', closeProfileDropdownOnOutsideClick);
+            }
+        }
+
+        // 개인정보수정 페이지 열기
+        function openProfileEdit() {
+            document.getElementById('profileDropdown').classList.remove('active');
+            
+            // 현재 관리자 ID (실제로는 로그인 세션에서 가져올 값)
+            const currentAdminId = 'ADMIN001';
+            
+            // iframe에서 관리자 상세 페이지 로드
+            loadPage(`pages/page_eng/system/admin-account-detail.html?id=${currentAdminId}`);
+        }
+
+        // 비밀번호 변경 모달 열기
+        function openPasswordChange() {
+            document.getElementById('profileDropdown').classList.remove('active');
+            document.getElementById('passwordModal').style.display = 'flex';
+            
+            // 입력 필드 초기화
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+            
+            // 첫 번째 입력 필드에 포커스
+            setTimeout(() => {
+                document.getElementById('newPassword').focus();
+            }, 100);
+        }
+
+        // 비밀번호 변경 모달 닫기
+        function closePasswordModal() {
+            document.getElementById('passwordModal').style.display = 'none';
+            
+            // 입력 필드 초기화
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        }
+
+        // Password change processing
+        function changePassword() {
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+            
+            // Password validation
+            if (!newPassword) {
+                alert('Please enter a new password.');
+                document.getElementById('newPassword').focus();
+                return;
+            }
+            
+            if (!confirmPassword) {
+                alert('Please enter password confirmation.');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            
+            // Password pattern check (8-16 characters including letters, numbers, special characters)
+            const passwordPattern = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,16}$/;
+            
+            if (!passwordPattern.test(newPassword)) {
+                alert('Password must be 8-16 characters including letters, numbers, and special characters.');
+                document.getElementById('newPassword').focus();
+                return;
+            }
+            
+            // Password match confirmation
+            if (newPassword !== confirmPassword) {
+                alert('Passwords do not match.');
+                document.getElementById('confirmPassword').focus();
+                return;
+            }
+            
+            // Password change confirmation
+            if (confirm('Do you want to change your password?')) {
+                // Call server API in actual implementation
+                setTimeout(() => {
+                    alert('Password has been successfully changed.');
+                    closePasswordModal();
+                }, 500);
+            }
+        }
+
+        // Logout from profile
+        function logoutFromProfile() {
+            document.getElementById('profileDropdown').classList.remove('active');
+            logout();
+        }
+
+        // Switch to worker page
+        function switchToWorkerPage() {
+            if (confirm('Switch to worker page?')) {
+                window.location.href = 'index_work.html';
+            }
+        }
+
+        // Switch to Korean version
+        function switchToKorean() {
+            if (confirm('한국어 버전으로 전환하시겠습니까?')) {
+                window.location.href = 'index.html';
+            }
+        }
+        
+        // Logout function
+        function logout() {
+            if (confirm('Do you want to logout?')) {
+                alert('You have been logged out.');
+                // Redirect to login page in actual implementation
+            }
+        }
+        
+        // Initial load processing
+        document.addEventListener('DOMContentLoaded', function() {
+            // Display worker management by default
+            const contentFrame = document.getElementById('content-frame');
+            if (!contentFrame.src || contentFrame.src.includes('about:blank')) {
+                loadPage('pages/page_eng/user/worker-management.html');
+            } else {
+                // Activate corresponding menu if page is already loaded
+                const currentSrc = contentFrame.src;
+                const pageUrl = currentSrc.substring(currentSrc.lastIndexOf('/') + 1);
+                setActiveMenu(pageUrl);
+            }
+        });
+    </script>
+</body>
+</html> 

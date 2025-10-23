@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다기록/통화기록 상세정보 - 소리바로 BO</title>
+    <title>Multi-Record/Call Record Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 구분 배지 */
+        /* Category Badge */
         .category-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -138,7 +138,7 @@
             color: #be185d;
         }
 
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -165,55 +165,55 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📞</span>
-            다기록/통화기록 상세정보
+            Multi-Record/Call Record Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">구분</div>
+                    <div class="info-label">Category</div>
                     <div class="info-value">
-                        <span id="categoryBadge" class="category-badge category-call">통화기록</span>
+                        <span id="categoryBadge" class="category-badge category-call">Call Record</span>
                     </div>
                     
-                    <div class="info-label">분류명</div>
+                    <div class="info-label">Name</div>
                     <div class="info-value" id="categoryName">통화기록 서비스_2025-08-27</div>
                     
-                    <div class="info-label">시작일</div>
+                    <div class="info-label">Start Date</div>
                     <div class="info-value" id="startDate">2025-01-01 00:00:00</div>
                     
-                    <div class="info-label">종료일</div>
+                    <div class="info-label">End Date</div>
                     <div class="info-value" id="endDate">9999-12-31 23:59:59</div>
                 </div>
             </div>
         </div>
         
-        <!-- 요금 정보 섹션 -->
+        <!-- Price Information Section -->
         <div class="info-section">
-            <div class="section-title">요금 정보</div>
+            <div class="section-title">Price Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">기본요금</div>
-                    <div class="info-value" id="basicPrice">10,000원</div>
+                    <div class="info-label">Basic Price</div>
+                    <div class="info-value" id="basicPrice">10,000WON</div>
                     
-                    <div class="info-label">추가요금(분)</div>
-                    <div class="info-value" id="additionalPrice">500원</div>
+                    <div class="info-label">Additional Price(per min)</div>
+                    <div class="info-value" id="additionalPrice">500WON</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 상세 설명 섹션 -->
+    <!-- Detailed Description Section -->
     <div class="description-section">
-        <div class="section-title">상세 설명</div>
+        <div class="section-title">Detailed Description</div>
         <div class="info-content">
             <div class="description-content" id="detailDescription">
                 통화기록 서비스에 대한 상세 설명입니다.
@@ -242,42 +242,42 @@
     
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('다기록/통화기록 상세 페이지 로드, ID:', itemId);
+            console.log('Multi-Record/Call Record Details page loaded, ID:', itemId);
             loadRecordDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detailed information
         function loadRecordDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in production
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'CALL001': {
-                    category: '통화기록',
+                    category: 'Call Record',
                     categoryClass: 'category-call',
                     name: '통화기록 서비스_2025-08-27',
-                    basicPrice: '10,000원',
-                    additionalPrice: '500원',
+                    basicPrice: '10,000WON',
+                    additionalPrice: '500WON',
                     startDate: '2025-01-01 00:00:00',
                     endDate: '9999-12-31 23:59:59'
                 },
                 'MULTI001': {
-                    category: '다기록',
+                    category: 'Multi-Record',
                     categoryClass: 'category-multi',
                     name: '다기록 서비스_2025-08-27',
-                    basicPrice: '15,000원',
-                    additionalPrice: '800원',
+                    basicPrice: '15,000WON',
+                    additionalPrice: '800WON',
                     startDate: '2025-01-01 00:00:00',
                     endDate: '9999-12-31 23:59:59'
                 },
@@ -304,7 +304,7 @@
             return mockDatabase[id] || mockDatabase['CALL001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('categoryBadge').textContent = data.category;
             document.getElementById('categoryBadge').className = `category-badge ${data.categoryClass}`;
@@ -315,7 +315,7 @@
             document.getElementById('endDate').textContent = data.endDate;
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'record-management.html';
         }

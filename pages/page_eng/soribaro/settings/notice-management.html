@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항 관리 - 소리바로 BO</title>
+    <title>Notice Management - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Area */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -97,7 +97,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Area */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -159,7 +159,7 @@
             cursor: pointer;
         }
         
-        /* 서비스 유형 배지 */
+        /* Service Type Badge */
         .service-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -178,7 +178,7 @@
             color: #92400e;
         }
         
-        /* 게시장소 배지 */
+        /* Posting Location Badge */
         .location-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -217,7 +217,7 @@
             color: #ea580c;
         }
         
-        /* 유형 배지 */
+        /* Type Badge */
         .type-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -236,7 +236,7 @@
             color: #6b7280;
         }
         
-        /* 상단고정 배지 */
+        /* Pin Badge */
         .pin-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -255,7 +255,7 @@
             color: #6b7280;
         }
         
-        /* 하단 액션 영역 */
+        /* Bottom Actions Area */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -281,7 +281,7 @@
             background: #059669;
         }
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -318,7 +318,7 @@
             cursor: not-allowed;
         }
         
-        /* 제목 정렬 */
+        /* Title Alignment */
         .title-cell {
             text-align: center !important;
         }
@@ -328,182 +328,182 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📢</span>
-            공지사항 관리
+            Notice Management
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Area -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">제목 검색</label>
-                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+                <label class="search-label">Title Search</label>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="Enter title">
             </div>
             
             <button class="search-btn" onclick="searchNoticeData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>📝</span>
-                등록
+                Register
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Area -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">공지사항 목록</h2>
-            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+            <h2 class="table-title">Notice List</h2>
+            <div class="table-info">Total <span id="totalCount">10</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="300">제목</th>
-                    <th width="100">서비스유형</th>
-                    <th width="120">게시장소</th>
-                    <th width="80">유형</th>
-                    <th width="80">상단고정</th>
-                    <th width="100">등록자</th>
-                    <th width="150">등록일시</th>
-                    <th width="100">수정자</th>
-                    <th width="150">수정일시</th>
-                    <th width="80">조회수</th>
+                    <th width="300">Title</th>
+                    <th width="100">Service Type</th>
+                    <th width="120">Posting Location</th>
+                    <th width="80">Type</th>
+                    <th width="80">Pinned</th>
+                    <th width="100">Registered By</th>
+                    <th width="150">Registration Date</th>
+                    <th width="100">Modified By</th>
+                    <th width="150">Modification Date</th>
+                    <th width="80">Views</th>
                 </tr>
             </thead>
             <tbody id="noticeTableBody">
                 <tr onclick="goToDetail('NOTICE001')">
                     <td>10</td>
-                    <td class="title-cell">소리바로 서비스 업데이트 안내</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-user">사용자</span></td>
-                    <td><span class="type-badge type-general">일반</span></td>
+                    <td class="title-cell">Soribaro Service Update Notice</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-user">User</span></td>
+                    <td><span class="type-badge type-general">General</span></td>
                     <td><span class="pin-badge pin-yes">Y</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-27 09:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-27 09:00:00</td>
                     <td>1,234</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE002')">
                     <td>9</td>
-                    <td class="title-cell">시스템 점검 안내</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-system">시스템관리자</span></td>
-                    <td><span class="type-badge type-general">일반</span></td>
+                    <td class="title-cell">System Maintenance Notice</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-system">System Admin</span></td>
+                    <td><span class="type-badge type-general">General</span></td>
                     <td><span class="pin-badge pin-yes">Y</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-27 10:30:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-27 10:30:00</td>
                     <td>2,567</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE003')">
                     <td>8</td>
-                    <td class="title-cell">속기사 모집 공고</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-stenographer">속기사</span></td>
-                    <td><span class="type-badge type-general">일반</span></td>
+                    <td class="title-cell">Stenographer Recruitment</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-stenographer">Stenographer</span></td>
+                    <td><span class="type-badge type-general">General</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-26 11:15:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-26 11:15:00</td>
                     <td>890</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE004')">
                     <td>7</td>
-                    <td class="title-cell">기업 서비스 할인 이벤트</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-enterprise">기업사용자</span></td>
-                    <td><span class="type-badge type-general">일반</span></td>
+                    <td class="title-cell">Corporate Service Discount Event</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-enterprise">Enterprise</span></td>
+                    <td><span class="type-badge type-general">General</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-26 14:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-26 14:00:00</td>
                     <td>456</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE005')">
                     <td>6</td>
                     <td class="title-cell">Service Update Information</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="location-badge location-user">사용자</span></td>
-                    <td><span class="type-badge type-general">일반</span></td>
+                    <td><span class="service-badge service-english">English</span></td>
+                    <td><span class="location-badge location-user">User</span></td>
+                    <td><span class="type-badge type-general">General</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-25 15:30:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-25 15:30:00</td>
                     <td>789</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE006')">
                     <td>5</td>
-                    <td class="title-cell">검수자 업무 가이드라인</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-reviewer">검수자</span></td>
-                    <td><span class="type-badge type-general">일반</span></td>
+                    <td class="title-cell">Reviewer Work Guidelines</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-reviewer">Reviewer</span></td>
+                    <td><span class="type-badge type-general">General</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-25 16:45:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-25 16:45:00</td>
                     <td>345</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE007')">
                     <td>4</td>
-                    <td class="title-cell">클립데스크 신규 기능 안내</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-clipdesk">클립데스크 사용자</span></td>
-                    <td><span class="type-badge type-general">일반</span></td>
+                    <td class="title-cell">ClipDesk New Features</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-clipdesk">ClipDesk User</span></td>
+                    <td><span class="type-badge type-general">General</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-24 08:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-24 08:00:00</td>
                     <td>678</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE008')">
                     <td>3</td>
-                    <td class="title-cell">개인정보처리방침 개정 안내</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-user">사용자</span></td>
-                    <td><span class="type-badge type-other">기타</span></td>
+                    <td class="title-cell">Privacy Policy Update</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-user">User</span></td>
+                    <td><span class="type-badge type-other">Other</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-24 09:30:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-24 09:30:00</td>
                     <td>1,123</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE009')">
                     <td>2</td>
                     <td class="title-cell">Payment Policy Changes</td>
-                    <td><span class="service-badge service-english">영어</span></td>
-                    <td><span class="location-badge location-enterprise">기업사용자</span></td>
-                    <td><span class="type-badge type-other">기타</span></td>
+                    <td><span class="service-badge service-english">English</span></td>
+                    <td><span class="location-badge location-enterprise">Enterprise</span></td>
+                    <td><span class="type-badge type-other">Other</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-23 10:15:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-23 10:15:00</td>
                     <td>234</td>
                 </tr>
                 <tr onclick="goToDetail('NOTICE010')">
                     <td>1</td>
-                    <td class="title-cell">서비스 약관 변경 사항</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
-                    <td><span class="location-badge location-user">사용자</span></td>
-                    <td><span class="type-badge type-other">기타</span></td>
+                    <td class="title-cell">Terms of Service Changes</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
+                    <td><span class="location-badge location-user">User</span></td>
+                    <td><span class="type-badge type-other">Other</span></td>
                     <td><span class="pin-badge pin-no">N</span></td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-23 11:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-23 11:00:00</td>
                     <td>567</td>
                 </tr>
@@ -511,7 +511,7 @@
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -523,51 +523,51 @@
     
 
     <script>
-        // 검색 기능
+        // Search function
         function searchNoticeData() {
             const searchKeyword = document.getElementById('searchKeyword').value;
-            console.log('검색어:', searchKeyword);
+            console.log('Search keyword:', searchKeyword);
             
-            // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+            // Call server API in actual implementation
+            alert('Search function is running.\nKeyword: ' + (searchKeyword || 'All'));
         }
         
-        // 상세 페이지 이동
+        // Navigate to detail page
         function goToDetail(id) {
             const url = `notice-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 등록 페이지로 이동
+        // Navigate to registration page
         function openRegisterModal() {
             window.location.href = 'notice-register.html';
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Navigate to page:', page);
+            // Load page data in actual implementation
         }
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('공지사항 관리 페이지 로드 완료');
+            console.log('Notice management page loaded');
             
-            // 엔터키로 검색
+            // Search with Enter key
             document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchNoticeData();
                 }
             });
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in actual implementation
             loadNoticeData();
         });
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadNoticeData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('공지사항 데이터 로딩');
+            // Call server API in actual implementation
+            console.log('Loading notice data');
         }
     </script>
 </body>

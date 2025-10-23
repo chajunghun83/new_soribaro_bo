@@ -982,6 +982,150 @@
             overflow: hidden !important;
             text-overflow: ellipsis !important;
         }
+        
+        /* 도착 언어 다중 선택 - 파일 추가 모달용 */
+        .modal-language-multi-select {
+            position: relative;
+            width: 100%;
+        }
+        
+        .modal-language-select-trigger {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            transition: all 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 36px;
+        }
+        
+        .modal-language-select-trigger:focus,
+        .modal-language-select-trigger.open {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .modal-language-select-trigger .selected-count {
+            color: #6b7280;
+            font-size: 13px;
+        }
+        
+        .modal-language-select-trigger .arrow {
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        
+        .modal-language-select-trigger.open .arrow {
+            transform: rotate(180deg);
+        }
+        
+        .modal-language-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 1001;
+            max-height: 250px;
+            overflow-y: auto;
+            display: none;
+            margin-top: 2px;
+        }
+        
+        .modal-language-dropdown.show {
+            display: block;
+        }
+        
+        .modal-language-group {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .modal-language-group:last-child {
+            border-bottom: none;
+        }
+        
+        .modal-language-group-title {
+            padding: 8px 15px;
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            font-size: 12px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .modal-language-option {
+            padding: 8px 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        
+        .modal-language-option:hover {
+            background: #f3f4f6;
+        }
+        
+        .modal-language-option.selected {
+            background: #dbeafe;
+            color: #1e40af;
+            font-weight: 500;
+        }
+        
+        .modal-language-option .checkmark {
+            opacity: 0;
+            color: #10b981;
+            font-weight: bold;
+            transition: opacity 0.2s;
+            font-size: 11px;
+        }
+        
+        .modal-language-option.selected .checkmark {
+            opacity: 1;
+        }
+        
+        .modal-selected-languages {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            margin-top: 6px;
+            max-height: 50px;
+            overflow-y: auto;
+        }
+        
+        .modal-selected-language-tag {
+            background: #dbeafe;
+            color: #1e40af;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        
+        .modal-selected-language-tag .remove {
+            cursor: pointer;
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 9px;
+        }
+        
+        .modal-selected-language-tag .remove:hover {
+            color: #dc2626;
+        }
     </style>
 </head>
 <body>
@@ -2336,18 +2480,14 @@
             
             console.log('중간어 영역에서 수집된 파일들:', allFiles);
             
-            // 중간어 영역 하단에 도착어 영역 추가
+            // 중간어 영역 확인
             const intermediateArea = document.getElementById(`intermediate-language-area-${projectId}`);
             if (!intermediateArea) {
                 console.log(`중간어 영역을 찾을 수 없습니다: intermediate-language-area-${projectId}`);
                 return;
             }
             
-            // 기존 도착어 영역들 제거 (재생성) - 현재 프로젝트 내에서만
-            const existingDestinationAreas = intermediateArea.querySelectorAll('.destination-language-area');
-            existingDestinationAreas.forEach(area => area.remove());
-            
-            // 기존 도착어 전체 컨테이너도 제거
+            // 기존 도착어 전체 컨테이너 제거 (중간어 영역 밖에서 검색)
             const existingDestinationContainer = document.getElementById(`destination-container-${projectId}`);
             if (existingDestinationContainer) {
                 existingDestinationContainer.remove();
@@ -2369,7 +2509,12 @@
                 </div>
             `;
             
-            intermediateArea.appendChild(destinationContainer);
+            // 도착어 영역을 중간어 영역의 다음 형제로 삽입 (중간어 영역 밖에 배치)
+            if (intermediateArea.nextSibling) {
+                intermediateArea.parentNode.insertBefore(destinationContainer, intermediateArea.nextSibling);
+            } else {
+                intermediateArea.parentNode.appendChild(destinationContainer);
+            }
             
             // 도착어 목록 (파일 리스트의 도착 언어 기준)
             const destinationLanguages = ["영어", "일본어", "중국어(간체)"];
@@ -3653,6 +3798,23 @@
             // 폼 초기화
             document.getElementById('fileAddForm').reset();
             removeNewFile();
+            
+            // 원본 언어 기본값 설정
+            document.getElementById('fileAddSourceLanguage').value = '한글';
+            
+            // 도착 언어 기본 선택 (영어, 일본어, 중국어(간체))
+            fileAddSelectedTargetLanguages = ['영어', '일본어', '중국어(간체)'];
+            document.querySelectorAll('#fileAddTargetLanguageDropdown .modal-language-option').forEach(option => {
+                if (fileAddSelectedTargetLanguages.includes(option.dataset.value)) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+            updateFileAddSelectedLanguagesDisplay();
+            
+            // 도착 언어 다중 선택 초기화
+            initializeFileAddTargetLanguageSelector();
         }
         
         // 선택된 파일들 분할 (파일 리스트에서)
@@ -4397,6 +4559,17 @@
                                 <!-- 파일들이 동적으로 추가됩니다 -->
                             </tbody>
                         </table>
+                        
+                        <!-- 중간어 건너뛰기 체크박스 -->
+                        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background: #f8f9fa;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #374151;">
+                                <input type="checkbox" id="skipIntermediateCheckbox-${projectId}" 
+                                       onchange="toggleIntermediateArea('${projectId}')"
+                                       style="width: 18px; height: 18px; cursor: pointer;">
+                                <span style="font-weight: 500;">⏭️ 중간어 건너뛰기</span>
+                                <span style="font-size: 12px; color: #6b7280; margin-left: 5px;">(체크 시 중간어 영역이 숨겨집니다)</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             `;
@@ -4589,6 +4762,17 @@
                                 <!-- 파일들이 동적으로 추가됩니다 -->
                             </tbody>
                         </table>
+                        
+                        <!-- 중간어 건너뛰기 체크박스 -->
+                        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background: #f8f9fa;">
+                            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: #374151;">
+                                <input type="checkbox" id="skipIntermediateCheckbox-${projectId}" 
+                                       onchange="toggleIntermediateArea('${projectId}')"
+                                       style="width: 18px; height: 18px; cursor: pointer;">
+                                <span style="font-weight: 500;">⏭️ 중간어 건너뛰기</span>
+                                <span style="font-size: 12px; color: #6b7280; margin-left: 5px;">(체크 시 중간어 영역이 숨겨집니다)</span>
+                            </label>
+                        </div>
                     </div>
                 </div>
             `;
@@ -5745,10 +5929,150 @@
         }
         
         // 파일추가 모달 관련 함수들 (trans-detail.html에서 가져옴)
+        // 도착 언어 다중 선택 변수 (파일 추가 모달용)
+        let fileAddSelectedTargetLanguages = [];
+        
         function closeFileAddModal() {
             document.getElementById('fileAddModal').style.display = 'none';
             document.getElementById('fileAddForm').reset();
             removeNewFile();
+            
+            // 도착 언어 선택 초기화
+            fileAddSelectedTargetLanguages = [];
+            document.querySelectorAll('#fileAddTargetLanguageDropdown .modal-language-option.selected').forEach(option => {
+                option.classList.remove('selected');
+            });
+            updateFileAddSelectedLanguagesDisplay();
+            closeFileAddDropdown();
+        }
+        
+        // 파일 추가 모달용 도착 언어 다중 선택 초기화
+        function initializeFileAddTargetLanguageSelector() {
+            const trigger = document.getElementById('fileAddTargetLanguageTrigger');
+            const dropdown = document.getElementById('fileAddTargetLanguageDropdown');
+            
+            if (!trigger || !dropdown) return;
+            
+            const options = dropdown.querySelectorAll('.modal-language-option');
+            
+            // 트리거 클릭 이벤트
+            trigger.addEventListener('click', function(e) {
+                e.stopPropagation();
+                toggleFileAddDropdown();
+            });
+            
+            // 키보드 이벤트 (스페이스바, 엔터)
+            trigger.addEventListener('keydown', function(e) {
+                if (e.key === ' ' || e.key === 'Enter') {
+                    e.preventDefault();
+                    toggleFileAddDropdown();
+                }
+            });
+            
+            // 옵션 클릭 이벤트
+            options.forEach(option => {
+                option.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    toggleFileAddLanguageSelection(this);
+                });
+            });
+            
+            // 외부 클릭 시 드롭다운 닫기
+            document.addEventListener('click', function(e) {
+                if (!trigger.contains(e.target) && !dropdown.contains(e.target)) {
+                    closeFileAddDropdown();
+                }
+            });
+        }
+        
+        // 파일 추가 모달 드롭다운 토글
+        function toggleFileAddDropdown() {
+            const trigger = document.getElementById('fileAddTargetLanguageTrigger');
+            const dropdown = document.getElementById('fileAddTargetLanguageDropdown');
+            
+            if (dropdown.classList.contains('show')) {
+                closeFileAddDropdown();
+            } else {
+                openFileAddDropdown();
+            }
+        }
+        
+        // 파일 추가 모달 드롭다운 열기
+        function openFileAddDropdown() {
+            const trigger = document.getElementById('fileAddTargetLanguageTrigger');
+            const dropdown = document.getElementById('fileAddTargetLanguageDropdown');
+            
+            trigger.classList.add('open');
+            dropdown.classList.add('show');
+        }
+        
+        // 파일 추가 모달 드롭다운 닫기
+        function closeFileAddDropdown() {
+            const trigger = document.getElementById('fileAddTargetLanguageTrigger');
+            const dropdown = document.getElementById('fileAddTargetLanguageDropdown');
+            
+            if (trigger) trigger.classList.remove('open');
+            if (dropdown) dropdown.classList.remove('show');
+        }
+        
+        // 파일 추가 모달 언어 선택/해제
+        function toggleFileAddLanguageSelection(option) {
+            const language = option.dataset.value;
+            
+            if (option.classList.contains('selected')) {
+                // 선택 해제
+                option.classList.remove('selected');
+                fileAddSelectedTargetLanguages = fileAddSelectedTargetLanguages.filter(lang => lang !== language);
+            } else {
+                // 선택 추가
+                option.classList.add('selected');
+                fileAddSelectedTargetLanguages.push(language);
+            }
+            
+            updateFileAddSelectedLanguagesDisplay();
+        }
+        
+        // 파일 추가 모달 선택된 언어 표시 업데이트
+        function updateFileAddSelectedLanguagesDisplay() {
+            const trigger = document.getElementById('fileAddTargetLanguageTrigger');
+            const selectedContainer = document.getElementById('fileAddSelectedLanguages');
+            
+            if (!trigger || !selectedContainer) return;
+            
+            const placeholder = trigger.querySelector('.placeholder');
+            
+            if (fileAddSelectedTargetLanguages.length === 0) {
+                placeholder.textContent = '도착 언어를 선택하세요';
+                placeholder.style.color = '#6b7280';
+                selectedContainer.innerHTML = '';
+            } else {
+                placeholder.textContent = `${fileAddSelectedTargetLanguages.length}개 언어 선택됨`;
+                placeholder.style.color = '#374151';
+                
+                // 선택된 언어 태그들 생성
+                const tagsHTML = fileAddSelectedTargetLanguages.map(language => `
+                    <div class="modal-selected-language-tag">
+                        <span>${language}</span>
+                        <span class="remove" onclick="removeFileAddSelectedLanguage('${language}')">✕</span>
+                    </div>
+                `).join('');
+                
+                selectedContainer.innerHTML = tagsHTML;
+            }
+        }
+        
+        // 파일 추가 모달 선택된 언어 제거
+        function removeFileAddSelectedLanguage(language) {
+            // 배열에서 제거
+            fileAddSelectedTargetLanguages = fileAddSelectedTargetLanguages.filter(lang => lang !== language);
+            
+            // 드롭다운 옵션에서 선택 해제
+            const option = document.querySelector(`#fileAddTargetLanguageDropdown .modal-language-option[data-value="${language}"]`);
+            if (option) {
+                option.classList.remove('selected');
+            }
+            
+            updateFileAddSelectedLanguagesDisplay();
         }
         
         function handleNewFileUpload(input) {
@@ -5788,6 +6112,21 @@
                 return;
             }
             
+            // 원본 언어 선택 확인
+            const sourceLanguage = document.getElementById('fileAddSourceLanguage').value;
+            if (!sourceLanguage) {
+                alert('원본 언어를 선택해주세요.');
+                document.getElementById('fileAddSourceLanguage').focus();
+                return;
+            }
+            
+            // 도착 언어 선택 확인
+            if (fileAddSelectedTargetLanguages.length === 0) {
+                alert('도착 언어를 최소 1개 이상 선택해주세요.');
+                document.getElementById('fileAddTargetLanguageTrigger').focus();
+                return;
+            }
+            
             const file = fileInput.files[0];
             
             // 시연용 임의 데이터 생성
@@ -5800,7 +6139,9 @@
             // 새 파일 데이터 생성 (시연용)
             const newFileData = {
                 file: { name: file.name },
-                duration: duration
+                duration: duration,
+                sourceLanguage: sourceLanguage,
+                targetLanguages: fileAddSelectedTargetLanguages.join(', ')
             };
             
             // 파일 리스트에 추가
@@ -5813,7 +6154,7 @@
         }
         
         function addFileToMainList(fileData) {
-            const tbody = document.querySelector('#main-file-list-table tbody');
+            const tbody = document.querySelector('.file-table tbody');
             if (!tbody) return;
             
             // 새 파일 ID 생성 (기존 파일 수 + 1)
@@ -5834,10 +6175,10 @@
                     ${fileData.file.name}
                 </td>
                 <td style="text-align: center; padding: 12px 8px; border: 1px solid #e5e7eb; vertical-align: middle;">
-                    한글
+                    ${fileData.sourceLanguage || '한글'}
                 </td>
                 <td style="text-align: center; padding: 12px 8px; border: 1px solid #e5e7eb; vertical-align: middle;">
-                    영어, 일본어, 중국어(간체)
+                    ${fileData.targetLanguages || '영어, 일본어, 중국어(간체)'}
                 </td>
                 <td style="text-align: center; padding: 12px 8px; border: 1px solid #e5e7eb; vertical-align: middle;">
                     ${fileData.duration}
@@ -6354,13 +6695,40 @@
                     updateSourceAreaProgressStatus(fileName, '검수완료');
                     
                     // 프로젝트 제목 가져오기
-                        const projectTitle = getProjectTitleForFile(fileName);
+                    const projectTitle = getProjectTitleForFile(fileName);
+                    
+                    // 현재 프로젝트 ID 찾기
+                    const visibleProjectArea = document.querySelector('[id^="worksby-detail-area-"][style*="block"]');
+                    const currentProjectId = visibleProjectArea ? visibleProjectArea.id.replace('worksby-detail-area-', '') : null;
                     
                     // 출발어 영역의 모든 파일이 검수 완료되었는지 확인
                     if (checkAllSourceFilesReviewComplete()) {
-                        // 모든 파일 완료 시에만 중간어 영역 생성
-                        createIntermediateLanguageAreaFromWorksby(fileName, projectTitle);
-                        alert(`모든 파일의 검수가 완료되었습니다.\n중간어 영역이 생성되었습니다.`);
+                        // 중간어 건너뛰기 체크박스 상태 확인
+                        const skipCheckbox = currentProjectId ? document.getElementById(`skipIntermediateCheckbox-${currentProjectId}`) : null;
+                        const shouldSkipIntermediate = skipCheckbox && skipCheckbox.checked;
+                        
+                        if (shouldSkipIntermediate) {
+                            // 중간어 건너뛰기 체크됨: 중간어 영역 생성하고 숨긴 후 바로 도착어 영역 생성
+                            createIntermediateLanguageAreaFromWorksby(fileName, projectTitle);
+                            
+                            // 중간어 영역 숨김
+                            const intermediateArea = document.getElementById(`intermediate-language-area-${currentProjectId}`);
+                            if (intermediateArea) {
+                                intermediateArea.style.display = 'none';
+                            }
+                            
+                            // 바로 도착어 영역 생성
+                            if (currentProjectId) {
+                                createDestinationLanguageAreaFromIntermediate(fileName, projectTitle, currentProjectId);
+                                alert(`모든 파일의 검수가 완료되었습니다.\n중간어 영역을 건너뛰고 도착어 영역이 생성되었습니다.`);
+                            } else {
+                                alert(`모든 파일의 검수가 완료되었습니다.\n중간어 영역이 생성되었습니다.`);
+                            }
+                        } else {
+                            // 중간어 건너뛰기 체크 안됨: 기존대로 중간어 영역만 생성
+                            createIntermediateLanguageAreaFromWorksby(fileName, projectTitle);
+                            alert(`모든 파일의 검수가 완료되었습니다.\n중간어 영역이 생성되었습니다.`);
+                        }
                     } else {
                         alert(`${fileName} 파일의 검수가 완료되었습니다.\n다른 파일들의 검수도 완료해주세요.`);
                     }
@@ -6716,7 +7084,34 @@
             });
         }
         
-        // 중간어 영역 건너뛰기 함수 (프로젝트별 고유 ID 사용)
+        // 중간어 영역 토글 함수 (체크박스 기반)
+        function toggleIntermediateArea(projectId) {
+            console.log('중간어 영역 토글:', projectId);
+            
+            const checkbox = document.getElementById(`skipIntermediateCheckbox-${projectId}`);
+            const intermediateArea = document.getElementById(`intermediate-language-area-${projectId}`);
+            
+            if (!checkbox) {
+                console.log('체크박스를 찾을 수 없습니다:', `skipIntermediateCheckbox-${projectId}`);
+                return;
+            }
+            
+            if (checkbox.checked) {
+                // 체크박스가 체크되면 중간어 영역 숨김
+                if (intermediateArea) {
+                    intermediateArea.style.display = 'none';
+                    console.log('중간어 영역 숨김');
+                }
+            } else {
+                // 체크박스가 해제되면 중간어 영역 표시
+                if (intermediateArea) {
+                    intermediateArea.style.display = 'block';
+                    console.log('중간어 영역 표시');
+                }
+            }
+        }
+        
+        // 중간어 영역 건너뛰기 함수 (프로젝트별 고유 ID 사용) - 더 이상 사용하지 않음
         function skipIntermediateArea(fileName, projectTitle, projectId) {
             console.log('중간어 영역 건너뛰기:', fileName, projectTitle, projectId);
             
@@ -7052,17 +7447,7 @@
                         </table>
                         
                         <!-- 중간어 영역 버튼들 (테이블 아래) -->
-                        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background: #f8f9fa; display: flex; justify-content: space-between; align-items: center;">
-                            <!-- 왼쪽 정렬 버튼 -->
-                            <div>
-                                <button class="btn" onclick="skipIntermediateArea('${fileName}', '${projectTitle}', '${currentProjectId}')" 
-                                        style="background: #f97316; color: white; padding: 8px 16px; font-size: 14px; border: none; border-radius: 6px; cursor: pointer;">
-                                    <span>⏭️</span>
-                                    중간어 건너뛰기
-                                </button>
-                            </div>
-                            
-                            <!-- 오른쪽 정렬 버튼들 -->
+                        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background: #f8f9fa; display: flex; justify-content: flex-end; align-items: center;">
                             <div style="display: flex; gap: 10px;">
                                 ${(isSingleFile || isSplitFile) 
                                     ? `<button class="btn btn-warning" onclick="splitIntermediateFile('${fileName}', '${projectTitle}')" 
@@ -7162,6 +7547,15 @@
             }
             
             console.log('중간어 영역이 생성되었습니다.');
+            
+            // 체크박스 상태에 따라 중간어 영역 초기 표시 상태 설정
+            setTimeout(() => {
+                const checkbox = document.getElementById(`skipIntermediateCheckbox-${currentProjectId}`);
+                if (checkbox && checkbox.checked) {
+                    intermediateArea.style.display = 'none';
+                    console.log('체크박스가 체크되어 있어 중간어 영역을 숨김');
+                }
+            }, 100);
             
             // 하단 영역을 최하단으로 이동
             ensureBottomSectionsAtEnd();
@@ -7305,17 +7699,7 @@
                         </table>
                         
                         <!-- 중간어 영역 버튼들 (테이블 아래) -->
-                        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background: #f8f9fa; display: flex; justify-content: space-between; align-items: center;">
-                            <!-- 왼쪽 정렬 버튼 -->
-                            <div>
-                                <button class="btn" onclick="skipIntermediateAreaLegacy('${fileName}', '${projectTitle}')" 
-                                        style="background: #f97316; color: white; padding: 8px 16px; font-size: 14px; border: none; border-radius: 6px; cursor: pointer;">
-                                    <span>⏭️</span>
-                                    중간어 건너뛰기
-                                </button>
-                            </div>
-                            
-                            <!-- 오른쪽 정렬 버튼들 -->
+                        <div style="padding: 15px 20px; border-top: 1px solid #e5e7eb; background: #f8f9fa; display: flex; justify-content: flex-end; align-items: center;">
                             <div style="display: flex; gap: 10px;">
                                 ${(isSingleFile || isSplitFile) 
                                     ? `<button class="btn btn-warning" onclick="splitIntermediateFile('${fileName}', '${projectTitle}')" 
@@ -7661,8 +8045,8 @@
         </div>
     </div>
 
-    <!-- 세부 요청사항 & 파일공유 섹션 -->
-    <div id="bottom-sections-container" style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
+    <!-- 세부 요청사항 & 파일공유 섹션 (상단) -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 25px;">
         <!-- 세부 요청사항 -->
         <div style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
             <h2 class="section-title">
@@ -7724,20 +8108,22 @@
         </div>
     </div>
 
-    <!-- 작업 특이사항 섹션 -->
-    <div class="workspy-section" id="work-notes-section" style="margin-top: 25px;">
-        <h2 class="section-title">
-            <span>📝</span>
-            작업 특이사항
-        </h2>
-        
-        <div style="position: relative;">
-            <textarea id="work-notes" placeholder="작업과 관련된 특이사항을 입력하세요..." style="width: 100%; min-height: 150px; padding: 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; line-height: 1.5; resize: vertical; font-family: inherit; box-sizing: border-box;" onchange="markNotesAsModified()"></textarea>
+    <!-- 작업 특이사항 섹션 (하단) -->
+    <div id="bottom-sections-container" style="margin-top: 25px;">
+        <div id="work-notes-section" style="background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 25px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <h2 class="section-title">
+                <span>📝</span>
+                작업 특이사항
+            </h2>
             
-            <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
-                <button onclick="saveWorkNotes()" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
-                    저장
-                </button>
+            <div style="position: relative;">
+                <textarea id="work-notes" placeholder="작업과 관련된 특이사항을 입력하세요..." style="width: 100%; min-height: 150px; padding: 15px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; line-height: 1.5; resize: vertical; font-family: inherit; box-sizing: border-box;" onchange="markNotesAsModified()"></textarea>
+                
+                <div style="display: flex; justify-content: flex-end; margin-top: 15px;">
+                    <button onclick="saveWorkNotes()" style="background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500;">
+                        저장
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -7809,22 +8195,22 @@
                 <div class="form-row">
                     <div class="form-group full-width">
                         <label style="margin-bottom: 15px; font-size: 16px; font-weight: 600; color: #374151;">파일 업로드</label>
-                        <div class="file-upload-area" style="height: 350px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; border: 2px dashed #d1d5db; border-radius: 12px; padding: 40px 20px; text-align: center; transition: border-color 0.2s; background: #f9fafb;">
-                            <div class="file-upload-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; width: 100%;">
-                                <div class="file-upload-icon" style="margin-bottom: 20px; font-size: 64px; color: #6b7280;">📁</div>
-                                <div class="file-upload-text" style="margin-bottom: 30px;">
-                                    <p style="margin: 0 0 12px 0; font-size: 18px; font-weight: 500; color: #374151;">파일을 업로드하세요</p>
+                        <div class="file-upload-area" style="height: 250px; display: flex; flex-direction: column; justify-content: center; align-items: center; margin-bottom: 20px; border: 2px dashed #d1d5db; border-radius: 12px; padding: 30px 20px; text-align: center; transition: border-color 0.2s; background: #f9fafb;">
+                            <div class="file-upload-content" style="display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%;">
+                                <div class="file-upload-icon" style="margin-bottom: 15px; font-size: 56px; color: #6b7280; line-height: 1;">📁</div>
+                                <div class="file-upload-text" style="margin-bottom: 25px; text-align: center;">
+                                    <p style="margin: 0 0 8px 0; font-size: 17px; font-weight: 500; color: #374151;">파일을 업로드하세요</p>
                                     <p style="margin: 0; font-size: 14px; color: #6b7280; line-height: 1.5;">비디오 또는 오디오 파일을 선택해주세요</p>
                                 </div>
-                                <button type="button" class="file-upload-btn" onclick="document.getElementById('newFileInput').click()" style="padding: 14px 28px; font-size: 15px; font-weight: 600; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);">파일 선택</button>
+                                <button type="button" class="file-upload-btn" onclick="document.getElementById('newFileInput').click()" style="padding: 12px 24px; font-size: 14px; font-weight: 600; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; transition: all 0.2s; box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);">파일 선택</button>
                             </div>
-                            <div class="file-preview" id="newFilePreview" style="display: none; position: relative; text-align: center; height: 100%; width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center;">
-                                <div id="newFileInfo" style="text-align: center;">
-                                    <div style="font-size: 64px; margin-bottom: 20px; color: #10b981;">✅</div>
-                                    <div id="newFileName" style="font-weight: 600; margin-bottom: 12px; font-size: 18px; color: #374151; word-break: break-all; max-width: 400px;">파일명</div>
-                                    <div id="newFileSize" style="font-size: 16px; color: #6b7280; font-weight: 500;">파일 크기</div>
+                            <div class="file-preview" id="newFilePreview" style="display: none; position: relative; text-align: center; width: 100%;">
+                                <div id="newFileInfo" style="text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                                    <div style="font-size: 56px; margin-bottom: 15px; color: #10b981; line-height: 1;">✅</div>
+                                    <div id="newFileName" style="font-weight: 600; margin-bottom: 8px; font-size: 16px; color: #374151; word-break: break-all; max-width: 400px; text-align: center;">파일명</div>
+                                    <div id="newFileSize" style="font-size: 14px; color: #6b7280; font-weight: 500; margin-bottom: 0;">파일 크기</div>
                                     <div style="margin-top: 20px;">
-                                        <button type="button" onclick="removeNewFile()" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 14px; font-weight: 500; transition: background-color 0.2s;">
+                                        <button type="button" onclick="removeNewFile()" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; cursor: pointer; font-size: 13px; font-weight: 500; transition: background-color 0.2s;">
                                             🗑️ 파일 제거
                                         </button>
                                     </div>
@@ -7832,6 +8218,248 @@
                             </div>
                         </div>
                         <input type="file" id="newFileInput" accept="video/*,audio/*" style="display: none;" onchange="handleNewFileUpload(this)">
+                    </div>
+                </div>
+                
+                <!-- 원본 언어 | 도착 언어 -->
+                <div class="form-row" style="display: flex; gap: 20px; margin-bottom: 20px; align-items: flex-start;">
+                    <div class="form-group" style="display: flex; flex-direction: column; flex: 1;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">원본 언어 <span style="color: #ef4444;">*</span></label>
+                        <select id="fileAddSourceLanguage" required style="padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; transition: border-color 0.2s; background: white; cursor: pointer;">
+                            <option value="">원본 언어를 선택하세요</option>
+                            <optgroup label="아시아/아프리카">
+                                <option value="네팔어">네팔어</option>
+                                <option value="말레이어">말레이어</option>
+                                <option value="말라얄람어">말라얄람어</option>
+                                <option value="마라티어">마라티어</option>
+                                <option value="몽골어">몽골어</option>
+                                <option value="벵골어">벵골어</option>
+                                <option value="아랍어">아랍어</option>
+                                <option value="우르두어">우르두어</option>
+                                <option value="우즈벡어">우즈벡어</option>
+                                <option value="인도네시아어">인도네시아어</option>
+                                <option value="일본어">일본어</option>
+                                <option value="중국어(간체)">중국어(간체)</option>
+                                <option value="중국어(번체)">중국어(번체)</option>
+                                <option value="카자흐어">카자흐어</option>
+                                <option value="칸나다어">칸나다어</option>
+                                <option value="크메르어">크메르어</option>
+                                <option value="타밀어">타밀어</option>
+                                <option value="태국어">태국어</option>
+                                <option value="텔루구어">텔루구어</option>
+                                <option value="터키어">터키어</option>
+                                <option value="펀자브어">펀자브어</option>
+                                <option value="필리핀어">필리핀어</option>
+                                <option value="한글" selected>한글</option>
+                                <option value="힌디어">힌디어</option>
+                                <option value="베트남어">베트남어</option>
+                                <option value="구자라트어">구자라트어</option>
+                            </optgroup>
+                            <optgroup label="유럽/아프리카">
+                                <option value="과라니어">과라니어</option>
+                                <option value="그리스어">그리스어</option>
+                                <option value="네덜란드어">네덜란드어</option>
+                                <option value="덴마크어">덴마크어</option>
+                                <option value="독일어">독일어</option>
+                                <option value="러시아어">러시아어</option>
+                                <option value="스웨덴어">스웨덴어</option>
+                                <option value="스페인어">스페인어</option>
+                                <option value="영어">영어</option>
+                                <option value="이탈리아어">이탈리아어</option>
+                                <option value="체코어">체코어</option>
+                                <option value="폴란드어">폴란드어</option>
+                                <option value="포르투갈어">포르투갈어</option>
+                                <option value="프랑스어">프랑스어</option>
+                                <option value="핀란드어">핀란드어</option>
+                                <option value="헝가리어">헝가리어</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    <div class="form-group" style="display: flex; flex-direction: column; flex: 1;">
+                        <label style="margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">도착 언어 <span style="color: #ef4444;">*</span></label>
+                        <div class="modal-language-multi-select">
+                            <div class="modal-language-select-trigger" id="fileAddTargetLanguageTrigger" tabindex="0">
+                                <span class="placeholder">도착 언어를 선택하세요</span>
+                                <span class="arrow">▼</span>
+                            </div>
+                            <div class="modal-language-dropdown" id="fileAddTargetLanguageDropdown">
+                                <div class="modal-language-group">
+                                    <div class="modal-language-group-title">아시아/아프리카</div>
+                                    <div class="modal-language-option" data-value="네팔어">
+                                        <span>네팔어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="말레이어">
+                                        <span>말레이어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="말라얄람어">
+                                        <span>말라얄람어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="마라티어">
+                                        <span>마라티어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="몽골어">
+                                        <span>몽골어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="벵골어">
+                                        <span>벵골어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="아랍어">
+                                        <span>아랍어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="우르두어">
+                                        <span>우르두어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="우즈벡어">
+                                        <span>우즈벡어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="인도네시아어">
+                                        <span>인도네시아어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="일본어">
+                                        <span>일본어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="중국어(간체)">
+                                        <span>중국어(간체)</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="중국어(번체)">
+                                        <span>중국어(번체)</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="카자흐어">
+                                        <span>카자흐어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="칸나다어">
+                                        <span>칸나다어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="크메르어">
+                                        <span>크메르어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="타밀어">
+                                        <span>타밀어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="태국어">
+                                        <span>태국어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="텔루구어">
+                                        <span>텔루구어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="터키어">
+                                        <span>터키어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="펀자브어">
+                                        <span>펀자브어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="필리핀어">
+                                        <span>필리핀어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="한글">
+                                        <span>한글</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="힌디어">
+                                        <span>힌디어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="베트남어">
+                                        <span>베트남어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="구자라트어">
+                                        <span>구자라트어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                </div>
+                                <div class="modal-language-group">
+                                    <div class="modal-language-group-title">유럽/아프리카</div>
+                                    <div class="modal-language-option" data-value="과라니어">
+                                        <span>과라니어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="그리스어">
+                                        <span>그리스어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="네덜란드어">
+                                        <span>네덜란드어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="덴마크어">
+                                        <span>덴마크어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="독일어">
+                                        <span>독일어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="러시아어">
+                                        <span>러시아어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="스웨덴어">
+                                        <span>스웨덴어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="스페인어">
+                                        <span>스페인어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="영어">
+                                        <span>영어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="이탈리아어">
+                                        <span>이탈리아어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="체코어">
+                                        <span>체코어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="폴란드어">
+                                        <span>폴란드어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="포르투갈어">
+                                        <span>포르투갈어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="프랑스어">
+                                        <span>프랑스어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="핀란드어">
+                                        <span>핀란드어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                    <div class="modal-language-option" data-value="헝가리어">
+                                        <span>헝가리어</span>
+                                        <span class="checkmark">✓</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-selected-languages" id="fileAddSelectedLanguages"></div>
+                        </div>
                     </div>
                 </div>
                 

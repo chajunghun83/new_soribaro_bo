@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ 상세정보 - 소리바로 BO</title>
+    <title>FAQ Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 서비스 유형 배지 */
+        /* Service Type Badge */
         .service-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -128,7 +128,7 @@
             color: #92400e;
         }
         
-        /* 카테고리 배지 */
+        /* Category Badge */
         .category-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -158,7 +158,7 @@
             color: #0369a1;
         }
 
-        /* 공개여부 배지 */
+        /* Visibility Badge */
         .visibility-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -178,7 +178,7 @@
             color: #dc2626;
         }
 
-        /* FAQ 내용 영역 */
+        /* FAQ Content Area */
         .content-section {
             grid-column: 1 / -1;
             background: white;
@@ -201,7 +201,7 @@
             white-space: pre-wrap;
         }
 
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -245,231 +245,231 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>❓</span>
-            FAQ 상세정보
+            FAQ Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">제목</div>
-                    <div class="info-value" id="faqTitle">소리바로 서비스 이용 방법</div>
+                    <div class="info-label">Title</div>
+                    <div class="info-value" id="faqTitle">How to Use Soribaro Service</div>
                     
-                    <div class="info-label">서비스 유형</div>
+                    <div class="info-label">Service Type</div>
                     <div class="info-value">
-                        <span id="serviceBadge" class="service-badge service-korean">한글</span>
+                        <span id="serviceBadge" class="service-badge service-korean">Korean</span>
                     </div>
                     
-                    <div class="info-label">카테고리</div>
+                    <div class="info-label">Category</div>
                     <div class="info-value">
-                        <span id="categoryBadge" class="category-badge category-service">서비스 이용</span>
+                        <span id="categoryBadge" class="category-badge category-service">Service Usage</span>
                     </div>
                     
-                    <div class="info-label">공개여부</div>
+                    <div class="info-label">Visibility</div>
                     <div class="info-value">
-                        <span id="visibilityBadge" class="visibility-badge visibility-public">공개</span>
+                        <span id="visibilityBadge" class="visibility-badge visibility-public">Public</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- 등록/수정 정보 섹션 -->
+        <!-- Registration/Update Information Section -->
         <div class="info-section">
-            <div class="section-title">등록/수정 정보</div>
+            <div class="section-title">Registration/Update Info</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">등록자</div>
-                    <div class="info-value" id="registeredBy">관리자</div>
+                    <div class="info-label">Registered By</div>
+                    <div class="info-value" id="registeredBy">Administrator</div>
                     
-                    <div class="info-label">등록일시</div>
+                    <div class="info-label">Registration Date</div>
                     <div class="info-value" id="registeredDate">2025-08-27 09:00:00</div>
                     
-                    <div class="info-label">수정자</div>
-                    <div class="info-value" id="modifiedBy">관리자</div>
+                    <div class="info-label">Modified By</div>
+                    <div class="info-value" id="modifiedBy">Administrator</div>
                     
-                    <div class="info-label">수정일시</div>
+                    <div class="info-label">Modification Date</div>
                     <div class="info-value" id="modifiedDate">2025-08-27 09:00:00</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- FAQ 질문 섹션 -->
+    <!-- FAQ Question Section -->
     <div class="content-section">
-        <div class="section-title">FAQ 질문</div>
+        <div class="section-title">FAQ Question</div>
         <div class="info-content">
-            <div class="content-display" id="faqQuestion">소리바로 서비스는 어떻게 이용하나요?</div>
+            <div class="content-display" id="faqQuestion">How do I use Soribaro service?</div>
         </div>
     </div>
     
-    <!-- FAQ 답변 섹션 -->
+    <!-- FAQ Answer Section -->
     <div class="content-section">
-        <div class="section-title">FAQ 답변</div>
+        <div class="section-title">FAQ Answer</div>
         <div class="info-content">
-            <div class="content-display" id="faqAnswer">소리바로 서비스 이용 방법은 다음과 같습니다.
+            <div class="content-display" id="faqAnswer">Here's how to use Soribaro service:
 
-1. 회원가입
-   - 소리바로 홈페이지에 접속하여 회원가입을 진행합니다.
-   - 이메일 인증을 완료하면 서비스 이용이 가능합니다.
+1. Sign Up
+   - Visit the Soribaro website and complete the sign-up process.
+   - Once email verification is complete, you can use the service.
 
-2. 파일 업로드
-   - 로그인 후 '파일 업로드' 버튼을 클릭합니다.
-   - 음성 파일 또는 동영상 파일을 업로드합니다.
-   - 지원 형식: MP3, WAV, MP4, AVI 등
+2. Upload Files
+   - After logging in, click the 'Upload File' button.
+   - Upload audio or video files.
+   - Supported formats: MP3, WAV, MP4, AVI, etc.
 
-3. 옵션 선택
-   - 작업 유형을 선택합니다 (녹취록, 번역, 자막 등).
-   - 화자 수와 특수 요구사항을 입력합니다.
-   - 작업 완료 희망일을 설정합니다.
+3. Select Options
+   - Choose the type of work (transcription, translation, subtitles, etc.).
+   - Enter the number of speakers and any special requirements.
+   - Set the desired completion date.
 
-4. 결제
-   - 견적을 확인하고 결제를 진행합니다.
-   - 다양한 결제 수단을 지원합니다 (카드, 계좌이체, 포인트).
+4. Payment
+   - Review the quote and proceed with payment.
+   - Various payment methods are supported (card, bank transfer, points).
 
-5. 작업 진행
-   - 작업이 시작되면 실시간으로 진행 상황을 확인할 수 있습니다.
-   - 마이페이지에서 작업 현황을 모니터링할 수 있습니다.
+5. Work Progress
+   - Once work begins, you can check the progress in real-time.
+   - Monitor work status from My Page.
 
-6. 완료 및 다운로드
-   - 작업 완료 시 알림을 받게 됩니다.
-   - 완성된 파일을 다운로드하여 확인할 수 있습니다.
+6. Completion and Download
+   - You will receive a notification when work is completed.
+   - Download and review the completed files.
 
-추가 문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.</div>
+For additional inquiries, please contact our customer service (1588-1234).</div>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-action btn-edit" onclick="editFaq()">
             <span>✏️</span>
-            수정
+            Edit
         </button>
         <button class="btn-action btn-delete" onclick="deleteFaq()">
             <span>🗑️</span>
-            삭제
+            Delete
         </button>
     </div>
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('FAQ 상세 페이지 로드, ID:', itemId);
+            console.log('FAQ detail page loaded, ID:', itemId);
             loadFaqDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detail information
         function loadFaqDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in actual implementation
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'FAQ001': {
-                    serviceType: '한글',
+                    serviceType: 'Korean',
                     serviceClass: 'service-korean',
-                    faqTitle: '소리바로 서비스 이용 방법',
-                    category: '서비스 이용',
+                    faqTitle: 'How to Use Soribaro Service',
+                    category: 'Service Usage',
                     categoryClass: 'category-service',
-                    visibility: '공개',
+                    visibility: 'Public',
                     visibilityClass: 'visibility-public',
-                    registeredBy: '관리자',
+                    registeredBy: 'Administrator',
                     registeredDate: '2025-08-27 09:00:00',
-                    modifiedBy: '관리자',
+                    modifiedBy: 'Administrator',
                     modifiedDate: '2025-08-27 09:00:00',
-                    question: `소리바로 서비스는 어떻게 이용하나요?`,
-                    answer: `소리바로 서비스 이용 방법은 다음과 같습니다.
+                    question: `How do I use Soribaro service?`,
+                    answer: `Here's how to use Soribaro service:
 
-1. 회원가입
-   - 소리바로 홈페이지에 접속하여 회원가입을 진행합니다.
-   - 이메일 인증을 완료하면 서비스 이용이 가능합니다.
+1. Sign Up
+   - Visit the Soribaro website and complete the sign-up process.
+   - Once email verification is complete, you can use the service.
 
-2. 파일 업로드
-   - 로그인 후 '파일 업로드' 버튼을 클릭합니다.
-   - 음성 파일 또는 동영상 파일을 업로드합니다.
-   - 지원 형식: MP3, WAV, MP4, AVI 등
+2. Upload Files
+   - After logging in, click the 'Upload File' button.
+   - Upload audio or video files.
+   - Supported formats: MP3, WAV, MP4, AVI, etc.
 
-3. 옵션 선택
-   - 작업 유형을 선택합니다 (녹취록, 번역, 자막 등).
-   - 화자 수와 특수 요구사항을 입력합니다.
-   - 작업 완료 희망일을 설정합니다.
+3. Select Options
+   - Choose the type of work (transcription, translation, subtitles, etc.).
+   - Enter the number of speakers and any special requirements.
+   - Set the desired completion date.
 
-4. 결제
-   - 견적을 확인하고 결제를 진행합니다.
-   - 다양한 결제 수단을 지원합니다 (카드, 계좌이체, 포인트).
+4. Payment
+   - Review the quote and proceed with payment.
+   - Various payment methods are supported (card, bank transfer, points).
 
-5. 작업 진행
-   - 작업이 시작되면 실시간으로 진행 상황을 확인할 수 있습니다.
-   - 마이페이지에서 작업 현황을 모니터링할 수 있습니다.
+5. Work Progress
+   - Once work begins, you can check the progress in real-time.
+   - Monitor work status from My Page.
 
-6. 완료 및 다운로드
-   - 작업 완료 시 알림을 받게 됩니다.
-   - 완성된 파일을 다운로드하여 확인할 수 있습니다.
+6. Completion and Download
+   - You will receive a notification when work is completed.
+   - Download and review the completed files.
 
-추가 문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.`
+For additional inquiries, please contact our customer service (1588-1234).`
                 },
                 'FAQ002': {
-                    serviceType: '한글',
+                    serviceType: 'Korean',
                     serviceClass: 'service-korean',
-                    faqTitle: '회원가입은 어떻게 하나요?',
-                    category: '계정정보',
+                    faqTitle: 'How to Sign Up?',
+                    category: 'Account Info',
                     categoryClass: 'category-account',
-                    visibility: '공개',
+                    visibility: 'Public',
                     visibilityClass: 'visibility-public',
-                    registeredBy: '관리자',
+                    registeredBy: 'Administrator',
                     registeredDate: '2025-08-27 10:30:00',
-                    modifiedBy: '관리자',
+                    modifiedBy: 'Administrator',
                     modifiedDate: '2025-08-27 10:30:00',
-                    question: `회원가입은 어떻게 하나요?`,
-                    answer: `소리바로 회원가입 절차는 다음과 같습니다.
+                    question: `How do I sign up?`,
+                    answer: `Here's the Soribaro sign-up procedure:
 
-1. 회원가입 페이지 접속
-   - 소리바로 홈페이지 상단의 '회원가입' 버튼을 클릭합니다.
+1. Access Sign-Up Page
+   - Click the 'Sign Up' button at the top of the Soribaro website.
 
-2. 회원 유형 선택
-   - 개인회원 또는 기업회원을 선택합니다.
-   - 각 유형에 따라 입력 항목이 다릅니다.
+2. Select Member Type
+   - Choose between individual member or corporate member.
+   - Input fields vary depending on the type.
 
-3. 필수 정보 입력
-   - 이메일 주소 (로그인 ID로 사용)
-   - 비밀번호 (8자리 이상, 영문/숫자/특수문자 조합)
-   - 이름
-   - 휴대폰 번호
+3. Enter Required Information
+   - Email address (used as login ID)
+   - Password (at least 8 characters, combination of letters/numbers/special characters)
+   - Name
+   - Mobile phone number
 
-4. 이메일 인증
-   - 입력한 이메일로 인증 메일이 발송됩니다.
-   - 인증 링크를 클릭하여 이메일 인증을 완료합니다.
+4. Email Verification
+   - A verification email will be sent to the entered email address.
+   - Click the verification link to complete email verification.
 
-5. 약관 동의
-   - 서비스 이용약관
-   - 개인정보 처리방침
-   - 마케팅 수신 동의 (선택)
+5. Terms Agreement
+   - Terms of Service
+   - Privacy Policy
+   - Marketing consent (optional)
 
-6. 가입 완료
-   - 모든 절차 완료 후 즉시 서비스 이용이 가능합니다.
+6. Registration Complete
+   - You can use the service immediately after completing all procedures.
 
-가입 중 문제가 발생하면 고객센터로 문의해 주세요.`
+If you encounter any problems during registration, please contact customer service.`
                 }
             };
             
             return mockDatabase[id] || mockDatabase['FAQ001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('serviceBadge').textContent = data.serviceType;
             document.getElementById('serviceBadge').className = `service-badge ${data.serviceClass}`;
@@ -486,22 +486,22 @@
             document.getElementById('faqAnswer').textContent = data.answer;
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'faq-management.html';
         }
         
-        // 수정 기능
+        // Edit function
         function editFaq() {
             const url = `faq-register.html?id=${itemId}&mode=edit`;
             window.location.href = url;
         }
         
-        // 삭제 기능
+        // Delete function
         function deleteFaq() {
-            if (confirm('이 FAQ를 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
-                alert('FAQ가 삭제되었습니다.');
-                // 실제 구현 시 서버 API 호출하여 삭제
+            if (confirm('Are you sure you want to delete this FAQ?\nDeleted data cannot be recovered.')) {
+                alert('FAQ has been deleted.');
+                // Call server API to delete in actual implementation
                 goBack();
             }
         }

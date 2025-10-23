@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>포인트 정책 상세정보 - 소리바로 BO</title>
+    <title>Point Policy Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 포인트 구분 배지 */
+        /* Point Type Badge */
         .point-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -133,7 +133,7 @@
             color: #166534;
         }
 
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -160,55 +160,55 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>💰</span>
-            포인트 정책 상세정보
+            Point Policy Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">포인트 구분</div>
+                    <div class="info-label">Point Type</div>
                     <div class="info-value">
-                        <span id="pointBadge" class="point-badge point-welcome">웰컴적립</span>
+                        <span id="pointBadge" class="point-badge point-welcome">Welcome Points</span>
                     </div>
                     
-                    <div class="info-label">시작일</div>
+                    <div class="info-label">Start Date</div>
                     <div class="info-value" id="startDate">2025-01-01 00:00:00</div>
                     
-                    <div class="info-label">종료일</div>
+                    <div class="info-label">End Date</div>
                     <div class="info-value" id="endDate">9999-12-31 23:59:59</div>
                 </div>
             </div>
         </div>
         
-        <!-- 포인트 정보 섹션 -->
+        <!-- Point Information Section -->
         <div class="info-section">
-            <div class="section-title">포인트 정보</div>
+            <div class="section-title">Point Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">지급포인트</div>
+                    <div class="info-label">Point Amount</div>
                     <div class="info-value" id="pointAmount">1,000</div>
                     
-                    <div class="info-label">단위</div>
-                    <div class="info-value" id="pointUnit">원</div>
+                    <div class="info-label">Unit</div>
+                    <div class="info-value" id="pointUnit">WON</div>
                     
-                    <div class="info-label">만료기간(일)</div>
+                    <div class="info-label">Expiry Period(days)</div>
                     <div class="info-value" id="expiryDays">365</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 상세 설명 섹션 -->
+    <!-- Detailed Description Section -->
     <div class="description-section">
-        <div class="section-title">상세 설명</div>
+        <div class="section-title">Detailed Description</div>
         <div class="info-content">
             <div class="description-content" id="detailDescription">
                 웰컴적립 포인트 정책에 대한 상세 설명입니다.
@@ -238,32 +238,32 @@
     
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('포인트 정책 상세 페이지 로드, ID:', itemId);
+            console.log('Point Policy Details page loaded, ID:', itemId);
             loadPointDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detailed information
         function loadPointDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in production
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'POINT001': {
-                    pointType: '웰컴적립',
+                    pointType: 'Welcome Points',
                     pointClass: 'point-welcome',
                     pointAmount: '1,000',
-                    pointUnit: '원',
+                    pointUnit: 'WON',
                     expiryDays: '365',
                     startDate: '2025-01-01 00:00:00',
                     endDate: '9999-12-31 23:59:59',
@@ -290,10 +290,10 @@
 - 현금 환불 불가`
                 },
                 'POINT002': {
-                    pointType: '접수',
+                    pointType: 'Reception',
                     pointClass: 'point-reception',
                     pointAmount: '500',
-                    pointUnit: '원',
+                    pointUnit: 'WON',
                     expiryDays: '180',
                     startDate: '2025-01-01 00:00:00',
                     endDate: '9999-12-31 23:59:59',
@@ -320,7 +320,7 @@
 - 법인 고객은 별도 정책 적용`
                 },
                 'POINT003': {
-                    pointType: '포인트 지급',
+                    pointType: 'Point Payment',
                     pointClass: 'point-payment',
                     pointAmount: '10',
                     pointUnit: '%',
@@ -350,7 +350,7 @@
 - 시스템 오류 시 자동 복구`
                 },
                 'POINT006': {
-                    pointType: '포인트 지급',
+                    pointType: 'Point Payment',
                     pointClass: 'point-payment',
                     pointAmount: '5',
                     pointUnit: '%',
@@ -384,7 +384,7 @@
             return mockDatabase[id] || mockDatabase['POINT001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('pointBadge').textContent = data.pointType;
             document.getElementById('pointBadge').className = `point-badge ${data.pointClass}`;
@@ -396,7 +396,7 @@
             document.getElementById('detailDescription').textContent = data.description;
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'point-management.html';
         }

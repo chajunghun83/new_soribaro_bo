@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 포인트 변경 상세정보 - 소리바로 BO</title>
+    <title>Customer Point Change Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 포인트 구분 배지 */
+        /* Point Type Badge */
         .point-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -135,7 +135,7 @@
         
 
 
-        /* 포인트 변경 스타일 */
+        /* Point Change Style */
         .point-increase {
             color: #059669;
             font-weight: 600;
@@ -148,7 +148,7 @@
             font-size: 16px;
         }
 
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -175,66 +175,66 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📊</span>
-            고객 포인트 변경 상세정보
+            Customer Point Change Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 고객 정보 섹션 -->
+        <!-- Customer Information Section -->
         <div class="info-section">
-            <div class="section-title">고객 정보</div>
+            <div class="section-title">Customer Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">이메일</div>
+                    <div class="info-label">Email</div>
                     <div class="info-value" id="userEmail">kim.cs@email.com</div>
                     
-                    <div class="info-label">이름</div>
+                    <div class="info-label">Name</div>
                     <div class="info-value" id="userName">김철수</div>
                     
-                    <div class="info-label">연락처</div>
+                    <div class="info-label">Contact</div>
                     <div class="info-value" id="userPhone">010-1234-5678</div>
                     
-                    <div class="info-label">포인트구분</div>
+                    <div class="info-label">Point Type</div>
                     <div class="info-value">
-                        <span id="pointBadge" class="point-badge point-welcome">웰컴적립</span>
+                        <span id="pointBadge" class="point-badge point-welcome">Welcome Points</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- 포인트 변경 정보 섹션 -->
+        <!-- Point Change Information Section -->
         <div class="info-section">
-            <div class="section-title">포인트 변경 정보</div>
+            <div class="section-title">Point Change Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">보유포인트</div>
+                    <div class="info-label">Current Points</div>
                     <div class="info-value" id="beforePoint">0</div>
                     
-                    <div class="info-label">변경포인트</div>
+                    <div class="info-label">Point Change</div>
                     <div class="info-value">
                         <span id="pointChange" class="point-increase">+1,000</span>
                     </div>
                     
-                    <div class="info-label">포인트합계</div>
+                    <div class="info-label">Total Points</div>
                     <div class="info-value" id="afterPoint">1,000</div>
                     
-                    <div class="info-label">등록자</div>
-                    <div class="info-value" id="registeredBy">관리자</div>
+                    <div class="info-label">Registered By</div>
+                    <div class="info-value" id="registeredBy">Admin</div>
                     
-                    <div class="info-label">변경일</div>
+                    <div class="info-label">Changed Date</div>
                     <div class="info-value" id="registeredDate">2025-08-27 14:30:00</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 상세 설명 섹션 -->
+    <!-- Description Section -->
     <div class="description-section">
-        <div class="section-title">변경 사유</div>
+        <div class="section-title">Change Reason</div>
         <div class="info-content">
             <div class="description-content" id="changeReason">
                 신규 회원 가입 웰컴 포인트 지급입니다.
@@ -259,32 +259,32 @@
     
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('고객 포인트 변경 상세 페이지 로드, ID:', itemId);
+            console.log('Customer Point Change Details page loaded, ID:', itemId);
             loadCustomerPointDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detailed information
         function loadCustomerPointDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in production
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'CP001': {
                     userEmail: 'kim.cs@email.com',
                     userName: '김철수',
                     userPhone: '010-1234-5678',
-                    pointType: '웰컴적립',
+                    pointType: 'Welcome Points',
                     pointClass: 'point-welcome',
                     pointChange: '+1,000',
                     pointChangeClass: 'point-increase',
@@ -313,13 +313,13 @@
                     userEmail: 'lee.yh@email.com',
                     userName: '이영희',
                     userPhone: '010-2345-6789',
-                    pointType: '접수',
+                    pointType: 'Reception',
                     pointClass: 'point-reception',
                     pointChange: '+500',
                     pointChangeClass: 'point-increase',
                     beforePoint: '2,000',
                     afterPoint: '2,500',
-                    registeredBy: '관리자',
+                    registeredBy: 'Admin',
                     changedDate: '2025-08-27 13:15:00',
                     changeReason: `서비스 접수 완료에 따른 포인트 적립입니다.
                 
@@ -342,13 +342,13 @@
                     userEmail: 'park.ms@email.com',
                     userName: '박민수',
                     userPhone: '010-3456-7890',
-                    pointType: '포인트 지급',
+                    pointType: 'Point Payment',
                     pointClass: 'point-payment',
                     pointChange: '+2,000',
                     pointChangeClass: 'point-increase',
                     beforePoint: '3,200',
                     afterPoint: '5,200',
-                    registeredBy: '관리자',
+                    registeredBy: 'Admin',
                     changedDate: '2025-08-27 12:45:00',
                     changeReason: `관리자가 직접 지급한 포인트입니다.
                 
@@ -372,7 +372,7 @@
             return mockDatabase[id] || mockDatabase['CP001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('userEmail').textContent = data.userEmail;
             document.getElementById('userName').textContent = data.userName;
@@ -388,7 +388,7 @@
             document.getElementById('changeReason').textContent = data.changeReason;
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'customer-point-management.html';
         }

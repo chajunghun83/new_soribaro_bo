@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공증신청/기록완본 등록 - 소리바로 BO</title>
+    <title>Notary/Record Completion Registration - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* 가격 정보 */
+        /* Price Information */
         .price-info {
             background: #f0f9ff;
             border: 1px solid #bae6fd;
@@ -172,7 +172,7 @@
             font-weight: 700 !important;
         }
 
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -203,7 +203,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -240,104 +240,104 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>💰</span>
-            공증신청/기록완본 등록
+            Notary/Record Completion Registration
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">구분<span class="required">*</span></div>
+                    <div class="info-label">Category<span class="required">*</span></div>
                     <select id="categorySelect" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="공증">공증</option>
-                        <option value="기록">기록</option>
+                        <option value="">Please select</option>
+                        <option value="Notary">Notary</option>
+                        <option value="Record">Record</option>
                     </select>
                     
-                    <div class="info-label">분류명<span class="required">*</span></div>
-                    <input type="text" id="categoryName" class="info-input" placeholder="분류명을 입력하세요">
+                    <div class="info-label">Name<span class="required">*</span></div>
+                    <input type="text" id="categoryName" class="info-input" placeholder="Enter name">
                     
-                    <div class="info-label">시작일<span class="required">*</span></div>
+                    <div class="info-label">Start Date<span class="required">*</span></div>
                     <input type="date" id="startDate" class="info-input">
                     
-                    <div class="info-label">종료일</div>
+                    <div class="info-label">End Date</div>
                     <input type="datetime-local" id="endDate" class="info-input" value="9999-12-31T23:59" readonly disabled>
                 </div>
             </div>
         </div>
         
-        <!-- 금액 정보 섹션 -->
+        <!-- Price Information Section -->
         <div class="info-section">
-            <div class="section-title">금액 정보</div>
+            <div class="section-title">Price Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">현재요금<span class="required">*</span></div>
+                    <div class="info-label">Current Price<span class="required">*</span></div>
                     <input type="number" id="currentPrice" class="info-input" placeholder="0" min="0">
                     
-                    <div class="info-label">할인율(%)</div>
+                    <div class="info-label">Discount Rate(%)</div>
                     <input type="number" id="discountRate" class="info-input" placeholder="0" min="0" max="100">
                 </div>
                 
-                <!-- 가격 정보 -->
+                <!-- Price Information -->
                 <div class="price-info">
                     <div class="price-row">
-                        <span class="price-label">정가</span>
-                        <span class="price-value" id="originalPrice">0원</span>
+                        <span class="price-label">Original Price</span>
+                        <span class="price-value" id="originalPrice">0WON</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label">할인금액</span>
-                        <span class="price-value" id="discountAmount">-0원</span>
+                        <span class="price-label">Discount Amount</span>
+                        <span class="price-value" id="discountAmount">-0WON</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label final-price">최종 판매가</span>
-                        <span class="price-value final-price" id="finalPrice">0원</span>
+                        <span class="price-label final-price">Final Price</span>
+                        <span class="price-value final-price" id="finalPrice">0WON</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 상세 설명 섹션 -->
+    <!-- Detailed Description Section -->
     <div class="description-section">
-        <div class="section-title">상세 설명</div>
+        <div class="section-title">Detailed Description</div>
         <div class="info-content">
-            <textarea class="description-textarea" id="detailDescription" placeholder="상세 설명을 입력하세요..."></textarea>
+            <textarea class="description-textarea" id="detailDescription" placeholder="Enter detailed description..."></textarea>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-register" onclick="registerNotaryItem()">
             <span>📝</span>
-            등록
+            Register
         </button>
     </div>
 
     <script>
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('공증신청/기록완본 등록 페이지 로드');
+            console.log('Notary/Record Completion Registration page loaded');
             
-            // 현재 날짜를 기본값으로 설정
+            // Set current date as default
             const now = new Date();
             const currentDate = now.toISOString().slice(0, 10);
             document.getElementById('startDate').value = currentDate;
             
-            // 종료일을 9999-12-31 23:59:59로 고정 설정 (이미 HTML에서 설정됨)
+            // End date is fixed to 9999-12-31 23:59:59 (already set in HTML)
             
-            // 가격 계산 이벤트 리스너
+            // Price calculation event listeners
             document.getElementById('currentPrice').addEventListener('input', calculatePrice);
             document.getElementById('discountRate').addEventListener('input', calculatePrice);
         });
         
-        // 가격 계산
+        // Calculate price
         function calculatePrice() {
             const currentPrice = parseInt(document.getElementById('currentPrice').value) || 0;
             const discountRate = parseInt(document.getElementById('discountRate').value) || 0;
@@ -345,19 +345,19 @@
             const discountAmount = Math.round(currentPrice * discountRate / 100);
             const finalPrice = currentPrice - discountAmount;
             
-            document.getElementById('originalPrice').textContent = currentPrice.toLocaleString() + '원';
-            document.getElementById('discountAmount').textContent = '-' + discountAmount.toLocaleString() + '원';
-            document.getElementById('finalPrice').textContent = finalPrice.toLocaleString() + '원';
+            document.getElementById('originalPrice').textContent = currentPrice.toLocaleString() + 'WON';
+            document.getElementById('discountAmount').textContent = '-' + discountAmount.toLocaleString() + 'WON';
+            document.getElementById('finalPrice').textContent = finalPrice.toLocaleString() + 'WON';
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'notary-management.html';
         }
         
-        // 등록 기능
+        // Registration function
         function registerNotaryItem() {
-            // 필수 항목 검증
+            // Validate required fields
             const category = document.getElementById('categorySelect').value;
             const categoryName = document.getElementById('categoryName').value.trim();
             const currentPrice = document.getElementById('currentPrice').value;
@@ -365,36 +365,36 @@
             const endDate = document.getElementById('endDate').value;
             
             if (!category) {
-                alert('구분을 선택해주세요.');
+                alert('Please select category.');
                 document.getElementById('categorySelect').focus();
                 return;
             }
             
             if (!categoryName) {
-                alert('분류명을 입력해주세요.');
+                alert('Please enter name.');
                 document.getElementById('categoryName').focus();
                 return;
             }
             
             if (!currentPrice || currentPrice <= 0) {
-                alert('현재요금을 입력해주세요.');
+                alert('Please enter current price.');
                 document.getElementById('currentPrice').focus();
                 return;
             }
             
             if (!startDate) {
-                alert('시작일을 입력해주세요.');
+                alert('Please enter start date.');
                 document.getElementById('startDate').focus();
                 return;
             }
             
-            // 종료일은 고정값이므로 검증 제거
+            // End date validation removed as it's fixed
             
-            // 시작일과 종료일 검증 (종료일이 9999-12-31로 고정되므로 항상 통과)
+            // Start date and end date validation (always passes as end date is fixed to 9999-12-31)
             
-            // 등록 확인
-            if (confirm('새로운 가격 정책을 등록하시겠습니까?')) {
-                // 실제 구현 시 서버 API 호출
+            // Confirm registration
+            if (confirm('Do you want to register new price policy?')) {
+                // Call server API in production
                 const formData = {
                     category: category,
                     categoryName: categoryName,
@@ -405,8 +405,8 @@
                     description: document.getElementById('detailDescription').value.trim()
                 };
                 
-                console.log('등록 데이터:', formData);
-                alert('등록이 완료되었습니다.');
+                console.log('Registration data:', formData);
+                alert('Registration completed.');
                 goBack();
             }
         }

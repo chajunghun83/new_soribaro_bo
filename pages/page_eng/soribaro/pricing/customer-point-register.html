@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 포인트 지급 - 소리바로 BO</title>
+    <title>Customer Point Payment - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* 고객 검색 버튼 */
+        /* Customer Search Button */
         .search-customer-btn {
             background: #3b82f6;
             color: white;
@@ -151,7 +151,7 @@
             background: #2563eb;
         }
 
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -182,7 +182,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -223,7 +223,7 @@
             font-size: 14px;
         }
 
-        /* 검색 팝업 스타일 */
+        /* Search Popup Style */
         .search-popup-overlay {
             display: none;
             position: fixed;
@@ -435,109 +435,109 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>💰</span>
-            고객 포인트 지급
+            Customer Point Payment
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 고객 정보 섹션 -->
+        <!-- Customer Information Section -->
         <div class="info-section">
-            <div class="section-title">고객 정보</div>
+            <div class="section-title">Customer Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">고객 검색<span class="required">*</span></div>
+                    <div class="info-label">Customer Search<span class="required">*</span></div>
                     <div style="display: flex; align-items: center;">
-                        <button class="search-customer-btn" onclick="openSearchPopup()">고객 검색</button>
+                        <button class="search-customer-btn" onclick="openSearchPopup()">Search Customer</button>
                     </div>
                     
-                    <div class="info-label">이메일</div>
-                    <div class="customer-info-display" id="selectedUserEmail">고객을 검색해주세요</div>
+                    <div class="info-label">Email</div>
+                    <div class="customer-info-display" id="selectedUserEmail">Please search for a customer</div>
                     
-                    <div class="info-label">이름</div>
+                    <div class="info-label">Name</div>
                     <div class="customer-info-display" id="selectedUserName">-</div>
                     
-                    <div class="info-label">연락처</div>
+                    <div class="info-label">Contact</div>
                     <div class="customer-info-display" id="selectedUserPhone">-</div>
                     
-                    <div class="info-label">보유포인트</div>
+                    <div class="info-label">Current Points</div>
                     <div class="customer-info-display" id="currentPoints">-</div>
                 </div>
             </div>
         </div>
         
-        <!-- 포인트 지급 정보 섹션 -->
+        <!-- Point Payment Information Section -->
         <div class="info-section">
-            <div class="section-title">포인트 지급 정보</div>
+            <div class="section-title">Point Payment Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">포인트 구분<span class="required">*</span></div>
+                    <div class="info-label">Point Type<span class="required">*</span></div>
                     <select id="pointTypeSelect" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="웰컴적립">웰컴적립</option>
-                        <option value="접수">접수</option>
-                        <option value="포인트 지급">포인트 지급</option>
+                        <option value="">Please select</option>
+                        <option value="Welcome Points">Welcome Points</option>
+                        <option value="Reception">Reception</option>
+                        <option value="Point Payment">Point Payment</option>
                     </select>
                     
-                    <div class="info-label">지급 포인트<span class="required">*</span></div>
+                    <div class="info-label">Points to Give<span class="required">*</span></div>
                     <input type="number" id="pointAmount" class="info-input" placeholder="0" min="0">
                     
-                    <div class="info-label">포인트합계</div>
+                    <div class="info-label">Total Points</div>
                     <div class="customer-info-display" id="afterPoints">-</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 지급 사유 섹션 -->
+    <!-- Payment Reason Section -->
     <div class="description-section">
-        <div class="section-title">지급 사유<span class="required">*</span></div>
+        <div class="section-title">Payment Reason<span class="required">*</span></div>
         <div class="info-content">
-            <textarea class="description-textarea" id="giveReason" placeholder="포인트 지급 사유를 상세히 입력하세요..."></textarea>
+            <textarea class="description-textarea" id="giveReason" placeholder="Enter detailed reason for point payment..."></textarea>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-register" onclick="giveCustomerPoint()">
             <span>💰</span>
-            포인트 지급
+            Give Points
         </button>
     </div>
 
-    <!-- 고객 검색 팝업 -->
+    <!-- Customer Search Popup -->
     <div class="search-popup-overlay" id="searchPopupOverlay">
         <div class="search-popup">
             <div class="popup-header">
-                <h3 class="popup-title">고객 검색</h3>
+                <h3 class="popup-title">Customer Search</h3>
                 <button class="popup-close" onclick="closeSearchPopup()">&times;</button>
             </div>
             <div class="popup-content">
                 <div class="popup-search-row">
                     <div class="popup-search-group">
-                        <label class="popup-search-label">검색 조건</label>
+                        <label class="popup-search-label">Search By</label>
                         <select id="popupSearchType" class="popup-search-select">
-                            <option value="userName">이름</option>
-                            <option value="userEmail">이메일</option>
-                            <option value="userPhone">연락처</option>
+                            <option value="userName">Name</option>
+                            <option value="userEmail">Email</option>
+                            <option value="userPhone">Contact</option>
                         </select>
                     </div>
                     <div class="popup-search-group">
-                        <label class="popup-search-label">검색어</label>
-                        <input type="text" id="popupSearchKeyword" class="popup-search-input" placeholder="검색어를 입력하세요">
+                        <label class="popup-search-label">Keyword</label>
+                        <input type="text" id="popupSearchKeyword" class="popup-search-input" placeholder="Enter search term">
                     </div>
-                    <button class="popup-search-btn" onclick="searchInPopup()">검색</button>
+                    <button class="popup-search-btn" onclick="searchInPopup()">Search</button>
                 </div>
                 <div class="search-results" id="searchResults">
-                    <div class="no-results">검색어를 입력하고 검색 버튼을 클릭하세요.</div>
+                    <div class="no-results">Enter search term and click search button.</div>
                 </div>
             </div>
             <div class="popup-actions">
-                <button class="btn-cancel" onclick="closeSearchPopup()">취소</button>
-                <button class="btn-select" id="selectCustomerBtn" onclick="selectCustomer()" disabled>선택</button>
+                <button class="btn-cancel" onclick="closeSearchPopup()">Cancel</button>
+                <button class="btn-select" id="selectCustomerBtn" onclick="selectCustomer()" disabled>Select</button>
             </div>
         </div>
     </div>
@@ -545,23 +545,23 @@
     <script>
         let selectedCustomer = null;
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('고객 포인트 지급 페이지 로드');
+            console.log('Customer Point Payment page loaded');
             
-            // 포인트 금액 변경 시 지급 후 포인트 계산
+            // Calculate points after payment when amount changes
             document.getElementById('pointAmount').addEventListener('input', function() {
                 calculateAfterPoints();
             });
             
-            // 팝업 검색어 입력 시 Enter 키로 검색
+            // Search with Enter key in popup
             document.getElementById('popupSearchKeyword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchInPopup();
                 }
             });
             
-            // 팝업 오버레이 클릭 시 닫기
+            // Close popup on overlay click
             document.getElementById('searchPopupOverlay').addEventListener('click', function(e) {
                 if (e.target === this) {
                     closeSearchPopup();
@@ -571,31 +571,31 @@
         
         let selectedPopupCustomer = null;
         
-        // 검색 팝업 열기
+        // Open search popup
         function openSearchPopup() {
             document.getElementById('searchPopupOverlay').style.display = 'block';
             document.getElementById('popupSearchKeyword').focus();
         }
         
-        // 검색 팝업 닫기
+        // Close search popup
         function closeSearchPopup() {
             document.getElementById('searchPopupOverlay').style.display = 'none';
-            document.getElementById('searchResults').innerHTML = '<div class="no-results">검색어를 입력하고 검색 버튼을 클릭하세요.</div>';
+            document.getElementById('searchResults').innerHTML = '<div class="no-results">Enter search term and click search button.</div>';
             document.getElementById('selectCustomerBtn').disabled = true;
             selectedPopupCustomer = null;
         }
         
-        // 팝업에서 검색 실행
+        // Execute search in popup
         function searchInPopup() {
             const searchType = document.getElementById('popupSearchType').value;
             const searchKeyword = document.getElementById('popupSearchKeyword').value.trim();
             
             if (!searchKeyword) {
-                alert('검색어를 입력해주세요.');
+                alert('Please enter search term.');
                 return;
             }
             
-            // 시연용 Mock 데이터
+            // Mock data for demonstration
             const mockCustomers = [
                 { userEmail: 'kim.cs@email.com', userName: '김철수', userPhone: '010-1234-5678', region: '서울특별시 강남구', currentPoints: 2500 },
                 { userEmail: 'lee.yh@email.com', userName: '이영희', userPhone: '010-2345-6789', region: '부산광역시 해운대구', currentPoints: 1800 },
@@ -604,7 +604,7 @@
                 { userEmail: 'jung.sj@email.com', userName: '정수진', userPhone: '010-5678-9012', region: '광주광역시 서구', currentPoints: 2800 }
             ];
             
-            // 검색 조건에 따라 필터링
+            // Filter by search criteria
             const filteredCustomers = mockCustomers.filter(customer => {
                 const searchValue = customer[searchType];
                 return searchValue && searchValue.toLowerCase().includes(searchKeyword.toLowerCase());
@@ -613,12 +613,12 @@
             displaySearchResults(filteredCustomers);
         }
         
-        // 검색 결과 표시
+        // Display search results
         function displaySearchResults(customers) {
             const resultsContainer = document.getElementById('searchResults');
             
             if (customers.length === 0) {
-                resultsContainer.innerHTML = '<div class="no-results">검색 결과가 없습니다.</div>';
+                resultsContainer.innerHTML = '<div class="no-results">No search results.</div>';
                 return;
             }
             
@@ -626,10 +626,10 @@
                 <table>
                     <thead>
                         <tr>
-                            <th>이름</th>
-                            <th>이메일</th>
-                            <th>연락처</th>
-                            <th>지역</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Contact</th>
+                            <th>Region</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -649,19 +649,19 @@
             html += '</tbody></table>';
             resultsContainer.innerHTML = html;
             
-            // 검색 결과를 전역 변수에 저장
+            // Save search results to global variable
             window.searchResultsData = customers;
         }
         
-        // 검색 결과 선택
+        // Select search result
         function selectSearchResult(index) {
-            // 기존 선택 해제
+            // Clear previous selection
             const previousSelected = document.querySelector('.search-results tbody tr.selected');
             if (previousSelected) {
                 previousSelected.classList.remove('selected');
             }
             
-            // 새로운 선택
+            // Set new selection
             const selectedRow = document.querySelector(`[data-index="${index}"]`);
             selectedRow.classList.add('selected');
             
@@ -669,7 +669,7 @@
             document.getElementById('selectCustomerBtn').disabled = false;
         }
         
-        // 고객 선택 완료
+        // Complete customer selection
         function selectCustomer() {
             if (selectedPopupCustomer) {
                 selectedCustomer = selectedPopupCustomer;
@@ -678,27 +678,27 @@
             }
         }
         
-        // 고객 정보 업데이트
+        // Update customer information
         function updateCustomerInfo(customer) {
             document.getElementById('selectedUserEmail').textContent = customer.userEmail;
             document.getElementById('selectedUserName').textContent = customer.userName;
             document.getElementById('selectedUserPhone').textContent = customer.userPhone;
-            document.getElementById('currentPoints').textContent = customer.currentPoints.toLocaleString() + '포인트';
+            document.getElementById('currentPoints').textContent = customer.currentPoints.toLocaleString() + ' points';
             
             calculateAfterPoints();
         }
         
-        // 고객 정보 초기화
+        // Clear customer information
         function clearCustomerInfo() {
             selectedCustomer = null;
-            document.getElementById('selectedUserEmail').textContent = '고객을 검색해주세요';
+            document.getElementById('selectedUserEmail').textContent = 'Please search for a customer';
             document.getElementById('selectedUserName').textContent = '-';
             document.getElementById('selectedUserPhone').textContent = '-';
             document.getElementById('currentPoints').textContent = '-';
             document.getElementById('afterPoints').textContent = '-';
         }
         
-        // 지급 후 포인트 계산
+        // Calculate points after payment
         function calculateAfterPoints() {
             if (!selectedCustomer) {
                 document.getElementById('afterPoints').textContent = '-';
@@ -708,19 +708,19 @@
             const pointAmount = parseInt(document.getElementById('pointAmount').value) || 0;
             const afterPoints = selectedCustomer.currentPoints + pointAmount;
             
-            document.getElementById('afterPoints').textContent = afterPoints.toLocaleString() + '포인트';
+            document.getElementById('afterPoints').textContent = afterPoints.toLocaleString() + ' points';
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'customer-point-management.html';
         }
         
-        // 포인트 지급 기능
+        // Point payment function
         function giveCustomerPoint() {
-            // 필수 항목 검증
+            // Validate required fields
             if (!selectedCustomer) {
-                alert('고객을 검색하여 선택해주세요.');
+                alert('Please search and select a customer.');
                 document.getElementById('customerSearch').focus();
                 return;
             }
@@ -730,29 +730,29 @@
             const giveReason = document.getElementById('giveReason').value.trim();
             
             if (!pointType) {
-                alert('포인트 구분을 선택해주세요.');
+                alert('Please select point type.');
                 document.getElementById('pointTypeSelect').focus();
                 return;
             }
             
             if (!pointAmount || pointAmount <= 0) {
-                alert('지급 포인트를 입력해주세요.');
+                alert('Please enter points to give.');
                 document.getElementById('pointAmount').focus();
                 return;
             }
             
             if (!giveReason) {
-                alert('지급 사유를 입력해주세요.');
+                alert('Please enter payment reason.');
                 document.getElementById('giveReason').focus();
                 return;
             }
             
-            // 지급 확인
-            if (confirm(`${selectedCustomer.userName}(${selectedCustomer.userEmail})님에게 ${parseInt(pointAmount).toLocaleString()}포인트를 지급하시겠습니까?`)) {
-                // 웰컴적립인 경우 등록자를 고객 이름으로 설정
-                const registeredBy = pointType === '웰컴적립' ? selectedCustomer.userName : '관리자';
+            // Confirm payment
+            if (confirm(`Do you want to give ${parseInt(pointAmount).toLocaleString()} points to ${selectedCustomer.userName}(${selectedCustomer.userEmail})?`)) {
+                // Set registered by as customer name for welcome points
+                const registeredBy = pointType === 'Welcome Points' ? selectedCustomer.userName : 'Admin';
                 
-                // 실제 구현 시 서버 API 호출
+                // Call server API in production
                 const formData = {
                     customerEmail: selectedCustomer.userEmail,
                     customerName: selectedCustomer.userName,
@@ -766,8 +766,8 @@
                     changedDate: new Date().toISOString().slice(0, 19).replace('T', ' ')
                 };
                 
-                console.log('포인트 지급 데이터:', formData);
-                alert('포인트 지급이 완료되었습니다.');
+                console.log('Point payment data:', formData);
+                alert('Point payment completed.');
                 goBack();
             }
         }

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Edit - Soribaro Worker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .info-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            width: 100%;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* 편집 모드에서 편집 가능한 항목만 입력 요소 표시 */
+        .edit-mode .editable-field .info-value {
+            display: none;
+        }
+        
+        .edit-mode .editable-field .info-input {
+            display: block;
+        }
+        
+        .info-input {
+            display: none;
+        }
+        
+        /* 프로필사진 업로드 관련 스타일 */
+        .profile-upload {
+            display: none;
+            text-align: center;
+            margin-top: 20px;
+            padding: 20px;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            background: #f9fafb;
+        }
+        
+        .edit-mode .profile-upload {
+            display: block;
+        }
+        
+        .profile-input {
+            display: none;
+        }
+        
+        .profile-upload-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin: 0 auto 10px;
+        }
+        
+        .profile-upload-btn:hover {
+            background: #059669;
+        }
+        
+        .profile-info {
+            font-size: 12px;
+            color: #6b7280;
+        }
+
+        /* 프로필사진 영역 */
+        .profile-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .profile-display {
+            background: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .profile-image {
+            max-width: 180px;
+            max-height: 180px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .no-profile {
+            color: #6b7280;
+            font-size: 14px;
+        }
+
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            grid-column: 1 / -1;
+        }
+        
+        #editModeButtons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .btn-action {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-width: 100px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .btn-edit {
+            background: #3b82f6;
+            color: white;
+        }
+        
+        .btn-edit:hover {
+            background: #2563eb;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(59, 130, 246, 0.3);
+        }
+        
+        .btn-save {
+            background: #10b981;
+            color: white;
+        }
+        
+        .btn-save:hover {
+            background: #059669;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-cancel {
+            background: #6b7280;
+            color: white;
+        }
+        
+        .btn-cancel:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(107, 114, 128, 0.3);
+        }
+
+        /* Address search related styles */
+        .address-edit-container {
+            display: none;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .edit-mode .address-edit-container {
+            display: flex;
+        }
+        
+        .address-search-container {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        
+        .address-search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        
+        .address-search-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>👤</span>
+            Profile Edit
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid" id="basicInfoGrid">
+                    <div class="info-label">아이디</div>
+                    <div class="info-value" id="workerId">worker001@soribaro.com</div>
+                    
+                    <div class="info-label">Name</div>
+                    <div class="editable-field">
+                        <div class="info-value" id="workerName">김작업</div>
+                        <input type="text" class="info-input" id="workerNameInput" value="김작업">
+                    </div>
+                    
+                    <div class="info-label">Phone Number</div>
+                    <div class="editable-field">
+                        <div class="info-value" id="phoneNumber">010-9876-5432</div>
+                        <input type="text" class="info-input" id="phoneNumberInput" value="010-9876-5432">
+                    </div>
+                    
+                    <div class="info-label">Address</div>
+                    <div class="editable-field">
+                        <div class="info-value" id="address">서울특별시 강남구 테헤란로 123, 456호</div>
+                        <div class="address-edit-container">
+                            <div class="address-search-container">
+                                <input type="text" class="info-input" id="postcodeInput" placeholder="우편번호" readonly style="width: 100px;">
+                                <button type="button" class="address-search-btn" onclick="searchAddress()">Search Address</button>
+                            </div>
+                            <input type="text" class="info-input" id="addressInput" placeholder="Basic Address" readonly>
+                            <input type="text" class="info-input" id="detailAddressInput" placeholder="Enter detailed address">
+                        </div>
+                    </div>
+                    
+                    <div class="info-label">등록일</div>
+                    <div class="info-value" id="registerDate">2024-03-15</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 프로필사진 섹션 -->
+        <div class="profile-section" id="profileSection">
+            <div class="section-title">프로필사진</div>
+            <div class="info-content">
+                <div class="profile-display" id="profileDisplay">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjkwIiBjeT0iOTAiIHI9IjkwIiBmaWxsPSIjM0I4MkY2Ii8+CjxjaXJjbGUgY3g9IjkwIiBjeT0iNzAiIHI9IjMwIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMzAgMTQ0QzMwIDEyNS40IDU2LjMgMTEwIDkwIDExMEMxMjMuNyAxMTAgMTUwIDEyNS40IDE1MCA0NFYxNTZIMzBWMTQ0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+" 
+                         alt="프로필사진" class="profile-image" id="profileImage">
+                </div>
+                <div class="profile-upload" id="profileUpload">
+                    <input type="file" id="profileInput" class="profile-input" accept="image/*" onchange="handleProfileUpload(event)">
+                    <button type="button" class="profile-upload-btn" onclick="document.getElementById('profileInput').click()">
+                        <span>📷</span>
+                        프로필사진 변경
+                    </button>
+                    <div class="profile-info">* 이미지 파일만 업로드 가능합니다. (최대 5MB)</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 하단 액션 버튼 -->
+        <div class="bottom-actions">
+            <div id="viewModeButtons">
+                <button class="btn-action btn-edit" onclick="toggleEditMode()">
+                    <span>✏️</span>
+                    Edit
+                </button>
+            </div>
+            <div id="editModeButtons" style="display: none;">
+                <button class="btn-action btn-save" onclick="saveProfile()">
+                    <span>💾</span>
+                    저장
+                </button>
+                <button class="btn-action btn-cancel" onclick="cancelEdit()">
+                    <span>❌</span>
+                    취소
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isEditMode = false;
+        let originalData = null;
+        
+        // 페이지 로드 시 데이터 로딩
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('작업자 개인정보수정 페이지 로드');
+            loadWorkerProfile();
+        });
+        
+        // 작업자 프로필 정보 로딩
+        function loadWorkerProfile() {
+            // 실제 구현 시 서버 API 호출
+            // 임시 데이터로 UI 업데이트
+            const mockData = {
+                workerId: 'worker001@soribaro.com',
+                workerName: '김작업',
+                phoneNumber: '010-9876-5432',
+                address: '서울특별시 강남구 테헤란로 123, 456호',
+                postcode: '06234',
+                basicAddress: '서울특별시 강남구 테헤란로 123',
+                detailAddress: '456호',
+                registerDate: '2024-03-15',
+                profileImage: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxjaXJjbGUgY3g9IjkwIiBjeT0iOTAiIHI9IjkwIiBmaWxsPSIjM0I4MkY2Ii8+CjxjaXJjbGUgY3g9IjkwIiBjeT0iNzAiIHI9IjMwIiBmaWxsPSJ3aGl0ZSIvPgo8cGF0aCBkPSJNMzAgMTQ0QzMwIDEyNS40IDU2LjMgMTEwIDkwIDExMEMxMjMuNyAxMTAgMTUwIDEyNS40IDE1MCA0NFYxNTZIMzBWMTQ0WiIgZmlsbD0id2hpdGUiLz4KPC9zdmc+'
+            };
+            updateUI(mockData);
+        }
+        
+        // UI 업데이트
+        function updateUI(data) {
+            // 원본 데이터 저장
+            originalData = { ...data };
+            
+            // 표시 요소 업데이트
+            document.getElementById('workerId').textContent = data.workerId;
+            document.getElementById('workerName').textContent = data.workerName;
+            document.getElementById('phoneNumber').textContent = data.phoneNumber;
+            document.getElementById('address').textContent = data.address;
+            document.getElementById('registerDate').textContent = data.registerDate;
+            
+            // 편집 가능한 입력 요소 업데이트
+            document.getElementById('workerNameInput').value = data.workerName;
+            document.getElementById('phoneNumberInput').value = data.phoneNumber;
+            document.getElementById('postcodeInput').value = data.postcode || '';
+            document.getElementById('addressInput').value = data.basicAddress || '';
+            document.getElementById('detailAddressInput').value = data.detailAddress || '';
+            
+            // 프로필사진 업데이트
+            if (data.profileImage) {
+                document.getElementById('profileImage').src = data.profileImage;
+                document.getElementById('profileImage').alt = `${data.workerName} 프로필사진`;
+            } else {
+                document.getElementById('profileDisplay').innerHTML = '<div class="no-profile">등록된 프로필사진이 없습니다.</div>';
+            }
+        }
+        
+        // 목록으로 돌아가기 (작업자 공지사항으로)
+        function goBack() {
+            window.location.href = 'notice.html';
+        }
+        
+        // 편집 모드 토글
+        function toggleEditMode() {
+            isEditMode = true;
+            document.getElementById('basicInfoGrid').classList.add('edit-mode');
+            document.getElementById('profileSection').classList.add('edit-mode');
+            document.getElementById('viewModeButtons').style.display = 'none';
+            document.getElementById('editModeButtons').style.display = 'flex';
+        }
+        
+        // 편집 취소
+        function cancelEdit() {
+            isEditMode = false;
+            document.getElementById('basicInfoGrid').classList.remove('edit-mode');
+            document.getElementById('profileSection').classList.remove('edit-mode');
+            document.getElementById('viewModeButtons').style.display = 'flex';
+            document.getElementById('editModeButtons').style.display = 'none';
+            
+            // 원본 데이터로 복원
+            if (originalData) {
+                updateUI(originalData);
+            }
+        }
+        
+        // 저장 기능
+        function saveProfile() {
+            // 편집 가능한 입력 값 검증
+            const workerName = document.getElementById('workerNameInput').value.trim();
+            const phoneNumber = document.getElementById('phoneNumberInput').value.trim();
+            const postcode = document.getElementById('postcodeInput').value.trim();
+            const basicAddress = document.getElementById('addressInput').value.trim();
+            const detailAddress = document.getElementById('detailAddressInput').value.trim();
+            
+            if (!workerName) {
+                alert('이름을 입력해주세요.');
+                document.getElementById('workerNameInput').focus();
+                return;
+            }
+            
+            if (!phoneNumber) {
+                alert('전화번호를 입력해주세요.');
+                document.getElementById('phoneNumberInput').focus();
+                return;
+            }
+            
+            // 전화번호 형식 검증
+            const phonePattern = /^010-\d{4}-\d{4}$/;
+            if (!phonePattern.test(phoneNumber)) {
+                alert('전화번호 형식이 올바르지 않습니다. (예: 010-1234-5678)');
+                document.getElementById('phoneNumberInput').focus();
+                return;
+            }
+            
+            // 저장 확인
+            if (confirm('변경사항을 저장하시겠습니까?')) {
+                // 주소 조합
+                let fullAddress = '';
+                if (postcode && basicAddress) {
+                    fullAddress = basicAddress;
+                    if (detailAddress) {
+                        fullAddress += ', ' + detailAddress;
+                    }
+                }
+                
+                // 업데이트된 데이터로 UI 갱신
+                const updatedData = {
+                    ...originalData,
+                    workerName: workerName,
+                    phoneNumber: phoneNumber,
+                    address: fullAddress,
+                    postcode: postcode,
+                    basicAddress: basicAddress,
+                    detailAddress: detailAddress
+                };
+                
+                updateUI(updatedData);
+                
+                // 편집 모드 종료
+                isEditMode = false;
+                document.getElementById('basicInfoGrid').classList.remove('edit-mode');
+                document.getElementById('profileSection').classList.remove('edit-mode');
+                document.getElementById('viewModeButtons').style.display = 'flex';
+                document.getElementById('editModeButtons').style.display = 'none';
+                
+                // 실제 구현 시 서버 API 호출
+                console.log('저장된 데이터:', updatedData);
+                alert('개인정보가 성공적으로 저장되었습니다.');
+            }
+        }
+        
+        // 프로필사진 업로드 처리
+        function handleProfileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            // 파일 크기 검사 (5MB = 5 * 1024 * 1024 bytes)
+            const maxSize = 5 * 1024 * 1024;
+            if (file.size > maxSize) {
+                alert('파일 크기가 5MB를 초과합니다.');
+                return;
+            }
+            
+            // 이미지 파일 검사
+            if (!file.type.startsWith('image/')) {
+                alert('이미지 파일만 업로드할 수 있습니다.');
+                return;
+            }
+            
+            // 파일을 읽어서 미리보기 표시
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                document.getElementById('profileImage').src = e.target.result;
+                console.log('프로필사진이 업로드되었습니다:', file.name);
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        // 주소 검색 (Daum 우편번호 API 사용 예정)
+        function searchAddress() {
+            // 실제 구현 시 Daum 우편번호 API 연동
+            alert('주소 검색 기능입니다.\n\n실제 구현 시 Daum 우편번호 API를 연동합니다.');
+            
+            // 임시로 샘플 주소 입력
+            document.getElementById('postcodeInput').value = '06234';
+            document.getElementById('addressInput').value = '서울특별시 강남구 테헤란로 123';
+            document.getElementById('detailAddressInput').focus();
+        }
+    </script>
+</body>
+</html>

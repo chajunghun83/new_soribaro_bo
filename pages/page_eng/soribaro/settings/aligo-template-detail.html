@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>알리고 템플릿 상세정보 - 소리바로 BO</title>
+    <title>Aligo Template Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 템플릿코드 배지 */
+        /* Template Code Badge */
         .template-code {
             display: inline-block;
             padding: 4px 12px;
@@ -120,7 +120,7 @@
             color: #0369a1;
         }
 
-        /* 내용 영역 */
+        /* Content Area */
         .content-section {
             grid-column: 1 / -1;
             background: white;
@@ -143,7 +143,7 @@
             white-space: pre-wrap;
         }
 
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -187,172 +187,172 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📱</span>
-            알리고 템플릿 상세정보
+            Aligo Template Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">템플릿코드(알리고)</div>
+                    <div class="info-label">Template Code (Aligo)</div>
                     <div class="info-value">
                         <span id="templateCode" class="template-code">TL_5927</span>
                     </div>
                     
-                    <div class="info-label">제목</div>
-                    <div class="info-value" id="templateTitle">회원가입 인증번호 발송</div>
+                    <div class="info-label">Title</div>
+                    <div class="info-value" id="templateTitle">Signup Verification Code Notification</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- SMS 내용 섹션 -->
+    <!-- SMS Content Section -->
     <div class="content-section">
-        <div class="section-title">SMS 내용</div>
+        <div class="section-title">SMS Content</div>
         <div class="info-content">
-            <div class="content-display" id="smsContent">[소리바로] 회원가입 인증번호는 [123456]입니다.
+            <div class="content-display" id="smsContent">[Soribaro] Your signup verification code is [123456].
 
-인증번호를 정확히 입력해 주세요.
-인증번호 유효시간은 5분입니다.
+Please enter the verification code correctly.
+The code is valid for 5 minutes.
 
-감사합니다.</div>
+Thank you.</div>
         </div>
     </div>
     
-    <!-- MMS 내용 섹션 -->
+    <!-- MMS Content Section -->
     <div class="content-section">
-        <div class="section-title">MMS 내용</div>
+        <div class="section-title">MMS Content</div>
         <div class="info-content">
-            <div class="content-display" id="mmsContent">🎉 [소리바로] 회원가입을 환영합니다! 🎉
+            <div class="content-display" id="mmsContent">🎉 [Soribaro] Welcome to Soribaro! 🎉
 
-인증번호: [123456]
+Verification Code: [123456]
 
-✅ 인증번호를 정확히 입력해 주세요.
-⏰ 인증번호 유효시간은 5분입니다.
-📞 문의사항: 1588-1234
+✅ Please enter the verification code correctly.
+⏰ The code is valid for 5 minutes.
+📞 Inquiries: 1588-1234
 
-소리바로와 함께 더 나은 서비스를 경험해보세요!
+Experience better service with Soribaro!
 
-감사합니다.</div>
+Thank you.</div>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-action btn-edit" onclick="editTemplate()">
             <span>✏️</span>
-            수정
+            Edit
         </button>
         <button class="btn-action btn-delete" onclick="deleteTemplate()">
             <span>🗑️</span>
-            삭제
+            Delete
         </button>
     </div>
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('알리고 템플릿 상세 페이지 로드, ID:', itemId);
+            console.log('Aligo template detail page loaded, ID:', itemId);
             loadTemplateDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detail information
         function loadTemplateDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in actual implementation
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'TEMPLATE001': {
                     templateCode: 'TL_5927',
-                    templateTitle: '회원가입 인증번호 발송',
-                    smsContent: `[소리바로] 회원가입 인증번호는 [123456]입니다.
+                    templateTitle: 'Signup Verification Code Notification',
+                    smsContent: `[Soribaro] Your signup verification code is [123456].
 
-인증번호를 정확히 입력해 주세요.
-인증번호 유효시간은 5분입니다.
+Please enter the verification code correctly.
+The code is valid for 5 minutes.
 
-감사합니다.`,
-                    mmsContent: `🎉 [소리바로] 회원가입을 환영합니다! 🎉
+Thank you.`,
+                    mmsContent: `🎉 [Soribaro] Welcome to Soribaro! 🎉
 
-인증번호: [123456]
+Verification Code: [123456]
 
-✅ 인증번호를 정확히 입력해 주세요.
-⏰ 인증번호 유효시간은 5분입니다.
-📞 문의사항: 1588-1234
+✅ Please enter the verification code correctly.
+⏰ The code is valid for 5 minutes.
+📞 Inquiries: 1588-1234
 
-소리바로와 함께 더 나은 서비스를 경험해보세요!
+Experience better service with Soribaro!
 
-감사합니다.`
+Thank you.`
                 },
                 'TEMPLATE002': {
                     templateCode: 'TL_5928',
-                    templateTitle: '비밀번호 재설정 안내',
-                    smsContent: `[소리바로] 비밀번호 재설정 링크입니다.
+                    templateTitle: 'Password Reset Guide',
+                    smsContent: `[Soribaro] Here is your password reset link.
 
-아래 링크를 클릭하여 새로운 비밀번호를 설정해 주세요.
+Please click the link below to set a new password.
 https://soribaro.com/reset/[token]
 
-링크 유효시간은 30분입니다.`,
-                    mmsContent: `🔐 [소리바로] 비밀번호 재설정 안내
+The link is valid for 30 minutes.`,
+                    mmsContent: `🔐 [Soribaro] Password Reset Guide
 
-안녕하세요, 소리바로입니다.
+Hello, this is Soribaro.
 
-비밀번호 재설정을 요청하셨습니다.
-아래 링크를 클릭하여 새로운 비밀번호를 설정해 주세요.
+You have requested a password reset.
+Please click the link below to set a new password.
 
 🔗 https://soribaro.com/reset/[token]
 
-⚠️ 주의사항:
-- 링크 유효시간: 30분
-- 본인이 요청하지 않은 경우 무시하세요.
+⚠️ Notes:
+- Link validity: 30 minutes
+- Please ignore if you did not request this.
 
-문의사항: 1588-1234`
+Inquiries: 1588-1234`
                 },
                 'TEMPLATE003': {
                     templateCode: 'TL_5929',
-                    templateTitle: '작업 완료 알림',
-                    smsContent: `[소리바로] 작업이 완료되었습니다.
+                    templateTitle: 'Task Completion Notification',
+                    smsContent: `[Soribaro] Your task has been completed.
 
-주문번호: [ORDER_NO]
-작업유형: [WORK_TYPE]
+Order Number: [ORDER_NO]
+Task Type: [WORK_TYPE]
 
-마이페이지에서 결과물을 다운로드하세요.
-감사합니다.`,
-                    mmsContent: `✅ [소리바로] 작업 완료 알림
+Download the results from My Page.
+Thank you.`,
+                    mmsContent: `✅ [Soribaro] Task Completion Notification
 
-주문번호: [ORDER_NO]
-작업유형: [WORK_TYPE]
-완료일시: [COMPLETE_DATE]
+Order Number: [ORDER_NO]
+Task Type: [WORK_TYPE]
+Completion Date: [COMPLETE_DATE]
 
-🎉 작업이 성공적으로 완료되었습니다!
+🎉 Your task has been completed successfully!
 
-📥 결과물 다운로드:
-마이페이지 > 주문내역에서 확인 가능합니다.
+📥 Download Results:
+Available in My Page > Order History.
 
-📞 문의사항: 1588-1234
-감사합니다.`
+📞 Inquiries: 1588-1234
+Thank you.`
                 }
             };
             
             return mockDatabase[id] || mockDatabase['TEMPLATE001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('templateCode').textContent = data.templateCode;
             document.getElementById('templateTitle').textContent = data.templateTitle;
@@ -360,22 +360,22 @@ https://soribaro.com/reset/[token]
             document.getElementById('mmsContent').textContent = data.mmsContent;
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'aligo-template-management.html';
         }
         
-        // 수정 기능
+        // Edit function
         function editTemplate() {
             const url = `aligo-template-register.html?id=${itemId}&mode=edit`;
             window.location.href = url;
         }
         
-        // 삭제 기능
+        // Delete function
         function deleteTemplate() {
-            if (confirm('이 알리고 템플릿을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
-                alert('알리고 템플릿이 삭제되었습니다.');
-                // 실제 구현 시 서버 API 호출하여 삭제
+            if (confirm('Are you sure you want to delete this Aligo template?\nDeleted data cannot be recovered.')) {
+                alert('The Aligo template has been deleted.');
+                // Call server API to delete in actual implementation
                 goBack();
             }
         }

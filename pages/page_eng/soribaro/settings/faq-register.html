@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FAQ 등록 - 소리바로 BO</title>
+    <title>FAQ Registration - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* FAQ 내용 영역 */
+        /* FAQ Content Area */
         .content-section {
             grid-column: 1 / -1;
             background: white;
@@ -164,7 +164,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -201,88 +201,88 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>❓</span>
-            <span id="pageTitle">FAQ 등록</span>
+            <span id="pageTitle">FAQ Registration</span>
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">제목<span class="required">*</span></div>
-                    <input type="text" id="faqTitle" class="info-input" placeholder="FAQ 제목을 입력하세요">
+                    <div class="info-label">Title<span class="required">*</span></div>
+                    <input type="text" id="faqTitle" class="info-input" placeholder="Enter FAQ title">
                     
-                    <div class="info-label">서비스 유형<span class="required">*</span></div>
+                    <div class="info-label">Service Type<span class="required">*</span></div>
                     <select id="serviceType" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="한글">한글</option>
-                        <option value="영어">영어</option>
+                        <option value="">Please select</option>
+                        <option value="한글">Korean</option>
+                        <option value="영어">English</option>
                     </select>
                     
-                    <div class="info-label">카테고리<span class="required">*</span></div>
+                    <div class="info-label">Category<span class="required">*</span></div>
                     <select id="category" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="서비스 이용">서비스 이용</option>
-                        <option value="계정정보">계정정보</option>
-                        <option value="결제하기">결제하기</option>
-                        <option value="공증">공증</option>
+                        <option value="">Please select</option>
+                        <option value="서비스 이용">Service Usage</option>
+                        <option value="계정정보">Account Info</option>
+                        <option value="결제하기">Billing</option>
+                        <option value="공증">Notarization</option>
                         <option value="Service">Service</option>
                         <option value="Account">Account</option>
                         <option value="Billing FAQ">Billing FAQ</option>
                         <option value="Notarization">Notarization</option>
                     </select>
                     
-                    <div class="info-label">공개여부<span class="required">*</span></div>
+                    <div class="info-label">Visibility<span class="required">*</span></div>
                     <select id="visibility" class="info-select">
-                        <option value="공개">공개</option>
-                        <option value="비공개">비공개</option>
+                        <option value="공개">Public</option>
+                        <option value="비공개">Private</option>
                     </select>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- FAQ 질문 섹션 -->
+    <!-- FAQ Question Section -->
     <div class="content-section">
-        <div class="section-title">FAQ 질문</div>
+        <div class="section-title">FAQ Question</div>
         <div class="info-content">
-            <textarea class="content-textarea" id="faqQuestion" placeholder="FAQ 질문을 입력하세요...
+            <textarea class="content-textarea" id="faqQuestion" placeholder="Enter FAQ question...
 
-예시:
-소리바로 서비스는 어떻게 이용하나요?"></textarea>
+Example:
+How do I use Soribaro service?"></textarea>
         </div>
     </div>
     
-    <!-- FAQ 답변 섹션 -->
+    <!-- FAQ Answer Section -->
     <div class="content-section">
-        <div class="section-title">FAQ 답변</div>
+        <div class="section-title">FAQ Answer</div>
         <div class="info-content">
-            <textarea class="content-textarea" id="faqAnswer" placeholder="FAQ 답변을 입력하세요...
+            <textarea class="content-textarea" id="faqAnswer" placeholder="Enter FAQ answer...
 
-예시:
-소리바로 서비스 이용 방법은 다음과 같습니다.
+Example:
+Here's how to use Soribaro service:
 
-1. 첫 번째 단계
-   - 상세 설명
+1. First step
+   - Detailed explanation
 
-2. 두 번째 단계
-   - 상세 설명
+2. Second step
+   - Detailed explanation
 
-추가 문의사항이 있으시면 고객센터로 연락해 주세요."></textarea>
+For additional inquiries, please contact customer service."></textarea>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-register" onclick="registerFaq()">
             <span id="registerIcon">📝</span>
-            <span id="registerText">등록</span>
+            <span id="registerText">Register</span>
         </button>
     </div>
 
@@ -290,11 +290,11 @@
         let isEditMode = false;
         let editItemId = null;
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('FAQ 등록 페이지 로드');
+            console.log('FAQ registration page loaded');
             
-            // URL 파라미터 확인 (수정 모드인지)
+            // Check URL parameters (check if edit mode)
             const urlParams = new URLSearchParams(window.location.search);
             const mode = urlParams.get('mode');
             const id = urlParams.get('id');
@@ -302,18 +302,18 @@
             if (mode === 'edit' && id) {
                 isEditMode = true;
                 editItemId = id;
-                document.getElementById('pageTitle').textContent = 'FAQ 수정';
+                document.getElementById('pageTitle').textContent = 'FAQ Edit';
                 document.getElementById('registerIcon').textContent = '✏️';
-                document.getElementById('registerText').textContent = '수정';
+                document.getElementById('registerText').textContent = 'Edit';
                 
-                // 기존 데이터 로드
+                // Load existing data
                 loadExistingData(id);
             }
         });
         
-        // 기존 데이터 로드 (수정 모드)
+        // Load existing data (edit mode)
         function loadExistingData(id) {
-            // 실제 구현 시 서버 API 호출
+            // Call server API in actual implementation
             const mockData = getMockData(id);
             
             document.getElementById('faqTitle').value = mockData.faqTitle;
@@ -324,58 +324,58 @@
             document.getElementById('faqAnswer').value = mockData.answer;
         }
         
-        // 임시 데이터 (수정 모드용)
+        // Mock data (for edit mode)
         function getMockData(id) {
             const mockDatabase = {
                 'FAQ001': {
-                    faqTitle: '소리바로 서비스 이용 방법',
+                    faqTitle: 'How to Use Soribaro Service',
                     serviceType: '한글',
                     category: '서비스 이용',
                     visibility: '공개',
-                    question: `소리바로 서비스는 어떻게 이용하나요?`,
-                    answer: `소리바로 서비스 이용 방법은 다음과 같습니다.
+                    question: `How do I use Soribaro service?`,
+                    answer: `Here's how to use Soribaro service:
 
-1. 회원가입
-   - 소리바로 홈페이지에 접속하여 회원가입을 진행합니다.
-   - 이메일 인증을 완료하면 서비스 이용이 가능합니다.
+1. Sign Up
+   - Visit the Soribaro website and complete the sign-up process.
+   - Once email verification is complete, you can use the service.
 
-2. 파일 업로드
-   - 로그인 후 '파일 업로드' 버튼을 클릭합니다.
-   - 음성 파일 또는 동영상 파일을 업로드합니다.
-   - 지원 형식: MP3, WAV, MP4, AVI 등
+2. Upload Files
+   - After logging in, click the 'Upload File' button.
+   - Upload audio or video files.
+   - Supported formats: MP3, WAV, MP4, AVI, etc.
 
-3. 옵션 선택
-   - 작업 유형을 선택합니다 (녹취록, 번역, 자막 등).
-   - 화자 수와 특수 요구사항을 입력합니다.
-   - 작업 완료 희망일을 설정합니다.
+3. Select Options
+   - Choose the type of work (transcription, translation, subtitles, etc.).
+   - Enter the number of speakers and any special requirements.
+   - Set the desired completion date.
 
-4. 결제
-   - 견적을 확인하고 결제를 진행합니다.
-   - 다양한 결제 수단을 지원합니다 (카드, 계좌이체, 포인트).
+4. Payment
+   - Review the quote and proceed with payment.
+   - Various payment methods are supported (card, bank transfer, points).
 
-5. 작업 진행
-   - 작업이 시작되면 실시간으로 진행 상황을 확인할 수 있습니다.
-   - 마이페이지에서 작업 현황을 모니터링할 수 있습니다.
+5. Work Progress
+   - Once work begins, you can check the progress in real-time.
+   - Monitor work status from My Page.
 
-6. 완료 및 다운로드
-   - 작업 완료 시 알림을 받게 됩니다.
-   - 완성된 파일을 다운로드하여 확인할 수 있습니다.
+6. Completion and Download
+   - You will receive a notification when work is completed.
+   - Download and review the completed files.
 
-추가 문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.`
+For additional inquiries, please contact our customer service (1588-1234).`
                 }
             };
             
             return mockDatabase[id] || {};
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'faq-management.html';
         }
         
-        // 등록/수정 기능
+        // Register/Edit function
         function registerFaq() {
-            // 필수 항목 검증
+            // Validate required fields
             const faqTitle = document.getElementById('faqTitle').value.trim();
             const serviceType = document.getElementById('serviceType').value;
             const category = document.getElementById('category').value;
@@ -384,39 +384,39 @@
             const faqAnswer = document.getElementById('faqAnswer').value.trim();
             
             if (!faqTitle) {
-                alert('제목을 입력해주세요.');
+                alert('Please enter title.');
                 document.getElementById('faqTitle').focus();
                 return;
             }
             
             if (!serviceType) {
-                alert('서비스 유형을 선택해주세요.');
+                alert('Please select service type.');
                 document.getElementById('serviceType').focus();
                 return;
             }
             
             if (!category) {
-                alert('카테고리를 선택해주세요.');
+                alert('Please select category.');
                 document.getElementById('category').focus();
                 return;
             }
             
             if (!faqQuestion) {
-                alert('FAQ 질문을 입력해주세요.');
+                alert('Please enter FAQ question.');
                 document.getElementById('faqQuestion').focus();
                 return;
             }
             
             if (!faqAnswer) {
-                alert('FAQ 답변을 입력해주세요.');
+                alert('Please enter FAQ answer.');
                 document.getElementById('faqAnswer').focus();
                 return;
             }
             
-            // 등록/수정 확인
-            const action = isEditMode ? '수정' : '등록';
-            if (confirm(`FAQ를 ${action}하시겠습니까?`)) {
-                // 실제 구현 시 서버 API 호출
+            // Confirm register/edit
+            const action = isEditMode ? 'edit' : 'register';
+            if (confirm(`Are you sure you want to ${action} this FAQ?`)) {
+                // Call server API in actual implementation
                 const formData = {
                     faqTitle: faqTitle,
                     serviceType: serviceType,
@@ -426,8 +426,8 @@
                     faqAnswer: faqAnswer
                 };
                 
-                console.log(`${action} 데이터:`, formData);
-                alert(`FAQ ${action}이 완료되었습니다.`);
+                console.log(`${action} data:`, formData);
+                alert(`FAQ ${action} completed.`);
                 goBack();
             }
         }

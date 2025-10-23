@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>팝업 이벤트 관리 - 소리바로 BO</title>
+    <title>Popup Event Management - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Area */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -97,7 +97,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Area */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -159,7 +159,7 @@
             cursor: pointer;
         }
         
-        /* 서비스 유형 배지 */
+        /* Service Type Badge */
         .service-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -178,7 +178,7 @@
             color: #92400e;
         }
         
-        /* 타겟 배지 */
+        /* Target Badge */
         .target-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -207,7 +207,7 @@
             color: #be185d;
         }
         
-        /* 사용여부 배지 */
+        /* Status Badge */
         .status-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -226,7 +226,7 @@
             color: #dc2626;
         }
         
-        /* 하단 액션 영역 */
+        /* Bottom Actions Area */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -252,7 +252,7 @@
             background: #059669;
         }
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -289,7 +289,7 @@
             cursor: not-allowed;
         }
         
-        /* 제목 정렬 */
+        /* Title Alignment */
         .title-cell {
             text-align: center !important;
         }
@@ -299,190 +299,190 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>🎉</span>
-            팝업 이벤트 관리
+            Popup Event Management
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Area -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">제목 검색</label>
-                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+                <label class="search-label">Title Search</label>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="Enter title">
             </div>
             
             <button class="search-btn" onclick="searchPopupData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>📝</span>
-                등록
+                Register
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Area -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">팝업 이벤트 목록</h2>
-            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+            <h2 class="table-title">Popup Event List</h2>
+            <div class="table-info">Total <span id="totalCount">10</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="300">제목</th>
-                    <th width="100">서비스유형</th>
-                    <th width="120">시작일</th>
-                    <th width="120">종료일</th>
-                    <th width="100">타겟</th>
-                    <th width="80">사용여부</th>
-                    <th width="100">등록자</th>
-                    <th width="150">등록일시</th>
-                    <th width="100">수정자</th>
-                    <th width="150">수정일시</th>
+                    <th width="300">Title</th>
+                    <th width="100">Service Type</th>
+                    <th width="120">Start Date</th>
+                    <th width="120">End Date</th>
+                    <th width="100">Target</th>
+                    <th width="80">Status</th>
+                    <th width="100">Registered By</th>
+                    <th width="150">Registration Date</th>
+                    <th width="100">Modified By</th>
+                    <th width="150">Modification Date</th>
                 </tr>
             </thead>
             <tbody id="popupTableBody">
                 <tr onclick="goToDetail('POPUP001')">
                     <td>10</td>
-                    <td class="title-cell">신규 회원 가입 이벤트</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">New Member Registration Event</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-08-01</td>
                     <td>2025-08-31</td>
-                    <td><span class="target-badge target-customer">고객</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-customer">Customer</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-27 09:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-27 09:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP002')">
                     <td>9</td>
-                    <td class="title-cell">여름 할인 이벤트</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">Summer Discount Event</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-07-01</td>
                     <td>2025-07-31</td>
-                    <td><span class="target-badge target-all">전체</span></td>
-                    <td><span class="status-badge status-inactive">미사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-all">All</span></td>
+                    <td><span class="status-badge status-inactive">Inactive</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-27 10:30:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-27 10:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP003')">
                     <td>8</td>
-                    <td class="title-cell">작업자 모집 공고</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">Worker Recruitment</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-08-15</td>
                     <td>2025-09-15</td>
-                    <td><span class="target-badge target-worker">작업자</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-worker">Worker</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-26 11:15:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-26 11:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP004')">
                     <td>7</td>
-                    <td class="title-cell">기업 서비스 런칭 이벤트</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">Corporate Service Launch Event</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-09-01</td>
                     <td>2025-09-30</td>
-                    <td><span class="target-badge target-enterprise">기업고객</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-enterprise">Enterprise</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-26 14:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-26 14:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP005')">
                     <td>6</td>
                     <td class="title-cell">New Service Launch Event</td>
-                    <td><span class="service-badge service-english">영어</span></td>
+                    <td><span class="service-badge service-english">English</span></td>
                     <td>2025-08-20</td>
                     <td>2025-09-20</td>
-                    <td><span class="target-badge target-customer">고객</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-customer">Customer</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-25 15:30:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-25 15:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP006')">
                     <td>5</td>
-                    <td class="title-cell">추석 연휴 서비스 안내</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">Chuseok Holiday Service Notice</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-09-15</td>
                     <td>2025-09-20</td>
-                    <td><span class="target-badge target-all">전체</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-all">All</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-25 16:45:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-25 16:45:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP007')">
                     <td>4</td>
-                    <td class="title-cell">포인트 적립 이벤트</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">Point Accumulation Event</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-08-10</td>
                     <td>2025-08-25</td>
-                    <td><span class="target-badge target-customer">고객</span></td>
-                    <td><span class="status-badge status-inactive">미사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-customer">Customer</span></td>
+                    <td><span class="status-badge status-inactive">Inactive</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-24 08:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-24 08:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP008')">
                     <td>3</td>
-                    <td class="title-cell">시스템 업데이트 안내</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">System Update Notice</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-08-28</td>
                     <td>2025-08-29</td>
-                    <td><span class="target-badge target-all">전체</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-all">All</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-24 09:30:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-24 09:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP009')">
                     <td>2</td>
                     <td class="title-cell">Worker Recruitment Notice</td>
-                    <td><span class="service-badge service-english">영어</span></td>
+                    <td><span class="service-badge service-english">English</span></td>
                     <td>2025-08-05</td>
                     <td>2025-09-05</td>
-                    <td><span class="target-badge target-worker">작업자</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-worker">Worker</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-23 10:15:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-23 10:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('POPUP010')">
                     <td>1</td>
-                    <td class="title-cell">서비스 이용 가이드</td>
-                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td class="title-cell">Service Usage Guide</td>
+                    <td><span class="service-badge service-korean">Korean</span></td>
                     <td>2025-08-01</td>
                     <td>2025-12-31</td>
-                    <td><span class="target-badge target-customer">고객</span></td>
-                    <td><span class="status-badge status-active">사용</span></td>
-                    <td>관리자</td>
+                    <td><span class="target-badge target-customer">Customer</span></td>
+                    <td><span class="status-badge status-active">Active</span></td>
+                    <td>Administrator</td>
                     <td>2025-08-23 11:00:00</td>
-                    <td>관리자</td>
+                    <td>Administrator</td>
                     <td>2025-08-23 11:00:00</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -494,51 +494,51 @@
     
 
     <script>
-        // 검색 기능
+        // Search function
         function searchPopupData() {
             const searchKeyword = document.getElementById('searchKeyword').value;
-            console.log('검색어:', searchKeyword);
+            console.log('Search keyword:', searchKeyword);
             
-            // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+            // Call server API in actual implementation
+            alert('Search function is running.\nKeyword: ' + (searchKeyword || 'All'));
         }
         
-        // 상세 페이지 이동
+        // Navigate to detail page
         function goToDetail(id) {
             const url = `popup-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 등록 페이지로 이동
+        // Navigate to registration page
         function openRegisterModal() {
             window.location.href = 'popup-register.html';
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Navigate to page:', page);
+            // Load page data in actual implementation
         }
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('팝업 이벤트 관리 페이지 로드 완료');
+            console.log('Popup event management page loaded');
             
-            // 엔터키로 검색
+            // Search with Enter key
             document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchPopupData();
                 }
             });
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in actual implementation
             loadPopupData();
         });
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadPopupData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('팝업 이벤트 데이터 로딩');
+            // Call server API in actual implementation
+            console.log('Loading popup event data');
         }
     </script>
 </body>

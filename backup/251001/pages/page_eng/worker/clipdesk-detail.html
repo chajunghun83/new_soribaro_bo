@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>클립데스크 작업 상세 - 소리바로 작업자</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+        
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 작업현황 섹션 */
+        .work-status-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            height: 650px;
+            overflow-y: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+            border-radius: 12px 12px 0 0;
+        }
+        
+        .work-details {
+            padding: 24px;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 24px;
+        }
+        
+        .detail-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .detail-value {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .detail-description {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+        
+        .detail-description .detail-label {
+            margin-bottom: 8px;
+        }
+        
+        .description-content {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .reference-link-box {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 38px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            word-break: break-all;
+            overflow-wrap: break-word;
+        }
+        
+        /* 상담자 작성 정보 섹션 */
+        .consultant-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            height: 650px;
+            overflow-y: auto;
+        }
+        
+        .consultant-form {
+            padding: 24px;
+        }
+        
+        .form-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 24px;
+        }
+        
+        .form-group {
+            display: contents;
+        }
+        
+        .form-group.full-width {
+            grid-column: 1 / -1;
+            margin-top: 10px;
+        }
+        
+        .form-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .form-input,
+        .form-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: #f3f4f6;
+            border-radius: 6px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .form-group.full-width .form-label {
+            margin-bottom: 8px;
+        }
+        
+        .form-textarea {
+            background: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 16px;
+            min-height: 120px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.6;
+            resize: none;
+        }
+        
+        /* 파일 리스트 영역 */
+        .file-list-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .file-list-container {
+            margin-top: 15px;
+        }
+
+        .file-list-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .file-list-table th,
+        .file-list-table td {
+            padding: 6px 8px;
+            text-align: center;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .file-list-table th {
+            background-color: #f9fafb;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .file-list-table td {
+            text-align: center;
+            font-size: 13px;
+        }
+
+        .file-list-actions {
+            margin-top: 15px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .btn-download {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            transition: background-color 0.2s;
+            white-space: nowrap;
+        }
+
+        .btn-download:hover {
+            background-color: #2563eb;
+        }
+
+        .btn-download-all {
+            background-color: #059669;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s;
+        }
+
+        .btn-download-all:hover {
+            background-color: #047857;
+        }
+
+        .icon-download::before {
+            content: "⬇️";
+        }
+        
+        /* URL 섹션 스타일 */
+        .url-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            padding: 15px 20px;
+            margin-bottom: 25px;
+        }
+
+        .url-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .url-input-group {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex: 1;
+        }
+
+        .url-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: #f9fafb;
+            color: #374151;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            cursor: default;
+        }
+
+        .url-input[readonly] {
+            background: #f9fafb;
+            color: #374151;
+            cursor: default;
+        }
+
+        .clipboard-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: background-color 0.2s;
+        }
+
+        .clipboard-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 하단 버튼 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+            padding: 20px 0;
+        }
+
+        .btn-cancel {
+            background-color: #ef4444;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+            margin-right: 10px;
+        }
+
+        .btn-cancel:hover {
+            background-color: #dc2626;
+        }
+
+        .btn-list {
+            background-color: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s;
+        }
+
+        .btn-list:hover {
+            background-color: #4b5563;
+        }
+    </style>
+</head>
+<body>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1 class="page-title" style="margin-bottom: 0;">
+            <span>🎬</span>
+            클립데스크 작업 상세
+        </h1>
+        <button class="back-button" onclick="goBack()" style="margin-bottom: 0;">
+            <span>←</span>
+            목록으로 돌아가기
+        </button>
+    </div>
+    
+    <!-- 의뢰정보 섹션 -->
+    <div class="work-status-section" style="grid-column: 1 / -1; height: auto; margin-bottom: 30px;">
+        <div class="section-title">의뢰정보</div>
+        <div class="work-details">
+            <!-- 첫 번째 행: 의뢰명, 서브타이틀, 편집 분야 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">의뢰명</div>
+                    <div class="detail-value" id="requestTitle">기업 홍보영상 제작</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">서브타이틀</div>
+                    <div class="detail-value" id="consultantSubTitle">2025년 신제품 런칭 홍보영상</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">편집 분야</div>
+                    <div class="detail-value" id="editField">롱폼</div>
+                </div>
+            </div>
+            
+            <!-- 두 번째 행: 제작 콘텐츠, 원본 러닝 타임, 카메라 대수 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">제작 콘텐츠</div>
+                    <div class="detail-value" id="contentType">교육 및 정보</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">원본 러닝 타임</div>
+                    <div class="detail-value" id="originalRuntime">60분</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">카메라 대수</div>
+                    <div class="detail-value" id="cameraCount">2대</div>
+                </div>
+            </div>
+            
+            <!-- 세 번째 행: 편집 등급, 인트로 유/무, 아웃트로 유/무 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">편집 등급</div>
+                    <div class="detail-value" id="editGrade">스탠다드 편집</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">인트로 유/무</div>
+                    <div class="detail-value" id="introYn">유</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">아웃트로 유/무</div>
+                    <div class="detail-value" id="outroYn">유</div>
+                </div>
+            </div>
+            
+            <!-- 네 번째 행: 채널 로고 유/무, 썸네일 종류, 최종본 예상 시간 -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-bottom: 20px;">
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">채널 로고 유/무</div>
+                    <div class="detail-value" id="channelLogoYn">유</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">썸네일 종류</div>
+                    <div class="detail-value" id="thumbnailType">디자인 썸네일</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 6px;">
+                    <div class="detail-label">최종본 예상 시간</div>
+                    <div class="detail-value" id="finalExpectedTime">45분</div>
+                </div>
+            </div>
+            
+            <!-- 참고 영상 링크 -->
+            <div class="detail-description">
+                <div class="detail-label">참고 영상 링크</div>
+                <div class="reference-link-box" id="referenceLink">-</div>
+            </div>
+            
+            <!-- 고객 요청 사항 -->
+            <div class="detail-description">
+                <div class="detail-label">고객 요청 사항</div>
+                <div class="description-content" id="customerRequest">
+                    기업 홍보용으로 전문적이고 깔끔한 느낌으로 편집해주세요. 
+                    
+주요 요청사항:
+- 브랜드 컬러(파란색 계열) 활용
+- 깔끔하고 모던한 느낌의 편집
+- 텍스트 애니메이션 포함
+- 배경음악은 차분하고 전문적인 느낌
+- 로고 애니메이션 인트로/아웃트로 필수
+- 썸네일은 메인 제품 이미지 활용
+
+편집 스타일:
+- 컷 편집 위주로 자연스럽게
+- 트랜지션은 심플하게
+- 자막은 깔끔한 폰트 사용
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 파일 리스트 -->
+    <div class="file-list-section">
+        <h3 class="section-title">파일 리스트</h3>
+        <div class="file-list-container">
+            <table class="file-list-table">
+                <thead>
+                    <tr>
+                        <th width="80">No.</th>
+                        <th>파일명</th>
+                        <th width="150">다운로드</th>
+                    </tr>
+                </thead>
+                <tbody id="fileListBody">
+                    <tr>
+                        <td>01</td>
+                        <td>작업완료_영상_최종본.mp4</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('작업완료_영상_최종본.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>02</td>
+                        <td>편집_영상_1차본.mp4</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('편집_영상_1차본.mp4')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>03</td>
+                        <td>썸네일_이미지.jpg</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('썸네일_이미지.jpg')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>04</td>
+                        <td>자막_파일.srt</td>
+                        <td>
+                            <button class="btn-download" onclick="downloadFile('자막_파일.srt')">
+                                <i class="icon-download"></i> 다운로드
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="file-list-actions">
+                <button class="btn-download-all" onclick="downloadAllFiles()">
+                    <i class="icon-download"></i> 모두 다운로드
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- URL 섹션 -->
+    <div class="url-section">
+        <div class="url-container">
+            <span style="margin: 0; font-size: 16px; font-weight: 600; color: #374151;">URL</span>
+            <div class="url-input-group">
+                <input type="url" id="urlInput" value="https://clipdesk.soribaro.co.kr/project/CLP-2025-001/detail" readonly class="url-input">
+                <button type="button" onclick="copyToClipboard()" class="clipboard-btn">
+                    클립보드에 복사
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 작업관리 섹션 -->
+    <div style="background: white; border-radius: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); border: 1px solid #e5e7eb; padding: 25px; margin-bottom: 30px;">
+        <h2 style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px; color: #1f2937; font-size: 18px; font-weight: 600;">
+            <span>🔧</span>
+            작업관리
+        </h2>
+        
+            <!-- 가편집 산출물 -->
+            <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #f9fafb;">
+                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">가편집 산출물</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <select id="rough-edit-0" style="flex: 1; max-width: 60%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-weight: 500; background: white;" onchange="updateWorkStatus('가편집', 'rough-edit-0')">
+                        <option value="작업대기">작업대기</option>
+                        <option value="작업시작">작업시작</option>
+                        <option value="초안완료" selected>초안완료</option>
+                        <option value="수정중">수정중</option>
+                        <option value="수정완료">수정완료</option>
+                        <option value="최종완료">최종완료</option>
+                    </select>
+                    <div id="rough-edit-buttons-0">
+                        <button onclick="handleRoughEditAction('0', 'upload')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">업로드</button>
+                        <button onclick="handleRoughEditAction('0', 'view')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">뷰어</button>
+                        <button onclick="handleRoughEditAction('0', 'delete')" style="background: #6b7280; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">삭제</button>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 본편집 산출물 -->
+            <div style="border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px; margin-bottom: 12px; background: #f9fafb;">
+                <label style="display: block; margin-bottom: 6px; font-weight: 500; color: #374151; font-size: 14px;">본편집 산출물</label>
+                <div style="display: flex; gap: 8px; align-items: center;">
+                    <select id="final-edit-0" style="flex: 1; max-width: 60%; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 6px; font-size: 14px; font-weight: 500; background: white;" onchange="updateWorkStatus('본편집', 'final-edit-0')">
+                        <option value="작업대기" selected>작업대기</option>
+                        <option value="작업시작">작업시작</option>
+                        <option value="초안완료">초안완료</option>
+                        <option value="수정중">수정중</option>
+                        <option value="수정완료">수정완료</option>
+                        <option value="최종완료">최종완료</option>
+                    </select>
+                    <div id="final-edit-buttons-0">
+                        <button onclick="handleFinalEditAction('0', 'confirm')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">확인</button>
+                        <button onclick="handleFinalEditAction('0', 'revert')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">되돌리기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 하단 버튼 영역 -->
+    <div class="bottom-actions">
+        <button class="btn-cancel" onclick="cancelWork()">작업취소</button>
+        <button class="btn-list" onclick="goToList()">목록</button>
+    </div>
+
+    <script>
+        // URL 파라미터에서 데이터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        
+        // 페이지 로드 시 파라미터 데이터로 폼 채우기
+        document.addEventListener('DOMContentLoaded', function() {
+            // URL 파라미터에서 데이터 추출
+            const orderNumber = urlParams.get('orderNumber');
+            const requestTitle = urlParams.get('requestTitle');
+            const subTitle = urlParams.get('subTitle');
+            const totalAmount = urlParams.get('totalAmount');
+            const partialAmount = urlParams.get('partialAmount');
+            const editor = urlParams.get('editor');
+            const status = urlParams.get('status');
+            const clientName = urlParams.get('clientName');
+            const email = urlParams.get('email');
+            const contact = urlParams.get('contact');
+            const requestDate = urlParams.get('requestDate');
+            const completeDate = urlParams.get('completeDate');
+            const workTime = urlParams.get('workTime');
+            
+            // 고객/의뢰정보 데이터 설정
+            if (orderNumber) document.getElementById('orderNumber').textContent = orderNumber;
+            if (requestTitle) document.getElementById('requestTitle').textContent = requestTitle;
+            if (clientName) document.getElementById('clientName').textContent = clientName;
+            if (email) document.getElementById('email').textContent = email;
+            if (contact) document.getElementById('contact').textContent = contact;
+            if (requestDate) document.getElementById('requestDate').textContent = requestDate;
+            if (status) document.getElementById('workStatus').textContent = status;
+            
+            // 참고 링크 설정
+            document.getElementById('referenceLink').textContent = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ (참고할 편집 스타일 영상)';
+            
+            // 최종결제금액 설정
+            if (totalAmount) {
+                document.getElementById('finalPaymentAmount').textContent = totalAmount + '원';
+            } else {
+                document.getElementById('finalPaymentAmount').textContent = '450,000원';
+            }
+            
+            // URL 파라미터에서 받은 데이터로 업데이트
+            if (requestTitle) document.getElementById('requestTitle').textContent = requestTitle;
+            if (subTitle) document.getElementById('consultantSubTitle').textContent = subTitle;
+            
+            console.log('클립데스크 작업 상세 페이지 파라미터:', {
+                orderNumber, requestTitle, subTitle, totalAmount, partialAmount, editor, status,
+                clientName, email, contact, requestDate, completeDate, workTime
+            });
+        });
+        
+
+        // 개별 파일 다운로드
+        function downloadFile(filename) {
+            console.log('다운로드 파일:', filename);
+            alert(filename + ' 파일 다운로드를 시작합니다.');
+        }
+
+        // 모든 파일 다운로드
+        function downloadAllFiles() {
+            const fileList = [
+                '작업완료_영상_최종본.mp4',
+                '편집_영상_1차본.mp4',
+                '썸네일_이미지.jpg',
+                '자막_파일.srt'
+            ];
+            
+            console.log('전체 파일 다운로드:', fileList);
+            alert('전체 파일 (' + fileList.length + '개) 다운로드를 시작합니다.');
+        }
+
+        // 작업취소 함수
+        function cancelWork() {
+            if (confirm('작업을 취소하시겠습니까?\n\n취소된 작업은 복구할 수 없습니다.')) {
+                alert('작업이 취소되었습니다.');
+                goBack();
+            }
+        }
+
+        // 클립보드에 URL 복사 함수
+        function copyToClipboard() {
+            const urlInput = document.getElementById('urlInput');
+            const url = urlInput.value;
+            
+            // 클립보드에 복사
+            navigator.clipboard.writeText(url).then(() => {
+                // 성공 시 버튼 텍스트 임시 변경
+                const button = document.querySelector('.clipboard-btn');
+                const originalText = button.textContent;
+                button.textContent = '복사완료!';
+                button.style.background = '#10b981';
+                
+                setTimeout(() => {
+                    button.textContent = originalText;
+                    button.style.background = '#3b82f6';
+                }, 2000);
+                
+            }).catch(err => {
+                // 클립보드 API가 지원되지 않는 경우 fallback
+                try {
+                    urlInput.select();
+                    urlInput.setSelectionRange(0, 99999); // 모바일 지원
+                    document.execCommand('copy');
+                    alert('URL이 클립보드에 복사되었습니다.');
+                } catch (fallbackErr) {
+                    alert('클립보드 복사에 실패했습니다.\nURL을 수동으로 복사해주세요.');
+                }
+            });
+        }
+
+        // 목록으로 돌아가기 함수
+        function goToList() {
+            try {
+                if (window.parent && window.parent !== window && typeof window.parent.loadPage === 'function') {
+                    window.parent.loadPage('pages/worker/clipdesk.html');
+                    return;
+                }
+            } catch (e) {
+                console.log('parent.loadPage 실패:', e);
+            }
+            
+            try {
+                if (window.history.length > 1) {
+                    window.history.back();
+                    return;
+                }
+            } catch (e) {
+                console.log('history.back() 실패:', e);
+            }
+            
+            try {
+                window.location.href = 'clipdesk.html';
+            } catch (e) {
+                console.log('직접 페이지 이동 실패:', e);
+                alert('이전 페이지로 돌아갈 수 없습니다.');
+            }
+        }
+        
+        // 뒤로 가기
+        function goBack() {
+            goToList();
+        }
+
+
+
+        // 작업 상태 업데이트 함수
+        function updateWorkStatus(workerName, dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            if (dropdown) {
+                const newStatus = dropdown.value;
+                console.log(`${workerName}의 ${dropdownId} 상태가 ${newStatus}로 변경되었습니다.`);
+                
+                // 워커 인덱스 추출
+                const workerIndex = dropdownId.split('-').pop();
+                
+                // 가편집 또는 본편집 구분
+                if (dropdownId.includes('rough-edit')) {
+                    updateRoughEditButtons(workerIndex, newStatus);
+                } else if (dropdownId.includes('final-edit')) {
+                    updateFinalEditButtons(workerIndex, newStatus);
+                }
+            }
+        }
+
+        // 가편집 버튼 업데이트
+        function updateRoughEditButtons(workerIndex, status) {
+            const buttonsContainer = document.getElementById(`rough-edit-buttons-${workerIndex}`);
+            if (!buttonsContainer) return;
+
+            let buttonsHTML = '';
+            switch(status) {
+                case '작업대기':
+                case '작업시작':
+                case '수정중':
+                case '최종완료':
+                    buttonsHTML = '<button onclick="handleRoughEditAction(\'' + workerIndex + '\', \'confirm\')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">확인</button>';
+                    break;
+                case '초안완료':
+                case '수정완료':
+                    buttonsHTML = '<button onclick="handleRoughEditAction(\'' + workerIndex + '\', \'upload\')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">업로드</button>' +
+                                 '<button onclick="handleRoughEditAction(\'' + workerIndex + '\', \'view\')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">뷰어</button>' +
+                                 '<button onclick="handleRoughEditAction(\'' + workerIndex + '\', \'delete\')" style="background: #6b7280; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">삭제</button>';
+                    break;
+            }
+            buttonsContainer.innerHTML = buttonsHTML;
+        }
+
+        // 본편집 버튼 업데이트
+        function updateFinalEditButtons(workerIndex, status) {
+            const buttonsContainer = document.getElementById(`final-edit-buttons-${workerIndex}`);
+            if (!buttonsContainer) return;
+
+            let buttonsHTML = '';
+            switch(status) {
+                case '작업대기':
+                    buttonsHTML = `
+                        <button onclick="handleFinalEditAction('${workerIndex}', 'confirm')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">확인</button>
+                        <button onclick="handleFinalEditAction('${workerIndex}', 'revert')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">되돌리기</button>
+                    `;
+                    break;
+                case '작업시작':
+                case '수정중':
+                case '최종완료':
+                    buttonsHTML = '<button onclick="handleFinalEditAction(\'' + workerIndex + '\', \'confirm\')" style="background: #3b82f6; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">확인</button>';
+                    break;
+                case '초안완료':
+                case '수정완료':
+                    buttonsHTML = '<button onclick="handleFinalEditAction(\'' + workerIndex + '\', \'upload\')" style="background: #10b981; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">업로드</button>' +
+                                 '<button onclick="handleFinalEditAction(\'' + workerIndex + '\', \'view\')" style="background: #ef4444; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap; margin-right: 4px;">뷰어</button>' +
+                                 '<button onclick="handleFinalEditAction(\'' + workerIndex + '\', \'delete\')" style="background: #6b7280; color: white; border: none; border-radius: 6px; padding: 8px 16px; font-size: 12px; cursor: pointer; font-weight: 500; white-space: nowrap;">삭제</button>';
+                    break;
+            }
+            buttonsContainer.innerHTML = buttonsHTML;
+        }
+
+        // 가편집 산출물 액션 처리
+        function handleRoughEditAction(workerIndex, actionType) {
+            switch(actionType) {
+                case 'confirm':
+                    const roughStatus = document.getElementById(`rough-edit-${workerIndex}`).value;
+                    alert(`가편집 ${roughStatus} 상태를 확인했습니다.`);
+                    break;
+                case 'upload':
+                    if (confirm('가편집 파일을 업로드하시겠습니까?')) {
+                        alert('가편집 파일이 성공적으로 업로드되었습니다.');
+                    }
+                    break;
+                case 'view':
+                    alert('가편집 파일 뷰어를 엽니다.\n\n실제 환경에서는 파일 뷰어가 새 창에서 열립니다.');
+                    break;
+                case 'delete':
+                    if (confirm('가편집 파일을 삭제하시겠습니까?')) {
+                        alert('가편집 파일이 삭제되었습니다.');
+                        // 삭제 후 업로드 버튼만 남기기
+                        updateRoughEditButtons(workerIndex, '초안완료');
+                    }
+                    break;
+            }
+        }
+
+        // 본편집 산출물 액션 처리
+        function handleFinalEditAction(workerIndex, actionType) {
+            switch(actionType) {
+                case 'confirm':
+                    const finalStatus = document.getElementById(`final-edit-${workerIndex}`).value;
+                    alert(`본편집 ${finalStatus} 상태를 확인했습니다.`);
+                    break;
+                case 'revert':
+                    if (confirm('가편집 완료 상태로 되돌리시겠습니까?')) {
+                        alert('가편집 완료 상태로 되돌렸습니다.');
+                        // 가편집 상태로 되돌리기
+                        document.getElementById(`rough-edit-${workerIndex}`).value = '초안완료';
+                        updateRoughEditButtons(workerIndex, '초안완료');
+                        document.getElementById(`final-edit-${workerIndex}`).value = '작업대기';
+                        updateFinalEditButtons(workerIndex, '작업대기');
+                    }
+                    break;
+                case 'upload':
+                    if (confirm('본편집 파일을 업로드하시겠습니까?')) {
+                        alert('본편집 파일이 성공적으로 업로드되었습니다.');
+                    }
+                    break;
+                case 'view':
+                    alert('본편집 파일 뷰어를 엽니다.\n\n실제 환경에서는 파일 뷰어가 새 창에서 열립니다.');
+                    break;
+                case 'delete':
+                    if (confirm('본편집 파일을 삭제하시겠습니까?')) {
+                        alert('본편집 파일이 삭제되었습니다.');
+                        // 삭제 후 업로드 버튼만 남기기
+                        updateFinalEditButtons(workerIndex, '초안완료');
+                    }
+                    break;
+            }
+        }
+    </script>
+</body>
+</html>

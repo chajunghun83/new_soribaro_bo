@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>팝업 이벤트 상세정보 - 소리바로 BO</title>
+    <title>Popup Event Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 서비스 유형 배지 */
+        /* Service Type Badge */
         .service-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -128,7 +128,7 @@
             color: #92400e;
         }
         
-        /* 타겟 배지 */
+        /* Target Badge */
         .target-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -158,7 +158,7 @@
             color: #be185d;
         }
 
-        /* 사용여부 배지 */
+        /* Status Badge */
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -178,7 +178,7 @@
             color: #dc2626;
         }
 
-        /* 팝업 내용 영역 */
+        /* Popup Content Area */
         .content-section {
             grid-column: 1 / -1;
             background: white;
@@ -201,7 +201,7 @@
             white-space: pre-wrap;
         }
 
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -245,253 +245,253 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>🎉</span>
-            팝업 이벤트 상세정보
+            Popup Event Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">제목</div>
-                    <div class="info-value" id="popupTitle">신규 회원 가입 이벤트</div>
+                    <div class="info-label">Title</div>
+                    <div class="info-value" id="popupTitle">New Member Registration Event</div>
                     
-                    <div class="info-label">서비스유형</div>
+                    <div class="info-label">Service Type</div>
                     <div class="info-value">
-                        <span id="serviceBadge" class="service-badge service-korean">한글</span>
+                        <span id="serviceBadge" class="service-badge service-korean">Korean</span>
                     </div>
                     
-                    <div class="info-label">타겟</div>
+                    <div class="info-label">Target</div>
                     <div class="info-value">
-                        <span id="targetBadge" class="target-badge target-customer">고객</span>
+                        <span id="targetBadge" class="target-badge target-customer">Customer</span>
                     </div>
                     
-                    <div class="info-label">사용여부</div>
+                    <div class="info-label">Status</div>
                     <div class="info-value">
-                        <span id="statusBadge" class="status-badge status-active">사용</span>
+                        <span id="statusBadge" class="status-badge status-active">Active</span>
                     </div>
                 </div>
             </div>
         </div>
         
-        <!-- 기간 정보 섹션 -->
+        <!-- Period/Registration Information Section -->
         <div class="info-section">
-            <div class="section-title">기간/등록 정보</div>
+            <div class="section-title">Period/Registration Info</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">시작일/종료일</div>
+                    <div class="info-label">Start/End Date</div>
                     <div class="info-value" id="dateRange">2025-08-01 ~ 2025-08-31</div>
                     
-                    <div class="info-label">등록자</div>
-                    <div class="info-value" id="registeredBy">관리자</div>
+                    <div class="info-label">Registered By</div>
+                    <div class="info-value" id="registeredBy">Administrator</div>
                     
-                    <div class="info-label">등록일시</div>
+                    <div class="info-label">Registration Date</div>
                     <div class="info-value" id="registeredDate">2025-08-27 09:00:00</div>
                     
-                    <div class="info-label">수정자</div>
-                    <div class="info-value" id="modifiedBy">관리자</div>
+                    <div class="info-label">Modified By</div>
+                    <div class="info-value" id="modifiedBy">Administrator</div>
                     
-                    <div class="info-label">수정일시</div>
+                    <div class="info-label">Modification Date</div>
                     <div class="info-value" id="modifiedDate">2025-08-27 09:00:00</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 팝업 내용 섹션 -->
+    <!-- Popup Content Section -->
     <div class="content-section">
-        <div class="section-title">팝업 내용</div>
+        <div class="section-title">Popup Content</div>
         <div class="info-content">
-            <div class="content-display" id="popupContent">🎉 신규 회원 가입 이벤트 🎉
+            <div class="content-display" id="popupContent">🎉 New Member Registration Event 🎉
 
-소리바로 서비스에 오신 것을 환영합니다!
+Welcome to Soribaro service!
 
-■ 이벤트 기간
-2025년 8월 1일 ~ 2025년 8월 31일
+■ Event Period
+August 1, 2025 ~ August 31, 2025
 
-■ 이벤트 내용
-✅ 신규 회원 가입 시 1,000 포인트 즉시 지급
-✅ 첫 번째 서비스 이용 시 20% 할인 쿠폰 제공
-✅ 친구 추천 시 추가 500 포인트 지급
+■ Event Details
+✅ 1,000 points instantly credited upon new member registration
+✅ 20% discount coupon provided for first service usage
+✅ Additional 500 points when referring friends
 
-■ 참여 방법
-1. 소리바로 홈페이지에서 회원가입
-2. 이메일 인증 완료
-3. 포인트 자동 지급 확인
+■ How to Participate
+1. Sign up on Soribaro website
+2. Complete email verification
+3. Check automatic point credit
 
-■ 주의사항
-- 본 이벤트는 신규 회원에게만 적용됩니다.
-- 중복 참여는 불가능합니다.
-- 이벤트 기간 내에 가입한 회원에게만 혜택이 제공됩니다.
+■ Notes
+- This event applies to new members only.
+- Duplicate participation is not allowed.
+- Benefits are provided only to members who sign up during the event period.
 
-문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.
+For inquiries, please contact customer service (1588-1234).
 
-감사합니다.</div>
+Thank you.</div>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-action btn-edit" onclick="editPopup()">
             <span>✏️</span>
-            수정
+            Edit
         </button>
         <button class="btn-action btn-delete" onclick="deletePopup()">
             <span>🗑️</span>
-            삭제
+            Delete
         </button>
     </div>
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('팝업 이벤트 상세 페이지 로드, ID:', itemId);
+            console.log('Popup event detail page loaded, ID:', itemId);
             loadPopupDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detail information
         function loadPopupDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in actual implementation
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'POPUP001': {
-                    serviceType: '한글',
+                    serviceType: 'Korean',
                     serviceClass: 'service-korean',
-                    popupTitle: '신규 회원 가입 이벤트',
-                    target: '고객',
+                    popupTitle: 'New Member Registration Event',
+                    target: 'Customer',
                     targetClass: 'target-customer',
-                    status: '사용',
+                    status: 'Active',
                     statusClass: 'status-active',
                     startDate: '2025-08-01',
                     endDate: '2025-08-31',
-                    registeredBy: '관리자',
+                    registeredBy: 'Administrator',
                     registeredDate: '2025-08-27 09:00:00',
-                    modifiedBy: '관리자',
+                    modifiedBy: 'Administrator',
                     modifiedDate: '2025-08-27 09:00:00',
-                    content: `🎉 신규 회원 가입 이벤트 🎉
+                    content: `🎉 New Member Registration Event 🎉
 
-소리바로 서비스에 오신 것을 환영합니다!
+Welcome to Soribaro service!
 
-■ 이벤트 기간
-2025년 8월 1일 ~ 2025년 8월 31일
+■ Event Period
+August 1, 2025 ~ August 31, 2025
 
-■ 이벤트 내용
-✅ 신규 회원 가입 시 1,000 포인트 즉시 지급
-✅ 첫 번째 서비스 이용 시 20% 할인 쿠폰 제공
-✅ 친구 추천 시 추가 500 포인트 지급
+■ Event Details
+✅ 1,000 points instantly credited upon new member registration
+✅ 20% discount coupon provided for first service usage
+✅ Additional 500 points when referring friends
 
-■ 참여 방법
-1. 소리바로 홈페이지에서 회원가입
-2. 이메일 인증 완료
-3. 포인트 자동 지급 확인
+■ How to Participate
+1. Sign up on Soribaro website
+2. Complete email verification
+3. Check automatic point credit
 
-■ 주의사항
-- 본 이벤트는 신규 회원에게만 적용됩니다.
-- 중복 참여는 불가능합니다.
-- 이벤트 기간 내에 가입한 회원에게만 혜택이 제공됩니다.
+■ Notes
+- This event applies to new members only.
+- Duplicate participation is not allowed.
+- Benefits are provided only to members who sign up during the event period.
 
-문의사항이 있으시면 고객센터(1588-1234)로 연락해 주세요.
+For inquiries, please contact customer service (1588-1234).
 
-감사합니다.`
+Thank you.`
                 },
                 'POPUP002': {
-                    serviceType: '한글',
+                    serviceType: 'Korean',
                     serviceClass: 'service-korean',
-                    popupTitle: '여름 할인 이벤트',
-                    target: '전체',
+                    popupTitle: 'Summer Discount Event',
+                    target: 'All',
                     targetClass: 'target-all',
-                    status: '미사용',
+                    status: 'Inactive',
                     statusClass: 'status-inactive',
                     startDate: '2025-07-01',
                     endDate: '2025-07-31',
-                    registeredBy: '관리자',
+                    registeredBy: 'Administrator',
                     registeredDate: '2025-08-27 10:30:00',
-                    modifiedBy: '관리자',
+                    modifiedBy: 'Administrator',
                     modifiedDate: '2025-08-27 10:30:00',
-                    content: `🌞 여름 할인 이벤트 🌞
+                    content: `🌞 Summer Discount Event 🌞
 
-뜨거운 여름, 시원한 할인으로 만나보세요!
+Cool off the hot summer with refreshing discounts!
 
-■ 이벤트 기간
-2025년 7월 1일 ~ 2025년 7월 31일
+■ Event Period
+July 1, 2025 ~ July 31, 2025
 
-■ 할인 내용
-🎯 모든 서비스 30% 할인
-🎯 추가 작업 시 50% 할인
-🎯 기업 고객 특별 할인 최대 40%
+■ Discount Details
+🎯 30% discount on all services
+🎯 50% discount on additional work
+🎯 Up to 40% special discount for corporate customers
 
-■ 이용 방법
-1. 서비스 신청 시 할인 쿠폰 코드 입력
-2. 자동 할인 적용 확인
-3. 결제 완료
+■ How to Use
+1. Enter discount coupon code when requesting service
+2. Confirm automatic discount application
+3. Complete payment
 
-■ 쿠폰 코드
+■ Coupon Code
 SUMMER2025
 
-여름 더위를 식혀줄 특별한 혜택을 놓치지 마세요!`
+Don't miss this special offer to beat the summer heat!`
                 },
                 'POPUP003': {
-                    serviceType: '한글',
+                    serviceType: 'Korean',
                     serviceClass: 'service-korean',
-                    popupTitle: '작업자 모집 공고',
-                    target: '작업자',
+                    popupTitle: 'Worker Recruitment',
+                    target: 'Worker',
                     targetClass: 'target-worker',
-                    status: '사용',
+                    status: 'Active',
                     statusClass: 'status-active',
                     startDate: '2025-08-15',
                     endDate: '2025-09-15',
-                    registeredBy: '관리자',
+                    registeredBy: 'Administrator',
                     registeredDate: '2025-08-26 11:15:00',
-                    modifiedBy: '관리자',
+                    modifiedBy: 'Administrator',
                     modifiedDate: '2025-08-26 11:15:00',
-                    content: `📢 작업자 모집 공고 📢
+                    content: `📢 Worker Recruitment Notice 📢
 
-소리바로와 함께 성장할 전문 작업자를 모집합니다!
+We are recruiting professional workers to grow together with Soribaro!
 
-■ 모집 분야
-✅ 음성 전사 작업자
-✅ 번역 전문가
-✅ 검수 담당자
-✅ 자막 제작자
+■ Recruitment Fields
+✅ Voice transcription workers
+✅ Translation specialists
+✅ Review staff
+✅ Subtitle creators
 
-■ 지원 자격
-- 관련 분야 경험 1년 이상
-- 정확하고 신속한 작업 능력
-- 책임감 있는 업무 수행
+■ Qualifications
+- At least 1 year of experience in the relevant field
+- Accurate and prompt work ability
+- Responsible work performance
 
-■ 우대 사항
-- 관련 자격증 보유자
-- 다국어 능력자
-- 장기 근무 가능자
+■ Preferred Qualifications
+- Holders of relevant certifications
+- Multilingual capabilities
+- Long-term availability
 
-■ 지원 방법
-이메일: recruit@soribaro.com
-전화: 1588-1234
+■ How to Apply
+Email: recruit@soribaro.com
+Phone: 1588-1234
 
-많은 관심과 지원 부탁드립니다.`
+We appreciate your interest and application.`
                 }
             };
             
             return mockDatabase[id] || mockDatabase['POPUP001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('serviceBadge').textContent = data.serviceType;
             document.getElementById('serviceBadge').className = `service-badge ${data.serviceClass}`;
@@ -508,22 +508,22 @@ SUMMER2025
             document.getElementById('popupContent').textContent = data.content;
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'popup-management.html';
         }
         
-        // 수정 기능
+        // Edit function
         function editPopup() {
             const url = `popup-register.html?id=${itemId}&mode=edit`;
             window.location.href = url;
         }
         
-        // 삭제 기능
+        // Delete function
         function deletePopup() {
-            if (confirm('이 팝업 이벤트를 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
-                alert('팝업 이벤트가 삭제되었습니다.');
-                // 실제 구현 시 서버 API 호출하여 삭제
+            if (confirm('Are you sure you want to delete this popup event?\nDeleted data cannot be recovered.')) {
+                alert('Popup event has been deleted.');
+                // Call server API to delete in actual implementation
                 goBack();
             }
         }

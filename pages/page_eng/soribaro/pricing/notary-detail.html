@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공증신청/기록완본 상세정보 - 소리바로 BO</title>
+    <title>Notary/Record Completion Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
         
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 구분 배지 */
+        /* Category Badge */
         .category-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -128,13 +128,13 @@
             color: #92400e;
         }
         
-        /* 할인률 표시 */
+        /* Discount Rate Display */
         .discount-rate {
             color: #dc2626;
             font-weight: 600;
         }
         
-        /* 가격 정보 */
+        /* Price Information */
         .price-info {
             background: #f0f9ff;
             border: 1px solid #bae6fd;
@@ -173,7 +173,7 @@
             font-weight: 700 !important;
         }
         
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -195,7 +195,7 @@
             line-height: 1.6;
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -270,73 +270,73 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>💰</span>
-            공증신청/기록완본 상세정보
+            Notary/Record Completion Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">구분</div>
+                    <div class="info-label">Category</div>
                     <div class="info-value">
-                        <span id="categoryBadge" class="category-badge category-notary">공증</span>
+                        <span id="categoryBadge" class="category-badge category-notary">Notary</span>
                     </div>
                     
-                    <div class="info-label">분류명</div>
+                    <div class="info-label">Name</div>
                     <div class="info-value" id="categoryName">공증서류 발급 서비스</div>
                     
-                    <div class="info-label">시작일</div>
+                    <div class="info-label">Start Date</div>
                     <div class="info-value" id="startDate">2025-01-01 00:00:00</div>
                     
-                    <div class="info-label">종료일</div>
+                    <div class="info-label">End Date</div>
                     <div class="info-value" id="endDate">9999-12-31 23:59:59</div>
                 </div>
             </div>
         </div>
         
-        <!-- 금액 정보 섹션 -->
+        <!-- Price Information Section -->
         <div class="info-section">
-            <div class="section-title">금액 정보</div>
+            <div class="section-title">Price Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">현재요금</div>
-                    <div class="info-value" id="currentPrice">50,000원</div>
+                    <div class="info-label">Current Price</div>
+                    <div class="info-value" id="currentPrice">50,000WON</div>
                     
-                    <div class="info-label">할인율</div>
+                    <div class="info-label">Discount Rate</div>
                     <div class="info-value">
                         <span id="discountRate" class="discount-rate">10%</span>
                     </div>
                 </div>
                 
-                <!-- 가격 정보 -->
+                <!-- Price Information -->
                 <div class="price-info">
                     <div class="price-row">
-                        <span class="price-label">정가</span>
-                        <span class="price-value" id="originalPrice">50,000원</span>
+                        <span class="price-label">Original Price</span>
+                        <span class="price-value" id="originalPrice">50,000WON</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label">할인금액</span>
-                        <span class="price-value" id="discountAmount">-5,000원</span>
+                        <span class="price-label">Discount Amount</span>
+                        <span class="price-value" id="discountAmount">-5,000WON</span>
                     </div>
                     <div class="price-row">
-                        <span class="price-label final-price">최종 판매가</span>
-                        <span class="price-value final-price" id="finalPrice">45,000원</span>
+                        <span class="price-label final-price">Final Price</span>
+                        <span class="price-value final-price" id="finalPrice">45,000WON</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 상세 설명 섹션 -->
+    <!-- Detailed Description Section -->
     <div class="description-section">
-        <div class="section-title">상세 설명</div>
+        <div class="section-title">Detailed Description</div>
         <div class="info-content">
             <div class="description-content" id="detailDescription">
                 공증서류 발급 서비스에 대한 상세 설명입니다.
@@ -368,32 +368,32 @@
 
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('공증신청/기록완본 상세 페이지 로드, ID:', itemId);
+            console.log('Notary/Record Completion Details page loaded, ID:', itemId);
             loadNotaryDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detailed information
         function loadNotaryDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in production
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'NOT001': {
-                    category: '공증',
+                    category: 'Notary',
                     categoryClass: 'category-notary',
                     name: '공증신청 가격 정책_2025-08-27',
-                    currentPrice: '50,000원',
+                    currentPrice: '50,000WON',
                     discountRate: '10%',
                     startDate: '2025-01-01 00:00:00',
                     endDate: '9999-12-31 23:59:59',
@@ -401,10 +401,10 @@
                     discountPercent: 10
                 },
                 'REC001': {
-                    category: '기록',
+                    category: 'Record',
                     categoryClass: 'category-record',
                     name: '기록완본 가격 정책_2025-08-27',
-                    currentPrice: '30,000원',
+                    currentPrice: '30,000WON',
                     discountRate: '15%',
                     startDate: '2025-01-01 00:00:00',
                     endDate: '9999-12-31 23:59:59',
@@ -416,7 +416,7 @@
             return mockDatabase[id] || mockDatabase['NOT001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('categoryBadge').textContent = data.category;
             document.getElementById('categoryBadge').className = `category-badge ${data.categoryClass}`;
@@ -426,16 +426,16 @@
             document.getElementById('startDate').textContent = data.startDate;
             document.getElementById('endDate').textContent = data.endDate;
             
-            // 가격 계산
+            // Calculate price
             const discountAmount = Math.round(data.originalPrice * data.discountPercent / 100);
             const finalPrice = data.originalPrice - discountAmount;
             
-            document.getElementById('originalPrice').textContent = data.originalPrice.toLocaleString() + '원';
-            document.getElementById('discountAmount').textContent = '-' + discountAmount.toLocaleString() + '원';
-            document.getElementById('finalPrice').textContent = finalPrice.toLocaleString() + '원';
+            document.getElementById('originalPrice').textContent = data.originalPrice.toLocaleString() + 'WON';
+            document.getElementById('discountAmount').textContent = '-' + discountAmount.toLocaleString() + 'WON';
+            document.getElementById('finalPrice').textContent = finalPrice.toLocaleString() + 'WON';
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'notary-management.html';
         }

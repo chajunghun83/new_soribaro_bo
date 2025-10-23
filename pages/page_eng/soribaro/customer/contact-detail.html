@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact US 상세정보 - 소리바로 BO</title>
+    <title>Contact US Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,13 +56,13 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: block;
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
 
-        /* 첨부파일 스타일 */
+        /* Attachment File Style */
         .file-list {
             display: flex;
             flex-direction: column;
@@ -152,7 +152,7 @@
             font-style: italic;
         }
 
-        /* 문의 내용 영역 */
+        /* Inquiry Content Section */
         .inquiry-section {
             grid-column: 1 / -1;
             background: white;
@@ -175,7 +175,7 @@
             white-space: pre-wrap;
         }
 
-        /* 상태 배지 */
+        /* Status Badge */
         .status-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -207,30 +207,30 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📞</span>
-            Contact US 상세정보
+            Contact US Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 문의 정보 섹션 -->
+        <!-- Inquiry Information Section -->
         <div class="info-section">
-            <div class="section-title">문의 정보</div>
+            <div class="section-title">Inquiry Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <!-- 첫 번째 줄: 이름 | 등록일시 -->
-                    <div class="info-label">이름</div>
+                    <!-- First Row: Name | Registered Date -->
+                    <div class="info-label">Name</div>
                     <div class="info-value" id="customerName">김철수</div>
-                    <div class="info-label">등록일시</div>
+                    <div class="info-label">Registered Date</div>
                     <div class="info-value" id="registeredDate">2025-08-27 14:30:00</div>
                     
-                    <!-- 두 번째 줄: 연락처 | 첨부파일 -->
-                    <div class="info-label">연락처</div>
+                    <!-- Second Row: Contact | Attachments -->
+                    <div class="info-label">Contact</div>
                     <div class="info-value" id="customerPhone">010-1234-5678</div>
-                    <div class="info-label">첨부파일</div>
+                    <div class="info-label">Attachments</div>
                     <div class="info-value" id="attachmentFiles">
                         <div class="file-list">
                             <div class="file-item">
@@ -241,8 +241,8 @@
                         </div>
                     </div>
                     
-                    <!-- 세 번째 줄: 이메일 -->
-                    <div class="info-label">이메일</div>
+                    <!-- Third Row: Email -->
+                    <div class="info-label">Email</div>
                     <div class="info-value" id="customerEmail">kim.cs@email.com</div>
                     <div></div>
                     <div></div>
@@ -251,9 +251,9 @@
         </div>
     </div>
     
-    <!-- 문의 내용 섹션 -->
+    <!-- Inquiry Content Section -->
     <div class="inquiry-section">
-        <div class="section-title">문의 내용</div>
+        <div class="section-title">Inquiry Content</div>
         <div class="info-content">
             <div class="inquiry-content" id="inquiryContent">안녕하세요. 소리바로 서비스에 대해 문의드립니다.
 
@@ -272,25 +272,25 @@
 
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameter
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Contact US 상세 페이지 로드, ID:', itemId);
+            console.log('Contact US Details page loaded, ID:', itemId);
             loadContactDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detail information
         function loadContactDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in production
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'CONTACT001': {
@@ -353,7 +353,7 @@
             return mockDatabase[id] || mockDatabase['CONTACT001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('customerName').textContent = data.customerName;
             document.getElementById('customerPhone').textContent = data.customerPhone;
@@ -361,16 +361,16 @@
             document.getElementById('registeredDate').textContent = data.registeredDate;
             document.getElementById('inquiryContent').textContent = data.inquiryContent;
             
-            // 첨부파일 렌더링
+            // Render attachments
             renderAttachments(data.attachments);
         }
         
-        // 첨부파일 렌더링
+        // Render attachments
         function renderAttachments(attachments) {
             const attachmentContainer = document.getElementById('attachmentFiles');
             
             if (!attachments || attachments.length === 0) {
-                attachmentContainer.innerHTML = '<div class="no-files">첨부파일이 없습니다.</div>';
+                attachmentContainer.innerHTML = '<div class="no-files">No attachments.</div>';
                 return;
             }
             
@@ -389,13 +389,13 @@
             attachmentContainer.innerHTML = html;
         }
         
-        // 파일 다운로드 (시연용)
+        // File download (demo)
         function downloadFile(fileName) {
-            alert(`파일 다운로드: ${fileName}`);
-            // 실제 구현 시 파일 다운로드 로직
+            alert(`File download: ${fileName}`);
+            // File download logic in production
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'contact-management.html';
         }

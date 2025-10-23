@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Contact US 관리 - 소리바로 BO</title>
+    <title>Contact US Management - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Section */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -113,7 +113,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Section */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -177,7 +177,7 @@
         
 
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -219,45 +219,45 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📞</span>
-            Contact US 관리
+            Contact US Management
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Section -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
                 <select id="searchType" class="search-select">
-                    <option value="name">이름</option>
-                    <option value="phone">연락처</option>
-                    <option value="email">이메일</option>
+                    <option value="name">Name</option>
+                    <option value="phone">Contact</option>
+                    <option value="email">Email</option>
                 </select>
-                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
+                <input type="text" id="searchKeyword" class="search-input" placeholder="Enter search term">
             </div>
             
             <button class="search-btn" onclick="searchContactData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Section -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">Contact US 목록</h2>
-            <div class="table-info">총 <span id="totalCount">15</span>건</div>
+            <h2 class="table-title">Contact US List</h2>
+            <div class="table-info">Total <span id="totalCount">15</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="120">이름</th>
-                    <th width="150">연락처</th>
-                    <th width="200">이메일</th>
-                    <th width="180">등록일시</th>
+                    <th width="120">Name</th>
+                    <th width="150">Contact</th>
+                    <th width="200">Email</th>
+                    <th width="180">Registered Date</th>
                 </tr>
             </thead>
             <tbody id="contactTableBody">
@@ -370,7 +370,7 @@
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -382,53 +382,53 @@
     
 
     <script>
-        // 검색 기능
+        // Search function
         function searchContactData() {
             const searchType = document.getElementById('searchType').value;
             const searchKeyword = document.getElementById('searchKeyword').value.trim();
-            console.log('검색 조건:', { searchType, searchKeyword });
+            console.log('Search criteria:', { searchType, searchKeyword });
             
             const searchTypeName = {
-                'name': '이름',
-                'phone': '연락처', 
-                'email': '이메일'
+                'name': 'Name',
+                'phone': 'Contact', 
+                'email': 'Email'
             };
             
-            // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n검색 조건: ' + searchTypeName[searchType] + '\n검색어: ' + (searchKeyword || '전체'));
+            // Call server API in production
+            alert('Search function executed.\nSearch Type: ' + searchTypeName[searchType] + '\nKeyword: ' + (searchKeyword || 'All'));
         }
         
-        // 상세 페이지 이동
+        // Go to detail page
         function goToDetail(id) {
             const url = `contact-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Go to page:', page);
+            // Load page data in production
         }
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('Contact US 관리 페이지 로드 완료');
+            console.log('Contact US Management page loaded');
             
-            // Enter 키로 검색
+            // Search with Enter key
             document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchContactData();
                 }
             });
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in production
             loadContactData();
         });
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadContactData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('Contact US 데이터 로딩');
+            // Call server API in production
+            console.log('Loading Contact US data');
         }
     </script>
 </body>

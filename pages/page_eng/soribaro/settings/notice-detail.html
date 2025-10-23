@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항 상세정보 - 소리바로 BO</title>
+    <title>Notice Details - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -108,7 +108,7 @@
             border: 1px solid #e5e7eb;
         }
         
-        /* 서비스 유형 배지 */
+        /* Service Type Badge */
         .service-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -128,7 +128,7 @@
             color: #92400e;
         }
         
-        /* 게시장소 배지 */
+        /* Posting Location Badge */
         .location-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -168,7 +168,7 @@
             color: #ea580c;
         }
 
-        /* 유형 배지 */
+        /* Type Badge */
         .type-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -188,7 +188,7 @@
             color: #6b7280;
         }
 
-        /* 상단고정 배지 */
+        /* Pin Badge */
         .pin-badge {
             display: inline-block;
             padding: 4px 12px;
@@ -208,7 +208,7 @@
             color: #6b7280;
         }
 
-        /* 공지사항 내용 영역 */
+        /* Notice Content Area */
         .content-section {
             grid-column: 1 / -1;
             background: white;
@@ -231,7 +231,7 @@
             white-space: pre-wrap;
         }
 
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -270,7 +270,7 @@
             background: #dc2626;
         }
 
-        /* 파일 첨부 영역 */
+        /* File Attachment Section */
         .file-attachment-section {
             grid-column: 1 / -1;
             background: white;
@@ -363,126 +363,126 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📢</span>
-            공지사항 상세정보
+            Notice Details
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">제목</div>
-                    <div class="info-value" id="noticeTitle">소리바로 서비스 업데이트 안내</div>
+                    <div class="info-label">Title</div>
+                    <div class="info-value" id="noticeTitle">Soribaro Service Update Notice</div>
                     
-                    <div class="info-label">서비스유형</div>
+                    <div class="info-label">Service Type</div>
                     <div class="info-value">
-                        <span id="serviceBadge" class="service-badge service-korean">한글</span>
+                        <span id="serviceBadge" class="service-badge service-korean">Korean</span>
                     </div>
                     
-                    <div class="info-label">게시장소</div>
+                    <div class="info-label">Posting Location</div>
                     <div class="info-value">
-                        <span id="locationBadge" class="location-badge location-user">사용자</span>
+                        <span id="locationBadge" class="location-badge location-user">User</span>
                     </div>
                     
-                    <div class="info-label">유형</div>
+                    <div class="info-label">Type</div>
                     <div class="info-value">
-                        <span id="typeBadge" class="type-badge type-general">일반</span>
+                        <span id="typeBadge" class="type-badge type-general">General</span>
                     </div>
                     
-                    <div class="info-label">상단고정</div>
+                    <div class="info-label">Pinned</div>
                     <div class="info-value">
                         <span id="pinBadge" class="pin-badge pin-yes">Y</span>
                     </div>
                     
-                    <div class="info-label">조회수</div>
+                    <div class="info-label">Views</div>
                     <div class="info-value" id="viewCount">1,234</div>
                 </div>
             </div>
         </div>
         
-        <!-- 등록/수정 정보 섹션 -->
+        <!-- Registration/Update Information Section -->
         <div class="info-section">
-            <div class="section-title">등록/수정 정보</div>
+            <div class="section-title">Registration/Update Info</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">등록자</div>
-                    <div class="info-value" id="registeredBy">관리자</div>
+                    <div class="info-label">Registered By</div>
+                    <div class="info-value" id="registeredBy">Administrator</div>
                     
-                    <div class="info-label">등록일시</div>
+                    <div class="info-label">Registration Date</div>
                     <div class="info-value" id="registeredDate">2025-08-27 09:00:00</div>
                     
-                    <div class="info-label">수정자</div>
-                    <div class="info-value" id="modifiedBy">관리자</div>
+                    <div class="info-label">Modified By</div>
+                    <div class="info-value" id="modifiedBy">Administrator</div>
                     
-                    <div class="info-label">수정일시</div>
+                    <div class="info-label">Modification Date</div>
                     <div class="info-value" id="modifiedDate">2025-08-27 09:00:00</div>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 공지사항 내용 섹션 -->
+    <!-- Notice Content Section -->
     <div class="content-section">
-        <div class="section-title">공지사항 내용</div>
+        <div class="section-title">Notice Content</div>
         <div class="info-content">
-            <div class="content-display" id="noticeContent">안녕하세요. 소리바로 서비스를 이용해 주셔서 감사합니다.
+            <div class="content-display" id="noticeContent">Hello. Thank you for using Soribaro service.
 
-이번에 소리바로 서비스가 새롭게 업데이트되어 안내드립니다.
+We are pleased to announce that Soribaro service has been newly updated.
 
-■ 주요 업데이트 내용
+■ Main Updates
 
-1. 음성인식 정확도 개선
-   - AI 음성인식 엔진 업그레이드로 정확도 95% 달성
-   - 방언 및 전문용어 인식률 향상
+1. Improved Voice Recognition Accuracy
+   - Achieved 95% accuracy with upgraded AI voice recognition engine
+   - Enhanced recognition rate for dialects and technical terms
 
-2. 새로운 기능 추가
-   - 실시간 음성 변환 기능
-   - 다중 화자 구분 자동 인식
-   - 타임스탬프 자동 삽입
+2. New Features Added
+   - Real-time voice conversion feature
+   - Automatic multi-speaker identification
+   - Automatic timestamp insertion
 
-3. 사용자 인터페이스 개선
-   - 직관적인 파일 업로드 인터페이스
-   - 작업 진행 상황 실시간 모니터링
-   - 모바일 최적화 완료
+3. User Interface Improvements
+   - Intuitive file upload interface
+   - Real-time work progress monitoring
+   - Mobile optimization completed
 
-4. 새로운 요금제 출시
-   - 개인 사용자를 위한 라이트 플랜
-   - 기업 고객을 위한 프리미엄 플랜
-   - 대용량 처리를 위한 엔터프라이즈 플랜
+4. New Pricing Plans Launch
+   - Light Plan for individual users
+   - Premium Plan for corporate customers
+   - Enterprise Plan for large-scale processing
 
-■ 적용 일정
-- 2025년 8월 30일(금) 오후 6시부터 적용
+■ Implementation Schedule
+- Applied from Friday, August 30, 2025, 6:00 PM
 
-■ 문의사항
-기타 궁금한 사항이 있으시면 고객센터(1588-1234)로 연락해 주시기 바랍니다.
+■ Inquiries
+For any questions, please contact customer service (1588-1234).
 
-감사합니다.</div>
+Thank you.</div>
         </div>
     </div>
     
-    <!-- 첨부파일 섹션 -->
+    <!-- Attachments Section -->
     <div class="file-attachment-section">
-        <div class="section-title">첨부파일</div>
+        <div class="section-title">Attachments</div>
         <div class="file-list" id="attachmentList">
-            <!-- 파일이 있는 경우 -->
+            <!-- If files exist -->
             <div class="file-item">
                 <div class="file-info">
                     <span class="file-icon">📄</span>
                     <div class="file-details">
-                        <span class="file-name">서비스_업데이트_상세내용.pdf</span>
+                        <span class="file-name">Service_Update_Details.pdf</span>
                         <span class="file-size">2.3 MB</span>
                     </div>
                 </div>
                 <div class="file-actions">
                     <button class="file-download" onclick="downloadFile('file1')">
                         <span>⬇️</span>
-                        다운로드
+                        Download
                     </button>
                 </div>
             </div>
@@ -491,172 +491,172 @@
                 <div class="file-info">
                     <span class="file-icon">🖼️</span>
                     <div class="file-details">
-                        <span class="file-name">UI_업데이트_스크린샷.png</span>
+                        <span class="file-name">UI_Update_Screenshot.png</span>
                         <span class="file-size">1.8 MB</span>
                     </div>
                 </div>
                 <div class="file-actions">
                     <button class="file-download" onclick="downloadFile('file2')">
                         <span>⬇️</span>
-                        다운로드
+                        Download
                     </button>
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-action btn-edit" onclick="editNotice()">
             <span>✏️</span>
-            수정
+            Edit
         </button>
         <button class="btn-action btn-delete" onclick="deleteNotice()">
             <span>🗑️</span>
-            삭제
+            Delete
         </button>
     </div>
 
     <script>
-        // URL 파라미터에서 ID 가져오기
+        // Get ID from URL parameters
         const urlParams = new URLSearchParams(window.location.search);
         const itemId = urlParams.get('id');
         
-        // 페이지 로드 시 데이터 로딩
+        // Load data on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('공지사항 상세 페이지 로드, ID:', itemId);
+            console.log('Notice detail page loaded, ID:', itemId);
             loadNoticeDetail(itemId);
         });
         
-        // 상세 정보 로딩
+        // Load detail information
         function loadNoticeDetail(id) {
-            // 실제 구현 시 서버 API 호출
-            // 임시 데이터로 UI 업데이트
+            // Call server API in actual implementation
+            // Update UI with mock data
             const mockData = getMockData(id);
             updateUI(mockData);
         }
         
-        // 임시 데이터 생성
+        // Generate mock data
         function getMockData(id) {
             const mockDatabase = {
                 'NOTICE001': {
-                    serviceType: '한글',
+                    serviceType: 'Korean',
                     serviceClass: 'service-korean',
-                    noticeTitle: '소리바로 서비스 업데이트 안내',
-                    location: '사용자',
+                    noticeTitle: 'Soribaro Service Update Notice',
+                    location: 'User',
                     locationClass: 'location-user',
-                    type: '일반',
+                    type: 'General',
                     typeClass: 'type-general',
                     pinned: 'Y',
                     pinnedClass: 'pin-yes',
                     viewCount: '1,234',
-                    registeredBy: '관리자',
+                    registeredBy: 'Administrator',
                     registeredDate: '2025-08-27 09:00:00',
-                    modifiedBy: '관리자',
+                    modifiedBy: 'Administrator',
                     modifiedDate: '2025-08-27 09:00:00',
                     attachedFiles: [
                         {
                             id: 'file1',
-                            name: '서비스_업데이트_상세내용.pdf',
+                            name: 'Service_Update_Details.pdf',
                             size: '2.3 MB',
                             icon: '📄',
                             url: '/files/service_update_details.pdf'
                         },
                         {
                             id: 'file2',
-                            name: 'UI_업데이트_스크린샷.png',
+                            name: 'UI_Update_Screenshot.png',
                             size: '1.8 MB',
                             icon: '🖼️',
                             url: '/files/ui_update_screenshot.png'
                         }
                     ],
-                    content: `안녕하세요. 소리바로 서비스를 이용해 주셔서 감사합니다.
+                    content: `Hello. Thank you for using Soribaro service.
 
-이번에 소리바로 서비스가 새롭게 업데이트되어 안내드립니다.
+We are pleased to announce that Soribaro service has been newly updated.
 
-■ 주요 업데이트 내용
+■ Main Updates
 
-1. 음성인식 정확도 개선
-   - AI 음성인식 엔진 업그레이드로 정확도 95% 달성
-   - 방언 및 전문용어 인식률 향상
+1. Improved Voice Recognition Accuracy
+   - Achieved 95% accuracy with upgraded AI voice recognition engine
+   - Enhanced recognition rate for dialects and technical terms
 
-2. 새로운 기능 추가
-   - 실시간 음성 변환 기능
-   - 다중 화자 구분 자동 인식
-   - 타임스탬프 자동 삽입
+2. New Features Added
+   - Real-time voice conversion feature
+   - Automatic multi-speaker identification
+   - Automatic timestamp insertion
 
-3. 사용자 인터페이스 개선
-   - 직관적인 파일 업로드 인터페이스
-   - 작업 진행 상황 실시간 모니터링
-   - 모바일 최적화 완료
+3. User Interface Improvements
+   - Intuitive file upload interface
+   - Real-time work progress monitoring
+   - Mobile optimization completed
 
-4. 새로운 요금제 출시
-   - 개인 사용자를 위한 라이트 플랜
-   - 기업 고객을 위한 프리미엄 플랜
-   - 대용량 처리를 위한 엔터프라이즈 플랜
+4. New Pricing Plans Launch
+   - Light Plan for individual users
+   - Premium Plan for corporate customers
+   - Enterprise Plan for large-scale processing
 
-■ 적용 일정
-- 2025년 8월 30일(금) 오후 6시부터 적용
+■ Implementation Schedule
+- Applied from Friday, August 30, 2025, 6:00 PM
 
-■ 문의사항
-기타 궁금한 사항이 있으시면 고객센터(1588-1234)로 연락해 주시기 바랍니다.
+■ Inquiries
+For any questions, please contact customer service (1588-1234).
 
-감사합니다.`
+Thank you.`
                 },
                 'NOTICE002': {
-                    serviceType: '한글',
+                    serviceType: 'Korean',
                     serviceClass: 'service-korean',
-                    noticeTitle: '시스템 점검 안내',
-                    location: '시스템관리자',
+                    noticeTitle: 'System Maintenance Notice',
+                    location: 'System Admin',
                     locationClass: 'location-system',
-                    type: '일반',
+                    type: 'General',
                     typeClass: 'type-general',
                     pinned: 'Y',
                     pinnedClass: 'pin-yes',
                     viewCount: '2,567',
-                    registeredBy: '관리자',
+                    registeredBy: 'Administrator',
                     registeredDate: '2025-08-27 10:30:00',
-                    modifiedBy: '관리자',
+                    modifiedBy: 'Administrator',
                     modifiedDate: '2025-08-27 10:30:00',
                     attachedFiles: [
                         {
                             id: 'file3',
-                            name: '시스템_점검_안내서.pdf',
+                            name: 'System_Maintenance_Guide.pdf',
                             size: '1.2 MB',
                             icon: '📄',
                             url: '/files/system_maintenance_guide.pdf'
                         }
                     ],
-                    content: `시스템 점검으로 인한 서비스 일시 중단 안내
+                    content: `Service Temporary Suspension Notice Due to System Maintenance
 
-안녕하세요. 소리바로 서비스 운영팀입니다.
+Hello. This is the Soribaro service operation team.
 
-서비스 품질 향상을 위한 시스템 점검을 실시하오니 이용에 참고하시기 바랍니다.
+We will conduct system maintenance to improve service quality. Please take note.
 
-■ 점검 일시
-- 2025년 8월 28일(토) 오전 2시 ~ 오전 6시 (4시간)
+■ Maintenance Schedule
+- Saturday, August 28, 2025, 2:00 AM ~ 6:00 AM (4 hours)
 
-■ 점검 내용
-- 서버 하드웨어 업그레이드
-- 데이터베이스 최적화
-- 보안 패치 적용
-- 백업 시스템 점검
+■ Maintenance Details
+- Server hardware upgrade
+- Database optimization
+- Security patch application
+- Backup system inspection
 
-■ 영향 범위
-- 전체 서비스 이용 불가
-- 파일 업로드/다운로드 불가
-- 회원가입/로그인 불가
+■ Impact Scope
+- All services unavailable
+- File upload/download unavailable
+- Member registration/login unavailable
 
-점검 시간 동안 서비스 이용에 불편을 드려 죄송합니다.
+We apologize for any inconvenience during the maintenance period.
 
-감사합니다.`
+Thank you.`
                 }
             };
             
             return mockDatabase[id] || mockDatabase['NOTICE001'];
         }
         
-        // UI 업데이트
+        // Update UI
         function updateUI(data) {
             document.getElementById('serviceBadge').textContent = data.serviceType;
             document.getElementById('serviceBadge').className = `service-badge ${data.serviceClass}`;
@@ -674,16 +674,16 @@
             document.getElementById('modifiedDate').textContent = data.modifiedDate;
             document.getElementById('noticeContent').textContent = data.content;
             
-            // 첨부파일 업데이트
+            // Update attachments
             updateAttachmentList(data.attachedFiles);
         }
         
-        // 첨부파일 목록 업데이트
+        // Update attachment list
         function updateAttachmentList(files) {
             const attachmentList = document.getElementById('attachmentList');
             
             if (!files || files.length === 0) {
-                attachmentList.innerHTML = '<div class="no-files">첨부된 파일이 없습니다.</div>';
+                attachmentList.innerHTML = '<div class="no-files">No attached files.</div>';
                 return;
             }
             
@@ -699,7 +699,7 @@
                     <div class="file-actions">
                         <button class="file-download" onclick="downloadFile('${file.id}')">
                             <span>⬇️</span>
-                            다운로드
+                            Download
                         </button>
                     </div>
                 </div>
@@ -708,29 +708,29 @@
             attachmentList.innerHTML = fileItems;
         }
         
-        // 파일 다운로드
+        // File download
         function downloadFile(fileId) {
-            // 실제 구현 시 서버에서 파일 다운로드 처리
-            console.log('파일 다운로드:', fileId);
-            alert('파일 다운로드를 시작합니다.');
+            // Handle file download from server in actual implementation
+            console.log('File download:', fileId);
+            alert('File download started.');
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'notice-management.html';
         }
         
-        // 수정 기능
+        // Edit function
         function editNotice() {
             const url = `notice-register.html?id=${itemId}&mode=edit`;
             window.location.href = url;
         }
         
-        // 삭제 기능
+        // Delete function
         function deleteNotice() {
-            if (confirm('이 공지사항을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.')) {
-                alert('공지사항이 삭제되었습니다.');
-                // 실제 구현 시 서버 API 호출하여 삭제
+            if (confirm('Are you sure you want to delete this notice?\nDeleted data cannot be recovered.')) {
+                alert('Notice has been deleted.');
+                // Call server API to delete in actual implementation
                 goBack();
             }
         }

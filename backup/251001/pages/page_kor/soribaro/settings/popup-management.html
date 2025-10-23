@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>팝업 이벤트 관리 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 20px;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        /* 검색 영역 */
+        .search-section {
+            background: white;
+            border-radius: 12px;
+            padding: 12px 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+        }
+        
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-label {
+            font-weight: 500;
+            color: #374151;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        
+        .search-input {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            background: white;
+            color: #374151;
+            min-width: 200px;
+        }
+        
+        .search-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-left: auto;
+        }
+        
+        .search-btn:hover {
+            background: #2563eb;
+        }
+        
+        /* 테이블 영역 */
+        .table-section {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .table-header {
+            background: #f8f9fa;
+            padding: 20px 25px;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .table-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+        }
+        
+        .table-info {
+            color: #6b7280;
+            font-size: 14px;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            flex: 1;
+        }
+        
+        .data-table th,
+        .data-table td {
+            padding: 8px 16px;
+            text-align: center;
+            border-bottom: 1px solid #f3f4f6;
+            font-size: 14px;
+        }
+        
+        .data-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .data-table td {
+            color: #6b7280;
+        }
+        
+        .data-table tbody tr:hover {
+            background: #f9fafb;
+            cursor: pointer;
+        }
+        
+        /* 서비스 유형 배지 */
+        .service-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .service-korean {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .service-english {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        /* 타겟 배지 */
+        .target-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .target-all {
+            background: #f3e8ff;
+            color: #7c3aed;
+        }
+        
+        .target-customer {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        
+        .target-worker {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .target-enterprise {
+            background: #fce7f3;
+            color: #be185d;
+        }
+        
+        /* 사용여부 배지 */
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        
+        .status-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-inactive {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        
+        /* 하단 액션 영역 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 25px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+        
+        /* 페이지네이션 */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 15px;
+            margin-bottom: 0;
+            gap: 8px;
+        }
+        
+        .pagination button {
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            background: white;
+            color: #374151;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+        
+        .pagination button:hover {
+            background: #f3f4f6;
+            border-color: #9ca3af;
+        }
+        
+        .pagination button.active {
+            background: #3b82f6;
+            color: white;
+            border-color: #3b82f6;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* 제목 정렬 */
+        .title-cell {
+            text-align: center !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>🎉</span>
+            팝업 이벤트 관리
+        </h1>
+    </div>
+    
+    <!-- 검색 영역 -->
+    <div class="search-section">
+        <div class="search-row">
+            <div style="flex: 1;"></div>
+            <div class="search-group">
+                <label class="search-label">제목 검색</label>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+            </div>
+            
+            <button class="search-btn" onclick="searchPopupData()">
+                <span>🔍</span>
+                검색
+            </button>
+            
+            <button class="btn-register" onclick="openRegisterModal()">
+                <span>📝</span>
+                등록
+            </button>
+        </div>
+    </div>
+    
+    <!-- 테이블 영역 -->
+    <div class="table-section">
+        <div class="table-header">
+            <h2 class="table-title">팝업 이벤트 목록</h2>
+            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+        </div>
+        
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th width="60">No.</th>
+                    <th width="300">제목</th>
+                    <th width="100">서비스유형</th>
+                    <th width="120">시작일</th>
+                    <th width="120">종료일</th>
+                    <th width="100">타겟</th>
+                    <th width="80">사용여부</th>
+                    <th width="100">등록자</th>
+                    <th width="150">등록일시</th>
+                    <th width="100">수정자</th>
+                    <th width="150">수정일시</th>
+                </tr>
+            </thead>
+            <tbody id="popupTableBody">
+                <tr onclick="goToDetail('POPUP001')">
+                    <td>10</td>
+                    <td class="title-cell">신규 회원 가입 이벤트</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-08-01</td>
+                    <td>2025-08-31</td>
+                    <td><span class="target-badge target-customer">고객</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-27 09:00:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-27 09:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP002')">
+                    <td>9</td>
+                    <td class="title-cell">여름 할인 이벤트</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-07-01</td>
+                    <td>2025-07-31</td>
+                    <td><span class="target-badge target-all">전체</span></td>
+                    <td><span class="status-badge status-inactive">미사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-27 10:30:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-27 10:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP003')">
+                    <td>8</td>
+                    <td class="title-cell">작업자 모집 공고</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-08-15</td>
+                    <td>2025-09-15</td>
+                    <td><span class="target-badge target-worker">작업자</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-26 11:15:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-26 11:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP004')">
+                    <td>7</td>
+                    <td class="title-cell">기업 서비스 런칭 이벤트</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-09-01</td>
+                    <td>2025-09-30</td>
+                    <td><span class="target-badge target-enterprise">기업고객</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-26 14:00:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-26 14:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP005')">
+                    <td>6</td>
+                    <td class="title-cell">New Service Launch Event</td>
+                    <td><span class="service-badge service-english">영어</span></td>
+                    <td>2025-08-20</td>
+                    <td>2025-09-20</td>
+                    <td><span class="target-badge target-customer">고객</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-25 15:30:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-25 15:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP006')">
+                    <td>5</td>
+                    <td class="title-cell">추석 연휴 서비스 안내</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-09-15</td>
+                    <td>2025-09-20</td>
+                    <td><span class="target-badge target-all">전체</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-25 16:45:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-25 16:45:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP007')">
+                    <td>4</td>
+                    <td class="title-cell">포인트 적립 이벤트</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-08-10</td>
+                    <td>2025-08-25</td>
+                    <td><span class="target-badge target-customer">고객</span></td>
+                    <td><span class="status-badge status-inactive">미사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-24 08:00:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-24 08:00:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP008')">
+                    <td>3</td>
+                    <td class="title-cell">시스템 업데이트 안내</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-08-28</td>
+                    <td>2025-08-29</td>
+                    <td><span class="target-badge target-all">전체</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-24 09:30:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-24 09:30:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP009')">
+                    <td>2</td>
+                    <td class="title-cell">Worker Recruitment Notice</td>
+                    <td><span class="service-badge service-english">영어</span></td>
+                    <td>2025-08-05</td>
+                    <td>2025-09-05</td>
+                    <td><span class="target-badge target-worker">작업자</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-23 10:15:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-23 10:15:00</td>
+                </tr>
+                <tr onclick="goToDetail('POPUP010')">
+                    <td>1</td>
+                    <td class="title-cell">서비스 이용 가이드</td>
+                    <td><span class="service-badge service-korean">한글</span></td>
+                    <td>2025-08-01</td>
+                    <td>2025-12-31</td>
+                    <td><span class="target-badge target-customer">고객</span></td>
+                    <td><span class="status-badge status-active">사용</span></td>
+                    <td>관리자</td>
+                    <td>2025-08-23 11:00:00</td>
+                    <td>관리자</td>
+                    <td>2025-08-23 11:00:00</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    
+    <!-- 페이지네이션 -->
+    <div class="pagination">
+        <button onclick="goToPage(1)" disabled>«</button>
+        <button onclick="goToPage(1)" disabled>‹</button>
+        <button class="active">1</button>
+        <button onclick="goToPage(2)">2</button>
+        <button onclick="goToPage(2)">›</button>
+        <button onclick="goToPage(2)">»</button>
+    </div>
+    
+
+    <script>
+        // 검색 기능
+        function searchPopupData() {
+            const searchKeyword = document.getElementById('searchKeyword').value;
+            console.log('검색어:', searchKeyword);
+            
+            // 실제 구현 시 서버 API 호출
+            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+        }
+        
+        // 상세 페이지 이동
+        function goToDetail(id) {
+            const url = `popup-detail.html?id=${id}`;
+            window.location.href = url;
+        }
+        
+        // 등록 페이지로 이동
+        function openRegisterModal() {
+            window.location.href = 'popup-register.html';
+        }
+        
+        // 페이지네이션
+        function goToPage(page) {
+            console.log('페이지 이동:', page);
+            // 실제 구현 시 페이지 데이터 로딩
+        }
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('팝업 이벤트 관리 페이지 로드 완료');
+            
+            // 엔터키로 검색
+            document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    searchPopupData();
+                }
+            });
+            
+            // 실제 구현 시 서버에서 데이터 로딩
+            loadPopupData();
+        });
+        
+        // 데이터 로딩 함수
+        function loadPopupData() {
+            // 실제 구현 시 서버 API 호출
+            console.log('팝업 이벤트 데이터 로딩');
+        }
+    </script>
+</body>
+</html>

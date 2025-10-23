@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>포인트 정책 등록 - 소리바로 BO</title>
+    <title>Point Policy Registration - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -164,7 +164,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -201,98 +201,98 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>💰</span>
-            포인트 정책 등록
+            Point Policy Registration
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">포인트 구분<span class="required">*</span></div>
+                    <div class="info-label">Point Type<span class="required">*</span></div>
                     <select id="pointTypeSelect" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="웰컴적립">웰컴적립</option>
-                        <option value="접수">접수</option>
-                        <option value="포인트 지급">포인트 지급</option>
+                        <option value="">Please select</option>
+                        <option value="Welcome Points">Welcome Points</option>
+                        <option value="Reception">Reception</option>
+                        <option value="Point Payment">Point Payment</option>
                     </select>
                     
-                    <div class="info-label">시작일<span class="required">*</span></div>
+                    <div class="info-label">Start Date<span class="required">*</span></div>
                     <input type="date" id="startDate" class="info-input">
                     
-                    <div class="info-label">종료일</div>
+                    <div class="info-label">End Date</div>
                     <input type="datetime-local" id="endDate" class="info-input" value="9999-12-31T23:59" readonly disabled>
                 </div>
             </div>
         </div>
         
-        <!-- 포인트 정보 섹션 -->
+        <!-- Point Information Section -->
         <div class="info-section">
-            <div class="section-title">포인트 정보</div>
+            <div class="section-title">Point Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">지급포인트<span class="required">*</span></div>
+                    <div class="info-label">Point Amount<span class="required">*</span></div>
                     <input type="number" id="pointAmount" class="info-input" placeholder="0" min="0">
                     
-                    <div class="info-label">단위<span class="required">*</span></div>
+                    <div class="info-label">Unit<span class="required">*</span></div>
                     <select id="pointUnit" class="info-select">
-                        <option value="원">원</option>
+                        <option value="WON">WON</option>
                         <option value="%">%</option>
                     </select>
                     
-                    <div class="info-label">만료기간(일)<span class="required">*</span></div>
+                    <div class="info-label">Expiry Period(days)<span class="required">*</span></div>
                     <input type="number" id="expiryDays" class="info-input" placeholder="365" min="1">
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 상세 설명 섹션 -->
+    <!-- Detailed Description Section -->
     <div class="description-section">
-        <div class="section-title">상세 설명</div>
+        <div class="section-title">Detailed Description</div>
         <div class="info-content">
-            <textarea class="description-textarea" id="detailDescription" placeholder="포인트 정책에 대한 상세 설명을 입력하세요..."></textarea>
+            <textarea class="description-textarea" id="detailDescription" placeholder="Enter detailed description of point policy..."></textarea>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-register" onclick="registerPointItem()">
             <span>📝</span>
-            등록
+            Register
         </button>
     </div>
 
     <script>
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('포인트 정책 등록 페이지 로드');
+            console.log('Point Policy Registration page loaded');
             
-            // 현재 날짜를 기본값으로 설정
+            // Set current date as default
             const now = new Date();
             const currentDate = now.toISOString().slice(0, 10);
             document.getElementById('startDate').value = currentDate;
             
-            // 포인트 구분 변경 시 기본값 설정
+            // Set default expiry period when point type changes
             document.getElementById('pointTypeSelect').addEventListener('change', function() {
                 const pointType = this.value;
                 const expiryDaysInput = document.getElementById('expiryDays');
                 
-                // 포인트 구분별 기본 만료기간 설정
+                // Set default expiry period by point type
                 switch(pointType) {
-                    case '웰컴적립':
+                    case 'Welcome Points':
                         expiryDaysInput.value = '365';
                         break;
-                    case '접수':
+                    case 'Reception':
                         expiryDaysInput.value = '180';
                         break;
-                    case '포인트 지급':
+                    case 'Point Payment':
                         expiryDaysInput.value = '90';
                         break;
                     default:
@@ -301,14 +301,14 @@
             });
         });
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'point-management.html';
         }
         
-        // 등록 기능
+        // Registration function
         function registerPointItem() {
-            // 필수 항목 검증
+            // Validate required fields
             const pointType = document.getElementById('pointTypeSelect').value;
             const pointAmount = document.getElementById('pointAmount').value;
             const pointUnit = document.getElementById('pointUnit').value;
@@ -317,32 +317,32 @@
             const endDate = document.getElementById('endDate').value;
             
             if (!pointType) {
-                alert('포인트 구분을 선택해주세요.');
+                alert('Please select point type.');
                 document.getElementById('pointTypeSelect').focus();
                 return;
             }
             
             if (!pointAmount || pointAmount <= 0) {
-                alert('지급포인트를 입력해주세요.');
+                alert('Please enter point amount.');
                 document.getElementById('pointAmount').focus();
                 return;
             }
             
             if (!expiryDays || expiryDays <= 0) {
-                alert('만료기간(일)을 입력해주세요.');
+                alert('Please enter expiry period(days).');
                 document.getElementById('expiryDays').focus();
                 return;
             }
             
             if (!startDate) {
-                alert('시작일을 입력해주세요.');
+                alert('Please enter start date.');
                 document.getElementById('startDate').focus();
                 return;
             }
             
-            // 등록 확인
-            if (confirm('새로운 포인트 정책을 등록하시겠습니까?')) {
-                // 실제 구현 시 서버 API 호출
+            // Confirm registration
+            if (confirm('Do you want to register new point policy?')) {
+                // Call server API in production
                 const formData = {
                     pointType: pointType,
                     pointAmount: parseInt(pointAmount),
@@ -353,8 +353,8 @@
                     description: document.getElementById('detailDescription').value.trim()
                 };
                 
-                console.log('등록 데이터:', formData);
-                alert('포인트 정책 등록이 완료되었습니다.');
+                console.log('Registration data:', formData);
+                alert('Point policy registration completed.');
                 goBack();
             }
         }

@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>서비스 약관 등록 - 소리바로 BO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            padding: 30px;
+            min-height: 100vh;
+        }
+        
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+        
+        .page-title {
+            font-size: 28px;
+            font-weight: 600;
+            color: #374151;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .back-button {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .back-button:hover {
+            background: #4b5563;
+        }
+
+        /* 메인 컨테이너 */
+        .detail-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        
+        /* 정보 섹션 */
+        .info-section {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #374151;
+            padding: 20px 24px;
+            border-bottom: 1px solid #e5e7eb;
+            background: #f8f9fa;
+        }
+        
+        .info-content {
+            padding: 24px;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            gap: 16px 20px;
+            margin-bottom: 20px;
+        }
+        
+        .info-label {
+            font-weight: 500;
+            color: #6b7280;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-input {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            transition: border-color 0.2s;
+        }
+        
+        .info-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        .info-select {
+            color: #374151;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            cursor: pointer;
+        }
+        
+        .info-select:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        /* 약관 내용 영역 */
+        .content-section {
+            grid-column: 1 / -1;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        
+        .content-textarea {
+            background: white;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            padding: 20px;
+            min-height: 400px;
+            color: #374151;
+            font-size: 14px;
+            line-height: 1.8;
+            width: 100%;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .content-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+        
+        /* 하단 액션 버튼 */
+        .bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        .btn-register {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-register:hover {
+            background: #059669;
+        }
+
+        .required {
+            color: #dc2626;
+            margin-left: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page-header">
+        <h1 class="page-title">
+            <span>📋</span>
+            <span id="pageTitle">서비스 약관 등록</span>
+        </h1>
+        <button class="back-button" onclick="goBack()">
+            <span>←</span>
+            목록으로
+        </button>
+    </div>
+    
+    <div class="detail-container">
+        <!-- 기본 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기본 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">제목<span class="required">*</span></div>
+                    <input type="text" id="termsTitle" class="info-input" placeholder="약관 제목을 입력하세요">
+                    
+                    <div class="info-label">사용자구분<span class="required">*</span></div>
+                    <select id="userTypeSelect" class="info-select">
+                        <option value="">선택하세요</option>
+                        <option value="시스템관리자">시스템관리자</option>
+                        <option value="사용자">사용자</option>
+                        <option value="관리자">관리자</option>
+                        <option value="속기사">속기사</option>
+                        <option value="기업사용자">기업사용자</option>
+                        <option value="검수자">검수자</option>
+                        <option value="클립데스크 사용자">클립데스크 사용자</option>
+                    </select>
+                    
+                    <div class="info-label">사용여부<span class="required">*</span></div>
+                    <select id="isActive" class="info-select">
+                        <option value="Y">Y</option>
+                        <option value="N">N</option>
+                    </select>
+                    
+                    <div class="info-label">순서<span class="required">*</span></div>
+                    <select id="sortOrder" class="info-select">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 기간 정보 섹션 -->
+        <div class="info-section">
+            <div class="section-title">기간 정보</div>
+            <div class="info-content">
+                <div class="info-grid">
+                    <div class="info-label">시작일<span class="required">*</span></div>
+                    <input type="date" id="startDate" class="info-input">
+                    
+                    <div class="info-label">종료일</div>
+                    <input type="date" id="endDate" class="info-input" value="2025-12-31">
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 약관 내용 섹션 -->
+    <div class="content-section">
+        <div class="section-title">약관 내용</div>
+        <div class="info-content">
+            <textarea class="content-textarea" id="termsContent" placeholder="약관 내용을 입력하세요...
+
+예시:
+제1조 (목적)
+이 약관은...
+
+제2조 (정의)
+1. ...
+2. ..."></textarea>
+        </div>
+    </div>
+    
+    <!-- 하단 액션 버튼 -->
+    <div class="bottom-actions">
+        <button class="btn-register" onclick="registerTerms()">
+            <span id="registerIcon">📝</span>
+            <span id="registerText">등록</span>
+        </button>
+    </div>
+
+    <script>
+        let isEditMode = false;
+        let editItemId = null;
+        
+        // 페이지 로드 시 초기화
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('서비스 약관 등록 페이지 로드');
+            
+            // URL 파라미터 확인 (수정 모드인지)
+            const urlParams = new URLSearchParams(window.location.search);
+            const mode = urlParams.get('mode');
+            const id = urlParams.get('id');
+            
+            if (mode === 'edit' && id) {
+                isEditMode = true;
+                editItemId = id;
+                document.getElementById('pageTitle').textContent = '서비스 약관 수정';
+                document.getElementById('registerIcon').textContent = '✏️';
+                document.getElementById('registerText').textContent = '수정';
+                
+                // 기존 데이터 로드
+                loadExistingData(id);
+            } else {
+                // 현재 날짜를 기본값으로 설정
+                const now = new Date();
+                const currentDate = now.toISOString().slice(0, 10);
+                document.getElementById('startDate').value = currentDate;
+            }
+        });
+        
+        // 기존 데이터 로드 (수정 모드)
+        function loadExistingData(id) {
+            // 실제 구현 시 서버 API 호출
+            const mockData = getMockData(id);
+            
+            document.getElementById('userTypeSelect').value = mockData.userType;
+            document.getElementById('termsTitle').value = mockData.termsTitle;
+            document.getElementById('isActive').value = mockData.isActive;
+            document.getElementById('sortOrder').value = mockData.sortOrder;
+            document.getElementById('startDate').value = mockData.startDate;
+            document.getElementById('endDate').value = mockData.endDate;
+            document.getElementById('termsContent').value = mockData.content;
+        }
+        
+        // 임시 데이터 (수정 모드용)
+        function getMockData(id) {
+            const mockDatabase = {
+                'TERMS001': {
+                    userType: '시스템관리자',
+                    termsTitle: '소리바로 서비스 이용약관',
+                    isActive: 'Y',
+                    sortOrder: '1',
+                    startDate: '2025-01-01',
+                    endDate: '2025-12-31',
+                    content: `제1조 (목적)
+이 약관은 소리바로(이하 "회사"라 합니다)가 제공하는 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다.
+
+제2조 (정의)
+이 약관에서 사용하는 용어의 정의는 다음과 같습니다.
+1. "서비스"라 함은 회사가 제공하는 모든 서비스를 의미합니다.
+2. "이용자"라 함은 이 약관에 따라 회사가 제공하는 서비스를 받는 회원 및 비회원을 말합니다.`
+                }
+            };
+            
+            return mockDatabase[id] || {};
+        }
+        
+        // 목록으로 돌아가기
+        function goBack() {
+            window.location.href = 'terms-management.html';
+        }
+        
+        // 등록/수정 기능
+        function registerTerms() {
+            // 필수 항목 검증
+            const userType = document.getElementById('userTypeSelect').value;
+            const termsTitle = document.getElementById('termsTitle').value.trim();
+            const isActive = document.getElementById('isActive').value;
+            const sortOrder = document.getElementById('sortOrder').value;
+            const startDate = document.getElementById('startDate').value;
+            const termsContent = document.getElementById('termsContent').value.trim();
+            
+            if (!userType) {
+                alert('사용자구분을 선택해주세요.');
+                document.getElementById('userTypeSelect').focus();
+                return;
+            }
+            
+            if (!termsTitle) {
+                alert('제목을 입력해주세요.');
+                document.getElementById('termsTitle').focus();
+                return;
+            }
+            
+            if (!startDate) {
+                alert('시작일을 입력해주세요.');
+                document.getElementById('startDate').focus();
+                return;
+            }
+            
+            if (!termsContent) {
+                alert('약관 내용을 입력해주세요.');
+                document.getElementById('termsContent').focus();
+                return;
+            }
+            
+            // 등록/수정 확인
+            const action = isEditMode ? '수정' : '등록';
+            if (confirm(`서비스 약관을 ${action}하시겠습니까?`)) {
+                // 실제 구현 시 서버 API 호출
+                const formData = {
+                    userType: userType,
+                    termsTitle: termsTitle,
+                    isActive: isActive,
+                    sortOrder: parseInt(sortOrder),
+                    startDate: startDate,
+                    endDate: document.getElementById('endDate').value || '2025-12-31',
+                    termsContent: termsContent
+                };
+                
+                console.log(`${action} 데이터:`, formData);
+                alert(`서비스 약관 ${action}이 완료되었습니다.`);
+                goBack();
+            }
+        }
+    </script>
+</body>
+</html>

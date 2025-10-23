@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>고객 포인트 변경 내역 - 소리바로 BO</title>
+    <title>Customer Point Change History - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Section */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -113,7 +113,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Section */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -175,7 +175,7 @@
             cursor: pointer;
         }
         
-        /* 포인트 구분 배지 */
+        /* Point Type Badge */
         .point-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -215,7 +215,7 @@
             font-weight: 600;
         }
         
-        /* 하단 액션 영역 */
+        /* Bottom Action Section */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -241,7 +241,7 @@
             background: #059669;
         }
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -283,27 +283,27 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📊</span>
-            고객 포인트 변경 내역
+            Customer Point Change History
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Section -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">선택</label>
+                <label class="search-label">Select</label>
                 <select id="searchType" class="search-select">
-                    <option value="">전체</option>
-                    <option value="userEmail">이메일</option>
-                    <option value="userName">이름</option>
-                    <option value="userPhone">연락처</option>
+                    <option value="">All</option>
+                    <option value="userEmail">Email</option>
+                    <option value="userName">Name</option>
+                    <option value="userPhone">Contact</option>
                 </select>
-                <input type="text" id="searchKeyword" class="search-input" placeholder="검색어를 입력하세요">
+                <input type="text" id="searchKeyword" class="search-input" placeholder="Enter search term">
             </div>
             
             <div class="search-group">
-                <label class="search-label">조회 기간</label>
+                <label class="search-label">Date Range</label>
                 <input type="date" id="startDate" class="search-input">
                 <span style="margin: 0 8px;">~</span>
                 <input type="date" id="endDate" class="search-input">
@@ -311,36 +311,36 @@
             
             <button class="search-btn" onclick="searchCustomerPointData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>💰</span>
-                포인트 지급
+                Give Points
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Section -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">고객 포인트 변경 내역</h2>
-            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+            <h2 class="table-title">Customer Point Change History</h2>
+            <div class="table-info">Total <span id="totalCount">10</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="120">이메일</th>
-                    <th width="100">이름</th>
-                    <th width="120">연락처</th>
-                    <th width="120">포인트구분</th>
-                    <th width="120">보유포인트</th>
-                    <th width="120">변경포인트</th>
-                    <th width="120">포인트합계</th>
-                    <th width="100">등록자</th>
-                    <th width="180">변경일</th>
+                    <th width="120">Email</th>
+                    <th width="100">Name</th>
+                    <th width="120">Contact</th>
+                    <th width="120">Point Type</th>
+                    <th width="120">Current Points</th>
+                    <th width="120">Point Change</th>
+                    <th width="120">Total Points</th>
+                    <th width="100">Registered By</th>
+                    <th width="180">Changed Date</th>
                 </tr>
             </thead>
             <tbody id="customerPointTableBody">
@@ -349,7 +349,7 @@
                     <td>kim.cs@email.com</td>
                     <td>김철수</td>
                     <td>010-1234-5678</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>0</td>
                     <td class="point-increase">+1,000</td>
                     <td>1,000</td>
@@ -361,11 +361,11 @@
                     <td>lee.yh@email.com</td>
                     <td>이영희</td>
                     <td>010-2345-6789</td>
-                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td><span class="point-badge point-reception">Reception</span></td>
                     <td>2,000</td>
                     <td class="point-increase">+500</td>
                     <td>2,500</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-27 13:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('CP003')">
@@ -373,11 +373,11 @@
                     <td>park.ms@email.com</td>
                     <td>박민수</td>
                     <td>010-3456-7890</td>
-                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td><span class="point-badge point-payment">Point Payment</span></td>
                     <td>3,200</td>
                     <td class="point-increase">+2,000</td>
                     <td>5,200</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-27 12:45:00</td>
                 </tr>
                 <tr onclick="goToDetail('CP004')">
@@ -385,7 +385,7 @@
                     <td>jung.sj@email.com</td>
                     <td>정수진</td>
                     <td>010-4567-8901</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>0</td>
                     <td class="point-increase">+1,000</td>
                     <td>1,000</td>
@@ -397,11 +397,11 @@
                     <td>choi.dm@email.com</td>
                     <td>최동민</td>
                     <td>010-5678-9012</td>
-                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td><span class="point-badge point-reception">Reception</span></td>
                     <td>1,300</td>
                     <td class="point-increase">+500</td>
                     <td>1,800</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-27 10:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('CP006')">
@@ -409,11 +409,11 @@
                     <td>han.my@email.com</td>
                     <td>한미영</td>
                     <td>010-6789-0123</td>
-                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td><span class="point-badge point-payment">Point Payment</span></td>
                     <td>5,500</td>
                     <td class="point-increase">+3,000</td>
                     <td>8,500</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 16:45:00</td>
                 </tr>
                 <tr onclick="goToDetail('CP007')">
@@ -421,7 +421,7 @@
                     <td>kang.th@email.com</td>
                     <td>강태호</td>
                     <td>010-7890-1234</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>0</td>
                     <td class="point-increase">+1,000</td>
                     <td>1,000</td>
@@ -433,11 +433,11 @@
                     <td>yoon.sy@email.com</td>
                     <td>윤서연</td>
                     <td>010-8901-2345</td>
-                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td><span class="point-badge point-reception">Reception</span></td>
                     <td>1,600</td>
                     <td class="point-increase">+500</td>
                     <td>2,100</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 14:10:00</td>
                 </tr>
                 <tr onclick="goToDetail('CP009')">
@@ -445,11 +445,11 @@
                     <td>lim.jh@email.com</td>
                     <td>임재현</td>
                     <td>010-9012-3456</td>
-                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td><span class="point-badge point-payment">Point Payment</span></td>
                     <td>2,700</td>
                     <td class="point-increase">+1,500</td>
                     <td>4,200</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 13:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('CP010')">
@@ -457,7 +457,7 @@
                     <td>cho.hj@email.com</td>
                     <td>조혜진</td>
                     <td>010-0123-4567</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>0</td>
                     <td class="point-increase">+1,000</td>
                     <td>1,000</td>
@@ -468,7 +468,7 @@
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -480,65 +480,65 @@
     
 
     <script>
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('고객 포인트 변경 내역 페이지 로드 완료');
+            console.log('Customer Point Change History page loaded');
             
-            // 기본 날짜 설정 (최근 30일)
+            // Set default date range (last 30 days)
             const now = new Date();
             const thirtyDaysAgo = new Date(now.getTime() - (30 * 24 * 60 * 60 * 1000));
             
             document.getElementById('startDate').value = thirtyDaysAgo.toISOString().slice(0, 10);
             document.getElementById('endDate').value = now.toISOString().slice(0, 10);
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in production
             loadCustomerPointData();
         });
         
-        // 검색 기능
+        // Search function
         function searchCustomerPointData() {
             const searchType = document.getElementById('searchType').value;
             const searchKeyword = document.getElementById('searchKeyword').value;
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
             
-            console.log('검색 조건:', { searchType, searchKeyword, startDate, endDate });
+            console.log('Search criteria:', { searchType, searchKeyword, startDate, endDate });
             
-            // 실제 구현 시 서버 API 호출
-            alert(`검색 기능이 실행됩니다.\n검색 조건: ${getSearchTypeName(searchType)}\n검색어: ${searchKeyword || '전체'}\n기간: ${startDate} ~ ${endDate}`);
+            // Call server API in production
+            alert(`Search function executed.\nSearch Type: ${getSearchTypeName(searchType)}\nKeyword: ${searchKeyword || 'All'}\nPeriod: ${startDate} ~ ${endDate}`);
         }
         
         function getSearchTypeName(searchType) {
             const names = {
-                '': '전체',
-                'userEmail': '이메일',
-                'userName': '이름',
-                'userPhone': '연락처'
+                '': 'All',
+                'userEmail': 'Email',
+                'userName': 'Name',
+                'userPhone': 'Contact'
             };
-            return names[searchType] || '전체';
+            return names[searchType] || 'All';
         }
         
-        // 상세 페이지 이동
+        // Go to detail page
         function goToDetail(id) {
             const url = `customer-point-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 포인트 지급 페이지로 이동
+        // Go to point payment page
         function openRegisterModal() {
             window.location.href = 'customer-point-register.html';
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Go to page:', page);
+            // Load page data in production
         }
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadCustomerPointData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('고객 포인트 변경 내역 데이터 로딩');
+            // Call server API in production
+            console.log('Loading customer point change history data');
         }
     </script>
 </body>

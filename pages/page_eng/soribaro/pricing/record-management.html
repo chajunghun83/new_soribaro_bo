@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다기록/통화기록 관리 - 소리바로 BO</title>
+    <title>Multi-Record/Call Record Management - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Section */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -97,7 +97,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Section */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -159,7 +159,7 @@
             cursor: pointer;
         }
         
-        /* 구분 배지 */
+        /* Category Badge */
         .category-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -188,7 +188,7 @@
             color: #be185d;
         }
         
-        /* 하단 액션 영역 */
+        /* Bottom Action Section */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -214,7 +214,7 @@
             background: #059669;
         }
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -256,20 +256,20 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📞</span>
-            다기록/통화기록 관리
+            Multi-Record/Call Record Management
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Section -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">구분</label>
+                <label class="search-label">Category</label>
                 <select id="categoryFilter" class="search-select">
-                    <option value="">전체</option>
-                    <option value="통화기록">통화기록</option>
-                    <option value="다기록">다기록</option>
+                    <option value="">All</option>
+                    <option value="Call Record">Call Record</option>
+                    <option value="Multi-Record">Multi-Record</option>
                     <option value="Transaction">Transaction</option>
                     <option value="Caption">Caption</option>
                 </select>
@@ -277,58 +277,58 @@
             
             <button class="search-btn" onclick="searchRecordData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>📝</span>
-                등록
+                Register
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Section -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">다기록/통화기록 목록</h2>
-            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+            <h2 class="table-title">Multi-Record/Call Record List</h2>
+            <div class="table-info">Total <span id="totalCount">10</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="120">구분</th>
-                    <th width="200">분류명</th>
-                    <th width="180">시작일</th>
-                    <th width="180">종료일</th>
-                    <th width="120">기본요금</th>
-                    <th width="120">추가요금(분)</th>
-                    <th width="100">등록자</th>
-                    <th width="180">등록일</th>
+                    <th width="120">Category</th>
+                    <th width="200">Name</th>
+                    <th width="180">Start Date</th>
+                    <th width="180">End Date</th>
+                    <th width="120">Basic Price</th>
+                    <th width="120">Additional Price(per min)</th>
+                    <th width="100">Registered By</th>
+                    <th width="180">Registered Date</th>
                 </tr>
             </thead>
             <tbody id="recordTableBody">
                 <tr onclick="goToDetail('CALL001')">
                     <td>10</td>
-                    <td><span class="category-badge category-call">통화기록</span></td>
+                    <td><span class="category-badge category-call">Call Record</span></td>
                     <td>통화기록 서비스_2025-08-27</td>
                     <td>2025-01-01 00:00:00</td>
                     <td>9999-12-31 23:59:59</td>
-                    <td>10,000원</td>
-                    <td>500원</td>
-                    <td>관리자</td>
+                    <td>10,000WON</td>
+                    <td>500WON</td>
+                    <td>Admin</td>
                     <td>2025-08-27 09:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('MULTI001')">
                     <td>9</td>
-                    <td><span class="category-badge category-multi">다기록</span></td>
+                    <td><span class="category-badge category-multi">Multi-Record</span></td>
                     <td>다기록 서비스_2025-08-27</td>
                     <td>2025-01-01 00:00:00</td>
                     <td>9999-12-31 23:59:59</td>
-                    <td>15,000원</td>
-                    <td>800원</td>
-                    <td>관리자</td>
+                    <td>15,000WON</td>
+                    <td>800WON</td>
+                    <td>Admin</td>
                     <td>2025-08-27 10:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('TRANS001')">
@@ -339,7 +339,7 @@
                     <td>9999-12-31 23:59:59</td>
                     <td>$20</td>
                     <td>$1</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 11:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('CAPTION001')">
@@ -350,29 +350,29 @@
                     <td>9999-12-31 23:59:59</td>
                     <td>$12</td>
                     <td>$0.6</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 14:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('CALL002')">
                     <td>6</td>
-                    <td><span class="category-badge category-call">통화기록</span></td>
+                    <td><span class="category-badge category-call">Call Record</span></td>
                     <td>통화기록 서비스_2025-08-25</td>
                     <td>2025-04-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>9,000원</td>
-                    <td>450원</td>
-                    <td>관리자</td>
+                    <td>9,000WON</td>
+                    <td>450WON</td>
+                    <td>Admin</td>
                     <td>2025-08-25 15:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('MULTI002')">
                     <td>5</td>
-                    <td><span class="category-badge category-multi">다기록</span></td>
+                    <td><span class="category-badge category-multi">Multi-Record</span></td>
                     <td>다기록 서비스_2025-08-25</td>
                     <td>2025-05-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>14,000원</td>
-                    <td>750원</td>
-                    <td>관리자</td>
+                    <td>14,000WON</td>
+                    <td>750WON</td>
+                    <td>Admin</td>
                     <td>2025-08-25 16:45:00</td>
                 </tr>
                 <tr onclick="goToDetail('TRANS002')">
@@ -383,7 +383,7 @@
                     <td>2025-12-31 23:59:59</td>
                     <td>$18</td>
                     <td>$0.9</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-24 08:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('CAPTION002')">
@@ -394,36 +394,36 @@
                     <td>2025-12-31 23:59:59</td>
                     <td>$11</td>
                     <td>$0.55</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-24 09:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('CALL003')">
                     <td>2</td>
-                    <td><span class="category-badge category-call">통화기록</span></td>
+                    <td><span class="category-badge category-call">Call Record</span></td>
                     <td>통화기록 서비스_2025-08-23</td>
                     <td>2025-08-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>8,500원</td>
-                    <td>400원</td>
-                    <td>관리자</td>
+                    <td>8,500WON</td>
+                    <td>400WON</td>
+                    <td>Admin</td>
                     <td>2025-08-23 10:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('MULTI003')">
                     <td>1</td>
-                    <td><span class="category-badge category-multi">다기록</span></td>
+                    <td><span class="category-badge category-multi">Multi-Record</span></td>
                     <td>다기록 서비스_2025-08-23</td>
                     <td>2025-08-15 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>13,500원</td>
-                    <td>700원</td>
-                    <td>관리자</td>
+                    <td>13,500WON</td>
+                    <td>700WON</td>
+                    <td>Admin</td>
                     <td>2025-08-23 11:00:00</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -435,44 +435,44 @@
     
 
     <script>
-        // 검색 기능
+        // Search function
         function searchRecordData() {
             const category = document.getElementById('categoryFilter').value;
-            console.log('검색 조건:', { category });
+            console.log('Search criteria:', { category });
             
-            // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n구분: ' + (category || '전체'));
+            // Call server API in production
+            alert('Search function executed.\nCategory: ' + (category || 'All'));
         }
         
-        // 상세 페이지 이동
+        // Go to detail page
         function goToDetail(id) {
             const url = `record-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 등록 페이지로 이동
+        // Go to register page
         function openRegisterModal() {
             window.location.href = 'record-register.html';
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Go to page:', page);
+            // Load page data in production
         }
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('다기록/통화기록 관리 페이지 로드 완료');
+            console.log('Multi-Record/Call Record Management page loaded');
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in production
             loadRecordData();
         });
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadRecordData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('다기록/통화기록 데이터 로딩');
+            // Call server API in production
+            console.log('Loading multi-record/call record data');
         }
     </script>
 </body>

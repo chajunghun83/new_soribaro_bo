@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>알리고 템플릿 관리 - 소리바로 BO</title>
+    <title>Aligo Template Management - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Area */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -97,7 +97,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Area */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -159,7 +159,7 @@
             cursor: pointer;
         }
         
-        /* 템플릿코드 배지 */
+        /* Template Code Badge */
         .template-code {
             padding: 4px 8px;
             border-radius: 12px;
@@ -170,7 +170,7 @@
             color: #0369a1;
         }
         
-        /* 하단 액션 영역 */
+        /* Bottom Actions Area */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -196,7 +196,7 @@
             background: #059669;
         }
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -238,105 +238,105 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📱</span>
-            알리고 템플릿 관리
+            Aligo Template Management
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Area -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">제목 검색</label>
-                <input type="text" id="searchKeyword" class="search-input" placeholder="제목을 입력하세요">
+                <label class="search-label">Title Search</label>
+                <input type="text" id="searchKeyword" class="search-input" placeholder="Enter title">
             </div>
             
             <button class="search-btn" onclick="searchTemplateData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>📝</span>
-                등록
+                Register
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Area -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">알리고 템플릿 목록</h2>
-            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+            <h2 class="table-title">Aligo Template List</h2>
+            <div class="table-info">Total <span id="totalCount">10</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="400">제목</th>
-                    <th width="150">템플릿코드</th>
-                    <th width="200">등록일시</th>
+                    <th width="400">Title</th>
+                    <th width="150">Template Code</th>
+                    <th width="200">Registration Date</th>
                 </tr>
             </thead>
             <tbody id="templateTableBody">
                 <tr onclick="goToDetail('TEMPLATE001')">
                     <td>10</td>
-                    <td>회원가입 인증번호 발송</td>
+                    <td>Signup Verification Code Notification</td>
                     <td><span class="template-code">TL_5927</span></td>
                     <td>2025-08-27 09:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE002')">
                     <td>9</td>
-                    <td>비밀번호 재설정 안내</td>
+                    <td>Password Reset Guide</td>
                     <td><span class="template-code">TL_5928</span></td>
                     <td>2025-08-27 10:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE003')">
                     <td>8</td>
-                    <td>작업 완료 알림</td>
+                    <td>Task Completion Notification</td>
                     <td><span class="template-code">TL_5929</span></td>
                     <td>2025-08-26 11:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE004')">
                     <td>7</td>
-                    <td>결제 완료 확인</td>
+                    <td>Payment Confirmation</td>
                     <td><span class="template-code">TL_5930</span></td>
                     <td>2025-08-26 14:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE005')">
                     <td>6</td>
-                    <td>서비스 이용 안내</td>
+                    <td>Service Usage Guide</td>
                     <td><span class="template-code">TL_5931</span></td>
                     <td>2025-08-25 15:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE006')">
                     <td>5</td>
-                    <td>이벤트 참여 안내</td>
+                    <td>Event Participation Guide</td>
                     <td><span class="template-code">TL_5932</span></td>
                     <td>2025-08-25 16:45:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE007')">
                     <td>4</td>
-                    <td>공지사항 안내</td>
+                    <td>Notice Information</td>
                     <td><span class="template-code">TL_5933</span></td>
                     <td>2025-08-24 08:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE008')">
                     <td>3</td>
-                    <td>정기점검 안내</td>
+                    <td>Regular Maintenance Notice</td>
                     <td><span class="template-code">TL_5934</span></td>
                     <td>2025-08-24 09:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE009')">
                     <td>2</td>
-                    <td>고객센터 이용 안내</td>
+                    <td>Customer Service Guide</td>
                     <td><span class="template-code">TL_5935</span></td>
                     <td>2025-08-23 10:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('TEMPLATE010')">
                     <td>1</td>
-                    <td>서비스 업데이트 안내</td>
+                    <td>Service Update Notice</td>
                     <td><span class="template-code">TL_5936</span></td>
                     <td>2025-08-23 11:00:00</td>
                 </tr>
@@ -344,7 +344,7 @@
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -356,51 +356,51 @@
     
 
     <script>
-        // 검색 기능
+        // Search function
         function searchTemplateData() {
             const searchKeyword = document.getElementById('searchKeyword').value;
-            console.log('검색어:', searchKeyword);
+            console.log('Search keyword:', searchKeyword);
             
-            // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n검색어: ' + (searchKeyword || '전체'));
+            // Call server API in actual implementation
+            alert('Search function is running.\nKeyword: ' + (searchKeyword || 'All'));
         }
         
-        // 상세 페이지 이동
+        // Navigate to detail page
         function goToDetail(id) {
             const url = `aligo-template-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 등록 페이지로 이동
+        // Navigate to registration page
         function openRegisterModal() {
             window.location.href = 'aligo-template-register.html';
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Navigate to page:', page);
+            // Load page data in actual implementation
         }
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('알리고 템플릿 관리 페이지 로드 완료');
+            console.log('Aligo template management page loaded');
             
-            // 엔터키로 검색
+            // Search with Enter key
             document.getElementById('searchKeyword').addEventListener('keypress', function(e) {
                 if (e.key === 'Enter') {
                     searchTemplateData();
                 }
             });
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in actual implementation
             loadTemplateData();
         });
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadTemplateData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('알리고 템플릿 데이터 로딩');
+            // Call server API in actual implementation
+            console.log('Loading Aligo template data');
         }
     </script>
 </body>

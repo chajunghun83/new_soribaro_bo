@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>알리고 템플릿 등록 - 소리바로 BO</title>
+    <title>Aligo Template Registration - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -117,7 +117,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* 내용 영역 */
+        /* Content Area */
         .content-section {
             grid-column: 1 / -1;
             background: white;
@@ -148,7 +148,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -185,72 +185,72 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📱</span>
-            <span id="pageTitle">알리고 템플릿 등록</span>
+            <span id="pageTitle">Aligo Template Registration</span>
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">템플릿코드(알리고)<span class="required">*</span></div>
-                    <input type="text" id="templateCode" class="info-input" placeholder="예: TL_5927">
+                    <div class="info-label">Template Code (Aligo)<span class="required">*</span></div>
+                    <input type="text" id="templateCode" class="info-input" placeholder="e.g. TL_5927">
                     
-                    <div class="info-label">제목<span class="required">*</span></div>
-                    <input type="text" id="templateTitle" class="info-input" placeholder="템플릿 제목을 입력하세요">
+                    <div class="info-label">Title<span class="required">*</span></div>
+                    <input type="text" id="templateTitle" class="info-input" placeholder="Enter template title">
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- SMS 내용 섹션 -->
+    <!-- SMS Content Section -->
     <div class="content-section">
-        <div class="section-title">SMS 내용</div>
+        <div class="section-title">SMS Content</div>
         <div class="info-content">
-            <textarea class="content-textarea" id="smsContent" placeholder="SMS 내용을 입력하세요...
+            <textarea class="content-textarea" id="smsContent" placeholder="Enter SMS content...
 
-예시:
-[소리바로] 회원가입 인증번호는 [123456]입니다.
+Example:
+[Soribaro] Your signup verification code is [123456].
 
-인증번호를 정확히 입력해 주세요.
-인증번호 유효시간은 5분입니다.
+Please enter the verification code correctly.
+The code is valid for 5 minutes.
 
-감사합니다."></textarea>
+Thank you."></textarea>
         </div>
     </div>
     
-    <!-- MMS 내용 섹션 -->
+    <!-- MMS Content Section -->
     <div class="content-section">
-        <div class="section-title">MMS 내용</div>
+        <div class="section-title">MMS Content</div>
         <div class="info-content">
-            <textarea class="content-textarea" id="mmsContent" placeholder="MMS 내용을 입력하세요...
+            <textarea class="content-textarea" id="mmsContent" placeholder="Enter MMS content...
 
-예시:
-🎉 [소리바로] 회원가입을 환영합니다! 🎉
+Example:
+🎉 [Soribaro] Welcome to Soribaro! 🎉
 
-인증번호: [123456]
+Verification Code: [123456]
 
-✅ 인증번호를 정확히 입력해 주세요.
-⏰ 인증번호 유효시간은 5분입니다.
-📞 문의사항: 1588-1234
+✅ Please enter the verification code correctly.
+⏰ The code is valid for 5 minutes.
+📞 Inquiries: 1588-1234
 
-소리바로와 함께 더 나은 서비스를 경험해보세요!
+Experience better service with Soribaro!
 
-감사합니다."></textarea>
+Thank you."></textarea>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-register" onclick="registerTemplate()">
             <span id="registerIcon">📝</span>
-            <span id="registerText">등록</span>
+            <span id="registerText">Register</span>
         </button>
     </div>
 
@@ -258,11 +258,11 @@
         let isEditMode = false;
         let editItemId = null;
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('알리고 템플릿 등록 페이지 로드');
+            console.log('Aligo template registration page loaded');
             
-            // URL 파라미터 확인 (수정 모드인지)
+            // Check URL parameters (check if edit mode)
             const urlParams = new URLSearchParams(window.location.search);
             const mode = urlParams.get('mode');
             const id = urlParams.get('id');
@@ -270,18 +270,18 @@
             if (mode === 'edit' && id) {
                 isEditMode = true;
                 editItemId = id;
-                document.getElementById('pageTitle').textContent = '알리고 템플릿 수정';
+                document.getElementById('pageTitle').textContent = 'Aligo Template Edit';
                 document.getElementById('registerIcon').textContent = '✏️';
-                document.getElementById('registerText').textContent = '수정';
+                document.getElementById('registerText').textContent = 'Edit';
                 
-                // 기존 데이터 로드
+                // Load existing data
                 loadExistingData(id);
             }
         });
         
-        // 기존 데이터 로드 (수정 모드)
+        // Load existing data (edit mode)
         function loadExistingData(id) {
-            // 실제 구현 시 서버 API 호출
+            // Call server API in actual implementation
             const mockData = getMockData(id);
             
             document.getElementById('templateCode').value = mockData.templateCode;
@@ -290,76 +290,76 @@
             document.getElementById('mmsContent').value = mockData.mmsContent;
         }
         
-        // 임시 데이터 (수정 모드용)
+        // Mock data (for edit mode)
         function getMockData(id) {
             const mockDatabase = {
                 'TEMPLATE001': {
                     templateCode: 'TL_5927',
-                    templateTitle: '회원가입 인증번호 발송',
-                    smsContent: `[소리바로] 회원가입 인증번호는 [123456]입니다.
+                    templateTitle: 'Signup Verification Code Notification',
+                    smsContent: `[Soribaro] Your signup verification code is [123456].
 
-인증번호를 정확히 입력해 주세요.
-인증번호 유효시간은 5분입니다.
+Please enter the verification code correctly.
+The code is valid for 5 minutes.
 
-감사합니다.`,
-                    mmsContent: `🎉 [소리바로] 회원가입을 환영합니다! 🎉
+Thank you.`,
+                    mmsContent: `🎉 [Soribaro] Welcome to Soribaro! 🎉
 
-인증번호: [123456]
+Verification Code: [123456]
 
-✅ 인증번호를 정확히 입력해 주세요.
-⏰ 인증번호 유효시간은 5분입니다.
-📞 문의사항: 1588-1234
+✅ Please enter the verification code correctly.
+⏰ The code is valid for 5 minutes.
+📞 Inquiries: 1588-1234
 
-소리바로와 함께 더 나은 서비스를 경험해보세요!
+Experience better service with Soribaro!
 
-감사합니다.`
+Thank you.`
                 }
             };
             
             return mockDatabase[id] || {};
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'aligo-template-management.html';
         }
         
-        // 등록/수정 기능
+        // Register/Edit function
         function registerTemplate() {
-            // 필수 항목 검증
+            // Validate required fields
             const templateCode = document.getElementById('templateCode').value.trim();
             const templateTitle = document.getElementById('templateTitle').value.trim();
             const smsContent = document.getElementById('smsContent').value.trim();
             const mmsContent = document.getElementById('mmsContent').value.trim();
             
             if (!templateCode) {
-                alert('템플릿코드(알리고)를 입력해주세요.');
+                alert('Please enter template code (Aligo).');
                 document.getElementById('templateCode').focus();
                 return;
             }
             
             if (!templateTitle) {
-                alert('제목을 입력해주세요.');
+                alert('Please enter title.');
                 document.getElementById('templateTitle').focus();
                 return;
             }
             
             if (!smsContent) {
-                alert('SMS 내용을 입력해주세요.');
+                alert('Please enter SMS content.');
                 document.getElementById('smsContent').focus();
                 return;
             }
             
             if (!mmsContent) {
-                alert('MMS 내용을 입력해주세요.');
+                alert('Please enter MMS content.');
                 document.getElementById('mmsContent').focus();
                 return;
             }
             
-            // 등록/수정 확인
-            const action = isEditMode ? '수정' : '등록';
-            if (confirm(`알리고 템플릿을 ${action}하시겠습니까?`)) {
-                // 실제 구현 시 서버 API 호출
+            // Confirm register/edit
+            const action = isEditMode ? 'edit' : 'register';
+            if (confirm(`Are you sure you want to ${action} this Aligo template?`)) {
+                // Call server API in actual implementation
                 const formData = {
                     templateCode: templateCode,
                     templateTitle: templateTitle,
@@ -367,8 +367,8 @@
                     mmsContent: mmsContent
                 };
                 
-                console.log(`${action} 데이터:`, formData);
-                alert(`알리고 템플릿 ${action}이 완료되었습니다.`);
+                console.log(`${action} data:`, formData);
+                alert(`Aligo template ${action} completed.`);
                 goBack();
             }
         }

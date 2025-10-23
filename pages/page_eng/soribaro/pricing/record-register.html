@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>다기록/통화기록 등록 - 소리바로 BO</title>
+    <title>Multi-Record/Call Record Registration - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* 설명 영역 */
+        /* Description Section */
         .description-section {
             grid-column: 1 / -1;
             background: white;
@@ -164,7 +164,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -201,93 +201,93 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📞</span>
-            다기록/통화기록 등록
+            Multi-Record/Call Record Registration
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">구분<span class="required">*</span></div>
+                    <div class="info-label">Category<span class="required">*</span></div>
                     <select id="categorySelect" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="통화기록">통화기록</option>
-                        <option value="다기록">다기록</option>
+                        <option value="">Please select</option>
+                        <option value="Call Record">Call Record</option>
+                        <option value="Multi-Record">Multi-Record</option>
                         <option value="Transaction">Transaction</option>
                         <option value="Caption">Caption</option>
                     </select>
                     
-                    <div class="info-label">분류명<span class="required">*</span></div>
-                    <input type="text" id="categoryName" class="info-input" placeholder="분류명을 입력하세요">
+                    <div class="info-label">Name<span class="required">*</span></div>
+                    <input type="text" id="categoryName" class="info-input" placeholder="Enter name">
                     
-                    <div class="info-label">시작일<span class="required">*</span></div>
+                    <div class="info-label">Start Date<span class="required">*</span></div>
                     <input type="date" id="startDate" class="info-input">
                     
-                    <div class="info-label">종료일</div>
+                    <div class="info-label">End Date</div>
                     <input type="datetime-local" id="endDate" class="info-input" value="9999-12-31T23:59" readonly disabled>
                 </div>
             </div>
         </div>
         
-        <!-- 요금 정보 섹션 -->
+        <!-- Price Information Section -->
         <div class="info-section">
-            <div class="section-title">요금 정보</div>
+            <div class="section-title">Price Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">기본요금<span class="required">*</span></div>
+                    <div class="info-label">Basic Price<span class="required">*</span></div>
                     <input type="number" id="basicPrice" class="info-input" placeholder="0" min="0" step="0.01">
                     
-                    <div class="info-label">추가요금(분)<span class="required">*</span></div>
+                    <div class="info-label">Additional Price(per min)<span class="required">*</span></div>
                     <input type="number" id="additionalPrice" class="info-input" placeholder="0" min="0" step="0.01">
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 상세 설명 섹션 -->
+    <!-- Detailed Description Section -->
     <div class="description-section">
-        <div class="section-title">상세 설명</div>
+        <div class="section-title">Detailed Description</div>
         <div class="info-content">
-            <textarea class="description-textarea" id="detailDescription" placeholder="상세 설명을 입력하세요..."></textarea>
+            <textarea class="description-textarea" id="detailDescription" placeholder="Enter detailed description..."></textarea>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-register" onclick="registerRecordItem()">
             <span>📝</span>
-            등록
+            Register
         </button>
     </div>
 
     <script>
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('다기록/통화기록 등록 페이지 로드');
+            console.log('Multi-Record/Call Record Registration page loaded');
             
-            // 현재 날짜를 기본값으로 설정
+            // Set current date as default
             const now = new Date();
             const currentDate = now.toISOString().slice(0, 10);
             document.getElementById('startDate').value = currentDate;
             
-            // 종료일을 9999-12-31 23:59:59로 고정 설정 (이미 HTML에서 설정됨)
+            // End date is fixed to 9999-12-31 23:59:59 (already set in HTML)
         });
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'record-management.html';
         }
         
-        // 등록 기능
+        // Registration function
         function registerRecordItem() {
-            // 필수 항목 검증
+            // Validate required fields
             const category = document.getElementById('categorySelect').value;
             const categoryName = document.getElementById('categoryName').value.trim();
             const basicPrice = document.getElementById('basicPrice').value;
@@ -296,42 +296,42 @@
             const endDate = document.getElementById('endDate').value;
             
             if (!category) {
-                alert('구분을 선택해주세요.');
+                alert('Please select category.');
                 document.getElementById('categorySelect').focus();
                 return;
             }
             
             if (!categoryName) {
-                alert('분류명을 입력해주세요.');
+                alert('Please enter name.');
                 document.getElementById('categoryName').focus();
                 return;
             }
             
             if (!basicPrice || basicPrice <= 0) {
-                alert('기본요금을 입력해주세요.');
+                alert('Please enter basic price.');
                 document.getElementById('basicPrice').focus();
                 return;
             }
             
             if (!additionalPrice || additionalPrice <= 0) {
-                alert('추가요금(분)을 입력해주세요.');
+                alert('Please enter additional price(per min).');
                 document.getElementById('additionalPrice').focus();
                 return;
             }
             
             if (!startDate) {
-                alert('시작일을 입력해주세요.');
+                alert('Please enter start date.');
                 document.getElementById('startDate').focus();
                 return;
             }
             
-            // 등록 확인
-            if (confirm('새로운 요금 정책을 등록하시겠습니까?')) {
-                // 통화 단위 결정
+            // Confirm registration
+            if (confirm('Do you want to register new price policy?')) {
+                // Determine currency unit
                 const isDollar = category === 'Transaction' || category === 'Caption';
                 const currencySymbol = isDollar ? '$' : '원';
                 
-                // 실제 구현 시 서버 API 호출
+                // Call server API in production
                 const formData = {
                     category: category,
                     categoryName: categoryName,
@@ -343,8 +343,8 @@
                     description: document.getElementById('detailDescription').value.trim()
                 };
                 
-                console.log('등록 데이터:', formData);
-                alert('등록이 완료되었습니다.');
+                console.log('Registration data:', formData);
+                alert('Registration completed.');
                 goBack();
             }
         }

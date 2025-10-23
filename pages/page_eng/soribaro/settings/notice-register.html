@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공지사항 등록 - 소리바로 BO</title>
+    <title>Notice Registration - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -56,7 +56,7 @@
             background: #4b5563;
         }
 
-        /* 메인 컨테이너 */
+        /* Main Container */
         .detail-container {
             display: grid;
             grid-template-columns: 1fr;
@@ -64,7 +64,7 @@
             margin-bottom: 30px;
         }
         
-        /* 정보 섹션 */
+        /* Information Section */
         .info-section {
             background: white;
             border-radius: 12px;
@@ -133,7 +133,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
-        /* 공지사항 내용 영역 */
+        /* Notice Content Area */
         .content-section {
             grid-column: 1 / -1;
             background: white;
@@ -164,7 +164,7 @@
             box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
         
-        /* 하단 액션 버튼 */
+        /* Bottom Action Buttons */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -196,7 +196,7 @@
             margin-left: 4px;
         }
 
-        /* 파일 첨부 영역 */
+        /* File Attachment Area */
         .file-attachment {
             margin-top: 20px;
             padding: 20px;
@@ -305,48 +305,48 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>📢</span>
-            <span id="pageTitle">공지사항 등록</span>
+            <span id="pageTitle">Notice Registration</span>
         </h1>
         <button class="back-button" onclick="goBack()">
             <span>←</span>
-            목록으로
+            Back to List
         </button>
     </div>
     
     <div class="detail-container">
-        <!-- 기본 정보 섹션 -->
+        <!-- Basic Information Section -->
         <div class="info-section">
-            <div class="section-title">기본 정보</div>
+            <div class="section-title">Basic Information</div>
             <div class="info-content">
                 <div class="info-grid">
-                    <div class="info-label">제목<span class="required">*</span></div>
-                    <input type="text" id="noticeTitle" class="info-input" placeholder="공지사항 제목을 입력하세요">
+                    <div class="info-label">Title<span class="required">*</span></div>
+                    <input type="text" id="noticeTitle" class="info-input" placeholder="Enter notice title">
                     
-                    <div class="info-label">서비스유형<span class="required">*</span></div>
+                    <div class="info-label">Service Type<span class="required">*</span></div>
                     <select id="serviceType" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="한글">한글</option>
-                        <option value="영어">영어</option>
+                        <option value="">Please select</option>
+                        <option value="한글">Korean</option>
+                        <option value="영어">English</option>
                     </select>
                     
-                    <div class="info-label">게시장소<span class="required">*</span></div>
+                    <div class="info-label">Posting Location<span class="required">*</span></div>
                     <select id="location" class="info-select">
-                        <option value="">선택하세요</option>
-                        <option value="시스템관리자">시스템관리자</option>
-                        <option value="사용자">사용자</option>
-                        <option value="속기사">속기사</option>
-                        <option value="기업사용자">기업사용자</option>
-                        <option value="검수자">검수자</option>
-                        <option value="클립데스크 사용자">클립데스크 사용자</option>
+                        <option value="">Please select</option>
+                        <option value="시스템관리자">System Admin</option>
+                        <option value="사용자">User</option>
+                        <option value="속기사">Stenographer</option>
+                        <option value="기업사용자">Enterprise</option>
+                        <option value="검수자">Reviewer</option>
+                        <option value="클립데스크 사용자">ClipDesk User</option>
                     </select>
                     
-                    <div class="info-label">유형<span class="required">*</span></div>
+                    <div class="info-label">Type<span class="required">*</span></div>
                     <select id="type" class="info-select">
-                        <option value="일반">일반</option>
-                        <option value="기타">기타</option>
+                        <option value="일반">General</option>
+                        <option value="기타">Other</option>
                     </select>
                     
-                    <div class="info-label">상단고정</div>
+                    <div class="info-label">Pinned</div>
                     <select id="pinned" class="info-select">
                         <option value="N">N</option>
                         <option value="Y">Y</option>
@@ -356,54 +356,54 @@
         </div>
     </div>
     
-    <!-- 공지사항 내용 섹션 -->
+    <!-- Notice Content Section -->
     <div class="content-section">
-        <div class="section-title">공지사항 내용</div>
+        <div class="section-title">Notice Content</div>
         <div class="info-content">
-            <textarea class="content-textarea" id="noticeContent" placeholder="공지사항 내용을 입력하세요...
+            <textarea class="content-textarea" id="noticeContent" placeholder="Enter notice content...
 
-예시:
-안녕하세요. 소리바로 서비스를 이용해 주셔서 감사합니다.
+Example:
+Hello. Thank you for using Soribaro service.
 
-■ 주요 내용
+■ Main Content
 
-1. 첫 번째 항목
-   - 상세 설명
+1. First item
+   - Detailed explanation
 
-2. 두 번째 항목
-   - 상세 설명
+2. Second item
+   - Detailed explanation
 
-■ 문의사항
-기타 궁금한 사항이 있으시면 고객센터로 연락해 주시기 바랍니다.
+■ Inquiries
+For any questions, please contact customer service.
 
-감사합니다."></textarea>
+Thank you."></textarea>
             
-            <!-- 파일 첨부 영역 -->
+            <!-- File Attachment Area -->
             <div class="file-attachment">
                 <div class="file-attachment-title">
                     <span>📎</span>
-                    파일 첨부 (최대 3개)
+                    File Attachment (Max 3 files)
                 </div>
                 <div class="file-input-group">
                     <input type="file" id="fileInput" class="file-input" multiple accept="*/*" onchange="handleFileSelect(event)">
                     <button type="button" class="file-input-button" onclick="document.getElementById('fileInput').click()">
                         <span>📁</span>
-                        파일 선택
+                        Select Files
                     </button>
                 </div>
                 <div class="file-list" id="fileList"></div>
                 <div class="file-limit-info">
-                    * 최대 3개 파일까지 첨부 가능합니다. (파일 크기 제한: 10MB)
+                    * Maximum 3 files can be attached. (File size limit: 10MB)
                 </div>
             </div>
         </div>
     </div>
     
-    <!-- 하단 액션 버튼 -->
+    <!-- Bottom Action Buttons -->
     <div class="bottom-actions">
         <button class="btn-register" onclick="registerNotice()">
             <span id="registerIcon">📝</span>
-            <span id="registerText">등록</span>
+            <span id="registerText">Register</span>
         </button>
     </div>
 
@@ -412,11 +412,11 @@
         let editItemId = null;
         let attachedFiles = [];
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('공지사항 등록 페이지 로드');
+            console.log('Notice registration page loaded');
             
-            // URL 파라미터 확인 (수정 모드인지)
+            // Check URL parameters (check if edit mode)
             const urlParams = new URLSearchParams(window.location.search);
             const mode = urlParams.get('mode');
             const id = urlParams.get('id');
@@ -424,18 +424,18 @@
             if (mode === 'edit' && id) {
                 isEditMode = true;
                 editItemId = id;
-                document.getElementById('pageTitle').textContent = '공지사항 수정';
+                document.getElementById('pageTitle').textContent = 'Notice Edit';
                 document.getElementById('registerIcon').textContent = '✏️';
-                document.getElementById('registerText').textContent = '수정';
+                document.getElementById('registerText').textContent = 'Edit';
                 
-                // 기존 데이터 로드
+                // Load existing data
                 loadExistingData(id);
             }
         });
         
-        // 기존 데이터 로드 (수정 모드)
+        // Load existing data (edit mode)
         function loadExistingData(id) {
-            // 실제 구현 시 서버 API 호출
+            // Call server API in actual implementation
             const mockData = getMockData(id);
             
             document.getElementById('noticeTitle').value = mockData.noticeTitle;
@@ -446,73 +446,73 @@
             document.getElementById('noticeContent').value = mockData.content;
         }
         
-        // 임시 데이터 (수정 모드용)
+        // Mock data (for edit mode)
         function getMockData(id) {
             const mockDatabase = {
                 'NOTICE001': {
-                    noticeTitle: '소리바로 서비스 업데이트 안내',
+                    noticeTitle: 'Soribaro Service Update Notice',
                     serviceType: '한글',
                     location: '사용자',
                     type: '일반',
                     pinned: 'Y',
-                    content: `안녕하세요. 소리바로 서비스를 이용해 주셔서 감사합니다.
+                    content: `Hello. Thank you for using Soribaro service.
 
-이번에 소리바로 서비스가 새롭게 업데이트되어 안내드립니다.
+We are pleased to announce that Soribaro service has been newly updated.
 
-■ 주요 업데이트 내용
+■ Main Updates
 
-1. 음성인식 정확도 개선
-   - AI 음성인식 엔진 업그레이드로 정확도 95% 달성
-   - 방언 및 전문용어 인식률 향상
+1. Improved Voice Recognition Accuracy
+   - Achieved 95% accuracy with upgraded AI voice recognition engine
+   - Enhanced recognition rate for dialects and technical terms
 
-2. 새로운 기능 추가
-   - 실시간 음성 변환 기능
-   - 다중 화자 구분 자동 인식
-   - 타임스탬프 자동 삽입
+2. New Features Added
+   - Real-time voice conversion feature
+   - Automatic multi-speaker identification
+   - Automatic timestamp insertion
 
-3. 사용자 인터페이스 개선
-   - 직관적인 파일 업로드 인터페이스
-   - 작업 진행 상황 실시간 모니터링
-   - 모바일 최적화 완료
+3. User Interface Improvements
+   - Intuitive file upload interface
+   - Real-time work progress monitoring
+   - Mobile optimization completed
 
-4. 새로운 요금제 출시
-   - 개인 사용자를 위한 라이트 플랜
-   - 기업 고객을 위한 프리미엄 플랜
-   - 대용량 처리를 위한 엔터프라이즈 플랜
+4. New Pricing Plans Launch
+   - Light Plan for individual users
+   - Premium Plan for corporate customers
+   - Enterprise Plan for large-scale processing
 
-■ 적용 일정
-- 2025년 8월 30일(금) 오후 6시부터 적용
+■ Implementation Schedule
+- Applied from Friday, August 30, 2025, 6:00 PM
 
-■ 문의사항
-기타 궁금한 사항이 있으시면 고객센터(1588-1234)로 연락해 주시기 바랍니다.
+■ Inquiries
+For any questions, please contact customer service (1588-1234).
 
-감사합니다.`
+Thank you.`
                 }
             };
             
             return mockDatabase[id] || {};
         }
         
-        // 파일 선택 처리
+        // Handle file selection
         function handleFileSelect(event) {
             const files = Array.from(event.target.files);
             
-            // 기존 파일과 새로 선택한 파일의 총 개수 확인
+            // Check total number of existing and newly selected files
             if (attachedFiles.length + files.length > 3) {
-                alert('최대 3개 파일까지만 첨부할 수 있습니다.');
+                alert('Maximum 3 files can be attached.');
                 return;
             }
             
-            // 파일 크기 검사 (10MB = 10 * 1024 * 1024 bytes)
+            // Check file size (10MB = 10 * 1024 * 1024 bytes)
             const maxSize = 10 * 1024 * 1024;
             for (let file of files) {
                 if (file.size > maxSize) {
-                    alert(`파일 "${file.name}"이 10MB를 초과합니다.`);
+                    alert(`File "${file.name}" exceeds 10MB.`);
                     return;
                 }
             }
             
-            // 파일 추가
+            // Add files
             files.forEach(file => {
                 const fileObj = {
                     file: file,
@@ -523,14 +523,14 @@
                 attachedFiles.push(fileObj);
             });
             
-            // 파일 목록 업데이트
+            // Update file list
             updateFileList();
             
-            // 파일 입력 초기화
+            // Reset file input
             event.target.value = '';
         }
         
-        // 파일 크기 포맷팅
+        // Format file size
         function formatFileSize(bytes) {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
@@ -539,7 +539,7 @@
             return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
         
-        // 파일 목록 업데이트
+        // Update file list
         function updateFileList() {
             const fileListElement = document.getElementById('fileList');
             
@@ -556,7 +556,7 @@
                         <span class="file-size">(${fileObj.size})</span>
                     </div>
                     <button type="button" class="file-remove" onclick="removeFile('${fileObj.id}')">
-                        삭제
+                        Delete
                     </button>
                 </div>
             `).join('');
@@ -564,20 +564,20 @@
             fileListElement.innerHTML = fileItems;
         }
         
-        // 파일 삭제
+        // Remove file
         function removeFile(fileId) {
             attachedFiles = attachedFiles.filter(file => file.id != fileId);
             updateFileList();
         }
         
-        // 목록으로 돌아가기
+        // Go back to list
         function goBack() {
             window.location.href = 'notice-management.html';
         }
         
-        // 등록/수정 기능
+        // Register/Edit function
         function registerNotice() {
-            // 필수 항목 검증
+            // Validate required fields
             const noticeTitle = document.getElementById('noticeTitle').value.trim();
             const serviceType = document.getElementById('serviceType').value;
             const location = document.getElementById('location').value;
@@ -585,33 +585,33 @@
             const noticeContent = document.getElementById('noticeContent').value.trim();
             
             if (!noticeTitle) {
-                alert('제목을 입력해주세요.');
+                alert('Please enter title.');
                 document.getElementById('noticeTitle').focus();
                 return;
             }
             
             if (!serviceType) {
-                alert('서비스유형을 선택해주세요.');
+                alert('Please select service type.');
                 document.getElementById('serviceType').focus();
                 return;
             }
             
             if (!location) {
-                alert('게시장소를 선택해주세요.');
+                alert('Please select posting location.');
                 document.getElementById('location').focus();
                 return;
             }
             
             if (!noticeContent) {
-                alert('공지사항 내용을 입력해주세요.');
+                alert('Please enter notice content.');
                 document.getElementById('noticeContent').focus();
                 return;
             }
             
-            // 등록/수정 확인
-            const action = isEditMode ? '수정' : '등록';
-            if (confirm(`공지사항을 ${action}하시겠습니까?`)) {
-                // 실제 구현 시 서버 API 호출
+            // Confirm register/edit
+            const action = isEditMode ? 'edit' : 'register';
+            if (confirm(`Are you sure you want to ${action} this notice?`)) {
+                // Call server API in actual implementation
                 const formData = {
                     noticeTitle: noticeTitle,
                     serviceType: serviceType,
@@ -625,8 +625,8 @@
                     }))
                 };
                 
-                console.log(`${action} 데이터:`, formData);
-                alert(`공지사항 ${action}이 완료되었습니다.`);
+                console.log(`${action} data:`, formData);
+                alert(`Notice ${action} completed.`);
                 goBack();
             }
         }

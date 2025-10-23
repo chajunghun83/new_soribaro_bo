@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>공증신청/기록완본 관리 - 소리바로 BO</title>
+    <title>Notary/Record Completion Management - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Section */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -97,7 +97,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Section */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -159,7 +159,7 @@
             cursor: pointer;
         }
         
-        /* 구분 배지 */
+        /* Category Badge */
         .category-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -178,13 +178,13 @@
             color: #92400e;
         }
         
-        /* 할인률 표시 */
+        /* Discount Rate Display */
         .discount-rate {
             color: #dc2626;
             font-weight: 600;
         }
         
-        /* 하단 액션 영역 */
+        /* Bottom Action Section */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -210,7 +210,7 @@
             background: #059669;
         }
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -252,172 +252,172 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>💰</span>
-            공증신청/기록완본 관리
+            Notary/Record Completion Management
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Section -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">구분</label>
+                <label class="search-label">Category</label>
                 <select id="categoryFilter" class="search-select">
-                    <option value="">전체</option>
-                    <option value="공증">공증</option>
-                    <option value="기록">기록</option>
+                    <option value="">All</option>
+                    <option value="Notary">Notary</option>
+                    <option value="Record">Record</option>
                 </select>
             </div>
             
             <button class="search-btn" onclick="searchNotaryData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>📝</span>
-                등록
+                Register
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Section -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">공증신청/기록완본 목록</h2>
-            <div class="table-info">총 <span id="totalCount">12</span>건</div>
+            <h2 class="table-title">Notary/Record Completion List</h2>
+            <div class="table-info">Total <span id="totalCount">12</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="80">구분</th>
-                    <th width="200">분류명</th>
-                    <th width="180">시작일</th>
-                    <th width="180">종료일</th>
-                    <th width="120">현재요금</th>
-                    <th width="100">할인율(%)</th>
-                    <th width="100">등록자</th>
-                    <th width="180">등록일</th>
+                    <th width="80">Category</th>
+                    <th width="200">Name</th>
+                    <th width="180">Start Date</th>
+                    <th width="180">End Date</th>
+                    <th width="120">Current Price</th>
+                    <th width="100">Discount Rate(%)</th>
+                    <th width="100">Registered By</th>
+                    <th width="180">Registered Date</th>
                 </tr>
             </thead>
             <tbody id="notaryTableBody">
                 <tr onclick="goToDetail('NOT001')">
                     <td>10</td>
-                    <td><span class="category-badge category-notary">공증</span></td>
+                    <td><span class="category-badge category-notary">Notary</span></td>
                     <td>공증신청 가격 정책_2025-08-27</td>
                     <td>2025-01-01 00:00:00</td>
                     <td>9999-12-31 23:59:59</td>
-                    <td>50,000원</td>
+                    <td>50,000WON</td>
                     <td><span class="discount-rate">10%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-27 09:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('REC001')">
                     <td>9</td>
-                    <td><span class="category-badge category-record">기록</span></td>
+                    <td><span class="category-badge category-record">Record</span></td>
                     <td>기록완본 가격 정책_2025-08-27</td>
                     <td>2025-01-01 00:00:00</td>
                     <td>9999-12-31 23:59:59</td>
-                    <td>30,000원</td>
+                    <td>30,000WON</td>
                     <td><span class="discount-rate">15%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-27 10:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('NOT002')">
                     <td>8</td>
-                    <td><span class="category-badge category-notary">공증</span></td>
+                    <td><span class="category-badge category-notary">Notary</span></td>
                     <td>공증신청 가격 정책_2025-08-26</td>
                     <td>2025-02-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>80,000원</td>
+                    <td>80,000WON</td>
                     <td><span class="discount-rate">5%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 11:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('REC002')">
                     <td>7</td>
-                    <td><span class="category-badge category-record">기록</span></td>
+                    <td><span class="category-badge category-record">Record</span></td>
                     <td>기록완본 가격 정책_2025-08-26</td>
                     <td>2025-03-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>25,000원</td>
+                    <td>25,000WON</td>
                     <td><span class="discount-rate">20%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 14:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('NOT003')">
                     <td>6</td>
-                    <td><span class="category-badge category-notary">공증</span></td>
+                    <td><span class="category-badge category-notary">Notary</span></td>
                     <td>공증신청 가격 정책_2025-08-25</td>
                     <td>2025-04-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>100,000원</td>
+                    <td>100,000WON</td>
                     <td><span class="discount-rate">0%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-25 15:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('REC003')">
                     <td>5</td>
-                    <td><span class="category-badge category-record">기록</span></td>
+                    <td><span class="category-badge category-record">Record</span></td>
                     <td>기록완본 가격 정책_2025-08-25</td>
                     <td>2025-05-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>60,000원</td>
+                    <td>60,000WON</td>
                     <td><span class="discount-rate">8%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-25 16:45:00</td>
                 </tr>
                 <tr onclick="goToDetail('NOT004')">
                     <td>4</td>
-                    <td><span class="category-badge category-notary">공증</span></td>
+                    <td><span class="category-badge category-notary">Notary</span></td>
                     <td>공증신청 가격 정책_2025-08-24</td>
                     <td>2025-06-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>40,000원</td>
+                    <td>40,000WON</td>
                     <td><span class="discount-rate">12%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-24 08:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('REC004')">
                     <td>3</td>
-                    <td><span class="category-badge category-record">기록</span></td>
+                    <td><span class="category-badge category-record">Record</span></td>
                     <td>기록완본 가격 정책_2025-08-24</td>
                     <td>2025-07-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>35,000원</td>
+                    <td>35,000WON</td>
                     <td><span class="discount-rate">18%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-24 09:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('NOT005')">
                     <td>2</td>
-                    <td><span class="category-badge category-notary">공증</span></td>
+                    <td><span class="category-badge category-notary">Notary</span></td>
                     <td>공증신청 가격 정책_2025-08-23</td>
                     <td>2025-08-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>120,000원</td>
+                    <td>120,000WON</td>
                     <td><span class="discount-rate">3%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-23 10:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('REC005')">
                     <td>1</td>
-                    <td><span class="category-badge category-record">기록</span></td>
+                    <td><span class="category-badge category-record">Record</span></td>
                     <td>기록완본 가격 정책_2025-08-23</td>
                     <td>2025-08-15 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
-                    <td>20,000원</td>
+                    <td>20,000WON</td>
                     <td><span class="discount-rate">25%</span></td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-23 11:00:00</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -430,44 +430,44 @@
 
 
     <script>
-        // 검색 기능
+        // Search function
         function searchNotaryData() {
             const category = document.getElementById('categoryFilter').value;
-            console.log('검색 조건:', { category });
+            console.log('Search criteria:', { category });
             
-            // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n구분: ' + (category || '전체'));
+            // Call server API in production
+            alert('Search function executed.\nCategory: ' + (category || 'All'));
         }
         
-        // 상세 페이지 이동
+        // Go to detail page
         function goToDetail(id) {
             const url = `notary-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 등록 페이지로 이동
+        // Go to register page
         function openRegisterModal() {
             window.location.href = 'notary-register.html';
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Go to page:', page);
+            // Load page data in production
         }
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('공증신청/기록완본 관리 페이지 로드 완료');
+            console.log('Notary/Record Completion Management page loaded');
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in production
             loadNotaryData();
         });
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadNotaryData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('공증신청/기록완본 데이터 로딩');
+            // Call server API in production
+            console.log('Loading notary/record completion data');
         }
     </script>
 </body>

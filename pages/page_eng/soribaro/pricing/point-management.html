@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>포인트 정책 관리 - 소리바로 BO</title>
+    <title>Point Policy Management - Soribaro BO</title>
     <style>
         * {
             margin: 0;
@@ -40,7 +40,7 @@
             gap: 12px;
         }
         
-        /* 검색 영역 */
+        /* Search Section */
         .search-section {
             background: white;
             border-radius: 12px;
@@ -97,7 +97,7 @@
             background: #2563eb;
         }
         
-        /* 테이블 영역 */
+        /* Table Section */
         .table-section {
             background: white;
             border-radius: 12px;
@@ -159,7 +159,7 @@
             cursor: pointer;
         }
         
-        /* 포인트 구분 배지 */
+        /* Point Type Badge */
         .point-badge {
             padding: 4px 8px;
             border-radius: 12px;
@@ -183,7 +183,7 @@
             color: #166534;
         }
         
-        /* 하단 액션 영역 */
+        /* Bottom Action Section */
         .bottom-actions {
             display: flex;
             justify-content: flex-end;
@@ -209,7 +209,7 @@
             background: #059669;
         }
         
-        /* 페이지네이션 */
+        /* Pagination */
         .pagination {
             display: flex;
             justify-content: center;
@@ -251,173 +251,173 @@
     <div class="page-header">
         <h1 class="page-title">
             <span>💰</span>
-            포인트 정책 관리
+            Point Policy Management
         </h1>
     </div>
     
-    <!-- 검색 영역 -->
+    <!-- Search Section -->
     <div class="search-section">
         <div class="search-row">
             <div style="flex: 1;"></div>
             <div class="search-group">
-                <label class="search-label">포인트 구분</label>
+                <label class="search-label">Point Type</label>
                 <select id="pointTypeFilter" class="search-select">
-                    <option value="">전체</option>
-                    <option value="웰컴적립">웰컴적립</option>
-                    <option value="접수">접수</option>
-                    <option value="포인트 지급">포인트 지급</option>
+                    <option value="">All</option>
+                    <option value="Welcome Points">Welcome Points</option>
+                    <option value="Reception">Reception</option>
+                    <option value="Point Payment">Point Payment</option>
                 </select>
             </div>
             
             <button class="search-btn" onclick="searchPointData()">
                 <span>🔍</span>
-                검색
+                Search
             </button>
             
             <button class="btn-register" onclick="openRegisterModal()">
                 <span>📝</span>
-                등록
+                Register
             </button>
         </div>
     </div>
     
-    <!-- 테이블 영역 -->
+    <!-- Table Section -->
     <div class="table-section">
         <div class="table-header">
-            <h2 class="table-title">포인트 정책 목록</h2>
-            <div class="table-info">총 <span id="totalCount">10</span>건</div>
+            <h2 class="table-title">Point Policy List</h2>
+            <div class="table-info">Total <span id="totalCount">10</span> items</div>
         </div>
         
         <table class="data-table">
             <thead>
                 <tr>
                     <th width="60">No.</th>
-                    <th width="120">포인트 구분</th>
-                    <th width="180">시작일</th>
-                    <th width="180">종료일</th>
-                    <th width="120">지급포인트</th>
-                    <th width="80">단위</th>
-                    <th width="120">만료기간(일)</th>
-                    <th width="100">등록자</th>
-                    <th width="180">등록일</th>
+                    <th width="120">Point Type</th>
+                    <th width="180">Start Date</th>
+                    <th width="180">End Date</th>
+                    <th width="120">Point Amount</th>
+                    <th width="80">Unit</th>
+                    <th width="120">Expiry Period(days)</th>
+                    <th width="100">Registered By</th>
+                    <th width="180">Registered Date</th>
                 </tr>
             </thead>
             <tbody id="pointTableBody">
                 <tr onclick="goToDetail('POINT001')">
                     <td>10</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>2025-01-01 00:00:00</td>
                     <td>9999-12-31 23:59:59</td>
                     <td>1,000</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>365</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-27 09:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT002')">
                     <td>9</td>
-                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td><span class="point-badge point-reception">Reception</span></td>
                     <td>2025-01-01 00:00:00</td>
                     <td>9999-12-31 23:59:59</td>
                     <td>500</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>180</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-27 10:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT003')">
                     <td>8</td>
-                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td><span class="point-badge point-payment">Point Payment</span></td>
                     <td>2025-02-01 00:00:00</td>
                     <td>9999-12-31 23:59:59</td>
                     <td>10</td>
                     <td>%</td>
                     <td>90</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 11:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT004')">
                     <td>7</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>2025-03-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
                     <td>800</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>365</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-26 14:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT005')">
                     <td>6</td>
-                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td><span class="point-badge point-reception">Reception</span></td>
                     <td>2025-04-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
                     <td>300</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>180</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-25 15:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT006')">
                     <td>5</td>
-                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td><span class="point-badge point-payment">Point Payment</span></td>
                     <td>2025-05-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
                     <td>5</td>
                     <td>%</td>
                     <td>90</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-25 16:45:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT007')">
                     <td>4</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>2025-06-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
                     <td>1,200</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>365</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-24 08:00:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT008')">
                     <td>3</td>
-                    <td><span class="point-badge point-reception">접수</span></td>
+                    <td><span class="point-badge point-reception">Reception</span></td>
                     <td>2025-07-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
                     <td>400</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>180</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-24 09:30:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT009')">
                     <td>2</td>
-                    <td><span class="point-badge point-payment">포인트 지급</span></td>
+                    <td><span class="point-badge point-payment">Point Payment</span></td>
                     <td>2025-08-01 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
                     <td>1,800</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>90</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-23 10:15:00</td>
                 </tr>
                 <tr onclick="goToDetail('POINT010')">
                     <td>1</td>
-                    <td><span class="point-badge point-welcome">웰컴적립</span></td>
+                    <td><span class="point-badge point-welcome">Welcome Points</span></td>
                     <td>2025-08-15 00:00:00</td>
                     <td>2025-12-31 23:59:59</td>
                     <td>1,100</td>
-                    <td>원</td>
+                    <td>WON</td>
                     <td>365</td>
-                    <td>관리자</td>
+                    <td>Admin</td>
                     <td>2025-08-23 11:00:00</td>
                 </tr>
             </tbody>
         </table>
     </div>
     
-    <!-- 페이지네이션 -->
+    <!-- Pagination -->
     <div class="pagination">
         <button onclick="goToPage(1)" disabled>«</button>
         <button onclick="goToPage(1)" disabled>‹</button>
@@ -429,44 +429,44 @@
     
 
     <script>
-        // 검색 기능
+        // Search function
         function searchPointData() {
             const pointType = document.getElementById('pointTypeFilter').value;
-            console.log('검색 조건:', { pointType });
+            console.log('Search criteria:', { pointType });
             
-            // 실제 구현 시 서버 API 호출
-            alert('검색 기능이 실행됩니다.\n포인트 구분: ' + (pointType || '전체'));
+            // Call server API in production
+            alert('Search function executed.\nPoint Type: ' + (pointType || 'All'));
         }
         
-        // 상세 페이지 이동
+        // Go to detail page
         function goToDetail(id) {
             const url = `point-detail.html?id=${id}`;
             window.location.href = url;
         }
         
-        // 등록 페이지로 이동
+        // Go to register page
         function openRegisterModal() {
             window.location.href = 'point-register.html';
         }
         
-        // 페이지네이션
+        // Pagination
         function goToPage(page) {
-            console.log('페이지 이동:', page);
-            // 실제 구현 시 페이지 데이터 로딩
+            console.log('Go to page:', page);
+            // Load page data in production
         }
         
-        // 페이지 로드 시 초기화
+        // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('포인트 정책 관리 페이지 로드 완료');
+            console.log('Point Policy Management page loaded');
             
-            // 실제 구현 시 서버에서 데이터 로딩
+            // Load data from server in production
             loadPointData();
         });
         
-        // 데이터 로딩 함수
+        // Data loading function
         function loadPointData() {
-            // 실제 구현 시 서버 API 호출
-            console.log('포인트 정책 데이터 로딩');
+            // Call server API in production
+            console.log('Loading point policy data');
         }
     </script>
 </body>
